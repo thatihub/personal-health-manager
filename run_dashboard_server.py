@@ -93,7 +93,7 @@ def main() -> None:
     rebuild_if_needed(args.no_rebuild)
 
     os.chdir(PROJECT_DIR)
-    server = ThreadingHTTPServer(("127.0.0.1", args.port), DashboardHandler)
+    server = ThreadingHTTPServer(("0.0.0.0", args.port), DashboardHandler)
     print(f"Personal Health Manager running at http://localhost:{args.port}/index.html")
     print("Press Ctrl+C to stop.")
     server.serve_forever()
