@@ -42,7 +42,20 @@
       letter-spacing: 0.2px;
     }
 
-    .sub { color: var(--muted); margin-bottom: 20px; }
+    .sub { color: var(--muted); margin-bottom: 8px; }
+    .updated-banner {
+      margin-bottom: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(16, 36, 54, 0.14);
+      background: rgba(255, 255, 255, 0.74);
+      color: #2f5569;
+      font-size: 12px;
+      font-weight: 700;
+    }
     .top-nav { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
     .top-nav a { text-decoration:none; padding:9px 12px; border-radius:12px; border:1px solid rgba(16,36,54,.14); background:rgba(255,255,255,.8); color:#274150; font-weight:700; font-size:13px; min-height:44px; display:inline-flex; align-items:center; }
     .top-nav a.active { background:linear-gradient(120deg, #0f7ea6, #1a93bf); color:#fff; border-color: transparent; }
@@ -430,6 +443,52 @@
       .chart-head h3 { font-size: 16px; }
       svg { height: 120px; }
     }
+
+    /* Forced dark mode */
+    :root { color-scheme: dark; }
+    body {
+      color: #e7edf3;
+      background:
+        radial-gradient(circle at 12% 10%, rgba(46, 92, 122, 0.34), transparent 42%),
+        radial-gradient(circle at 88% 18%, rgba(118, 69, 60, 0.32), transparent 36%),
+        radial-gradient(circle at 65% 80%, rgba(38, 93, 78, 0.31), transparent 34%),
+        linear-gradient(160deg, #0b1219 0%, #101923 44%, #121b1a 100%);
+    }
+    h1, .chart h3, .kpi .value, .mini h4 { color: #f2f6fa; }
+    .sub, .action-status, .legend, .mini-range, .kpi .label { color: #aab8c6; }
+    .top-nav a, .bottom-tab {
+      background: rgba(17, 26, 36, 0.92);
+      border-color: rgba(164, 185, 204, 0.2);
+      color: #d5e2ee;
+    }
+    .card, .kpi, .table-wrap, .mini, .graph-shell, .notes {
+      background: rgba(15, 23, 32, 0.88) !important;
+      border-color: rgba(163, 184, 201, 0.2) !important;
+      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.45);
+    }
+    .value-pill.na { background: rgba(86, 102, 116, 0.35); color: #cfd8e1; }
+    .value-pill.normal { background: rgba(52, 108, 62, 0.4); color: #cde8d1; }
+    .value-pill.high, .value-pill.low { background: rgba(131, 44, 57, 0.45); color: #ffd5dc; }
+    thead th {
+      background: linear-gradient(180deg, #1a2a38, #152330);
+      color: #d9e5ef;
+      border-bottom-color: rgba(167, 186, 203, 0.2);
+    }
+    tbody td { color: #dce6ef; border-bottom-color: rgba(167, 186, 203, 0.15); }
+    tbody tr:nth-child(odd) { background: rgba(42, 61, 76, 0.42); }
+    tbody tr:nth-child(even) { background: rgba(20, 30, 40, 0.52); }
+    tbody tr:hover { background: rgba(52, 84, 95, 0.56); }
+    .date-cell { color: #d8e4ef !important; }
+    .panel-btn, .view-btn, .collapse-btn {
+      background: rgba(20, 30, 40, 0.9);
+      border-color: rgba(167, 186, 203, 0.2);
+      color: #cfdbe6;
+    }
+    .updated-banner {
+      background: rgba(20, 30, 40, 0.9);
+      border-color: rgba(167, 186, 203, 0.2);
+      color: #cfdbe6;
+    }
   </style>
 </head>
 <body>
@@ -441,6 +500,7 @@
     </nav>
     <h1>Lab Results Dashboard</h1>
     <div class="sub" id="summary-subtitle"></div>
+    <div class="updated-banner" id="last-updated-banner">Last updated: loading...</div>
     <div class="actions">
       <button class="action-btn" id="rebuild-btn" type="button">Rebuild Data</button>
       <div class="panel-tools">
@@ -898,10 +958,24 @@
     }
 
     const subtitle = document.getElementById("summary-subtitle");
+    const lastUpdatedBanner = document.getElementById("last-updated-banner");
     const validDates = data.map(d => d.date).filter(Boolean).sort();
     const firstDate = validDates[0];
     const lastDate = validDates[validDates.length - 1];
     subtitle.textContent = `Consolidated from ${data.length} reports between ${fmtLongDate(firstDate)} and ${fmtLongDate(lastDate)}.`;
+
+    async function updateLastUpdatedBanner() {
+      try {
+        const res = await fetch("/api/last-updated");
+        if (!res.ok) throw new Error("status");
+        const payload = await res.json();
+        const ts = payload.latest_display || "-";
+        lastUpdatedBanner.textContent = `Last updated: ${ts}`;
+      } catch (_err) {
+        lastUpdatedBanner.textContent = "Last updated: unavailable";
+      }
+    }
+    updateLastUpdatedBanner();
 
     function fillTable(tableId, columns) {
       const tbody = document.querySelector(`#${tableId} tbody`);

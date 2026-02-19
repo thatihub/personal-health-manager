@@ -4,16 +4,22 @@
 from __future__ import annotations
 
 import argparse
+import base64
+import binascii
+import hmac
 import json
 import os
 import subprocess
 import threading
+from datetime import datetime
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 
 PROJECT_DIR = Path(__file__).resolve().parent
 REBUILD_LOCK = threading.Lock()
+VAULT_AUTH_USER = os.getenv("VAULT_BASIC_AUTH_USER", "").strip()
+VAULT_AUTH_PASS = os.getenv("VAULT_BASIC_AUTH_PASS", "").strip()
 
 
 def parse_args() -> argparse.Namespace:
@@ -47,6 +53,80 @@ def rebuild_now() -> None:
 
 
 class DashboardHandler(SimpleHTTPRequestHandler):
+    def _vault_auth_enabled(self) -> bool:
+        return bool(VAULT_AUTH_USER and VAULT_AUTH_PASS)
+
+    def _is_vault_protected_path(self) -> bool:
+        path = self.path.split("?", 1)[0]
+        return path in {"/vault.html", "/vault_data.json"}
+
+    def _is_authorized(self) -> bool:
+        auth_header = self.headers.get("Authorization", "")
+        if not auth_header.startswith("Basic "):
+            return False
+        encoded = auth_header[6:].strip()
+        try:
+            decoded = base64.b64decode(encoded).decode("utf-8")
+        except (binascii.Error, UnicodeDecodeError):
+            return False
+        if ":" not in decoded:
+            return False
+        username, password = decoded.split(":", 1)
+        return hmac.compare_digest(username, VAULT_AUTH_USER) and hmac.compare_digest(password, VAULT_AUTH_PASS)
+
+    def _require_vault_auth(self) -> bool:
+        if not self._vault_auth_enabled() or not self._is_vault_protected_path():
+            return False
+        if self._is_authorized():
+            return False
+        self.send_response(401)
+        self.send_header("WWW-Authenticate", 'Basic realm="Health Vault"')
+        self.send_header("Content-Type", "text/plain; charset=utf-8")
+        body = b"Authentication required for Health Vault."
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        if self.command != "HEAD":
+            self.wfile.write(body)
+        return True
+
+    def _last_updated_payload(self) -> dict[str, object]:
+        files = [
+            ("Consolidated Labs", PROJECT_DIR / "consolidated_labs.json"),
+            ("Dashboard Data", PROJECT_DIR / "dashboard_data.js"),
+            ("Vault Data", PROJECT_DIR / "vault_data.json"),
+        ]
+        known_files: list[dict[str, object]] = []
+        latest_epoch = 0.0
+        for label, path in files:
+            if not path.exists():
+                continue
+            mtime = path.stat().st_mtime
+            latest_epoch = max(latest_epoch, mtime)
+            dt = datetime.fromtimestamp(mtime).astimezone()
+            known_files.append(
+                {
+                    "label": label,
+                    "file": path.name,
+                    "updated_iso": dt.isoformat(),
+                    "updated_display": dt.strftime("%b %d, %Y %I:%M %p"),
+                }
+            )
+
+        latest_display = "-"
+        latest_iso = ""
+        if latest_epoch > 0:
+            latest_dt = datetime.fromtimestamp(latest_epoch).astimezone()
+            latest_display = latest_dt.strftime("%b %d, %Y %I:%M %p")
+            latest_iso = latest_dt.isoformat()
+
+        return {
+            "ok": True,
+            "vault_auth_enabled": self._vault_auth_enabled(),
+            "latest_display": latest_display,
+            "latest_iso": latest_iso,
+            "files": known_files,
+        }
+
     def _json(self, status: int, payload: dict[str, object]) -> None:
         body = json.dumps(payload).encode("utf-8")
         self.send_response(status)
@@ -54,6 +134,19 @@ class DashboardHandler(SimpleHTTPRequestHandler):
         self.send_header("Content-Length", str(len(body)))
         self.end_headers()
         self.wfile.write(body)
+
+    def do_GET(self) -> None:  # noqa: N802
+        if self.path.split("?", 1)[0] == "/api/last-updated":
+            self._json(200, self._last_updated_payload())
+            return
+        if self._require_vault_auth():
+            return
+        super().do_GET()
+
+    def do_HEAD(self) -> None:  # noqa: N802
+        if self._require_vault_auth():
+            return
+        super().do_HEAD()
 
     def do_POST(self) -> None:  # noqa: N802
         if self.path != "/api/rebuild":

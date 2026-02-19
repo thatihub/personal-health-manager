@@ -62,7 +62,20 @@
     .bottom-tab a.active { background: linear-gradient(120deg, var(--blue), #1a93bf); color: #fff; }
 
     h1 { margin: 0 0 6px; font-family: Georgia, "Times New Roman", serif; font-size: clamp(26px,4vw,40px); }
-    .sub { color: var(--muted); margin-bottom: 16px; }
+    .sub { color: var(--muted); margin-bottom: 8px; }
+    .updated-banner {
+      margin-bottom: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(16, 36, 54, 0.14);
+      background: rgba(255, 255, 255, 0.78);
+      color: #2f5569;
+      font-size: 12px;
+      font-weight: 700;
+    }
     .search-wrap {
       margin-bottom: 14px;
       display: flex;
@@ -153,6 +166,41 @@
       .card { padding: 12px; border-radius: 14px; }
       .row { padding: 8px 0; }
     }
+
+    /* Forced dark mode */
+    :root { color-scheme: dark; }
+    body {
+      color: #e7edf3;
+      background:
+        radial-gradient(circle at 85% 10%, rgba(48, 97, 124, 0.34), transparent 35%),
+        radial-gradient(circle at 12% 90%, rgba(72, 81, 140, 0.3), transparent 34%),
+        linear-gradient(160deg, #0b1219 0%, #101923 42%, #121b1a 100%);
+    }
+    h1, .card h3, .v { color: #f2f6fa; }
+    .sub, .k, .muted, .search-note { color: #aab8c6; }
+    .nav a, .bottom-tab {
+      background: rgba(17, 26, 36, 0.92);
+      border-color: rgba(164, 185, 204, 0.2);
+      color: #d5e2ee;
+    }
+    .card {
+      background: rgba(15, 23, 32, 0.88);
+      border-color: rgba(163, 184, 201, 0.18);
+      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.45);
+    }
+    .updated-banner {
+      background: rgba(20, 30, 40, 0.9);
+      border-color: rgba(167, 186, 203, 0.2);
+      color: #cfdbe6;
+    }
+    .search-input, .mini-btn {
+      background: rgba(20, 30, 40, 0.9);
+      border-color: rgba(167, 186, 203, 0.2);
+      color: #dce6ef;
+    }
+    .row { border-top-color: rgba(167, 186, 203, 0.15); }
+    a.link, .phone-link { color: #8fc8e5; }
+    .chip { background: rgba(61, 117, 145, 0.35); color: #d2e8f5; }
   </style>
 </head>
 <body>
@@ -165,6 +213,7 @@
 
     <h1>Health Vault</h1>
     <div class="sub">SCAN 2026, benefits, contacts, medications, and care references.</div>
+    <div class="updated-banner" id="last-updated-banner">Last updated: loading...</div>
     <div class="search-wrap">
       <input id="vault-search" class="search-input" type="search" placeholder="Search: phone, doctor, program, medication, vaccine..." />
       <span class="search-note">Type to filter cards</span>
@@ -258,6 +307,7 @@
     }
 
     async function load() {
+      await updateLastUpdatedBanner();
       const res = await fetch('./vault_data.json');
       const data = await res.json();
       const scan = data.scan_2026 || {};
@@ -295,6 +345,19 @@
 
       bindCopyButtons();
       bindSearch();
+    }
+
+    async function updateLastUpdatedBanner() {
+      const node = document.getElementById("last-updated-banner");
+      try {
+        const res = await fetch("/api/last-updated");
+        if (!res.ok) throw new Error("status");
+        const payload = await res.json();
+        const ts = payload.latest_display || "-";
+        node.textContent = `Last updated: ${ts}`;
+      } catch (_err) {
+        node.textContent = "Last updated: unavailable";
+      }
     }
 
     load();

@@ -46,3 +46,21 @@ Edit `vault_data.json` to manage:
 - important links
 - phone contacts
 - scanned document references
+
+## Vault Basic Auth (recommended)
+
+To protect the Vault page (`/vault.html`) and its data (`/vault_data.json`), set both env vars:
+
+```bash
+export VAULT_BASIC_AUTH_USER="your_username"
+export VAULT_BASIC_AUTH_PASS="your_password"
+```
+
+If both are set, Vault requires HTTP Basic Auth.
+If either is missing, Vault auth is disabled.
+
+## Last Updated Banner
+
+`dashboard.html` and `vault.html` now show a live "Last updated" badge from:
+
+- `/api/last-updated`

@@ -75,7 +75,35 @@
       font-family: Georgia, "Times New Roman", serif;
       font-size: clamp(28px, 4vw, 44px);
     }
-    .sub { color: var(--muted); margin-bottom: 18px; }
+    .sub { color: var(--muted); margin-bottom: 10px; }
+    .status-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(16,36,54,.14);
+      background: rgba(255,255,255,.78);
+      color: #2f5569;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .status-badge.locked {
+      border-color: rgba(42, 125, 68, .24);
+      color: #2f6a3a;
+      background: rgba(58, 125, 68, .12);
+    }
+    .status-badge.open {
+      border-color: rgba(178, 58, 72, .24);
+      color: #8f1f2c;
+      background: rgba(178, 58, 72, .12);
+    }
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -156,6 +184,34 @@
       .stats { grid-template-columns: 1fr 1fr; }
       .val { font-size: 20px; }
     }
+
+    /* Forced dark mode */
+    :root { color-scheme: dark; }
+    body {
+      color: #e7edf3;
+      background:
+        radial-gradient(circle at 8% 8%, rgba(56,108,141,0.36), transparent 38%),
+        radial-gradient(circle at 90% 14%, rgba(127,74,68,0.34), transparent 34%),
+        radial-gradient(circle at 72% 86%, rgba(47,95,78,0.32), transparent 30%),
+        linear-gradient(160deg, #0b1219 0%, #101923 44%, #121b1a 100%);
+    }
+    .sub, .label, .card p { color: #aab8c6; }
+    .nav a, .bottom-tab {
+      background: rgba(17, 26, 36, 0.92);
+      border-color: rgba(164, 185, 204, 0.2);
+      color: #d5e2ee;
+    }
+    .card, .stat {
+      background: rgba(15, 23, 32, 0.88) !important;
+      border-color: rgba(163, 184, 201, 0.18);
+      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.45);
+    }
+    .val, h1, .card h3 { color: #f2f6fa; }
+    .status-badge {
+      background: rgba(17, 26, 36, 0.92);
+      border-color: rgba(164, 185, 204, 0.2);
+      color: #c9d8e5;
+    }
   </style>
 </head>
 <body>
@@ -168,6 +224,10 @@
 
     <h1>Personal Health Manager</h1>
     <div class="sub" id="summary">One place for labs, scans, insurance links, and care contacts.</div>
+    <div class="status-row">
+      <div class="status-badge" id="vault-status">Vault: checking...</div>
+      <div class="status-badge" id="updated-status">Last updated: loading...</div>
+    </div>
 
     <section class="stats" id="stats"></section>
 
@@ -188,6 +248,24 @@
   <script>
     async function loadStats() {
       const statsRoot = document.getElementById('stats');
+      const vaultStatus = document.getElementById('vault-status');
+      const updatedStatus = document.getElementById('updated-status');
+      try {
+        const statusRes = await fetch('/api/last-updated');
+        if (statusRes.ok) {
+          const status = await statusRes.json();
+          const locked = Boolean(status.vault_auth_enabled);
+          vaultStatus.textContent = `Vault: ${locked ? 'Locked' : 'Open'}`;
+          vaultStatus.classList.add(locked ? 'locked' : 'open');
+          updatedStatus.textContent = `Last updated: ${status.latest_display || '-'}`;
+        } else {
+          vaultStatus.textContent = 'Vault: unknown';
+          updatedStatus.textContent = 'Last updated: unavailable';
+        }
+      } catch (_e) {
+        vaultStatus.textContent = 'Vault: unknown';
+        updatedStatus.textContent = 'Last updated: unavailable';
+      }
       try {
         const res = await fetch('./dashboard_data.js');
         const txt = await res.text();
