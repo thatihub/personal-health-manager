@@ -1,0 +1,228 @@
+Thatikunta, Prakash DOB: 03/12/1960 Patient Report
+Patient ID: E1561134 Age: 65 Account Number: 04065065
+Specimen ID: 043-544-3024-0 Sex: Male Ordering Physician: M JAVED
+Date Collected: 02/12/2026 Date Received: 02/12/2026 Date Reported: 02/13/2026 Fasting: Yes
+Ordered Items: TSH+Free T4; CBC With Differential/Platelet; Comp. Metabolic Panel (14); UA/M w/rflx Culture, Routine; Lipid Panel
+With LDL/HDL Ratio; Albumin/Creatinine Ratio,Urine; Hemoglobin A1c; C-Peptide, Serum; Vitamin D, 25-Hydroxy; Panel 140659;
+PSA, Ultrasensitive W/O Serial; Vitamin B12; Venipuncture; Cupertino,CA
+Date Collected: 02/12/2026
+TSH+Free T4
+Test Current Result and Flag Previous Result and Date Units Reference Interval
+TSH 01 12.700 High uIU/mL 0.450-4.500
+T4,Free(Direct) 01 1.05 ng/dL 0.82-1.77
+CBC With Differential/Platelet
+Test Current Result and Flag Previous Result and Date Units Reference Interval
+WBC 01 12.2 High 9.6 09/12/2025 x10E3/uL 3.4-10.8
+RBC 01 4.46 4.91 09/12/2025 x10E6/uL 4.14-5.80
+Hemoglobin 01 12.9 Low 14.1 09/12/2025 g/dL 13.0-17.7
+Hematocrit 01 39.5 43.8 09/12/2025 % 37.5-51.0
+MCV 01 89 89 09/12/2025 fL 79-97
+MCH 01 28.9 28.7 09/12/2025 pg 26.6-33.0
+MCHC 01 32.7 32.2 09/12/2025 g/dL 31.5-35.7
+RDW 01 13.2 14.0 09/12/2025 % 11.6-15.4
+Platelets 01 328 293 09/12/2025 x10E3/uL 150-450
+Neutrophils 01 59 % Not Estab.
+Lymphs 01 27 % Not Estab.
+Monocytes 01 10 % Not Estab.
+Eos 01 3 % Not Estab.
+Basos 01 1 % Not Estab.
+Neutrophils (Absolute) 01 7.1 High x10E3/uL 1.4-7.0
+Lymphs (Absolute) 01 3.3 High x10E3/uL 0.7-3.1
+Monocytes(Absolute) 01 1.2 High x10E3/uL 0.1-0.9
+Eos (Absolute) 01 0.4 x10E3/uL 0.0-0.4
+Baso (Absolute) 01 0.1 x10E3/uL 0.0-0.2
+Immature Granulocytes 01 0 % Not Estab.
+Immature Grans (Abs) 01 0.0 x10E3/uL 0.0-0.1
+Comp. Metabolic Panel (14)
+Test Current Result and Flag Previous Result and Date Units Reference Interval
+Glucose 01 135 High 112 09/12/2025 mg/dL 70-99
+BUN 01 16 10 09/12/2025 mg/dL 8-27
+Creatinine 01 0.99 0.90 09/12/2025 mg/dL 0.76-1.27
+eGFR 85 95 09/12/2025 mL/min/1.73 >59
+BUN/Creatinine Ratio 16 11 09/12/2025 10-24
+Sodium 01 131 Low 132 09/12/2025 mmol/L 134-144
+Potassium 01 4.4 4.9 09/12/2025 mmol/L 3.5-5.2
+Date Created and Stored  02/13/26 1233 ET   Final Report  Page 1 of 4
+©2026 Laboratory Corporation of America® Holdings
+All Rights Reserved - Enterprise Report Version 2.00
+This document contains private and confidential health information protected by state and federal law.
+              If you have received this document in error please call 858-668-3700
+
+Thatikunta, Prakash DOB: 03/12/1960 Patient Report
+Patient ID: E1561134 Age: 65 Account Number: 04065065
+Specimen ID: 043-544-3024-0 Sex: Male Ordering Physician: M JAVED
+Date Collected: 02/12/2026
+Comp. Metabolic Panel (14) (Cont.)
+Chloride 01 93 Low 93 09/12/2025 mmol/L 96-106
+Carbon Dioxide, Total 01 25 22 09/12/2025 mmol/L 20-29
+Calcium 01 9.2 9.5 09/12/2025 mg/dL 8.6-10.2
+Protein, Total 01 7.0 7.1 09/12/2025 g/dL 6.0-8.5
+Albumin 01 4.6 4.6 09/12/2025 g/dL 3.9-4.9
+Globulin, Total 2.4 2.5 09/12/2025 g/dL 1.5-4.5
+Bilirubin, Total 01 0.3 0.3 09/12/2025 mg/dL 0.0-1.2
+Alkaline Phosphatase 01 58 65* 09/12/2025 IU/L 47-123
+AST (SGOT) 01 22 25 09/12/2025 IU/L 0-40
+ALT (SGPT) 01 17 15 09/12/2025 IU/L 0-44
+* Previous Reference Interval: (Alkaline Phosphatase: 44-121 IU/L)
+UA/M w/rflx Culture, Routine
+Test Current Result and Flag Previous Result and Date Units Reference Interval
+Urinalysis Gross Exam 01
+Specific Gravity 01 1.009 1.005-1.030
+pH 01 6.5 5.0-7.5
+Urine-Color 01 Yellow Yellow
+Appearance 01 Clear Clear
+WBC Esterase 01 Negative Negative
+Protein 01 Negative Negative/Trace
+Glucose 01 Negative Negative
+Ketones 01 Negative Negative
+Occult Blood 01 Negative Negative
+Bilirubin 01 Negative Negative
+Urobilinogen,Semi-Qn 01 0.2 mg/dL 0.2-1.0
+Nitrite, Urine 01 Negative Negative
+Microscopic Examination 01
+ Microscopic follows if indicated.
+Microscopic Examination 01 See below:
+ Microscopic was indicated and was performed.
+WBC 01 None seen /hpf 0-5
+RBC 01 None seen /hpf 0-2
+Epithelial Cells (non renal) 01 None seen /hpf 0-10
+Casts 01 None seen /lpf None seen
+Bacteria 01 None seen None seen/Few
+Urinalysis Reflex 01
+ This specimen will not reflex to a Urine Culture.
+Lipid Panel With LDL/HDL Ratio
+Test Current Result and Flag Previous Result and Date Units Reference Interval
+Cholesterol, Total 01 101 99 06/02/2025 mg/dL 100-199
+Triglycerides 01 133 87 06/02/2025 mg/dL 0-149
+HDL Cholesterol 01 36 Low 38 06/02/2025 mg/dL >39
+Date Created and Stored  02/13/26 1233 ET   Final Report  Page 2 of 4
+©2026 Laboratory Corporation of America® Holdings
+All Rights Reserved - Enterprise Report Version 2.00
+This document contains private and confidential health information protected by state and federal law.
+              If you have received this document in error please call 858-668-3700
+
+Thatikunta, Prakash DOB: 03/12/1960 Patient Report
+Patient ID: E1561134 Age: 65 Account Number: 04065065
+Specimen ID: 043-544-3024-0 Sex: Male Ordering Physician: M JAVED
+Date Collected: 02/12/2026
+Lipid Panel With LDL/HDL Ratio (Cont.)
+VLDL Cholesterol Cal 23 17 06/02/2025 mg/dL 5-40
+LDL Chol Calc (NIH) 42 44 06/02/2025 mg/dL 0-99
+LDL/HDL Ratio 1.2 ratio 0.0-3.6
+Please Note: 01
+                                                    LDL/HDL Ratio
+                                                            Men  Women
+                                              1/2 Avg.Risk  1.0    1.5
+                                                  Avg.Risk  3.6    3.2
+                                               2X Avg.Risk  6.2    5.0
+                                               3X Avg.Risk  8.0    6.1
+Albumin/Creatinine Ratio,Urine
+Test Current Result and Flag Previous Result and Date Units Reference Interval
+Creatinine, Urine 01 55.6 17.6 09/12/2025 mg/dL Not Estab.
+Albumin, Urine 01 15.9 3.3 09/12/2025 ug/mL Not Estab.
+Alb/Creat Ratio 29 19 09/12/2025 mg/g creat 0-29
+                                       Normal:                0 -  29
+                                       Moderately increased: 30 - 300
+                                       Severely increased:       >300
+Hemoglobin A1c
+Test Current Result and Flag Previous Result and Date Units Reference Interval
+Hemoglobin A1c 01 6.5 High 7.4 09/12/2025 % 4.8-5.6
+Please Note: 01
+          Prediabetes: 5.7 - 6.4
+          Diabetes: >6.4
+          Glycemic control for adults with diabetes: <7.0
+C-Peptide, Serum
+Test Current Result and Flag Previous Result and Date Units Reference Interval
+C-Peptide, Serum 01 1.3 0.9 09/12/2025 ng/mL 1.1-4.4
+ C-Peptide reference interval is for fasting patients.
+Vitamin D, 25-Hydroxy
+Test Current Result and Flag Previous Result and Date Units Reference Interval
+Vitamin D, 25-Hydroxy 01 72.0 ng/mL 30.0-100.0
+ Vitamin D deficiency has been defined by the Institute of
+ Medicine and an Endocrine Society practice guideline as a
+ level of serum 25-OH vitamin D less than 20 ng/mL (1,2).
+ The Endocrine Society went on to further define vitamin D
+ insufficiency as a level between 21 and 29 ng/mL (2).
+ 1. IOM (Institute of Medicine). 2010. Dietary reference
+    intakes for calcium and D. Washington DC: The
+    National Academies Press.
+ 2. Holick MF, Binkley NC, Bischoff-Ferrari HA, et al.
+    Evaluation, treatment, and prevention of vitamin D
+    deficiency: an Endocrine Society clinical practice
+    guideline. JCEM. 2011 Jul; 96(7):1911-30.
+Date Created and Stored  02/13/26 1233 ET   Final Report  Page 3 of 4
+©2026 Laboratory Corporation of America® Holdings
+All Rights Reserved - Enterprise Report Version 2.00
+This document contains private and confidential health information protected by state and federal law.
+              If you have received this document in error please call 858-668-3700
+
+Thatikunta, Prakash DOB: 03/12/1960 Patient Report
+Patient ID: E1561134 Age: 65 Account Number: 04065065
+Specimen ID: 043-544-3024-0 Sex: Male Ordering Physician: M JAVED
+Date Collected: 02/12/2026
+Panel 140659
+Test Current Result and Flag Previous Result and Date Units Reference Interval
+Hep C Virus Ab 01 Non Reactive Non Reactive
+ HCV antibody alone does not differentiate between previously
+ resolved infection and active infection. Equivocal and Reactive
+ HCV antibody results should be followed up with an HCV RNA test
+ to support the diagnosis of active HCV infection.
+PSA, Ultrasensitive W/O Serial
+Test Current Result and Flag Previous Result and Date Units Reference Interval
+PSA, Ultrasensitive 01 1.020 ng/mL 0.000-4.000
+ Roche ECLIA methodology.
+ According to the American Urological Association, Serum PSA should
+ decrease and remain at undetectable levels after radical
+ prostatectomy. The AUA defines biochemical recurrence as an initial
+ PSA value 0.200 ng/mL or greater followed by a subsequent
+ confirmatory PSA value 0.200 ng/mL or greater.
+ Values obtained with different assay methods or kits cannot be used
+ interchangeably. Results cannot be interpreted as absolute evidence
+ of the presence or absence of malignant disease.
+Vitamin B12
+Test Current Result and Flag Previous Result and Date Units Reference Interval
+Vitamin B12 01 >2000 High pg/mL 232-1245
+ 
+Previous Result
+The Previous Result is listed for the most recent test performed by Labcorp in the past 5 years where there is sufficient patient demographic data to
+match the result to the patient. Results from certain tests are excluded from the Previous Result display.
+ 
+Icon Legend
+ Out of Reference Range      Critical or Alert
+ 
+Performing Labs
+01: SO - Labcorp San Diego, 13112 Evening Creek Dr So  Ste 200, San Diego, CA 92128-4108 Dir: Earle Collum, Jr, MD
+For inquiries, the physician may contact Branch: 800-888-1113 Lab: 858-668-3700
+ 
+Patient Details
+Thatikunta, Prakash
+10281 TORRE AVE UNIT 820, CUPERTINO, CA,
+95014
+Phone: 408-309-4950
+Date of Birth: 03/12/1960
+Age: 65
+Sex: Male
+Patient ID: E1561134
+Alternate Patient ID: E1561134
+Physician Details
+M JAVED
+El Camino Health Cuesta In
+2204 Grant Rd Ste 203, Mountain View, CA,
+94040
+Phone: 408-866-4000
+Account Number: 04065065
+Physician ID: 1568543130
+NPI: 1568543130
+Specimen Details
+Specimen ID: 043-544-3024-0
+Control ID: 201926010
+Alternate Control Number: 201926010
+Date Collected: 02/12/2026 0803  Local
+Date Received: 02/12/2026 0000  ET
+Date Entered: 02/12/2026 1111  ET
+Date Reported: 02/13/2026 1211  ET
+Date Created and Stored  02/13/26 1233 ET   Final Report  Page 4 of 4
+©2026 Laboratory Corporation of America® Holdings
+All Rights Reserved - Enterprise Report Version 2.00
+This document contains private and confidential health information protected by state and federal law.
+              If you have received this document in error please call 858-668-3700

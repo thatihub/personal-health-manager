@@ -1,0 +1,213 @@
+Thatikunta, Prakash R DOB: 03/12/1960 Patient Report
+Patient ID: Age: 65 Account Number: 04304280
+Specimen ID: 255-544-1711-0 Sex: Male Ordering Physician: D JUE
+Date Collected: 09/12/2025 Date Received: 09/12/2025 Date Reported: 09/13/2025 Fasting: Yes
+Ordered Items: Comp. Metabolic Panel (14); CBC, Platelet, No Differential; Albumin/Creatinine Ratio,Urine; Hemoglobin A1c;
+C-Peptide, Serum; C-Reactive Protein, Cardiac; Homocyst(e)ine; C-Reactive Protein, Quant; Venipuncture; Non LCA Req;
+Handwritten Order; Diabetes Patient Education
+Date Collected: 09/12/2025
+Comp. Metabolic Panel (14)
+Test Current Result and Flag Previous Result and Date Units Reference Interval
+Glucose 01 112 High 147 06/02/2025 mg/dL 70-99
+BUN 01 10 16 06/02/2025 mg/dL 8-27
+Creatinine 01 0.90 0.95 06/02/2025 mg/dL 0.76-1.27
+eGFR 95 89 06/02/2025 mL/min/1.73 >59
+BUN/Creatinine Ratio 11 17 06/02/2025 10-24
+Sodium 01 132 Low 135 06/02/2025 mmol/L 134-144
+Potassium 01 4.9 4.5 06/02/2025 mmol/L 3.5-5.2
+Chloride 01 93 Low 97 06/02/2025 mmol/L 96-106
+Carbon Dioxide, Total 01 22 23 06/02/2025 mmol/L 20-29
+Calcium 01 9.5 9.2 06/02/2025 mg/dL 8.6-10.2
+Protein, Total 01 7.1 6.8 06/02/2025 g/dL 6.0-8.5
+Albumin 01 4.6 4.3 06/02/2025 g/dL 3.9-4.9
+Globulin, Total 2.5 2.5 06/02/2025 g/dL 1.5-4.5
+Bilirubin, Total 01 0.3 0.4 06/02/2025 mg/dL 0.0-1.2
+Alkaline Phosphatase 01 65 61 06/02/2025 IU/L 44-121
+                **Effective September 15, 2025 Alkaline Phosphatase**
+                  reference interval will be changing to:
+                             Age                Male          Female
+                          0 -  5 days         47 - 127       47 - 127
+                          6 - 10 days         29 - 242       29 - 242
+                         11 - 20 days        109 - 357      109 - 357
+                         21 - 30 days         94 - 494       94 - 494
+                          1 -  2 months      149 - 539      149 - 539
+                          3 -  6 months      131 - 452      131 - 452
+                          7 - 11 months      117 - 401      117 - 401
+                  12 months -  6 years       158 - 369      158 - 369
+                          7 - 12 years       150 - 409      150 - 409
+                              13 years       156 - 435       78 - 227
+                              14 years       114 - 375       64 - 161
+                              15 years        88 - 279       56 - 134
+                              16 years        74 - 207       51 - 121
+                              17 years        63 - 161       47 - 113
+                         18 - 20 years        51 - 125       42 - 106
+                         21 - 50 years        47 - 123       41 - 116
+                         51 - 80 years        49 - 135       51 - 125
+                             >80 years        48 - 129       48 - 129
+AST (SGOT) 01 25 20 06/02/2025 IU/L 0-40
+ALT (SGPT) 01 15 18 06/02/2025 IU/L 0-44
+Date Created and Stored  09/13/25 1909 ET   Final Report  Page 1 of 3
+©2025 Laboratory Corporation of America® Holdings
+All Rights Reserved - Enterprise Report Version 2.00
+This document contains private and confidential health information protected by state and federal law.
+              If you have received this document in error please call 858-668-3700
+
+Thatikunta, Prakash R DOB: 03/12/1960 Patient Report
+Patient ID: Age: 65 Account Number: 04304280
+Specimen ID: 255-544-1711-0 Sex: Male Ordering Physician: D JUE
+Date Collected: 09/12/2025
+CBC, Platelet, No Differential
+Test Current Result and Flag Previous Result and Date Units Reference Interval
+WBC 01 9.6 11.2 06/02/2025 x10E3/uL 3.4-10.8
+RBC 01 4.91 4.82 06/02/2025 x10E6/uL 4.14-5.80
+Hemoglobin 01 14.1 14.0 06/02/2025 g/dL 13.0-17.7
+Hematocrit 01 43.8 42.2 06/02/2025 % 37.5-51.0
+MCV 01 89 88 06/02/2025 fL 79-97
+MCH 01 28.7 29.0 06/02/2025 pg 26.6-33.0
+MCHC 01 32.2 33.2 06/02/2025 g/dL 31.5-35.7
+RDW 01 14.0 13.9 06/02/2025 % 11.6-15.4
+Platelets 01 293 312 06/02/2025 x10E3/uL 150-450
+Albumin/Creatinine Ratio,Urine
+Test Current Result and Flag Previous Result and Date Units Reference Interval
+Creatinine, Urine 01 17.6 37.1 06/02/2025 mg/dL Not Estab.
+Albumin, Urine 01 3.3 18.8 06/02/2025 ug/mL Not Estab.
+Alb/Creat Ratio 19 51 06/02/2025 mg/g creat 0-29
+                                       Normal:                0 -  29
+                                       Moderately increased: 30 - 300
+                                       Severely increased:       >300
+Hemoglobin A1c
+Test Current Result and Flag Previous Result and Date Units Reference Interval
+Hemoglobin A1c 01 7.4 High 7.4 06/02/2025 % 4.8-5.6
+Please Note: 01
+          Prediabetes: 5.7 - 6.4
+          Diabetes: >6.4
+          Glycemic control for adults with diabetes: <7.0
+C-Peptide, Serum
+Test Current Result and Flag Previous Result and Date Units Reference Interval
+C-Peptide, Serum 01 0.9 Low 1.2 06/02/2025 ng/mL 1.1-4.4
+ C-Peptide reference interval is for fasting patients.
+C-Reactive Protein, Cardiac
+Test Current Result and Flag Previous Result and Date Units Reference Interval
+C-Reactive Protein, Cardiac 01 0.83 mg/L 0.00-3.00
+                         Relative Risk for Future Cardiovascular Event
+                                             Low                 <1.00
+                                             Average       1.00 - 3.00
+                                             High                >3.00
+Homocyst(e)ine
+Test Current Result and Flag Previous Result and Date Units Reference Interval
+Homocyst(e)ine 01 7.2 umol/L 0.0-17.2
+Date Created and Stored  09/13/25 1909 ET   Final Report  Page 2 of 3
+©2025 Laboratory Corporation of America® Holdings
+All Rights Reserved - Enterprise Report Version 2.00
+This document contains private and confidential health information protected by state and federal law.
+              If you have received this document in error please call 858-668-3700
+
+Thatikunta, Prakash R DOB: 03/12/1960 Patient Report
+Patient ID: Age: 65 Account Number: 04304280
+Specimen ID: 255-544-1711-0 Sex: Male Ordering Physician: D JUE
+Date Collected: 09/12/2025
+C-Reactive Protein, Quant
+Test Current Result and Flag Previous Result and Date Units Reference Interval
+C-Reactive Protein, Quant 01 <1 mg/L 0-10
+Diabetes Patient Education
+Test Current Result and Flag Previous Result and Date Units Reference Interval
+PDF 02 .
+ 
+Disclaimer
+The Previous Result is listed for the most recent test performed by Labcorp in the past 5 years where there is sufficient patient demographic data to
+match the result to the patient. Results from certain tests are excluded from the Previous Result display.
+ 
+Icon Legend
+ Out of Reference Range      Critical or Alert
+ 
+Performing Labs
+01: SO - Labcorp San Diego, 13112 Evening Creek Dr So  Ste 200, San Diego, CA 92128-4108 Dir: Earle Collum, Jr, MD
+02: LITNC - Labcorp Clinical / Digital, 10 Moore Drive, Durham, NC 27709-0009 Dir: Jennifer Ennis, MD
+For inquiries, the physician may contact Branch: 800-888-1113 Lab: 858-668-3700
+ 
+Patient Details
+Thatikunta, Prakash R
+10281 TORRE AVE UNIT 820, CUPERTINO, CA,
+95014
+Phone: 408-309-4950
+Date of Birth: 03/12/1960
+Age: 65
+Sex: Male
+Patient ID:
+Alternate Patient ID:
+Physician Details
+D JUE
+Dyron J Jue MD
+2101 Forest Ave Ste 100, SAN JOSE, CA,
+95128
+Phone: 408-280-0755
+Account Number: 04304280
+Physician ID:
+NPI: 1760484240
+Specimen Details
+Specimen ID: 255-544-1711-0
+Control ID: 60013829702
+Alternate Control Number:
+Date Collected: 09/12/2025 0729  Local
+Date Received: 09/12/2025 0000  ET
+Date Entered: 09/12/2025 1203  ET
+Date Reported: 09/13/2025 1909  ET
+Date Created and Stored  09/13/25 1909 ET   Final Report  Page 3 of 3
+©2025 Laboratory Corporation of America® Holdings
+All Rights Reserved - Enterprise Report Version 2.00
+This document contains private and confidential health information protected by state and federal law.
+              If you have received this document in error please call 858-668-3700
+
+Test Your Results Comments
+Your Test Results
+Blood Sugar
+A1C measures your average blood sugar
+control over the last 2-3 months.
+YOUR A1C IS SLIGHTLY ABOVE GOAL but has
+gotten better since your last test. Remember to
+take all medicines prescribed by your doctor.
+Avoid foods high in sugar. Regular exercise (at
+least 30 minutes 5 times a week) and weight loss
+can also improve diabetes control.
+7.4%
+7.4%
+7.7%
+Kidney Health
+eGFR estimates how well your kidneys
+are filtering blood.  The higher the
+number, the better your kidneys are
+working.
+YOUR RESULT SHOWS NORMAL KIDNEY
+FUNCTION. Control of diabetes and blood
+pressure can help to preserve kidney function.
+95
+Ref Range: >59
+mL/min/1.73mE2
+URINE ALBUMIN : CREATININE
+RATIO is a test that looks for albumin in
+the urine, a sign of kidney damage.
+Higher amounts also put you at risk for
+heart disease and loss of kidney function.
+The lower the result, the better.
+YOUR URINE ALBUMIN IS NORMAL. Controlli
+ng conditions like high blood pressure and
+diabetes can help keep your urine albumin in the
+normal range.  Regular exercise, weight loss, and
+quitting smoking are also beneficial for both heart
+and kidney health.
+18.7
+Ref. Range: 0 to 30 mg/g creat
+JUE, DYRON JAKE
+LabCorp Account #: 04304280
+09/12/2025M03/12/1960THATIKUNTA, PRAKASH
+Litholink Patient Results ReportPATIENT DATE OF BIRTH GENDER DATE OF SERVICE PHYSICIAN
+DISCLAIMER: You should discuss this information with your physician. Labcorp does not have a doctor-patient relationship with you, nor does it have access to a complete
+medical history or physical examination conducted by a physician that would be necessary for a complete diagnosis and comprehensive treatment plan. Neither you nor your
+physician should rely solely on this guidance. Bolded result descriptions in "Comments" consider either the reference range or target range for the test result. Reference range
+refers to the Labcorp reference interval. Target range refers to the guideline-suggested goal. REFERENCES:American Diabetes Association's Standards of Medical Care in
+Diabetes-2022 (Diabetes Care, Vol 45, Supp 1, Jan 2022); National Diabetes Education Program's 4 Steps to Manage Your Diabetes for Life (2016, NIH publication 16-5492).
+Page: 1 of 1Date Issued 09/13/2025 7:03 PM
+This document contains private and confidential health information protected by state and federal law.
+If you have received this document in error, please call 336-222-7566.
+© 1995-2021 Laboratory Corporation of America® Holdings
+All RIghts Reserved - Enterprise Report Version 2.00

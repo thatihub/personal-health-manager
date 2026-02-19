@@ -1,0 +1,257 @@
+DOB: 
+03/12/1960
+Sex: 
+M
+Phone: 
+(408) 309-4950
+Patient ID: 
+1044153
+Age: 
+64
+Fasting: 
+Y
+ 
+ 
+Specimen: 
+SZ574416Q
+Requisition: 
+0019854
+Report Status: 
+FINAL
+Collected: 
+10/02/2024 08:14
+Received: 
+10/02/2024 08:15
+Reported: 
+10/04/2024 07:39
+Client #: 
+95064001
+QUE,CHI-LING
+CARBON HLTH-SANTA CLARA
+SQUARE/ STE #120
+2712 AUGUSTINE DR
+SANTA CLARA, CA 95054-2941
+Phone: 
+(408) 786-9636
+Quest, Quest Diagnostics, the associated logo, Nichols Institute, Interactive Insights and all associated Quest Diagnostics marks are the registered trademarks of Quest Diagnostics. All
+third party marks - '®' and '™' - are the property of their respective owners. Privacy policy can be found at: 
+http://questdiagnostics.com/home/privacy-policy/online-privacy.html
+. © 2022
+Quest Diagnostics Incorporated. All rights reserved.
+THATIKUNTA,PRAKASH
+FASTING:YES
+ 
+These results have been sent to the person who ordered the tests. Your receipt of these results should not be viewed as medical advice and is not meant to replace discussion with
+your doctor or other healthcare professional.
+Performing Sites
+EN Quest Diagnostics-West Hills, 8401 Fallbrook Ave, West Hills, CA 91304-3226 Laboratory Director: Thomas J McDonald
+UL Quest Diagnostics-Sacramento - Northgate, 3714 Northgate Blvd, Sacramento, CA 95834-1617 Laboratory Director: Lorne L Holland
+Key
+ 
+Priority Out of Range
+ 
+ 
+Out of Range
+ 
+HEMOGLOBIN A1c 
+   
+Analyte
+Value
+ 
+HEMOGLOBIN A1c
+6.6 H
+Reference Range:
+ 
+<5.7
+ 
+% of total Hgb
+For
+ 
+someone
+ 
+without
+ 
+known
+ 
+diabetes,
+ 
+a
+ 
+hemoglobin
+ 
+A1c
+ 
+value
+ 
+of
+ 
+6.5%
+ 
+or
+ 
+greater
+ 
+indicates
+ 
+that
+ 
+they
+ 
+may
+ 
+have
+ 
+diabetes
+ 
+and
+ 
+this
+ 
+should
+ 
+be
+ 
+confirmed
+ 
+with
+ 
+a
+ 
+follow-up
+ 
+test.
+ 
+ 
+ 
+For
+ 
+someone
+ 
+with
+ 
+known
+ 
+diabetes,
+ 
+a
+ 
+value
+ 
+<7%
+ 
+indicates
+ 
+that
+ 
+their
+ 
+diabetes
+ 
+is
+ 
+well
+ 
+controlled
+ 
+and
+ 
+a
+ 
+value
+ 
+greater
+ 
+than
+ 
+or
+ 
+equal
+ 
+to
+ 
+7%
+ 
+indicates
+ 
+suboptimal
+ 
+control.
+ 
+A1c
+ 
+targets
+ 
+should
+ 
+be
+ 
+individualized
+ 
+based
+ 
+on
+ 
+duration
+ 
+of
+ 
+diabetes,
+ 
+age,
+ 
+comorbid
+ 
+conditions,
+ 
+and
+ 
+other
+ 
+considerations.
+ 
+ 
+ 
+Currently,
+ 
+no
+ 
+consensus
+ 
+exists
+ 
+regarding
+ 
+use
+ 
+of
+ 
+hemoglobin
+ 
+A1c
+ 
+for
+ 
+diagnosis
+ 
+of
+ 
+diabetes
+ 
+for
+ 
+children.
+ 
+C-PEPTIDE 
+   
+Analyte
+Value
+C-PEPTIDE
+0.82
+Reference Range:
+ 
+0.80-3.85
+ 
+ng/mL
+THATIKUNTA,PRAKASH (SZ574416Q)
+1 / 1
+6/3/25  

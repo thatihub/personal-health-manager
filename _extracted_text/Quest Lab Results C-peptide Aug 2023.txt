@@ -1,0 +1,69 @@
+DOB: 
+03/12/1960
+Sex: 
+M
+Phone: 
+(408) 309-4950
+Patient ID: 
+1044153
+Age: 
+63
+Fasting: 
+Y
+ 
+ 
+Specimen: 
+SZ222504L
+Requisition: 
+0001028
+Report Status: 
+FINAL
+Collected: 
+08/28/2023 09:38
+Received: 
+08/28/2023 09:40
+Reported: 
+08/29/2023 22:10
+Client #: 
+94087020
+POON,VINCENT
+CARBON HEALTH SUNNYVALE
+**INACTIVE**
+500 E REMINGTON DR STE 20
+SUNNYVALE, CA 94087-2612
+Phone: 
+(650) 318-3384
+Quest, Quest Diagnostics, the associated logo, Nichols Institute, Interactive Insights and all associated Quest Diagnostics marks are the registered trademarks of Quest Diagnostics. All
+third party marks - '®' and '™' - are the property of their respective owners. Privacy policy can be found at: 
+http://questdiagnostics.com/home/privacy-policy/online-privacy.html
+. © 2022
+Quest Diagnostics Incorporated. All rights reserved.
+THATIKUNTA,PRAKASH
+FASTING:YES
+ 
+These results have been sent to the person who ordered the tests. Your receipt of these results should not be viewed as medical advice and is not meant to replace discussion with
+your doctor or other healthcare professional.
+Performing Sites
+EN Quest Diagnostics-West Hills, 8401 Fallbrook Ave, West Hills, CA 91304-3226 Laboratory Director: Thomas J McDonald
+Key
+ 
+Priority Out of Range
+ 
+ 
+Out of Range
+ 
+C-PEPTIDE 
+   
+Analyte
+Value
+ 
+C-PEPTIDE
+0.72 L
+Reference Range:
+ 
+0.80-3.85
+ 
+ng/mL
+THATIKUNTA,PRAKASH (SZ222504L)
+1 / 1
+6/3/25  

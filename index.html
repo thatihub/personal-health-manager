@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Personal Health Manager</title>
+  <style>
+    :root {
+      --bg: #f2f7ff;
+      --ink: #102436;
+      --muted: #476176;
+      --panel: rgba(255, 255, 255, 0.84);
+      --shadow: 0 14px 34px rgba(16, 36, 54, 0.14);
+      --blue: #0f7ea6;
+      --coral: #ef6f59;
+      --lime: #3aa76d;
+      --violet: #6f7bf7;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Avenir Next", "Trebuchet MS", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 8% 8%, rgba(15,126,166,0.26), transparent 38%),
+        radial-gradient(circle at 90% 14%, rgba(239,111,89,0.24), transparent 34%),
+        radial-gradient(circle at 72% 86%, rgba(58,167,109,0.22), transparent 30%),
+        linear-gradient(160deg, #eef6ff 0%, #f9f5ff 44%, #f8fffa 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .wrap { max-width: 1100px; margin: 0 auto; }
+    .nav {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+    .nav a {
+      text-decoration: none;
+      padding: 9px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(16,36,54,0.13);
+      background: rgba(255,255,255,0.75);
+      color: #1f465c;
+      font-weight: 700;
+      font-size: 13px;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+    }
+    .nav a.active { background: linear-gradient(120deg, var(--blue), #1a93bf); color: #fff; border-color: transparent; }
+
+    .bottom-tab { display: none; }
+    .bottom-tab a {
+      text-decoration: none;
+      color: #2b4655;
+      font-weight: 700;
+      font-size: 12px;
+      padding: 8px 6px;
+      border-radius: 10px;
+      text-align: center;
+      min-height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .bottom-tab a.active {
+      background: linear-gradient(120deg, var(--blue), #1a93bf);
+      color: #fff;
+    }
+
+    h1 {
+      margin: 0 0 6px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(28px, 4vw, 44px);
+    }
+    .sub { color: var(--muted); margin-bottom: 18px; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 12px;
+    }
+    .card {
+      background: var(--panel);
+      border: 1px solid rgba(16,36,54,0.1);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 14px;
+      backdrop-filter: blur(8px);
+    }
+    .grid .card:nth-child(1) { border-top: 5px solid var(--blue); }
+    .grid .card:nth-child(2) { border-top: 5px solid var(--coral); }
+    .card h3 { margin: 0 0 8px; }
+    .card p { margin: 0; color: var(--muted); line-height: 1.4; }
+    .cta {
+      display: inline-block;
+      margin-top: 12px;
+      text-decoration: none;
+      padding: 8px 12px;
+      border-radius: 10px;
+      background: linear-gradient(120deg, #183f52, #0f7ea6);
+      color: #fff;
+      font-weight: 700;
+      font-size: 12px;
+      min-height: 40px;
+      line-height: 24px;
+    }
+    .stats {
+      margin-top: 14px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 10px;
+    }
+    .stat {
+      padding: 12px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.92);
+      border: 1px solid rgba(16,36,54,.08);
+      box-shadow: var(--shadow);
+    }
+    .stats .stat:nth-child(1) { background: linear-gradient(160deg, rgba(15,126,166,.16), rgba(255,255,255,.92)); }
+    .stats .stat:nth-child(2) { background: linear-gradient(160deg, rgba(239,111,89,.16), rgba(255,255,255,.92)); }
+    .stats .stat:nth-child(3) { background: linear-gradient(160deg, rgba(58,167,109,.16), rgba(255,255,255,.92)); }
+    .stats .stat:nth-child(4) { background: linear-gradient(160deg, rgba(111,123,247,.16), rgba(255,255,255,.92)); }
+    .stats .stat:nth-child(5) { background: linear-gradient(160deg, rgba(15,126,166,.16), rgba(255,255,255,.92)); }
+    .label { font-size: 11px; color: var(--muted); text-transform: uppercase; }
+    .val { font-size: 24px; font-weight: 800; margin-top: 3px; }
+    @media (max-width: 1024px) {
+      body { padding: 16px; }
+      .wrap { max-width: 100%; }
+    }
+    @media (max-width: 640px) {
+      body {
+        padding: 12px;
+        padding-bottom: calc(86px + env(safe-area-inset-bottom));
+      }
+      .nav { display: none; }
+      .bottom-tab {
+        position: fixed;
+        left: 12px;
+        right: 12px;
+        bottom: max(10px, env(safe-area-inset-bottom));
+        z-index: 999;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 8px;
+        padding: 8px;
+        border-radius: 14px;
+        background: rgba(255,255,255,0.94);
+        border: 1px solid rgba(16,36,54,0.18);
+        box-shadow: 0 12px 26px rgba(16,36,54,0.18);
+        backdrop-filter: blur(8px);
+      }
+      h1 { font-size: clamp(24px, 7vw, 34px); }
+      .stats { grid-template-columns: 1fr 1fr; }
+      .val { font-size: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <nav class="nav">
+      <a class="active" href="./index.html">Home</a>
+      <a href="./dashboard.html">Lab Results Dashboard</a>
+      <a href="./vault.html">Health Vault</a>
+    </nav>
+
+    <h1>Personal Health Manager</h1>
+    <div class="sub" id="summary">One place for labs, scans, insurance links, and care contacts.</div>
+
+    <section class="stats" id="stats"></section>
+
+    <section class="grid" style="margin-top:12px">
+      <article class="card">
+        <h3>Lab Results Dashboard</h3>
+        <p>Lab trends, normal ranges, abnormal highlights, and latest value cards.</p>
+        <a class="cta" href="./dashboard.html">Open Lab Dashboard</a>
+      </article>
+      <article class="card">
+        <h3>Health Vault</h3>
+        <p>Scanned insurance details, useful links, member IDs, and phone contacts.</p>
+        <a class="cta" href="./vault.html">Open Vault</a>
+      </article>
+    </section>
+  </div>
+
+  <script>
+    async function loadStats() {
+      const statsRoot = document.getElementById('stats');
+      try {
+        const res = await fetch('./dashboard_data.js');
+        const txt = await res.text();
+        const jsonTxt = txt.split('=', 2)[1].trim().replace(/;\s*$/, '');
+        const rows = JSON.parse(jsonTxt);
+        const last = rows[rows.length - 1] || {};
+
+        const lastVal = (k) => {
+          for (let i = rows.length - 1; i >= 0; i--) {
+            const v = rows[i][k];
+            if (v !== null && v !== undefined) return v;
+          }
+          return '-';
+        };
+
+        const cards = [
+          ['Reports', rows.length],
+          ['Latest HbA1c', lastVal('hba1c')],
+          ['Latest Glucose', lastVal('glucose')],
+          ['Latest TSH', lastVal('tsh')],
+          ['Latest LDL', lastVal('ldl')]
+        ];
+
+        statsRoot.innerHTML = cards.map(([l,v]) => `<div class="stat"><div class="label">${l}</div><div class="val">${v}</div></div>`).join('');
+      } catch (e) {
+        statsRoot.innerHTML = '<div class="stat"><div class="label">Status</div><div class="val">Load failed</div></div>';
+      }
+    }
+    loadStats();
+  </script>
+
+  <nav class="bottom-tab" aria-label="Primary">
+    <a href="./index.html" class="active">Home</a>
+    <a href="./dashboard.html">Lab Results</a>
+    <a href="./vault.html">Vault</a>
+  </nav>
+</body>
+</html>

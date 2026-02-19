@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Health Vault</title>
+  <style>
+    :root {
+      --bg: #f2f7ff;
+      --ink: #102436;
+      --muted: #476176;
+      --panel: rgba(255, 255, 255, 0.9);
+      --shadow: 0 14px 34px rgba(16, 36, 54, 0.14);
+      --blue: #0f7ea6;
+      --coral: #ef6f59;
+      --lime: #3aa76d;
+      --violet: #6f7bf7;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Avenir Next", "Trebuchet MS", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 85% 10%, rgba(15,126,166,0.24), transparent 35%),
+        radial-gradient(circle at 12% 90%, rgba(111,123,247,0.22), transparent 34%),
+        linear-gradient(160deg, #eef6ff 0%, #f9f5ff 42%, #f7fff8 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .wrap { max-width: 1150px; margin: 0 auto; }
+    .nav { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+    .nav a {
+      text-decoration: none;
+      padding: 9px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(16,36,54,.14);
+      background: rgba(255,255,255,0.82);
+      color: #274150;
+      font-weight: 700;
+      font-size: 13px;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+    }
+    .nav a.active { background: linear-gradient(120deg, var(--blue), #1a93bf); color: #fff; border-color: transparent; }
+
+    .bottom-tab { display: none; }
+    .bottom-tab a {
+      text-decoration: none;
+      color: #2b4655;
+      font-weight: 700;
+      font-size: 12px;
+      padding: 8px 6px;
+      border-radius: 10px;
+      text-align: center;
+      min-height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .bottom-tab a.active { background: linear-gradient(120deg, var(--blue), #1a93bf); color: #fff; }
+
+    h1 { margin: 0 0 6px; font-family: Georgia, "Times New Roman", serif; font-size: clamp(26px,4vw,40px); }
+    .sub { color: var(--muted); margin-bottom: 16px; }
+    .search-wrap {
+      margin-bottom: 14px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .search-input {
+      width: min(560px, 100%);
+      min-height: 44px;
+      border-radius: 12px;
+      border: 1px solid rgba(16,36,54,.2);
+      background: rgba(255,255,255,.92);
+      padding: 10px 12px;
+      font-size: 14px;
+      color: var(--ink);
+      outline: none;
+    }
+    .search-input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(15,126,166,.15); }
+    .search-note { font-size: 12px; color: var(--muted); }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .card {
+      background: var(--panel);
+      border: 1px solid rgba(16,36,54,.08);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 14px;
+      backdrop-filter: blur(8px);
+    }
+    .grid .card:nth-child(4n+1) { border-top: 5px solid var(--blue); }
+    .grid .card:nth-child(4n+2) { border-top: 5px solid var(--coral); }
+    .grid .card:nth-child(4n+3) { border-top: 5px solid var(--lime); }
+    .grid .card:nth-child(4n+4) { border-top: 5px solid var(--violet); }
+
+    .card h3 { margin: 0 0 10px; }
+    .row { border-top: 1px solid rgba(20,34,46,.08); padding: 9px 0; }
+    .row:first-child { border-top: 0; padding-top: 0; }
+    .k { font-size: 12px; color: var(--muted); }
+    .v { font-weight: 700; margin-top: 2px; }
+    .muted { color: var(--muted); font-size: 12px; margin-top: 3px; }
+    a.link { color: #124e67; word-break: break-all; }
+    .chip { display: inline-block; background: rgba(15,126,166,.16); color: #104f67; padding: 2px 8px; border-radius: 999px; font-size: 11px; margin-right: 6px; }
+    ul.list { margin: 6px 0 0 18px; padding: 0; }
+    ul.list li { margin: 4px 0; }
+    .phone-link { color: #124e67; font-weight: 700; text-decoration: none; }
+    .mini-btn {
+      border: 1px solid rgba(16,36,54,.18);
+      background: #fff;
+      color: #2f5267;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 7px;
+      margin-left: 6px;
+      cursor: pointer;
+      vertical-align: middle;
+    }
+    .card.hidden-by-search { display: none; }
+
+    @media (max-width: 1024px) {
+      body { padding: 16px; }
+      .wrap { max-width: 100%; }
+      .grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      body {
+        padding: 12px;
+        padding-bottom: calc(86px + env(safe-area-inset-bottom));
+      }
+      .nav { display: none; }
+      .bottom-tab {
+        position: fixed;
+        left: 12px;
+        right: 12px;
+        bottom: max(10px, env(safe-area-inset-bottom));
+        z-index: 999;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 8px;
+        padding: 8px;
+        border-radius: 14px;
+        background: rgba(255,255,255,0.94);
+        border: 1px solid rgba(16,36,54,0.18);
+        box-shadow: 0 12px 26px rgba(16,36,54,0.18);
+        backdrop-filter: blur(8px);
+      }
+      h1 { font-size: clamp(24px, 7vw, 34px); }
+      .card { padding: 12px; border-radius: 14px; }
+      .row { padding: 8px 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <nav class="nav">
+      <a href="./index.html">Home</a>
+      <a href="./dashboard.html">Lab Results Dashboard</a>
+      <a class="active" href="./vault.html">Health Vault</a>
+    </nav>
+
+    <h1>Health Vault</h1>
+    <div class="sub">SCAN 2026, benefits, contacts, medications, and care references.</div>
+    <div class="search-wrap">
+      <input id="vault-search" class="search-input" type="search" placeholder="Search: phone, doctor, program, medication, vaccine..." />
+      <span class="search-note">Type to filter cards</span>
+    </div>
+
+    <section class="grid">
+      <article class="card"><h3>Member</h3><div id="member"></div></article>
+      <article class="card"><h3>SCAN Support</h3><div id="support"></div></article>
+      <article class="card"><h3>Benefits & Programs</h3><div id="benefits"></div></article>
+      <article class="card"><h3>Pharmacy & Rx</h3><div id="pharmacy"></div></article>
+      <article class="card"><h3>Doctors & Networks</h3><div id="providers"></div></article>
+      <article class="card"><h3>Lab Test Plan</h3><div id="labtests"></div></article>
+      <article class="card"><h3>Vaccines</h3><div id="vaccines"></div></article>
+      <article class="card"><h3>Notes</h3><div id="notes"></div></article>
+    </section>
+  </div>
+
+  <script>
+    function normalizePhone(phone) {
+      if (!phone) return "";
+      return String(phone).replace(/[^0-9+]/g, "");
+    }
+
+    function copyButton(text, label = "Copy") {
+      if (!text) return "";
+      const safe = String(text).replace(/"/g, "&quot;");
+      return `<button class="mini-btn copy-btn" type="button" data-copy="${safe}">${label}</button>`;
+    }
+
+    function phoneLink(phone) {
+      if (!phone) return "-";
+      const cleaned = normalizePhone(phone);
+      return `<a class="phone-link" href="tel:${cleaned}">${phone}</a>${copyButton(phone)}`;
+    }
+
+    function phoneInline(phone) {
+      if (!phone) return "-";
+      const cleaned = normalizePhone(phone);
+      return `<a class="phone-link" href="tel:${cleaned}">${phone}</a>`;
+    }
+
+    function linkifyPhones(text) {
+      if (!text) return "-";
+      return String(text).replace(/(\+?\d[\d()\-\s]{7,}\d)/g, (m) => phoneInline(m.trim()));
+    }
+
+    function row(title, value, cls = "") {
+      return `<div class="row ${cls}"><div class="k">${title}</div><div class="v">${value || "-"}</div></div>`;
+    }
+
+    function link(url) {
+      if (!url) return "-";
+      return `<a class="link" href="${url}" target="_blank" rel="noopener">${url}</a>`;
+    }
+
+    function list(items) {
+      if (!items || !items.length) return "-";
+      return `<ul class="list">${items.map((x) => `<li>${linkifyPhones(x)}</li>`).join("")}</ul>`;
+    }
+
+    function bindCopyButtons() {
+      document.querySelectorAll(".copy-btn").forEach((btn) => {
+        if (btn.dataset.bound === "1") return;
+        btn.dataset.bound = "1";
+        btn.addEventListener("click", async () => {
+          const value = btn.getAttribute("data-copy") || "";
+          try {
+            await navigator.clipboard.writeText(value);
+            const old = btn.textContent;
+            btn.textContent = "Copied";
+            setTimeout(() => { btn.textContent = old; }, 1200);
+          } catch (_e) {
+            btn.textContent = "Copy failed";
+            setTimeout(() => { btn.textContent = "Copy"; }, 1200);
+          }
+        });
+      });
+    }
+
+    function bindSearch() {
+      const input = document.getElementById("vault-search");
+      const cards = Array.from(document.querySelectorAll(".grid .card"));
+      input.addEventListener("input", () => {
+        const q = input.value.trim().toLowerCase();
+        cards.forEach((card) => {
+          const text = card.innerText.toLowerCase();
+          const show = !q || text.includes(q);
+          card.classList.toggle("hidden-by-search", !show);
+        });
+      });
+    }
+
+    async function load() {
+      const res = await fetch('./vault_data.json');
+      const data = await res.json();
+      const scan = data.scan_2026 || {};
+
+      document.getElementById('member').innerHTML =
+        row('Plan', scan.member?.plan) +
+        row('Member ID', `${scan.member?.member_id || "-"} ${copyButton(scan.member?.member_id)}`);
+
+      document.getElementById('support').innerHTML = (scan.support_contacts || []).map((c) =>
+        `<div class="row"><div class="v">${c.name || '-'}</div><div>${phoneLink(c.phone)}</div>${c.hours ? `<div class="muted">${c.hours}</div>` : ''}${c.website ? `<div>${link(c.website)} ${copyButton(c.website)}</div>` : ''}${c.notes ? `<div class="muted">${linkifyPhones(c.notes)}</div>` : ''}</div>`
+      ).join('') || row('Support', 'No data');
+
+      document.getElementById('benefits').innerHTML = (scan.benefits_programs || []).map((b) =>
+        `<div class="row"><div class="v">${b.title || '-'}</div>${b.phone ? `<div>${phoneLink(b.phone)}</div>` : ''}${b.email ? `<div>${b.email} ${copyButton(b.email)}</div>` : ''}${b.website ? `<div>${link(b.website)} ${copyButton(b.website)}</div>` : ''}${b.details ? list(b.details) : ''}</div>`
+      ).join('') || row('Benefits', 'No data');
+
+      const rx = scan.pharmacy_prescriptions || {};
+      document.getElementById('pharmacy').innerHTML =
+        `<div class="row"><div class="v">Contacts</div>${(rx.pharmacy_contacts || []).map((p) => `<div><span class="chip">${p.name || '-'}</span> ${phoneLink(p.phone)} ${p.website ? `• ${link(p.website)} ${copyButton(p.website)}` : ''}${p.notes ? `<div class="muted">${linkifyPhones(p.notes)}</div>` : ''}</div>`).join('')}</div>` +
+        `<div class="row"><div class="v">Medications</div>${list(rx.active_medications || [])}</div>` +
+        `<div class="row"><div class="v">Device Notes</div>${list(rx.device_notes || [])}</div>`;
+
+      const prov = scan.providers || {};
+      document.getElementById('providers').innerHTML =
+        `<div class="row"><div class="v">Primary Care</div>${list((prov.primary_care || []).map((d) => `${d.name || '-'}${d.phone ? ` • ${phoneInline(d.phone)}` : ''}${d.address ? ` • ${d.address}` : ''}${d.appointment ? ` • ${d.appointment}` : ''}`))}</div>` +
+        `<div class="row"><div class="v">Endocrinology</div>${list((prov.endocrinology || []).map((d) => `${d.name || '-'}${d.phone ? ` • ${phoneInline(d.phone)}` : ''}${d.address ? ` • ${d.address}` : ''}`))}</div>` +
+        `<div class="row"><div class="v">Doctor Lookup & Telehealth</div>${list((prov.doctor_lookup || []).map((d) => `${d.title || '-'}${d.url ? ` • ${link(d.url)}` : ''}${d.notes ? ` • ${d.notes}` : ''}`))}</div>` +
+        `<div class="row"><div class="v">Network</div>${list((prov.network || []).map((n) => `${n.name || '-'}${n.phone ? ` • ${phoneInline(n.phone)}` : ''}${n.support ? ` • support ${phoneInline(n.support)}` : ''}${n.website ? ` • ${link(n.website)}` : ''}`))}</div>`;
+
+      document.getElementById('labtests').innerHTML = list(scan.lab_test_plan || []);
+      document.getElementById('vaccines').innerHTML = list(scan.vaccines || []);
+      document.getElementById('notes').innerHTML =
+        row('Symptom Note', scan.symptom_note || '-') +
+        `<div class="row"><div class="v">Night Tips</div>${list(scan.night_tips || [])}</div>`;
+
+      bindCopyButtons();
+      bindSearch();
+    }
+
+    load();
+  </script>
+
+  <nav class="bottom-tab" aria-label="Primary">
+    <a href="./index.html">Home</a>
+    <a href="./dashboard.html">Lab Results</a>
+    <a href="./vault.html" class="active">Vault</a>
+  </nav>
+</body>
+</html>

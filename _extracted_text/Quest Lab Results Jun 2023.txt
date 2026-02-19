@@ -1,0 +1,1467 @@
+DOB: 
+03/12/1960
+Sex: 
+M
+Phone: 
+(408) 309-4950
+Patient ID: 
+1044153
+Age: 
+63
+Fasting: 
+Y
+ 
+ 
+Specimen: 
+SZ288237K
+Requisition: 
+0000962
+Report Status: 
+FINAL / SEE REPORT
+Collected: 
+05/30/2023 08:34
+Received: 
+05/30/2023 08:37
+Reported: 
+06/08/2023 12:49
+Client #: 
+91304545
+POON,VINCENT
+DIRECT TO PATIENT- WEST HILLS
+8401 FALLBROOK AVE
+WEST HILLS, CA 91304-3226
+Phone: 
+(818) 737-6000
+Fax: 
+(805) 426-8983
+THATIKUNTA,PRAKASH
+FASTING:YES
+ 
+COMPREHENSIVE METABOLIC PANEL 
+   
+ 
+GLUCOSE
+Reference Range:
+ 
+65-99
+ 
+mg/dL
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Fasting
+ 
+reference
+ 
+interval
+ 
+ 
+ 
+For
+ 
+someone
+ 
+without
+ 
+known
+ 
+diabetes,
+ 
+a
+ 
+glucose
+ 
+value
+ 
+>125
+ 
+mg/dL
+ 
+indicates
+ 
+that
+ 
+they
+ 
+may
+ 
+have
+ 
+diabetes
+ 
+and
+ 
+this
+ 
+should
+ 
+be
+ 
+confirmed
+ 
+with
+ 
+a
+ 
+follow-up
+ 
+test.
+ 
+149
+65
+99
+ 
+From
+05/29/2023
+To
+06/12/2024
+Sep '23
+Jan '24
+May '24
+36
+72
+108
+144
+180
+UREA NITROGEN (BUN)
+Reference Range:
+ 
+7-25
+ 
+mg/dL
+14
+7
+25
+ 
+From
+05/29/2023
+To
+06/12/2024
+Sep '23
+Jan '24
+May '24
+0
+8
+16
+24
+32
+CREATININE
+Reference Range:
+ 
+0.70-1.35
+ 
+mg/dL
+0.99
+0.70
+1.35
+ 
+From
+05/29/2023
+To
+06/12/2024
+Sep '23
+Jan '24
+May '24
+0.56
+0.84
+1.12
+1.4
+|
+|
+|
+THATIKUNTA,PRAKASH (SZ288237K)
+1 / 8
+6/3/25  
+EGFR
+Reference Range:
+ 
+> OR = 60
+ 
+mL/min/1.73m2
+The
+ 
+eGFR
+ 
+is
+ 
+based
+ 
+on
+ 
+the
+ 
+CKD-EPI
+ 
+2021
+ 
+equation.
+ 
+To
+ 
+calculate
+ 
+the
+ 
+new
+ 
+eGFR
+ 
+from
+ 
+a
+ 
+previous
+ 
+Creatinine
+ 
+or
+ 
+Cystatin
+ 
+C
+ 
+result,
+ 
+go
+ 
+to
+ 
+https://www.kidney.org/professionals/
+ 
+kdoqi/gfr%5Fcalculator
+ 
+86
+> OR = 60
+ 
+From
+05/29/2023
+To
+06/12/2024
+Sep '23
+Jan '24
+May '24
+48
+64
+80
+96
+112
+BUN/CREATININE RATIO
+Reference Range:
+ 
+6-22
+ 
+(calc)
+NOT APPLICABLE
+ 
+NOT
+APPLICABLE
+05/30/2023
+ 
+NOT
+APPLICABLE
+05/30/2023
+ 
+SEE NOTE:
+01/15/2024
+ 
+SEE NOTE:
+06/11/2024
+SODIUM
+Reference Range:
+ 
+135-146
+ 
+mmol/L
+137
+135
+146
+ 
+From
+05/29/2023
+To
+06/12/2024
+Sep '23
+Jan '24
+May '24
+120
+130
+140
+150
+160
+POTASSIUM
+Reference Range:
+ 
+3.5-5.3
+ 
+mmol/L
+4.8
+3.5
+5.3
+ 
+From
+05/29/2023
+To
+06/12/2024
+Sep '23
+Jan '24
+May '24
+2.58
+3.44
+4.3
+5.16
+6.02
+CHLORIDE
+Reference Range:
+ 
+98-110
+ 
+mmol/L
+101
+98
+110
+ 
+From
+05/29/2023
+To
+06/12/2024
+Sep '23
+Jan '24
+May '24
+88
+96
+104
+112
+120
+|
+|
+|
+|
+THATIKUNTA,PRAKASH (SZ288237K)
+2 / 8
+6/3/25  
+CARBON DIOXIDE
+Reference Range:
+ 
+20-32
+ 
+mmol/L
+28
+20
+32
+ 
+From
+05/29/2023
+To
+06/12/2024
+Sep '23
+Jan '24
+May '24
+18
+24
+30
+36
+CALCIUM
+Reference Range:
+ 
+8.6-10.3
+ 
+mg/dL
+9.4
+8.6
+10.3
+ 
+From
+05/29/2023
+To
+06/12/2024
+Sep '23
+Jan '24
+May '24
+8.16
+9.18
+10.2
+11.22
+PROTEIN, TOTAL
+Reference Range:
+ 
+6.1-8.1
+ 
+g/dL
+7.0
+6.1
+8.1
+ 
+From
+05/29/2023
+To
+06/12/2024
+Sep '23
+Jan '24
+May '24
+5.2
+6.24
+7.28
+8.32
+9.36
+ALBUMIN
+Reference Range:
+ 
+3.6-5.1
+ 
+g/dL
+4.4
+3.6
+5.1
+ 
+From
+05/29/2023
+To
+06/12/2024
+Sep '23
+Jan '24
+May '24
+2.96
+3.7
+4.44
+5.18
+5.92
+GLOBULIN
+Reference Range:
+ 
+1.9-3.7
+ 
+g/dL (calc)
+2.6
+1.9
+3.7
+ 
+From
+05/29/2023
+To
+06/12/2024
+Sep '23
+Jan '24
+May '24
+1.6
+2.4
+3.2
+4
+|
+|
+|
+|
+|
+THATIKUNTA,PRAKASH (SZ288237K)
+3 / 8
+6/3/25  
+ALBUMIN/GLOBULIN RATIO
+Reference Range:
+ 
+1.0-2.5
+ 
+(calc)
+1.7
+1.0
+2.5
+ 
+From
+05/29/2023
+To
+06/12/2024
+Sep '23
+Jan '24
+May '24
+0.64
+1.28
+1.92
+2.56
+BILIRUBIN, TOTAL
+Reference Range:
+ 
+0.2-1.2
+ 
+mg/dL
+0.5
+0.2
+1.2
+ 
+From
+05/29/2023
+To
+06/12/2024
+Sep '23
+Jan '24
+May '24
+0
+0.4
+0.8
+1.2
+1.6
+ALKALINE PHOSPHATASE
+Reference Range:
+ 
+35-144
+ 
+U/L
+52
+35
+144
+ 
+From
+05/29/2023
+To
+06/12/2024
+Sep '23
+Jan '24
+May '24
+0
+46
+92
+138
+184
+AST
+Reference Range:
+ 
+10-35
+ 
+U/L
+19
+10
+35
+ 
+From
+05/29/2023
+To
+06/12/2024
+Sep '23
+Jan '24
+May '24
+0
+10
+20
+30
+40
+ALT
+Reference Range:
+ 
+9-46
+ 
+U/L
+13
+9
+46
+ 
+From
+05/29/2023
+To
+06/12/2024
+Sep '23
+Jan '24
+May '24
+0
+16
+32
+48
+ 
+HEMOGLOBIN A1c 
+   
+|
+|
+|
+|
+|
+THATIKUNTA,PRAKASH (SZ288237K)
+4 / 8
+6/3/25  
+ALBUMIN, RANDOM URINE W/CREATININE 
+   
+ 
+HEMOGLOBIN A1c
+Reference Range:
+ 
+<5.7
+ 
+% of total Hgb
+For
+ 
+someone
+ 
+without
+ 
+known
+ 
+diabetes,
+ 
+a
+ 
+hemoglobin
+ 
+A1c
+ 
+value
+ 
+of
+ 
+6.5%
+ 
+or
+ 
+greater
+ 
+indicates
+ 
+that
+ 
+they
+ 
+may
+ 
+have
+ 
+diabetes
+ 
+and
+ 
+this
+ 
+should
+ 
+be
+ 
+confirmed
+ 
+with
+ 
+a
+ 
+follow-up
+ 
+test.
+ 
+ 
+ 
+For
+ 
+someone
+ 
+with
+ 
+known
+ 
+diabetes,
+ 
+a
+ 
+value
+ 
+<7%
+ 
+indicates
+ 
+that
+ 
+their
+ 
+diabetes
+ 
+is
+ 
+well
+ 
+controlled
+ 
+and
+ 
+a
+ 
+value
+ 
+greater
+ 
+than
+ 
+or
+ 
+equal
+ 
+to
+ 
+7%
+ 
+indicates
+ 
+suboptimal
+ 
+control.
+ 
+A1c
+ 
+targets
+ 
+should
+ 
+be
+ 
+individualized
+ 
+based
+ 
+on
+ 
+duration
+ 
+of
+ 
+diabetes,
+ 
+age,
+ 
+comorbid
+ 
+conditions,
+ 
+and
+ 
+other
+ 
+considerations.
+ 
+ 
+ 
+Currently,
+ 
+no
+ 
+consensus
+ 
+exists
+ 
+regarding
+ 
+use
+ 
+of
+ 
+hemoglobin
+ 
+A1c
+ 
+for
+ 
+diagnosis
+ 
+of
+ 
+diabetes
+ 
+for
+ 
+children.
+ 
+7.1
+<5.7
+ 
+From
+05/29/2023
+To
+10/03/2024
+Sep '23
+Jan '24
+May '24
+Sep '24
+4.68
+5.46
+6.24
+7.02
+7.8
+ 
+INSULIN 
+   
+ 
+INSULIN
+uIU/mL
+68.7 H
+Reference
+ 
+Range
+ 
+ 
+<
+ 
+or
+ 
+=
+ 
+18.4
+ 
+ 
+ 
+Risk:
+ 
+Optimal
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+<
+ 
+or
+ 
+=
+ 
+18.4
+ 
+Moderate
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+NA
+ 
+High
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+>18.4
+ 
+ 
+ 
+Adult
+ 
+cardiovascular
+ 
+event
+ 
+risk
+ 
+category
+ 
+cut
+ 
+points
+ 
+(optimal,
+ 
+moderate,
+ 
+high)
+ 
+are
+ 
+based
+ 
+on
+ 
+Insulin
+ 
+Reference
+ 
+Interval
+ 
+studies
+ 
+performed
+ 
+at
+ 
+Quest
+ 
+Diagnostics
+ 
+in
+ 
+2022.
+ 
+Reference range varies across results
+ 
+From
+05/29/2023
+To
+05/31/2023
+12:00
+30. May
+12:00
+31. May
+68.70
+CREATININE, RANDOM URINE
+Reference Range:
+ 
+20-320
+mg/dL
+264
+20
+320
+ 
+From
+05/29/2023
+To
+06/12/2024
+Sep '23
+Jan '24
+May '24
+0
+120
+240
+360
+ALBUMIN, RANDOM URINE W/CREATININE 
+   
+|
+|
+THATIKUNTA,PRAKASH (SZ288237K)
+5 / 8
+6/3/25  
+LIPID PANEL WITH REFLEX TO DIRECT LDL 
+   
+ALBUMIN, URINE
+Reference Range:
+ 
+Reference Range
+ 
+mg/dL
+ 
+Not established
+ 
+mg/dL
+3.4
+ 
+From
+05/29/2023
+To
+06/12/2024
+Sep '23
+Jan '24
+May '24
+0
+1.12
+2.24
+3.36
+4.48
+ALBUMIN/CREATININE RATIO, RANDOM URINE
+Reference Range:
+ 
+<30
+mcg/mg creat
+The
+ 
+ADA
+ 
+defines
+ 
+abnormalities
+ 
+in
+ 
+albumin
+ 
+excretion
+ 
+as
+ 
+follows:
+ 
+ 
+ 
+Albuminuria
+ 
+Category
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Result
+ 
+(mcg/mg
+ 
+creatinine)
+ 
+ 
+ 
+Normal
+ 
+to
+ 
+Mildly
+ 
+increased
+ 
+ 
+ 
+<30
+ 
+Moderately
+ 
+increased
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+30-299
+ 
+Severely
+ 
+increased
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+>
+ 
+OR
+ 
+=
+ 
+300
+ 
+ 
+ 
+The
+ 
+ADA
+ 
+recommends
+ 
+that
+ 
+at
+ 
+least
+ 
+two
+ 
+of
+ 
+three
+ 
+specimens
+ 
+collected
+ 
+within
+ 
+a
+ 
+3-6
+ 
+month
+ 
+period
+ 
+be
+ 
+abnormal
+ 
+before
+ 
+considering
+ 
+a
+ 
+patient
+ 
+to
+ 
+be
+ 
+within
+ 
+a
+ 
+diagnostic
+ 
+category.
+ 
+13
+<30
+Reference range varies across results
+ 
+From
+05/29/2023
+To
+06/12/2024
+Sep '23
+Jan '24
+May '24
+8
+16
+24
+32
+CHOLESTEROL, TOTAL
+Reference Range:
+ 
+<200
+mg/dL
+137
+<200
+ 
+From
+05/29/2023
+To
+01/16/2024
+Jul '23
+Sep '23
+Nov '23
+Jan '24
+120
+150
+180
+210
+HDL CHOLESTEROL
+Reference Range:
+ 
+> OR = 40
+mg/dL
+41
+> OR = 40
+ 
+From
+05/29/2023
+To
+01/16/2024
+Jul '23
+Sep '23
+Nov '23
+Jan '24
+36
+40
+44
+48
+|
+|
+|
+THATIKUNTA,PRAKASH (SZ288237K)
+6 / 8
+6/3/25  
+Performing Sites
+EN Quest Diagnostics-West Hills, 8401 Fallbrook Ave, West Hills, CA 91304-3226 Laboratory Director: Thomas J McDonald
+UL Quest Diagnostics-Sacramento - Northgate, 3714 Northgate Blvd, Sacramento, CA 95834-1617 Laboratory Director: Lorne L Holland
+Key
+TRIGLYCERIDES
+Reference Range:
+ 
+<150
+mg/dL
+129
+<150
+ 
+From
+05/29/2023
+To
+01/16/2024
+Jul '23
+Sep '23
+Nov '23
+Jan '24
+120
+150
+180
+210
+LDL-CHOLESTEROL
+mg/dL (calc)
+75
+Reference
+ 
+range:
+ 
+<100
+ 
+ 
+ 
+Desirable
+ 
+range
+ 
+<100
+ 
+mg/dL
+ 
+for
+ 
+primary
+ 
+prevention;
+ 
+<70
+ 
+mg/dL
+ 
+for
+ 
+patients
+ 
+with
+ 
+CHD
+ 
+or
+ 
+diabetic
+ 
+patients
+ 
+with
+ 
+>
+ 
+or
+ 
+=
+ 
+2
+ 
+CHD
+ 
+risk
+ 
+factors.
+ 
+ 
+ 
+LDL-C
+ 
+is
+ 
+now
+ 
+calculated
+ 
+using
+ 
+the
+ 
+Martin-Hopkins
+ 
+calculation,
+ 
+which
+ 
+is
+ 
+a
+ 
+validated
+ 
+novel
+ 
+method
+ 
+providing
+ 
+better
+ 
+accuracy
+ 
+than
+ 
+the
+ 
+Friedewald
+ 
+equation
+ 
+in
+ 
+the
+ 
+estimation
+ 
+of
+ 
+LDL-C.
+ 
+Martin
+ 
+SS
+ 
+et
+ 
+al.
+ 
+JAMA.
+ 
+2013;310(19):
+ 
+2061-2068
+ 
+(http://education.QuestDiagnostics.com/faq/FAQ164)
+ 
+Reference range varies across results
+ 
+From
+05/29/2023
+To
+01/16/2024
+Jul '23
+Sep '23
+Nov '23
+Jan '24
+72
+84
+96
+108
+120
+CHOL/HDLC RATIO
+Reference Range:
+ 
+<5.0
+ 
+(calc)
+3.3
+<5.0
+ 
+From
+05/29/2023
+To
+01/16/2024
+Jul '23
+Sep '23
+Nov '23
+Jan '24
+2.46
+3.28
+4.1
+4.92
+5.74
+NON HDL CHOLESTEROL
+Reference Range:
+ 
+<130
+mg/dL (calc)
+For
+ 
+patients
+ 
+with
+ 
+diabetes
+ 
+plus
+ 
+1
+ 
+major
+ 
+ASCVD
+ 
+risk
+ 
+factor,
+ 
+treating
+ 
+to
+ 
+a
+ 
+non-HDL-C
+ 
+goal
+ 
+of
+ 
+<100
+ 
+mg/dL
+ 
+(LDL-C
+ 
+of
+ 
+<70
+ 
+mg/dL)
+ 
+is
+ 
+considered
+ 
+a
+ 
+therapeutic
+ 
+option.
+ 
+96
+<130
+ 
+From
+05/29/2023
+To
+01/16/2024
+Jul '23
+Sep '23
+Nov '23
+Jan '24
+72
+96
+120
+144
+168
+|
+|
+|
+THATIKUNTA,PRAKASH (SZ288237K)
+7 / 8
+6/3/25  
+Quest, Quest Diagnostics, the associated logo, Nichols Institute, Interactive Insights and all associated Quest Diagnostics marks are the registered trademarks of Quest Diagnostics. All
+third party marks - '®' and '™' - are the property of their respective owners. Privacy policy can be found at: 
+http://questdiagnostics.com/home/privacy-policy/online-privacy.html
+. © 2022
+Quest Diagnostics Incorporated. All rights reserved.
+ 
+Note: Data displayed only for results that meet strict identification matching. Historical result view may vary based on corrected or updated patient demographics. The reference range
+displayed may vary due to potential changes in laboratory testing methods. Please refer to the published reference range on each lab report.
+These results have been sent to the person who ordered the tests. Your receipt of these results should not be viewed as medical advice and is not meant to replace discussion with
+your doctor or other healthcare professional.
+ 
+Priority Out of Range
+ 
+ 
+Out of Range
+THATIKUNTA,PRAKASH (SZ288237K)
+8 / 8
+6/3/25  

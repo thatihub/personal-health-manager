@@ -1,0 +1,175 @@
+{
+  "scan_2026": {
+    "member": {
+      "plan": "SCAN Medicare 2026",
+      "member_id": "40083848601"
+    },
+    "support_contacts": [
+      {
+        "name": "SCAN Main Customer Service",
+        "phone": "800-559-3500",
+        "hours": "Mon-Fri 8:00 AM-5:00 PM"
+      },
+      {
+        "name": "Hector Diaz",
+        "phone": "562-554-3955",
+        "notes": "SCAN contact person"
+      },
+      {
+        "name": "SCAN Transportation",
+        "phone": "844-714-2218"
+      },
+      {
+        "name": "Emergency Response America",
+        "phone": "866-435-2617",
+        "website": "https://www.connectamerica.com/personal-emergency-response-systems/"
+      }
+    ],
+    "benefits_programs": [
+      {
+        "title": "CVS OTC Health Solutions",
+        "phone": "844-428-8135",
+        "website": "https://www.cvs.com/benefits/v2/dashboard",
+        "details": [
+          "OTC Card: **** **** **** 1035",
+          "Expiration: 09/29",
+          "Code: 749",
+          "Login email: thatikunta@gmail.com"
+        ]
+      },
+      {
+        "title": "Walmart Food & OTC Benefits",
+        "website": "https://www.walmart.com/food-otc-benefit",
+        "details": [
+          "Also accepted at Walgreens, Safeway, Dollar Tree, Costco"
+        ]
+      },
+      {
+        "title": "SCAN Skechers Discount",
+        "phone": "1-855-759-7463",
+        "email": "info@skechersdirect.com",
+        "details": [
+          "Retail Code: K2Z",
+          "Show SCAN Member ID in-store"
+        ]
+      },
+      {
+        "title": "One Pass Fitness",
+        "website": "https://youronepass.com",
+        "details": [
+          "Fitness Member Code: A882356736",
+          "Login System: HealthSafe-ID",
+          "Username: thatikunta",
+          "Email: pkt2005@gmail.com"
+        ]
+      }
+    ],
+    "pharmacy_prescriptions": {
+      "pharmacy_contacts": [
+        {
+          "name": "Express Scripts",
+          "phone": "866-553-4125",
+          "website": "https://www.express-scripts.com",
+          "notes": "Prescription Transfer: 800-922-1557"
+        },
+        {
+          "name": "OptumRx Transfer Service",
+          "phone": "800-791-7658"
+        }
+      ],
+      "active_medications": [
+        "Metformin Hydrochloride 500 mg - 4 tablets/day",
+        "Amlodipine Besylate 2.5 mg - 1 tablet/day",
+        "Losartan Potassium 50 mg - 1 tablet/day",
+        "Atorvastatin Calcium 10 mg - 1 tablet/day",
+        "Tresiba FlexTouch 100 units/mL - 32 units/day",
+        "Humalog Mix 50:50 100 units/mL - 25u breakfast, 50u lunch, 25u dinner",
+        "Dexcom G7 CGM (15-day sensor) - replace every 15 days",
+        "Test strips"
+      ],
+      "device_notes": [
+        "Dexcom G7 Rx#: 1802943",
+        "G7 replacement cycle: every 15 days"
+      ]
+    },
+    "providers": {
+      "primary_care": [
+        {
+          "name": "Richard Ornelas, MD",
+          "phone": "408-871-3400",
+          "address": "828 S Winchester Blvd N, San Jose, CA 95128"
+        },
+        {
+          "name": "Munir Javed, MD",
+          "phone": "408-871-3400",
+          "address": "2204 Grant Rd, Ste 203, Mountain View, CA 94040",
+          "appointment": "Jan 28, 2026 at 1:30 PM"
+        }
+      ],
+      "endocrinology": [
+        {
+          "name": "Archana Bindra, MD",
+          "phone": "408-871-3400"
+        },
+        {
+          "name": "Nicole Borau, MD",
+          "address": "2577 Samaritan Dr, San Jose, CA 95124"
+        }
+      ],
+      "doctor_lookup": [
+        {
+          "title": "SCAN Doctor Lookup",
+          "url": "https://www.scanhealthplan.com/lut/doctor"
+        },
+        {
+          "title": "SCAN Telehealth",
+          "url": "https://doctorondemand.includedhealth.com/",
+          "notes": "Login email: thatikunta@gmail.com"
+        }
+      ],
+      "network": [
+        {
+          "name": "El Camino Health Group",
+          "phone": "408-871-3400",
+          "support": "650-988-8366",
+          "website": "https://mycare.elcaminohospital.org/MyChart/Home/"
+        }
+      ]
+    },
+    "lab_test_plan": [
+      "HbA1c",
+      "Fasting Blood Glucose",
+      "Fasting Serum C-Peptide",
+      "Lipid Panel",
+      "Kidney Labs (Creatinine, eGFR, Urine ACR)",
+      "Liver Function Panel (AST, ALT, ALP, Bilirubin)",
+      "TSH",
+      "Vitamin B12",
+      "CRP / hsCRP",
+      "ESR",
+      "Homocysteine",
+      "PSA",
+      "Apolipoprotein B (Apo-B)",
+      "Lipoprotein(a)",
+      "NT-proBNP",
+      "CT Coronary Calcium Score",
+      "Serum Bile Acids (Fasting, Morning Draw)"
+    ],
+    "vaccines": [
+      "Shingrix dose 1 - Mar 07, 2025",
+      "Shingrix dose 2 - Aug 28, 2024",
+      "PCV (status to confirm)",
+      "RSV (status to confirm)",
+      "Tetanus every 10 years"
+    ],
+    "symptom_note": "Intermittent itching mainly evening/night, a few hours after dinner, no rash, often resolves after urination.",
+    "night_tips": [
+      "Drink water around 8-9 PM",
+      "10-15 min gentle walk after dinner",
+      "Avoid salty/protein-heavy meals at night",
+      "Elevate legs slightly",
+      "Magnesium glycinate 200-300 mg at night",
+      "Vitamin C 500 mg after dinner"
+    ]
+  }
+}

@@ -1,0 +1,297 @@
+PATIENT
+Name:
+Phone #:
+Patient ID #:
+THATIKUNTA, PRAKASH 
+(408) 309-4950
+7702160
+DOB:
+Age:
+Sex:
+03/12/1960
+64
+M
+MRN#:
+Height:
+Weight
+BAWMKL
+Address:
+Race:
+10281 Torre Avenue, Unit 820
+Asian/Pacific 
+Islander
+Address2:
+County:
+Ethnicity:
+City:
+State:
+Zip Code:
+Cupertino
+CA
+95014
+SPECIMEN
+Report Status:
+Accession #:
+Specimen ID:
+Final
+4542594
+LGC-0402-5760-9310
+Collection Date:
+Collection Time:
+Type:
+01/28/2025
+7:00 AM
+DBS, DPS
+Received Date:
+Received Time:
+02/03/2025
+1:35 PM
+Completed Date:
+Completed Time:
+02/05/2025
+2:01 PM
+02/05/2025 (UTC)
+22:01 (UTC)
+PROVIDER
+Requesting HCP1:
+Robert Mordkin
+NPI: 1821020579
+Requesting Practice:
+LetsGetChecked
+RESULTS SUMMARY
+CRITICAL RESULTS
+ABNORMAL RESULTS
+Hemoglobin A1c
+LAB NOTES
+Note: Dried blood/plasma spot test result values are only an estimate of venous specimen levels. During validation dried blood/plasma spot values at times showed 
+significant differences when compared to venipuncture results. These results are therefore NOT to be used for diagnosis or clinical decisions.
+LIPID PANEL
+TESTS
+FLAG
+UNITS
+RESULTS
+PREVIOUS RESULTS
+Cholesterol
+Normal
+mg/dL
+NORMAL
+121
+Ref Range: <200 mg/dL
+NOTES: 
+<200: Desirable
+200-239: Borderline High
+>239: High
+This test was developed and its performance characteristics 
+determined by Priva Path Labs. It has not been cleared or approved by 
+the FDA. The laboratory is regulated under CLIA as qualified to 
+perform high-complexity testing. This test is used for clinical 
+purposes. It should not be regarded as investigational or for 
+research.
+N/A
+Triglycerides
+Normal
+mg/dL
+NORMAL
+112
+Ref Range: <150 mg/dL
+NOTES: 
+<150: Normal
+150-199: Borderline High
+200-499: High
+>=500: Very High
+This test was developed and its performance characteristics 
+determined by Priva Path Labs. It has not been cleared or approved by 
+the FDA. The laboratory is regulated under CLIA as qualified to 
+perform high-complexity testing. This test is used for clinical 
+purposes. It should not be regarded as investigational or for 
+research.
+N/A
+Lipoprotein (a)
+Normal
+mg/dL
+NORMAL
+<12
+Ref Range: <50.00 mg/dL
+NOTES: 
+Lipoprotein(a) Interpretation ------------------------------ 
+Normal: <30mg/dL
+Borderline/Moderately High: >30mg/dL
+High: >50mg/dL
+This test was developed and its performance characteristics 
+determined by Priva Path Labs. It has not been cleared or approved by 
+the FDA. The laboratory is regulated under CLIA as qualified to 
+perform high-complexity testing. This test is used for clinical 
+purposes. It should not be regarded as investigational or for 
+research.
+N/A
+Ordered Items:
+LGC Biometric (A1c+LPD)
+Laboratory Results
+Summary Report
+Wednesday, February 5, 2025 2:10:11 PM
+Dates and times are displayed using (-08:00) America/Los_Angeles.
+Page 1 of 2
+POWERED BY
+Priva Path Labs
+Patient Name: 
+222 E Huntington Dr. Suite 100, Monrovia, CA 91016
+THATIKUNTA, PRAKASH
+Tel: 626.479.8489
+Stat[S]   Corrected[C]   Addition [A]
+Specimen ID: LGC-0402-5760-9310
+Fax: 626.509.2962
+7:00 AM - 5:00 PM PT, Monday-Friday
+CLIA #: 05D2180792
+Lab Director: Dr. Stacy Beal M.D.
+
+PATIENT
+Name:
+Phone #:
+Patient ID #:
+THATIKUNTA, PRAKASH 
+(408) 309-4950
+7702160
+DOB:
+Age:
+Sex:
+03/12/1960
+64
+M
+MRN#:
+Height:
+Weight
+BAWMKL
+Address:
+Race:
+10281 Torre Avenue, Unit 820
+Asian/Pacific 
+Islander
+Address2:
+County:
+Ethnicity:
+City:
+State:
+Zip Code:
+Cupertino
+CA
+95014
+SPECIMEN
+Report Status:
+Accession #:
+Specimen ID:
+Final
+4542594
+LGC-0402-5760-9310
+Collection Date:
+Collection Time:
+Type:
+01/28/2025
+7:00 AM
+DBS, DPS
+Received Date:
+Received Time:
+02/03/2025
+1:35 PM
+Completed Date:
+Completed Time:
+02/05/2025
+2:01 PM
+02/05/2025 (UTC)
+22:01 (UTC)
+PROVIDER
+Requesting HCP1:
+Robert Mordkin
+NPI: 1821020579
+Requesting Practice:
+LetsGetChecked
+HDL Cholesterol
+Normal
+mg/dL
+NORMAL
+45
+Ref Range: >40 mg/dL
+NOTES: 
+Low = <40, Normal = ≥ 40
+This test was developed and its performance characteristics 
+determined by Priva Path Labs. It has not been cleared or approved by 
+the FDA. The laboratory is regulated under CLIA as qualified to 
+perform high-complexity testing. This test is used for clinical 
+purposes. It should not be regarded as investigational or for 
+research.
+N/A
+HDL % of Total Cholesterol
+N/A
+%
+36.9
+Ref Range: >20.0 %
+NOTES: 
+N/A
+LDL Cholesterol (Calc)
+Normal
+mg/dL
+NORMAL
+56
+Ref Range: <130 mg/dL
+NOTES: 
+<100: Optimal
+100-129: Near/Above Normal
+130-159: Borderline High
+160-189: High
+>189: Very High
+N/A
+Hemoglobin A1c
+High
+%
+HIGH
+7.7
+Ref Range: <6.5 %
+NOTES: 
+HbA1c(%) Interpretation
+------------------------------
+<5.7            Normal
+5.7-6.4        Prediabetes
+>=6.5          Diabetes
+This test was developed and its performance characteristics 
+determined by Priva Path Labs. It has not been cleared or approved by 
+the FDA. The laboratory is regulated under CLIA as qualified to 
+perform high-complexity testing. This test is used for clinical 
+purposes. It should not be regarded as investigational or for 
+research.
+N/A
+Estimated Avg Glucose (Calc)
+N/A
+mg/dL
+175
+Ref Range: See notes
+NOTES: 
+HbA1c(%)   Estimated Mean Plasma Glucose   Interpretation
+4          68                              Normal
+5          97                              Normal
+5.7-6.4    117-137                         Prediabetes
+6.5        140                             Diabetes
+7          154                             Diabetes
+8          183                             Diabetes
+9          212                             Diabetes
+10         240                             Diabetes
+Interpretations according to ADA Recommendations.
+Calculation of estimated Average Glucose is performed using equation 
+referenced in Nathan et.al. "Translating the A1C Assay Into Estimated 
+Average Glucose Values" Diabetes Care 31:1-6, 2008
+N/A
+Laboratory Results
+Summary Report
+Wednesday, February 5, 2025 2:10:11 PM
+Dates and times are displayed using (-08:00) America/Los_Angeles.
+Page 2 of 2
+POWERED BY
+Priva Path Labs
+Patient Name: 
+222 E Huntington Dr. Suite 100, Monrovia, CA 91016
+THATIKUNTA, PRAKASH
+Tel: 626.479.8489
+Stat[S]   Corrected[C]   Addition [A]
+Specimen ID: LGC-0402-5760-9310
+Fax: 626.509.2962
+7:00 AM - 5:00 PM PT, Monday-Friday
+CLIA #: 05D2180792
+Lab Director: Dr. Stacy Beal M.D.
