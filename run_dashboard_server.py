@@ -221,11 +221,19 @@ class DashboardHandler(SimpleHTTPRequestHandler):
         rows = self._read_existing_bp()
         if not rows:
             return []
-        threshold = datetime.now() - timedelta(days=max(1, days))
-        out: list[dict[str, object]] = []
+        dated: list[tuple[datetime, dict[str, object]]] = []
         for r in rows:
             dt = self._parse_bp_datetime(str(r.get("date", "")), str(r.get("time", "")))
-            if dt is None or dt < threshold:
+            if dt is None:
+                continue
+            dated.append((dt, r))
+        if not dated:
+            return []
+        latest_dt = max(dt for dt, _ in dated)
+        threshold = latest_dt - timedelta(days=max(1, days))
+        out: list[dict[str, object]] = []
+        for dt, r in dated:
+            if dt < threshold:
                 continue
             out.append(
                 {
