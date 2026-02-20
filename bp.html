@@ -24,6 +24,27 @@
     .nav a.active { background:linear-gradient(120deg,#0f7ea6,#1a93bf); color:#fff; border-color:transparent; }
     h1 { margin:0 0 6px; font-family: Georgia, "Times New Roman", serif; }
     .sub { color:#aab8c6; margin-bottom:14px; }
+    .hero {
+      margin-bottom: 12px;
+      border: 1px solid #35516a;
+      border-radius: 14px;
+      padding: 12px 14px;
+      background: linear-gradient(120deg, #163247, #1f4561 55%, #245273);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.28);
+    }
+    .hero-title {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: .6px;
+      color: #d7e7f5;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+    .hero-sub {
+      font-size: 15px;
+      color: #f3f9ff;
+      font-weight: 700;
+    }
     .card {
       background: #101a25;
       border: 1px solid #2b4155;
@@ -49,10 +70,11 @@
     }
     .mini h3 {
       margin: 0;
-      font-size: 12px;
+      font-size: 13px;
       letter-spacing: .3px;
       text-transform: uppercase;
-      color: #e8f2fb;
+      color: #f3f9ff;
+      font-weight: 800;
     }
     .mini-meta {
       font-size: 11px;
@@ -77,6 +99,10 @@
     tbody tr:nth-child(odd) td { background:#162432; }
     tbody tr:nth-child(even) td { background:#121d29; }
     .empty { color:#ffd5dc; }
+    @media (min-width: 1100px) {
+      .chart-grid { grid-template-columns: 1fr 1fr 1fr; }
+      svg { height: 260px; }
+    }
   </style>
 </head>
 <body>
@@ -90,6 +116,10 @@
     </nav>
     <h1>Blood Pressure</h1>
     <div class="sub">Showing last 90 days only (SYS, DIAS, Pulse).</div>
+    <section class="hero">
+      <div class="hero-title">Blood Pressure Monitor</div>
+      <div class="hero-sub">Professional view with separate SYS, DIAS, and Pulse trend panels.</div>
+    </section>
 
     <section class="card kpis" id="kpis"></section>
     <section class="card">
