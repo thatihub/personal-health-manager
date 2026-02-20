@@ -245,9 +245,12 @@
         const form = new FormData();
         form.append("file", file);
         const res = await fetch("/api/admin/upload-bp-csv", { method: "POST", body: form });
-        const out = await res.json();
+        const text = await res.text();
+        let out = {};
+        try { out = JSON.parse(text); } catch (_e) { out = { ok: false, error: text || "Non-JSON response" }; }
         if (!res.ok || !out.ok) {
-          setStatus(`BP upload failed: ${out.error || "Unknown error"}`);
+          const preview = out.preview ? `\nPreview:\n${String(out.preview).slice(0, 220)}` : "";
+          setStatus(`BP upload failed (${res.status}): ${out.error || "Unknown error"}${preview}`);
           return;
         }
         setStatus(

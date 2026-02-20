@@ -132,17 +132,31 @@ class DashboardHandler(SimpleHTTPRequestHandler):
     def _parse_bp_csv(self, raw: bytes, source_file: str) -> list[dict[str, object]]:
         text = self._decode_csv_bytes(raw).replace("\x00", "")
         sample = text[:2048]
-        delimiter = "\t" if sample.count("\t") >= sample.count(",") else ","
+        if sample.count("\t") >= max(sample.count(","), sample.count(";")):
+            delimiter = "\t"
+        elif sample.count(";") > sample.count(","):
+            delimiter = ";"
+        else:
+            delimiter = ","
         reader = csv.DictReader(io.StringIO(text), delimiter=delimiter)
         rows: list[dict[str, object]] = []
 
         # Map incoming headers to canonical names.
         def pick(d: dict[str, str], keys: list[str]) -> str:
+            norm = lambda s: re.sub(r"\s+", " ", (s or "").strip().lower())
+            normalized_keys = [norm(k) for k in keys]
             for k in keys:
                 for dk, dv in d.items():
                     if dk is None:
                         continue
-                    if dk.strip().lower() == k:
+                    ndk = norm(dk)
+                    nk = norm(k)
+                    if ndk == nk or nk in ndk:
+                        return (dv or "").strip()
+            for dk, dv in d.items():
+                ndk = norm(dk or "")
+                for nk in normalized_keys:
+                    if nk in ndk:
                         return (dv or "").strip()
             return ""
 
@@ -694,7 +708,15 @@ class DashboardHandler(SimpleHTTPRequestHandler):
 
         incoming = self._parse_bp_csv(file_bytes, filename)
         if not incoming:
-            self._json(422, {"ok": False, "error": "CSV parsed but no valid BP rows found."})
+            preview = self._decode_csv_bytes(file_bytes).replace("\x00", "")[:240]
+            self._json(
+                422,
+                {
+                    "ok": False,
+                    "error": "CSV parsed but no valid BP rows found.",
+                    "preview": preview,
+                },
+            )
             return
 
         existing = self._read_existing_bp()
