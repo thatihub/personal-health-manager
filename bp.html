@@ -34,7 +34,21 @@
     .kpis { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:10px; }
     .kpi-label { color:#aab8c6; font-size:11px; text-transform:uppercase; }
     .kpi-val { font-size:24px; font-weight:800; color:#f3f8fc; }
-    svg { width:100%; height:240px; display:block; shape-rendering:geometricPrecision; }
+    .chart-grid { display:grid; grid-template-columns:1fr; gap:10px; }
+    .mini {
+      border: 1px solid rgba(163, 184, 201, 0.2);
+      border-radius: 10px;
+      padding: 8px;
+      background: #111c27;
+    }
+    .mini h3 {
+      margin: 0 0 6px;
+      font-size: 12px;
+      letter-spacing: .3px;
+      text-transform: uppercase;
+      color: #d8e6f3;
+    }
+    svg { width:100%; height:180px; display:block; shape-rendering:geometricPrecision; }
     table { width:100%; border-collapse:collapse; font-size:14px; }
     th, td { padding:9px; text-align:center; border-bottom:1px solid #24384b; }
     th { background:#1f2f40; color:#f3f8fc; position:sticky; top:0; }
@@ -57,7 +71,20 @@
 
     <section class="card kpis" id="kpis"></section>
     <section class="card">
-      <svg id="bp-chart"></svg>
+      <div class="chart-grid">
+        <div class="mini">
+          <h3>SYS (mmHg)</h3>
+          <svg id="bp-chart-sys"></svg>
+        </div>
+        <div class="mini">
+          <h3>DIAS (mmHg)</h3>
+          <svg id="bp-chart-dias"></svg>
+        </div>
+        <div class="mini">
+          <h3>Pulse (bpm)</h3>
+          <svg id="bp-chart-pulse"></svg>
+        </div>
+      </div>
     </section>
     <section class="card" style="overflow:auto; max-height:520px;">
       <table>
@@ -73,16 +100,19 @@
       return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
     }
 
-    function drawChart(rows) {
-      const svg = document.getElementById("bp-chart");
+    function drawSingle(rows, svgId, key, color) {
+      const svg = document.getElementById(svgId);
       const w = svg.clientWidth || 1000;
-      const h = svg.clientHeight || 240;
+      const h = svg.clientHeight || 180;
       const pad = { l: 40, r: 12, t: 12, b: 30 };
       const innerW = w - pad.l - pad.r;
       const innerH = h - pad.t - pad.b;
-      const vals = rows.flatMap(r => [r.systolic, r.diastolic, r.pulse]);
-      const min = Math.min(...vals, 40);
-      const max = Math.max(...vals, 180);
+      const vals = rows.map(r => Number(r[key]));
+      const vMin = Math.min(...vals);
+      const vMax = Math.max(...vals);
+      const padY = Math.max(4, Math.round((vMax - vMin) * 0.15) || 4);
+      const min = vMin - padY;
+      const max = vMax + padY;
       const y = (v) => pad.t + (1 - ((v - min) / ((max - min) || 1))) * innerH;
       const x = (i) => pad.l + (i / Math.max(1, rows.length - 1)) * innerW;
 
@@ -92,24 +122,18 @@
         html += `<line x1="${pad.l}" y1="${yy}" x2="${pad.l + innerW}" y2="${yy}" stroke="rgba(160,180,198,0.28)" stroke-dasharray="3 4"/>`;
       }
 
-      const makePath = (key) => rows.map((r, i) => `${i ? "L" : "M"}${x(i)} ${y(r[key])}`).join(" ");
-      html += `<path d="${makePath("systolic")}" fill="none" stroke="#4ec9ff" stroke-width="3"/>`;
-      html += `<path d="${makePath("diastolic")}" fill="none" stroke="#7ee08f" stroke-width="3"/>`;
-      html += `<path d="${makePath("pulse")}" fill="none" stroke="#ff9f6e" stroke-width="3"/>`;
+      const path = rows.map((r, i) => `${i ? "L" : "M"}${x(i)} ${y(Number(r[key]))}`).join(" ");
+      html += `<path d="${path}" fill="none" stroke="${color}" stroke-width="3"/>`;
 
       rows.forEach((r, i) => {
-        html += `<circle cx="${x(i)}" cy="${y(r.systolic)}" r="3.8" fill="#4ec9ff" stroke="#f5fbff" stroke-width="1"/>`;
-        html += `<circle cx="${x(i)}" cy="${y(r.diastolic)}" r="3.8" fill="#7ee08f" stroke="#f5fbff" stroke-width="1"/>`;
-        html += `<circle cx="${x(i)}" cy="${y(r.pulse)}" r="3.8" fill="#ff9f6e" stroke="#f5fbff" stroke-width="1"/>`;
+        html += `<circle cx="${x(i)}" cy="${y(Number(r[key]))}" r="3.8" fill="${color}" stroke="#f5fbff" stroke-width="1"/>`;
       });
 
       const last = rows.length - 1;
       [0, Math.floor(last / 2), last].filter((v, i, a) => a.indexOf(v) === i).forEach((i) => {
         html += `<text x="${x(i)}" y="${h - 8}" text-anchor="middle" fill="#d2deea" font-size="11" font-weight="700">${rows[i].date.slice(5)}</text>`;
       });
-      html += `<text x="${pad.l}" y="${pad.t + 10}" fill="#4ec9ff" font-size="12">SYS</text>`;
-      html += `<text x="${pad.l + 44}" y="${pad.t + 10}" fill="#7ee08f" font-size="12">DIAS</text>`;
-      html += `<text x="${pad.l + 95}" y="${pad.t + 10}" fill="#ff9f6e" font-size="12">Pulse</text>`;
+      html += `<text x="${pad.l}" y="${pad.t + 10}" fill="#dce9f5" font-size="11" font-weight="700">Range ${vMin}-${vMax}</text>`;
       svg.setAttribute("viewBox", `0 0 ${w} ${h}`);
       svg.innerHTML = html;
     }
@@ -137,7 +161,9 @@
         body.innerHTML = rows.slice().reverse().map(r =>
           `<tr><td>${fmtDate(r.date)}</td><td>${r.time}</td><td>${r.systolic}</td><td>${r.diastolic}</td><td>${r.pulse}</td></tr>`
         ).join("");
-        drawChart(rows);
+        drawSingle(rows, "bp-chart-sys", "systolic", "#4ec9ff");
+        drawSingle(rows, "bp-chart-dias", "diastolic", "#7ee08f");
+        drawSingle(rows, "bp-chart-pulse", "pulse", "#ff9f6e");
       } catch (_e) {
         body.innerHTML = `<tr><td colspan="5" class="empty">Failed to load BP data.</td></tr>`;
       }
