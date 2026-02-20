@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project History</title>
+  <style>
+    :root { color-scheme: dark; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Avenir Next", "Trebuchet MS", "Segoe UI", sans-serif;
+      background: linear-gradient(160deg, #0b1219 0%, #101923 44%, #121b1a 100%);
+      color: #e7edf3;
+      padding: 18px;
+    }
+    .wrap { max-width: 1180px; margin: 0 auto; }
+    .nav { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+    .nav a {
+      text-decoration:none; padding:9px 12px; border-radius:12px;
+      border:1px solid rgba(164,185,204,.2); background:rgba(17,26,36,.92);
+      color:#d5e2ee; font-weight:700; font-size:13px; min-height:44px; display:inline-flex; align-items:center;
+    }
+    .nav a.active { background:linear-gradient(120deg,#0f7ea6,#1a93bf); color:#fff; border-color:transparent; }
+    h1 { margin:0 0 6px; font-family: Georgia, "Times New Roman", serif; }
+    .sub { color:#aab8c6; margin-bottom:12px; }
+    .grid { display:grid; grid-template-columns: 1fr 2fr; gap:12px; }
+    .card {
+      border: 1px solid #2b4155;
+      border-radius: 14px;
+      background: #101a25;
+      padding: 12px;
+    }
+    h3 { margin: 0 0 10px; }
+    .tag {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid #3b5f7d;
+      background: #1a2e41;
+      color: #eaf4fc;
+      font-size: 12px;
+      margin: 0 6px 6px 0;
+      font-weight: 700;
+    }
+    .row { border-top: 1px solid #223546; padding: 8px 0; }
+    .row:first-child { border-top: 0; padding-top: 0; }
+    .meta { color: #9fb4c8; font-size: 12px; }
+    .subject { color: #e7f0f8; font-weight: 700; margin-top: 2px; }
+    .feature li { margin: 6px 0; color: #d2e0ed; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <nav class="nav">
+      <a href="./index.html">Home</a>
+      <a href="./dashboard.html">Lab Results Dashboard</a>
+      <a href="./bp.html">Blood Pressure</a>
+      <a href="./vault.html">Health Vault</a>
+      <a href="./admin.html">Admin</a>
+      <a href="./cabinet.html">Cabinet</a>
+      <a class="active" href="./history.html">History</a>
+    </nav>
+
+    <h1>Project History</h1>
+    <div class="sub">Track all commits, release tags, and key feature milestones on one page.</div>
+
+    <section class="grid">
+      <article class="card">
+        <h3>Release Tags</h3>
+        <div id="tags">Loading...</div>
+      </article>
+      <article class="card">
+        <h3>Feature Milestones</h3>
+        <ul class="feature">
+          <li>Lab Results Dashboard with per-panel graph/table and collapsible categories</li>
+          <li>Health Vault with clickable phone links and search</li>
+          <li>Basic Auth for Vault and Admin</li>
+          <li>Admin Upload for PDFs and BP CSV</li>
+          <li>Blood Pressure dashboard with separate SYS/DIAS/Pulse panels</li>
+          <li>Project Cabinet page for organized references</li>
+          <li>Stage lock tag: <strong>stage-lock-2026-02-20</strong></li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="card" style="margin-top:12px;">
+      <h3>Commit Timeline</h3>
+      <div id="commits">Loading...</div>
+    </section>
+  </div>
+
+  <script>
+    async function loadHistory() {
+      const tagsNode = document.getElementById("tags");
+      const commitsNode = document.getElementById("commits");
+      try {
+        const res = await fetch("/api/history");
+        const out = await res.json();
+        const tags = Array.isArray(out.tags) ? out.tags : [];
+        const commits = Array.isArray(out.commits) ? out.commits : [];
+        tagsNode.innerHTML = tags.length
+          ? tags.map((t) => `<span class="tag">${t}</span>`).join("")
+          : "No tags found.";
+        commitsNode.innerHTML = commits.length
+          ? commits.map((c) => `<div class="row"><div class="meta">${c.date} • ${c.hash}</div><div class="subject">${c.subject}</div></div>`).join("")
+          : "No commit history available.";
+      } catch (_e) {
+        tagsNode.textContent = "Unable to load tags.";
+        commitsNode.textContent = "Unable to load commit history.";
+      }
+    }
+    loadHistory();
+  </script>
+</body>
+</html>

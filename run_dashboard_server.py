@@ -92,6 +92,43 @@ def _rebuild_env(upload_dir_override: Path | None = None) -> dict[str, str]:
 
 
 class DashboardHandler(SimpleHTTPRequestHandler):
+    def _history_payload(self) -> dict[str, object]:
+        payload: dict[str, object] = {"ok": True, "commits": [], "tags": []}
+        try:
+            commits = subprocess.run(
+                ["git", "log", "--date=short", "--pretty=format:%h|%ad|%s", "-n", "80"],
+                cwd=PROJECT_DIR,
+                check=False,
+                capture_output=True,
+                text=True,
+            )
+            if commits.returncode == 0:
+                lines = [ln.strip() for ln in commits.stdout.splitlines() if ln.strip()]
+                parsed = []
+                for ln in lines:
+                    parts = ln.split("|", 2)
+                    if len(parts) != 3:
+                        continue
+                    parsed.append({"hash": parts[0], "date": parts[1], "subject": parts[2]})
+                payload["commits"] = parsed
+        except Exception:
+            payload["commits"] = []
+
+        try:
+            tags = subprocess.run(
+                ["git", "tag", "--list", "--sort=-creatordate"],
+                cwd=PROJECT_DIR,
+                check=False,
+                capture_output=True,
+                text=True,
+            )
+            if tags.returncode == 0:
+                payload["tags"] = [t.strip() for t in tags.stdout.splitlines() if t.strip()]
+        except Exception:
+            payload["tags"] = []
+
+        return payload
+
     def _decode_csv_bytes(self, raw: bytes) -> str:
         for enc in ("utf-8-sig", "utf-16", "utf-16-le", "utf-16-be", "latin-1"):
             try:
@@ -745,6 +782,9 @@ class DashboardHandler(SimpleHTTPRequestHandler):
         path = self.path.split("?", 1)[0]
         if path == "/api/last-updated":
             self._json(200, self._last_updated_payload())
+            return
+        if path == "/api/history":
+            self._json(200, self._history_payload())
             return
         if path == "/api/bp-data":
             self._json(200, {"ok": True, "days": 90, "rows": self._bp_last_days(90)})
