@@ -23,6 +23,9 @@
     body {
       margin: 0;
       font-family: "Avenir Next", "Trebuchet MS", "Segoe UI", sans-serif;
+      text-rendering: geometricPrecision;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
       color: var(--ink);
       background:
         radial-gradient(circle at 12% 10%, rgba(15, 126, 166, 0.24), transparent 42%),
@@ -305,18 +308,21 @@
       overflow: auto;
       border: 2px solid rgba(20, 34, 46, 0.16);
       border-radius: 14px;
-      background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(245, 248, 250, 0.92));
+      background: #ffffff;
+      backdrop-filter: none;
     }
     table {
       width: 100%;
       border-collapse: separate;
       border-spacing: 0;
       min-width: 420px;
-      font-size: 13px;
+      font-size: 14px;
+      line-height: 1.35;
+      letter-spacing: 0.01em;
       color: #1e3240;
       overflow: hidden;
       border-radius: 10px;
+      background: #ffffff;
     }
     thead th {
       position: sticky;
@@ -337,6 +343,7 @@
       white-space: nowrap;
       font-variant-numeric: tabular-nums;
       text-align: center;
+      backdrop-filter: none;
     }
     tbody tr:nth-child(odd) { background: rgba(31, 111, 139, 0.03); }
     tbody tr:nth-child(even) { background: rgba(255, 255, 255, 0.7); }
@@ -451,14 +458,19 @@
     .value-pill.normal { background: rgba(52, 108, 62, 0.4); color: #cde8d1; }
     .value-pill.high, .value-pill.low { background: rgba(131, 44, 57, 0.45); color: #ffd5dc; }
     thead th {
-      background: linear-gradient(180deg, #1a2a38, #152330);
+      background: #182736;
       color: #d9e5ef;
       border-bottom-color: rgba(167, 186, 203, 0.2);
     }
-    tbody td { color: #dce6ef; border-bottom-color: rgba(167, 186, 203, 0.15); }
-    tbody tr:nth-child(odd) { background: rgba(42, 61, 76, 0.42); }
-    tbody tr:nth-child(even) { background: rgba(20, 30, 40, 0.52); }
-    tbody tr:hover { background: rgba(52, 84, 95, 0.56); }
+    tbody td {
+      color: #e6edf5;
+      border-bottom-color: rgba(167, 186, 203, 0.2);
+      background: #131f2b;
+      font-weight: 600;
+    }
+    tbody tr:nth-child(odd) td { background: #162432; }
+    tbody tr:nth-child(even) td { background: #121d29; }
+    tbody tr:hover td { background: #213447; }
     .date-cell { color: #d8e4ef !important; }
     .panel-btn, .view-btn, .collapse-btn {
       background: rgba(20, 30, 40, 0.9);
