@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Health Admin</title>
+  <style>
+    :root { color-scheme: dark; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Avenir Next", "Trebuchet MS", "Segoe UI", sans-serif;
+      color: #e7edf3;
+      background: linear-gradient(160deg, #0b1219 0%, #101923 44%, #121b1a 100%);
+      min-height: 100vh;
+      padding: 18px;
+    }
+    .wrap { max-width: 980px; margin: 0 auto; }
+    .nav { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+    .nav a {
+      text-decoration: none;
+      padding: 9px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(164, 185, 204, 0.2);
+      background: rgba(17, 26, 36, 0.92);
+      color: #d5e2ee;
+      font-weight: 700;
+      font-size: 13px;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+    }
+    .nav a.active { background: linear-gradient(120deg, #0f7ea6, #1a93bf); color: #fff; border-color: transparent; }
+    h1 { margin: 0 0 6px; font-family: Georgia, "Times New Roman", serif; font-size: clamp(26px,4vw,40px); color: #f2f6fa; }
+    .sub { color: #aab8c6; margin-bottom: 14px; }
+    .card {
+      background: rgba(15, 23, 32, 0.88);
+      border: 1px solid rgba(163, 184, 201, 0.2);
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 10px;
+    }
+    .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .row label { min-width: 180px; font-weight: 700; color: #cfdbe6; }
+    input[type="file"] {
+      flex: 1;
+      min-width: 280px;
+      background: rgba(20, 30, 40, 0.9);
+      border: 1px solid rgba(167, 186, 203, 0.2);
+      color: #dce6ef;
+      border-radius: 8px;
+      padding: 7px 8px;
+    }
+    .btn {
+      border: 1px solid rgba(16, 36, 54, 0.2);
+      background: linear-gradient(120deg, #0f7ea6, #1a93bf);
+      color: #fff;
+      padding: 9px 14px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      min-height: 42px;
+    }
+    .btn.secondary {
+      background: rgba(20, 30, 40, 0.9);
+      border-color: rgba(167, 186, 203, 0.2);
+      color: #dce6ef;
+    }
+    .status {
+      margin-top: 10px;
+      background: rgba(20, 30, 40, 0.9);
+      border: 1px solid rgba(167, 186, 203, 0.2);
+      border-radius: 10px;
+      padding: 10px;
+      color: #b7c7d6;
+      font-size: 13px;
+      white-space: pre-wrap;
+    }
+    .hint { color: #aab8c6; font-size: 12px; margin-top: 6px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <nav class="nav">
+      <a href="./index.html">Home</a>
+      <a href="./dashboard.html">Lab Results Dashboard</a>
+      <a href="./vault.html">Health Vault</a>
+      <a class="active" href="./admin.html">Admin</a>
+    </nav>
+
+    <h1>Health Admin</h1>
+    <div class="sub">Upload updated JSON files without editing Render environment variables.</div>
+
+    <section class="card">
+      <div class="row">
+        <label for="vault-file">Vault Data JSON</label>
+        <input id="vault-file" type="file" accept=".json,application/json" />
+        <button class="btn" id="upload-vault" type="button">Upload Vault</button>
+      </div>
+      <div class="hint">Expected: JSON object for `vault_data.json`.</div>
+    </section>
+
+    <section class="card">
+      <div class="row">
+        <label for="dashboard-file">Dashboard Data</label>
+        <input id="dashboard-file" type="file" accept=".json,.js,application/json,text/javascript" />
+        <button class="btn" id="upload-dashboard" type="button">Upload Dashboard</button>
+      </div>
+      <div class="hint">Use `dashboard_data.js` or raw JSON array.</div>
+    </section>
+
+    <section class="card">
+      <div class="row">
+        <label for="consolidated-file">Consolidated Labs JSON</label>
+        <input id="consolidated-file" type="file" accept=".json,application/json" />
+        <button class="btn" id="upload-consolidated" type="button">Upload Consolidated</button>
+      </div>
+      <div class="hint">Expected: JSON array for `consolidated_labs.json`.</div>
+    </section>
+
+    <section class="card">
+      <div class="row">
+        <label>PDF Rebuild</label>
+        <button class="btn secondary" id="rebuild-btn" type="button">Run Rebuild</button>
+      </div>
+      <div class="hint">Rebuild reads PDFs from server-side lab folder config.</div>
+    </section>
+
+    <div id="status" class="status">Ready.</div>
+  </div>
+
+  <script>
+    const statusNode = document.getElementById("status");
+    const setStatus = (msg) => { statusNode.textContent = msg; };
+
+    async function readText(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(String(reader.result || ""));
+        reader.onerror = () => reject(new Error("Failed to read file"));
+        reader.readAsText(file);
+      });
+    }
+
+    function parseDashboardInput(raw) {
+      const t = raw.trim();
+      if (t.startsWith("window.LAB_DASH_DATA")) {
+        const jsonPart = t.replace(/^window\.LAB_DASH_DATA\s*=\s*/, "").replace(/;\s*$/, "");
+        return JSON.parse(jsonPart);
+      }
+      return JSON.parse(t);
+    }
+
+    async function uploadFromInput(inputId, target, parser = JSON.parse) {
+      const input = document.getElementById(inputId);
+      const file = input.files && input.files[0];
+      if (!file) {
+        setStatus(`Select a file first for ${target}.`);
+        return;
+      }
+      setStatus(`Uploading ${file.name} -> ${target} ...`);
+      try {
+        const raw = await readText(file);
+        const content = parser(raw);
+        const res = await fetch("/api/admin/upload-data", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ target, content })
+        });
+        const out = await res.json();
+        if (!res.ok || !out.ok) {
+          setStatus(`Upload failed: ${out.error || "Unknown error"}`);
+          return;
+        }
+        setStatus(`Upload complete: ${out.target}`);
+      } catch (err) {
+        setStatus(`Upload failed: ${err.message || err}`);
+      }
+    }
+
+    document.getElementById("upload-vault").addEventListener("click", () =>
+      uploadFromInput("vault-file", "vault", JSON.parse)
+    );
+    document.getElementById("upload-dashboard").addEventListener("click", () =>
+      uploadFromInput("dashboard-file", "dashboard", parseDashboardInput)
+    );
+    document.getElementById("upload-consolidated").addEventListener("click", () =>
+      uploadFromInput("consolidated-file", "consolidated", JSON.parse)
+    );
+
+    document.getElementById("rebuild-btn").addEventListener("click", async () => {
+      setStatus("Running rebuild...");
+      try {
+        const res = await fetch("/api/rebuild", { method: "POST" });
+        const out = await res.json();
+        if (!res.ok || !out.ok) {
+          setStatus(`Rebuild failed: ${out.error || "Unknown error"}`);
+          return;
+        }
+        setStatus("Rebuild complete.");
+      } catch (err) {
+        setStatus(`Rebuild failed: ${err.message || err}`);
+      }
+    });
+  </script>
+</body>
+</html>

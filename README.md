@@ -64,3 +64,66 @@ If either is missing, Vault auth is disabled.
 `dashboard.html` and `vault.html` now show a live "Last updated" badge from:
 
 - `/api/last-updated`
+
+## Environment-backed sensitive data (Render-ready)
+
+You can keep sensitive data out of GitHub by loading data from env vars at runtime.
+
+Supported env overrides:
+
+- `VAULT_DATA_JSON` or `VAULT_DATA_JSON_B64` -> serves `/vault_data.json`
+- `DASHBOARD_DATA_JSON` or `DASHBOARD_DATA_JSON_B64` -> serves `/dashboard_data.js`
+- `CONSOLIDATED_LABS_JSON` or `CONSOLIDATED_LABS_JSON_B64` -> serves `/consolidated_labs.json`
+- `DATA_LAST_UPDATED` (optional label for banner when env data is used)
+
+Notes:
+
+- If both plain and `_B64` are set, plain value is used.
+- If env var is missing, server falls back to local file.
+- `_B64` is recommended for large JSON values in Render.
+
+### Prepare base64 values locally
+
+```bash
+cd "/Users/prakashthatikunta/Documents/Health/personal_health_manager"
+base64 < vault_data.json | tr -d '\n'
+base64 < consolidated_labs.json | tr -d '\n'
+```
+
+For dashboard JSON array from `dashboard_data.js`:
+
+```bash
+cd "/Users/prakashthatikunta/Documents/Health/personal_health_manager"
+sed 's/^window.LAB_DASH_DATA = //; s/;[[:space:]]*$//' dashboard_data.js | base64 | tr -d '\n'
+```
+
+Set the generated strings in Render env vars:
+
+- `VAULT_DATA_JSON_B64`
+- `CONSOLIDATED_LABS_JSON_B64`
+- `DASHBOARD_DATA_JSON_B64`
+
+Then deploy.
+
+## Admin Upload Page (easier updates)
+
+Use `/admin.html` to upload updated data files from browser.
+
+Security:
+
+- Set admin credentials in Render:
+  - `ADMIN_BASIC_AUTH_USER`
+  - `ADMIN_BASIC_AUTH_PASS`
+- `admin.html` and `/api/admin/*` require this Basic Auth.
+
+Upload targets in Admin page:
+
+- Vault JSON -> updates `vault_data.json`
+- Dashboard JSON/JS -> updates `dashboard_data.js`
+- Consolidated JSON -> updates `consolidated_labs.json`
+- Optional Rebuild button -> calls `/api/rebuild`
+
+Important:
+
+- If env overrides (`*_JSON` or `*_JSON_B64`) are active for a target, admin upload for that target is blocked.
+- Remove env override vars if you want file uploads to take effect.

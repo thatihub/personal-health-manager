@@ -20,6 +20,8 @@ PROJECT_DIR = Path(__file__).resolve().parent
 REBUILD_LOCK = threading.Lock()
 VAULT_AUTH_USER = os.getenv("VAULT_BASIC_AUTH_USER", "").strip()
 VAULT_AUTH_PASS = os.getenv("VAULT_BASIC_AUTH_PASS", "").strip()
+ADMIN_AUTH_USER = os.getenv("ADMIN_BASIC_AUTH_USER", "").strip()
+ADMIN_AUTH_PASS = os.getenv("ADMIN_BASIC_AUTH_PASS", "").strip()
 
 
 def parse_args() -> argparse.Namespace:
@@ -52,7 +54,23 @@ def rebuild_now() -> None:
     )
 
 
+def _decode_env_text(plain_var: str, b64_var: str) -> str | None:
+    plain = os.getenv(plain_var, "")
+    if plain:
+        return plain
+    encoded = os.getenv(b64_var, "")
+    if not encoded:
+        return None
+    try:
+        return base64.b64decode(encoded).decode("utf-8")
+    except (binascii.Error, UnicodeDecodeError):
+        return None
+
+
 class DashboardHandler(SimpleHTTPRequestHandler):
+    def _admin_auth_enabled(self) -> bool:
+        return bool(ADMIN_AUTH_USER and ADMIN_AUTH_PASS)
+
     def _vault_auth_enabled(self) -> bool:
         return bool(VAULT_AUTH_USER and VAULT_AUTH_PASS)
 
@@ -60,7 +78,11 @@ class DashboardHandler(SimpleHTTPRequestHandler):
         path = self.path.split("?", 1)[0]
         return path in {"/vault.html", "/vault_data.json"}
 
-    def _is_authorized(self) -> bool:
+    def _is_admin_protected_path(self) -> bool:
+        path = self.path.split("?", 1)[0]
+        return path == "/admin.html" or path.startswith("/api/admin/")
+
+    def _is_authorized(self, expected_user: str, expected_pass: str) -> bool:
         auth_header = self.headers.get("Authorization", "")
         if not auth_header.startswith("Basic "):
             return False
@@ -72,12 +94,12 @@ class DashboardHandler(SimpleHTTPRequestHandler):
         if ":" not in decoded:
             return False
         username, password = decoded.split(":", 1)
-        return hmac.compare_digest(username, VAULT_AUTH_USER) and hmac.compare_digest(password, VAULT_AUTH_PASS)
+        return hmac.compare_digest(username, expected_user) and hmac.compare_digest(password, expected_pass)
 
     def _require_vault_auth(self) -> bool:
         if not self._vault_auth_enabled() or not self._is_vault_protected_path():
             return False
-        if self._is_authorized():
+        if self._is_authorized(VAULT_AUTH_USER, VAULT_AUTH_PASS):
             return False
         self.send_response(401)
         self.send_header("WWW-Authenticate", 'Basic realm="Health Vault"')
@@ -89,7 +111,36 @@ class DashboardHandler(SimpleHTTPRequestHandler):
             self.wfile.write(body)
         return True
 
+    def _require_admin_auth(self) -> bool:
+        if not self._is_admin_protected_path():
+            return False
+        if not self._admin_auth_enabled():
+            self._json(
+                403,
+                {"ok": False, "error": "Admin auth disabled. Set ADMIN_BASIC_AUTH_USER and ADMIN_BASIC_AUTH_PASS."},
+            )
+            return True
+        if self._is_authorized(ADMIN_AUTH_USER, ADMIN_AUTH_PASS):
+            return False
+        self.send_response(401)
+        self.send_header("WWW-Authenticate", 'Basic realm="Health Admin"')
+        self.send_header("Content-Type", "text/plain; charset=utf-8")
+        body = b"Authentication required for Health Admin."
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        if self.command != "HEAD":
+            self.wfile.write(body)
+        return True
+
     def _last_updated_payload(self) -> dict[str, object]:
+        override_sources = []
+        if _decode_env_text("VAULT_DATA_JSON", "VAULT_DATA_JSON_B64") is not None:
+            override_sources.append("vault_data.json")
+        if _decode_env_text("DASHBOARD_DATA_JSON", "DASHBOARD_DATA_JSON_B64") is not None:
+            override_sources.append("dashboard_data.js")
+        if _decode_env_text("CONSOLIDATED_LABS_JSON", "CONSOLIDATED_LABS_JSON_B64") is not None:
+            override_sources.append("consolidated_labs.json")
+
         files = [
             ("Consolidated Labs", PROJECT_DIR / "consolidated_labs.json"),
             ("Dashboard Data", PROJECT_DIR / "dashboard_data.js"),
@@ -114,7 +165,11 @@ class DashboardHandler(SimpleHTTPRequestHandler):
 
         latest_display = "-"
         latest_iso = ""
-        if latest_epoch > 0:
+        env_updated = os.getenv("DATA_LAST_UPDATED", "").strip()
+        if env_updated and override_sources:
+            latest_display = env_updated
+            latest_iso = env_updated
+        elif latest_epoch > 0:
             latest_dt = datetime.fromtimestamp(latest_epoch).astimezone()
             latest_display = latest_dt.strftime("%b %d, %Y %I:%M %p")
             latest_iso = latest_dt.isoformat()
@@ -122,10 +177,134 @@ class DashboardHandler(SimpleHTTPRequestHandler):
         return {
             "ok": True,
             "vault_auth_enabled": self._vault_auth_enabled(),
+            "admin_auth_enabled": self._admin_auth_enabled(),
             "latest_display": latest_display,
             "latest_iso": latest_iso,
+            "data_source": "environment" if override_sources else "files",
+            "env_overrides": override_sources,
             "files": known_files,
         }
+
+    def _send_content(self, status: int, content_type: str, body: bytes) -> None:
+        self.send_response(status)
+        self.send_header("Content-Type", content_type)
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        if self.command != "HEAD":
+            self.wfile.write(body)
+
+    def _serve_env_override(self, path: str) -> bool:
+        if path == "/vault_data.json":
+            payload = _decode_env_text("VAULT_DATA_JSON", "VAULT_DATA_JSON_B64")
+            if payload is None:
+                return False
+            try:
+                parsed = json.loads(payload)
+            except json.JSONDecodeError:
+                self._json(500, {"ok": False, "error": "Invalid VAULT_DATA_JSON/VAULT_DATA_JSON_B64"})
+                return True
+            body = json.dumps(parsed).encode("utf-8")
+            self._send_content(200, "application/json; charset=utf-8", body)
+            return True
+
+        if path == "/dashboard_data.js":
+            payload = _decode_env_text("DASHBOARD_DATA_JSON", "DASHBOARD_DATA_JSON_B64")
+            if payload is None:
+                return False
+            try:
+                parsed = json.loads(payload)
+            except json.JSONDecodeError:
+                self._json(500, {"ok": False, "error": "Invalid DASHBOARD_DATA_JSON/DASHBOARD_DATA_JSON_B64"})
+                return True
+            body = f"window.LAB_DASH_DATA = {json.dumps(parsed)};\n".encode("utf-8")
+            self._send_content(200, "application/javascript; charset=utf-8", body)
+            return True
+
+        if path == "/consolidated_labs.json":
+            payload = _decode_env_text("CONSOLIDATED_LABS_JSON", "CONSOLIDATED_LABS_JSON_B64")
+            if payload is None:
+                return False
+            try:
+                parsed = json.loads(payload)
+            except json.JSONDecodeError:
+                self._json(
+                    500,
+                    {"ok": False, "error": "Invalid CONSOLIDATED_LABS_JSON/CONSOLIDATED_LABS_JSON_B64"},
+                )
+                return True
+            body = json.dumps(parsed).encode("utf-8")
+            self._send_content(200, "application/json; charset=utf-8", body)
+            return True
+        return False
+
+    def _is_override_active_for_target(self, target: str) -> bool:
+        if target == "vault":
+            return _decode_env_text("VAULT_DATA_JSON", "VAULT_DATA_JSON_B64") is not None
+        if target == "dashboard":
+            return _decode_env_text("DASHBOARD_DATA_JSON", "DASHBOARD_DATA_JSON_B64") is not None
+        if target == "consolidated":
+            return _decode_env_text("CONSOLIDATED_LABS_JSON", "CONSOLIDATED_LABS_JSON_B64") is not None
+        return False
+
+    def _write_json_file(self, path: Path, payload: object) -> None:
+        tmp = path.with_suffix(path.suffix + ".tmp")
+        tmp.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+        tmp.replace(path)
+
+    def _write_dashboard_js(self, payload: object) -> None:
+        path = PROJECT_DIR / "dashboard_data.js"
+        tmp = path.with_suffix(path.suffix + ".tmp")
+        tmp.write_text(f"window.LAB_DASH_DATA = {json.dumps(payload)};\n", encoding="utf-8")
+        tmp.replace(path)
+
+    def _handle_admin_upload(self) -> None:
+        length = int(self.headers.get("Content-Length", "0"))
+        raw = self.rfile.read(length) if length else b"{}"
+        try:
+            payload = json.loads(raw.decode("utf-8"))
+        except (UnicodeDecodeError, json.JSONDecodeError):
+            self._json(400, {"ok": False, "error": "Invalid JSON body"})
+            return
+
+        target = str(payload.get("target", "")).strip()
+        content = payload.get("content")
+        if target not in {"vault", "dashboard", "consolidated"}:
+            self._json(400, {"ok": False, "error": "target must be one of: vault, dashboard, consolidated"})
+            return
+        if content is None:
+            self._json(400, {"ok": False, "error": "content is required"})
+            return
+        if self._is_override_active_for_target(target):
+            self._json(
+                409,
+                {"ok": False, "error": f"Env override active for {target}. Remove related *_JSON vars first."},
+            )
+            return
+
+        try:
+            if target == "vault":
+                if not isinstance(content, dict):
+                    raise ValueError("Vault content must be a JSON object")
+                self._write_json_file(PROJECT_DIR / "vault_data.json", content)
+                self._json(200, {"ok": True, "target": "vault_data.json"})
+                return
+
+            if target == "dashboard":
+                if not isinstance(content, list):
+                    raise ValueError("Dashboard content must be a JSON array")
+                self._write_dashboard_js(content)
+                self._json(200, {"ok": True, "target": "dashboard_data.js"})
+                return
+
+            if target == "consolidated":
+                if not isinstance(content, list):
+                    raise ValueError("Consolidated content must be a JSON array")
+                self._write_json_file(PROJECT_DIR / "consolidated_labs.json", content)
+                self._json(200, {"ok": True, "target": "consolidated_labs.json"})
+                return
+        except ValueError as exc:
+            self._json(400, {"ok": False, "error": str(exc)})
+            return
 
     def _json(self, status: int, payload: dict[str, object]) -> None:
         body = json.dumps(payload).encode("utf-8")
@@ -136,19 +315,35 @@ class DashboardHandler(SimpleHTTPRequestHandler):
         self.wfile.write(body)
 
     def do_GET(self) -> None:  # noqa: N802
-        if self.path.split("?", 1)[0] == "/api/last-updated":
+        path = self.path.split("?", 1)[0]
+        if path == "/api/last-updated":
             self._json(200, self._last_updated_payload())
             return
+        if self._require_admin_auth():
+            return
         if self._require_vault_auth():
+            return
+        if self._serve_env_override(path):
             return
         super().do_GET()
 
     def do_HEAD(self) -> None:  # noqa: N802
+        path = self.path.split("?", 1)[0]
+        if self._require_admin_auth():
+            return
         if self._require_vault_auth():
+            return
+        if self._serve_env_override(path):
             return
         super().do_HEAD()
 
     def do_POST(self) -> None:  # noqa: N802
+        if self.path == "/api/admin/upload-data":
+            if self._require_admin_auth():
+                return
+            self._handle_admin_upload()
+            return
+
         if self.path != "/api/rebuild":
             self._json(404, {"ok": False, "error": "Not found"})
             return
