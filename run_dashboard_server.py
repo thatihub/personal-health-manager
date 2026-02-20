@@ -6,10 +6,10 @@ from __future__ import annotations
 import argparse
 import base64
 import binascii
-import cgi
 import hmac
 import json
 import os
+import re
 import subprocess
 import threading
 from datetime import datetime
@@ -88,6 +88,53 @@ def _rebuild_env(upload_dir_override: Path | None = None) -> dict[str, str]:
 
 
 class DashboardHandler(SimpleHTTPRequestHandler):
+    def _parse_multipart_form(self) -> tuple[dict[str, str], dict[str, tuple[str, bytes]]]:
+        ctype = self.headers.get("Content-Type", "")
+        if "multipart/form-data" not in ctype:
+            raise ValueError("Use multipart/form-data.")
+        m = re.search(r'boundary="?([^";]+)"?', ctype)
+        if not m:
+            raise ValueError("Missing multipart boundary.")
+        boundary = m.group(1).encode("utf-8")
+        length = int(self.headers.get("Content-Length", "0"))
+        body = self.rfile.read(length) if length else b""
+
+        fields: dict[str, str] = {}
+        files: dict[str, tuple[str, bytes]] = {}
+        marker = b"--" + boundary
+        parts = body.split(marker)
+        for part in parts:
+            chunk = part.strip()
+            if not chunk or chunk == b"--":
+                continue
+            if chunk.startswith(b"\r\n"):
+                chunk = chunk[2:]
+            if chunk.endswith(b"--"):
+                chunk = chunk[:-2]
+            header_blob, sep, content = chunk.partition(b"\r\n\r\n")
+            if not sep:
+                continue
+            headers = header_blob.decode("utf-8", errors="ignore").split("\r\n")
+            disposition = ""
+            for h in headers:
+                if h.lower().startswith("content-disposition:"):
+                    disposition = h
+                    break
+            if not disposition:
+                continue
+            name_match = re.search(r'name="([^"]+)"', disposition)
+            if not name_match:
+                continue
+            field_name = name_match.group(1)
+            filename_match = re.search(r'filename="([^"]*)"', disposition)
+            if content.endswith(b"\r\n"):
+                content = content[:-2]
+            if filename_match and filename_match.group(1):
+                files[field_name] = (filename_match.group(1), content)
+            else:
+                fields[field_name] = content.decode("utf-8", errors="ignore")
+        return fields, files
+
     def _admin_auth_enabled(self) -> bool:
         return bool(ADMIN_AUTH_USER and ADMIN_AUTH_PASS)
 
@@ -337,22 +384,17 @@ class DashboardHandler(SimpleHTTPRequestHandler):
         )
 
     def _handle_admin_pdf_upload(self) -> None:
-        ctype = self.headers.get("Content-Type", "")
-        if "multipart/form-data" not in ctype:
-            self._json(400, {"ok": False, "error": "Use multipart/form-data with file field 'file'."})
+        try:
+            fields, files = self._parse_multipart_form()
+        except ValueError as exc:
+            self._json(400, {"ok": False, "error": str(exc)})
             return
-
-        form = cgi.FieldStorage(
-            fp=self.rfile,
-            headers=self.headers,
-            environ={"REQUEST_METHOD": "POST", "CONTENT_TYPE": ctype},
-        )
-        if "file" not in form:
+        if "file" not in files:
             self._json(400, {"ok": False, "error": "Missing file field."})
             return
 
-        file_item = form["file"]
-        filename = Path(getattr(file_item, "filename", "") or "").name
+        raw_name, file_bytes = files["file"]
+        filename = Path(raw_name or "").name
         if not filename:
             self._json(400, {"ok": False, "error": "No file selected."})
             return
@@ -372,9 +414,9 @@ class DashboardHandler(SimpleHTTPRequestHandler):
                 i += 1
 
         with target.open("wb") as f:
-            f.write(file_item.file.read())
+            f.write(file_bytes)
 
-        do_rebuild = str(form.getfirst("rebuild", "1")).strip() != "0"
+        do_rebuild = str(fields.get("rebuild", "1")).strip() != "0"
         if not do_rebuild:
             self._json(200, {"ok": True, "uploaded": target.name, "rebuild": False, "upload_dir": str(upload_dir)})
             return
