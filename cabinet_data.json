@@ -1,0 +1,35 @@
+{
+  "title": "Project Cabinet",
+  "subtitle": "Organized place for health documents, references, and quick links.",
+  "sections": [
+    {
+      "name": "Lab Documents",
+      "items": [
+        { "title": "Lab Results Dashboard", "type": "app-link", "href": "./dashboard.html", "note": "Trend charts and tables." },
+        { "title": "Raw Extracted Text", "type": "folder", "note": "_extracted_text files in project." },
+        { "title": "Consolidated Labs JSON", "type": "file", "note": "consolidated_labs.json" }
+      ]
+    },
+    {
+      "name": "Blood Pressure",
+      "items": [
+        { "title": "BP Dashboard", "type": "app-link", "href": "./bp.html", "note": "Latest 90-day window." },
+        { "title": "BP Stored Data", "type": "runtime-file", "note": "bp_readings.csv (runtime, not in git)." }
+      ]
+    },
+    {
+      "name": "Insurance and Contacts",
+      "items": [
+        { "title": "Health Vault", "type": "app-link", "href": "./vault.html", "note": "SCAN and healthcare references." },
+        { "title": "Vault Data JSON", "type": "file", "note": "vault_data.json" }
+      ]
+    },
+    {
+      "name": "Admin and Uploads",
+      "items": [
+        { "title": "Admin Upload", "type": "app-link", "href": "./admin.html", "note": "Upload PDFs and BP CSVs." },
+        { "title": "Uploaded PDFs Folder", "type": "runtime-folder", "note": "_uploaded_pdfs/ (runtime)." }
+      ]
+    }
+  ]
+}
