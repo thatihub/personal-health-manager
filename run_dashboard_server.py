@@ -395,6 +395,49 @@ class DashboardHandler(SimpleHTTPRequestHandler):
             env=_rebuild_env(upload_dir_override),
         )
 
+    def _count_rows_in_dashboard_js(self) -> int:
+        path = PROJECT_DIR / "dashboard_data.js"
+        if not path.exists():
+            return 0
+        text = path.read_text(encoding="utf-8", errors="ignore").strip()
+        if not text.startswith("window.LAB_DASH_DATA"):
+            return 0
+        try:
+            json_part = text.split("=", 1)[1].strip()
+            if json_part.endswith(";"):
+                json_part = json_part[:-1].strip()
+            parsed = json.loads(json_part)
+            if isinstance(parsed, list):
+                return len(parsed)
+        except Exception:
+            return 0
+        return 0
+
+    def _snapshot_outputs(self) -> dict[str, bytes]:
+        snapshot: dict[str, bytes] = {}
+        for name in ("dashboard_data.js", "consolidated_labs.json", "consolidated_labs.csv"):
+            p = PROJECT_DIR / name
+            if p.exists():
+                snapshot[name] = p.read_bytes()
+        return snapshot
+
+    def _restore_outputs(self, snapshot: dict[str, bytes]) -> None:
+        for name, content in snapshot.items():
+            (PROJECT_DIR / name).write_bytes(content)
+
+    def _guarded_rebuild(self, upload_dir_override: Path | None = None) -> tuple[subprocess.CompletedProcess[str], str | None]:
+        before = self._snapshot_outputs()
+        result = self._run_rebuild(upload_dir_override=upload_dir_override)
+        if result.returncode != 0:
+            self._restore_outputs(before)
+            return result, "Rebuild failed"
+
+        row_count = self._count_rows_in_dashboard_js()
+        if row_count < 1:
+            self._restore_outputs(before)
+            return result, "Rebuild produced no valid report rows; previous dashboard restored"
+        return result, None
+
     def _handle_admin_pdf_upload(self) -> None:
         try:
             fields, files = self._parse_multipart_form()
@@ -448,13 +491,13 @@ class DashboardHandler(SimpleHTTPRequestHandler):
             self._json(200, {"ok": True, "uploaded": target.name, "rebuild": False, "upload_dir": str(upload_dir)})
             return
 
-        result = self._run_rebuild(upload_dir_override=upload_dir)
-        if result.returncode != 0:
+        result, rebuild_error = self._guarded_rebuild(upload_dir_override=upload_dir)
+        if rebuild_error is not None:
             self._json(
-                500,
+                422,
                 {
                     "ok": False,
-                    "error": "PDF uploaded but rebuild failed",
+                    "error": f"PDF uploaded but {rebuild_error}",
                     "uploaded": target.name,
                     "stdout": result.stdout,
                     "stderr": result.stderr,
@@ -526,13 +569,13 @@ class DashboardHandler(SimpleHTTPRequestHandler):
             return
 
         try:
-            result = self._run_rebuild()
-            if result.returncode != 0:
+            result, rebuild_error = self._guarded_rebuild()
+            if rebuild_error is not None:
                 self._json(
                     500,
                     {
                         "ok": False,
-                        "error": "Rebuild failed",
+                        "error": rebuild_error,
                         "stdout": result.stdout,
                         "stderr": result.stderr,
                     },

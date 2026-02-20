@@ -206,6 +206,10 @@
         const res = await fetch("/api/admin/upload-pdf", { method: "POST", body: form });
         const out = await res.json();
         if (!res.ok || !out.ok) {
+          if (res.status === 422) {
+            setStatus(`Uploaded: ${out.uploaded || file.name}\nBut parsing found no valid report rows.\nPrevious dashboard data was restored.\nTry another PDF file or check report format.`);
+            return;
+          }
           setStatus(`PDF upload failed: ${out.error || "Unknown error"}`);
           return;
         }
