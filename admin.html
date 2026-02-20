@@ -85,6 +85,7 @@
     <nav class="nav">
       <a href="./index.html">Home</a>
       <a href="./dashboard.html">Lab Results Dashboard</a>
+      <a href="./bp.html">Blood Pressure</a>
       <a href="./vault.html">Health Vault</a>
       <a class="active" href="./admin.html">Admin</a>
     </nav>
@@ -99,6 +100,15 @@
         <button class="btn" id="upload-pdf" type="button">Upload PDF + Rebuild</button>
       </div>
       <div class="hint">Use this for normal workflow: upload latest lab PDF and refresh dashboard data.</div>
+    </section>
+
+    <section class="card" style="border-top: 4px solid #3aa76d;">
+      <div class="row">
+        <label for="bp-file">Blood Pressure CSV</label>
+        <input id="bp-file" type="file" accept=".csv,text/csv" />
+        <button class="btn" id="upload-bp" type="button">Upload BP CSV (Append)</button>
+      </div>
+      <div class="hint">Appends new BP rows, skips duplicates, and BP page shows only last 90 days.</div>
     </section>
 
     <section class="card">
@@ -220,6 +230,31 @@
         setStatus(`Done.\nUploaded: ${out.uploaded}\nParsing/Rebuild: complete.\nRefresh Lab Results Dashboard now.`);
       } catch (err) {
         setStatus(`PDF upload failed: ${err.message || err}`);
+      }
+    });
+
+    document.getElementById("upload-bp").addEventListener("click", async () => {
+      const input = document.getElementById("bp-file");
+      const file = input.files && input.files[0];
+      if (!file) {
+        setStatus("Select a BP CSV file first.");
+        return;
+      }
+      setStatus(`Uploading BP CSV: ${file.name}...`);
+      try {
+        const form = new FormData();
+        form.append("file", file);
+        const res = await fetch("/api/admin/upload-bp-csv", { method: "POST", body: form });
+        const out = await res.json();
+        if (!res.ok || !out.ok) {
+          setStatus(`BP upload failed: ${out.error || "Unknown error"}`);
+          return;
+        }
+        setStatus(
+          `BP upload complete.\nFile: ${out.uploaded_file}\nParsed rows: ${out.parsed_rows}\nAppended new rows: ${out.appended_rows}\nTotal stored rows: ${out.total_rows}\nOpen Blood Pressure page to view last 90 days.`
+        );
+      } catch (err) {
+        setStatus(`BP upload failed: ${err.message || err}`);
       }
     });
   </script>

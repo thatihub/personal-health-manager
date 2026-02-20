@@ -171,7 +171,7 @@
         bottom: max(10px, env(safe-area-inset-bottom));
         z-index: 999;
         display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
         gap: 8px;
         padding: 8px;
         border-radius: 14px;
@@ -219,6 +219,7 @@
     <nav class="nav">
       <a class="active" href="./index.html">Home</a>
       <a href="./dashboard.html">Lab Results Dashboard</a>
+      <a href="./bp.html">Blood Pressure</a>
       <a href="./vault.html">Health Vault</a>
       <a href="./admin.html">Admin</a>
     </nav>
@@ -242,6 +243,11 @@
         <h3>Health Vault</h3>
         <p>Scanned insurance details, useful links, member IDs, and phone contacts.</p>
         <a class="cta" href="./vault.html">Open Vault</a>
+      </article>
+      <article class="card">
+        <h3>Blood Pressure</h3>
+        <p>Uploads append historical BP data; view last 90 days of SYS, DIAS, and Pulse.</p>
+        <a class="cta" href="./bp.html">Open BP Dashboard</a>
       </article>
       <article class="card">
         <h3>Admin Upload</h3>
@@ -306,6 +312,7 @@
   <nav class="bottom-tab" aria-label="Primary">
     <a href="./index.html" class="active">Home</a>
     <a href="./dashboard.html">Lab Results</a>
+    <a href="./bp.html">BP</a>
     <a href="./vault.html">Vault</a>
   </nav>
 </body>

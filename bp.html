@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blood Pressure (Last 90 Days)</title>
+  <style>
+    :root { color-scheme: dark; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Avenir Next", "Trebuchet MS", "Segoe UI", sans-serif;
+      background: linear-gradient(160deg, #0b1219 0%, #101923 44%, #121b1a 100%);
+      color: #e7edf3;
+      padding: 18px;
+    }
+    .wrap { max-width: 1150px; margin: 0 auto; }
+    .nav { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+    .nav a {
+      text-decoration:none; padding:9px 12px; border-radius:12px;
+      border:1px solid rgba(164,185,204,.2); background:rgba(17,26,36,.92);
+      color:#d5e2ee; font-weight:700; font-size:13px; min-height:44px; display:inline-flex; align-items:center;
+    }
+    .nav a.active { background:linear-gradient(120deg,#0f7ea6,#1a93bf); color:#fff; border-color:transparent; }
+    h1 { margin:0 0 6px; font-family: Georgia, "Times New Roman", serif; }
+    .sub { color:#aab8c6; margin-bottom:14px; }
+    .card {
+      background: rgba(15, 23, 32, 0.88);
+      border: 1px solid rgba(163, 184, 201, 0.2);
+      border-radius: 14px;
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+    .kpis { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:10px; }
+    .kpi-label { color:#aab8c6; font-size:11px; text-transform:uppercase; }
+    .kpi-val { font-size:24px; font-weight:800; color:#f3f8fc; }
+    svg { width:100%; height:240px; display:block; shape-rendering:geometricPrecision; }
+    table { width:100%; border-collapse:collapse; font-size:14px; }
+    th, td { padding:9px; text-align:center; border-bottom:1px solid #24384b; }
+    th { background:#1f2f40; color:#f3f8fc; position:sticky; top:0; }
+    tbody tr:nth-child(odd) td { background:#162432; }
+    tbody tr:nth-child(even) td { background:#121d29; }
+    .empty { color:#ffd5dc; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <nav class="nav">
+      <a href="./index.html">Home</a>
+      <a href="./dashboard.html">Lab Results Dashboard</a>
+      <a class="active" href="./bp.html">Blood Pressure</a>
+      <a href="./vault.html">Health Vault</a>
+      <a href="./admin.html">Admin</a>
+    </nav>
+    <h1>Blood Pressure</h1>
+    <div class="sub">Showing last 90 days only (SYS, DIAS, Pulse).</div>
+
+    <section class="card kpis" id="kpis"></section>
+    <section class="card">
+      <svg id="bp-chart"></svg>
+    </section>
+    <section class="card" style="overflow:auto; max-height:520px;">
+      <table>
+        <thead><tr><th>Date</th><th>Time</th><th>SYS</th><th>DIAS</th><th>Pulse</th></tr></thead>
+        <tbody id="bp-body"></tbody>
+      </table>
+    </section>
+  </div>
+
+  <script>
+    function fmtDate(iso) {
+      const d = new Date(`${iso}T00:00:00`);
+      return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+    }
+
+    function drawChart(rows) {
+      const svg = document.getElementById("bp-chart");
+      const w = svg.clientWidth || 1000;
+      const h = svg.clientHeight || 240;
+      const pad = { l: 40, r: 12, t: 12, b: 30 };
+      const innerW = w - pad.l - pad.r;
+      const innerH = h - pad.t - pad.b;
+      const vals = rows.flatMap(r => [r.systolic, r.diastolic, r.pulse]);
+      const min = Math.min(...vals, 40);
+      const max = Math.max(...vals, 180);
+      const y = (v) => pad.t + (1 - ((v - min) / ((max - min) || 1))) * innerH;
+      const x = (i) => pad.l + (i / Math.max(1, rows.length - 1)) * innerW;
+
+      let html = "";
+      for (let i = 0; i < 4; i++) {
+        const yy = pad.t + (i / 3) * innerH;
+        html += `<line x1="${pad.l}" y1="${yy}" x2="${pad.l + innerW}" y2="${yy}" stroke="rgba(160,180,198,0.28)" stroke-dasharray="3 4"/>`;
+      }
+
+      const makePath = (key) => rows.map((r, i) => `${i ? "L" : "M"}${x(i)} ${y(r[key])}`).join(" ");
+      html += `<path d="${makePath("systolic")}" fill="none" stroke="#4ec9ff" stroke-width="3"/>`;
+      html += `<path d="${makePath("diastolic")}" fill="none" stroke="#7ee08f" stroke-width="3"/>`;
+      html += `<path d="${makePath("pulse")}" fill="none" stroke="#ff9f6e" stroke-width="3"/>`;
+
+      rows.forEach((r, i) => {
+        html += `<circle cx="${x(i)}" cy="${y(r.systolic)}" r="3.8" fill="#4ec9ff" stroke="#f5fbff" stroke-width="1"/>`;
+        html += `<circle cx="${x(i)}" cy="${y(r.diastolic)}" r="3.8" fill="#7ee08f" stroke="#f5fbff" stroke-width="1"/>`;
+        html += `<circle cx="${x(i)}" cy="${y(r.pulse)}" r="3.8" fill="#ff9f6e" stroke="#f5fbff" stroke-width="1"/>`;
+      });
+
+      const last = rows.length - 1;
+      [0, Math.floor(last / 2), last].filter((v, i, a) => a.indexOf(v) === i).forEach((i) => {
+        html += `<text x="${x(i)}" y="${h - 8}" text-anchor="middle" fill="#d2deea" font-size="11" font-weight="700">${rows[i].date.slice(5)}</text>`;
+      });
+      html += `<text x="${pad.l}" y="${pad.t + 10}" fill="#4ec9ff" font-size="12">SYS</text>`;
+      html += `<text x="${pad.l + 44}" y="${pad.t + 10}" fill="#7ee08f" font-size="12">DIAS</text>`;
+      html += `<text x="${pad.l + 95}" y="${pad.t + 10}" fill="#ff9f6e" font-size="12">Pulse</text>`;
+      svg.setAttribute("viewBox", `0 0 ${w} ${h}`);
+      svg.innerHTML = html;
+    }
+
+    async function load() {
+      const body = document.getElementById("bp-body");
+      const kpis = document.getElementById("kpis");
+      try {
+        const res = await fetch("/api/bp-data");
+        const out = await res.json();
+        const rows = (out.rows || []).slice();
+        if (!rows.length) {
+          kpis.innerHTML = `<div class="card empty">No BP data for last 90 days.</div>`;
+          body.innerHTML = `<tr><td colspan="5" class="empty">No BP data for last 90 days.</td></tr>`;
+          return;
+        }
+        const latest = rows[rows.length - 1];
+        const avg = (k) => Math.round(rows.reduce((s, r) => s + Number(r[k] || 0), 0) / rows.length);
+        kpis.innerHTML = `
+          <div class="card"><div class="kpi-label">Latest SYS</div><div class="kpi-val">${latest.systolic}</div></div>
+          <div class="card"><div class="kpi-label">Latest DIAS</div><div class="kpi-val">${latest.diastolic}</div></div>
+          <div class="card"><div class="kpi-label">Latest Pulse</div><div class="kpi-val">${latest.pulse}</div></div>
+          <div class="card"><div class="kpi-label">90d Avg SYS/DIAS</div><div class="kpi-val">${avg("systolic")}/${avg("diastolic")}</div></div>
+        `;
+        body.innerHTML = rows.slice().reverse().map(r =>
+          `<tr><td>${fmtDate(r.date)}</td><td>${r.time}</td><td>${r.systolic}</td><td>${r.diastolic}</td><td>${r.pulse}</td></tr>`
+        ).join("");
+        drawChart(rows);
+      } catch (_e) {
+        body.innerHTML = `<tr><td colspan="5" class="empty">Failed to load BP data.</td></tr>`;
+      }
+    }
+    load();
+  </script>
+</body>
+</html>

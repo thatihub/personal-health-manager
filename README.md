@@ -4,6 +4,7 @@ Personal health workspace with:
 
 - `index.html` - Home
 - `dashboard.html` - Lab Results Dashboard (lab trends)
+- `bp.html` - Blood Pressure Dashboard (last 90 days)
 - `vault.html` - Health Vault (insurance links, contacts, scanned-doc index)
 
 ## Start locally
@@ -119,6 +120,7 @@ Security:
 Upload targets in Admin page:
 
 - New Lab Result PDF -> uploads PDF to server folder and triggers rebuild
+- Blood Pressure CSV -> appends non-duplicate BP rows to `bp_readings.csv`
 - Vault JSON -> updates `vault_data.json`
 - Dashboard JSON/JS -> updates `dashboard_data.js`
 - Consolidated JSON -> updates `consolidated_labs.json`
@@ -135,3 +137,10 @@ PDF upload notes:
 - Rebuild uses `LAB_RESULTS_DIR` if set.
 - If `LAB_RESULTS_DIR` is not set, rebuild automatically uses uploaded PDF folder when it exists.
 - Duplicate PDF uploads are detected by file hash; duplicate files are skipped with "File already uploaded" message.
+
+BP CSV notes:
+
+- Upload from `/admin.html` -> "Upload BP CSV (Append)".
+- Incoming CSV rows are merged into `bp_readings.csv`.
+- Duplicate rows (same date, time, SYS, DIAS, Pulse) are skipped.
+- `/bp.html` displays only the latest 90 days.
