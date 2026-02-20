@@ -92,23 +92,6 @@
       display: inline-flex;
       gap: 8px;
     }
-    .action-btn {
-      border: 1px solid rgba(16, 36, 54, 0.2);
-      background: linear-gradient(120deg, #0f7ea6, #1a93bf);
-      color: #fff;
-      padding: 9px 14px;
-      border-radius: 10px;
-      font-weight: 700;
-      font-size: 13px;
-      cursor: pointer;
-      min-height: 44px;
-    }
-    .action-btn:disabled { opacity: 0.7; cursor: wait; }
-    .action-status {
-      font-size: 13px;
-      color: var(--muted);
-      min-height: 18px;
-    }
     .panel-btn {
       border: 1px solid rgba(16, 36, 54, 0.2);
       background: rgba(255,255,255,0.9);
@@ -434,8 +417,6 @@
       }
       h1 { font-size: clamp(24px, 7vw, 34px); }
       .actions { gap: 8px; }
-      .action-btn { width: 100%; justify-content: center; }
-      .action-status { width: 100%; }
       .kpis { grid-template-columns: 1fr 1fr; gap: 8px; }
       .kpi { padding: 10px; }
       .kpi .value { font-size: 22px; }
@@ -455,7 +436,7 @@
         linear-gradient(160deg, #0b1219 0%, #101923 44%, #121b1a 100%);
     }
     h1, .chart h3, .kpi .value, .mini h4 { color: #f2f6fa; }
-    .sub, .action-status, .legend, .mini-range, .kpi .label { color: #aab8c6; }
+    .sub, .legend, .mini-range, .kpi .label { color: #aab8c6; }
     .top-nav a, .bottom-tab {
       background: rgba(17, 26, 36, 0.92);
       border-color: rgba(164, 185, 204, 0.2);
@@ -502,12 +483,10 @@
     <div class="sub" id="summary-subtitle"></div>
     <div class="updated-banner" id="last-updated-banner">Last updated: loading...</div>
     <div class="actions">
-      <button class="action-btn" id="rebuild-btn" type="button">Rebuild Data</button>
       <div class="panel-tools">
         <button class="panel-btn" id="expand-all-btn" type="button">Expand All</button>
         <button class="panel-btn" id="collapse-all-btn" type="button">Collapse All</button>
       </div>
-      <span class="action-status" id="rebuild-status">Add new PDF files, then click Rebuild Data.</span>
     </div>
 
     <section class="kpis" id="kpis"></section>
@@ -764,10 +743,8 @@
     }
 
     const latest = data[data.length - 1];
-    const rebuildBtn = document.getElementById("rebuild-btn");
     const expandAllBtn = document.getElementById("expand-all-btn");
     const collapseAllBtn = document.getElementById("collapse-all-btn");
-    const rebuildStatus = document.getElementById("rebuild-status");
     const kpis = [
       ["Latest HbA1c", latestAvailable("hba1c")],
       ["Latest Glucose", latestAvailable("glucose")],
@@ -784,27 +761,6 @@
       div.innerHTML = `<div class="label">${label}</div><div class="value">${value}</div>`;
       kpiRoot.appendChild(div);
     });
-
-    async function rebuildData() {
-      rebuildBtn.disabled = true;
-      rebuildStatus.textContent = "Rebuilding from PDFs...";
-      try {
-        const res = await fetch("/api/rebuild", { method: "POST" });
-        const payload = await res.json();
-        if (!res.ok || !payload.ok) {
-          rebuildStatus.textContent = `Rebuild failed. ${payload.error || "Unknown error"}`;
-          rebuildBtn.disabled = false;
-          return;
-        }
-        rebuildStatus.textContent = "Rebuild complete. Refreshing dashboard...";
-        window.location.reload();
-      } catch (_err) {
-        rebuildStatus.textContent = "Rebuild failed. Check server logs.";
-        rebuildBtn.disabled = false;
-      }
-    }
-
-    rebuildBtn.addEventListener("click", rebuildData);
 
     function initCategoryCollapse() {
       const cards = Array.from(document.querySelectorAll(".card.chart"));
