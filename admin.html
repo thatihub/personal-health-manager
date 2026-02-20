@@ -128,14 +128,6 @@
       <div class="hint">Expected: JSON array for `consolidated_labs.json`.</div>
     </section>
 
-    <section class="card">
-      <div class="row">
-        <label>PDF Rebuild</label>
-        <button class="btn secondary" id="rebuild-btn" type="button">Run Rebuild</button>
-      </div>
-      <div class="hint">Rebuild reads PDFs from server-side lab folder config.</div>
-    </section>
-
     <div id="status" class="status">Ready.</div>
   </div>
 
@@ -198,21 +190,6 @@
       uploadFromInput("consolidated-file", "consolidated", JSON.parse)
     );
 
-    document.getElementById("rebuild-btn").addEventListener("click", async () => {
-      setStatus("Running rebuild...");
-      try {
-        const res = await fetch("/api/rebuild", { method: "POST" });
-        const out = await res.json();
-        if (!res.ok || !out.ok) {
-          setStatus(`Rebuild failed: ${out.error || "Unknown error"}`);
-          return;
-        }
-        setStatus("Rebuild complete.");
-      } catch (err) {
-        setStatus(`Rebuild failed: ${err.message || err}`);
-      }
-    });
-
     document.getElementById("upload-pdf").addEventListener("click", async () => {
       const input = document.getElementById("pdf-file");
       const file = input.files && input.files[0];
@@ -220,18 +197,23 @@
         setStatus("Select a PDF file first.");
         return;
       }
-      setStatus(`Uploading ${file.name} and rebuilding...`);
+      setStatus(`Uploading ${file.name}...`);
       try {
         const form = new FormData();
         form.append("file", file);
         form.append("rebuild", "1");
+        setStatus(`Uploading ${file.name}... Parsing will start automatically.`);
         const res = await fetch("/api/admin/upload-pdf", { method: "POST", body: form });
         const out = await res.json();
         if (!res.ok || !out.ok) {
           setStatus(`PDF upload failed: ${out.error || "Unknown error"}`);
           return;
         }
-        setStatus(`Upload complete: ${out.uploaded}\nRebuild complete.`);
+        if (out.duplicate) {
+          setStatus(`File already uploaded.\nExisting file: ${out.uploaded}\nNo rebuild needed.`);
+          return;
+        }
+        setStatus(`Done.\nUploaded: ${out.uploaded}\nParsing/Rebuild: complete.\nRefresh Lab Results Dashboard now.`);
       } catch (err) {
         setStatus(`PDF upload failed: ${err.message || err}`);
       }

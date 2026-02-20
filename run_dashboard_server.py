@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import base64
 import binascii
+import hashlib
 import hmac
 import json
 import os
@@ -88,6 +89,17 @@ def _rebuild_env(upload_dir_override: Path | None = None) -> dict[str, str]:
 
 
 class DashboardHandler(SimpleHTTPRequestHandler):
+    def _find_duplicate_pdf(self, upload_dir: Path, file_bytes: bytes) -> Path | None:
+        incoming_hash = hashlib.sha256(file_bytes).hexdigest()
+        for candidate in upload_dir.glob("*.pdf"):
+            try:
+                existing_hash = hashlib.sha256(candidate.read_bytes()).hexdigest()
+            except OSError:
+                continue
+            if existing_hash == incoming_hash:
+                return candidate
+        return None
+
     def _parse_multipart_form(self) -> tuple[dict[str, str], dict[str, tuple[str, bytes]]]:
         ctype = self.headers.get("Content-Type", "")
         if "multipart/form-data" not in ctype:
@@ -404,6 +416,21 @@ class DashboardHandler(SimpleHTTPRequestHandler):
 
         upload_dir = _default_upload_dir()
         upload_dir.mkdir(parents=True, exist_ok=True)
+        duplicate = self._find_duplicate_pdf(upload_dir, file_bytes)
+        if duplicate is not None:
+            self._json(
+                200,
+                {
+                    "ok": True,
+                    "duplicate": True,
+                    "message": "File already uploaded",
+                    "uploaded": duplicate.name,
+                    "rebuild": False,
+                    "upload_dir": str(upload_dir),
+                },
+            )
+            return
+
         target = upload_dir / filename
         if target.exists():
             stem = target.stem

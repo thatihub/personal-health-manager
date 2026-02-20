@@ -122,7 +122,6 @@ Upload targets in Admin page:
 - Vault JSON -> updates `vault_data.json`
 - Dashboard JSON/JS -> updates `dashboard_data.js`
 - Consolidated JSON -> updates `consolidated_labs.json`
-- Optional Rebuild button -> calls `/api/rebuild`
 
 Important:
 
@@ -135,3 +134,4 @@ PDF upload notes:
   - `ADMIN_UPLOADS_DIR` (if set), otherwise `/_uploaded_pdfs` under project folder.
 - Rebuild uses `LAB_RESULTS_DIR` if set.
 - If `LAB_RESULTS_DIR` is not set, rebuild automatically uses uploaded PDF folder when it exists.
+- Duplicate PDF uploads are detected by file hash; duplicate files are skipped with "File already uploaded" message.
