@@ -118,6 +118,7 @@ Security:
 
 Upload targets in Admin page:
 
+- New Lab Result PDF -> uploads PDF to server folder and triggers rebuild
 - Vault JSON -> updates `vault_data.json`
 - Dashboard JSON/JS -> updates `dashboard_data.js`
 - Consolidated JSON -> updates `consolidated_labs.json`
@@ -127,3 +128,10 @@ Important:
 
 - If env overrides (`*_JSON` or `*_JSON_B64`) are active for a target, admin upload for that target is blocked.
 - Remove env override vars if you want file uploads to take effect.
+
+PDF upload notes:
+
+- Uploaded PDFs are stored under:
+  - `ADMIN_UPLOADS_DIR` (if set), otherwise `/_uploaded_pdfs` under project folder.
+- Rebuild uses `LAB_RESULTS_DIR` if set.
+- If `LAB_RESULTS_DIR` is not set, rebuild automatically uses uploaded PDF folder when it exists.

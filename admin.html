@@ -92,6 +92,15 @@
     <h1>Health Admin</h1>
     <div class="sub">Upload updated JSON files without editing Render environment variables.</div>
 
+    <section class="card" style="border-top: 4px solid #0f7ea6;">
+      <div class="row">
+        <label for="pdf-file">New Lab Result PDF</label>
+        <input id="pdf-file" type="file" accept=".pdf,application/pdf" />
+        <button class="btn" id="upload-pdf" type="button">Upload PDF + Rebuild</button>
+      </div>
+      <div class="hint">Use this for normal workflow: upload latest lab PDF and refresh dashboard data.</div>
+    </section>
+
     <section class="card">
       <div class="row">
         <label for="vault-file">Vault Data JSON</label>
@@ -201,6 +210,30 @@
         setStatus("Rebuild complete.");
       } catch (err) {
         setStatus(`Rebuild failed: ${err.message || err}`);
+      }
+    });
+
+    document.getElementById("upload-pdf").addEventListener("click", async () => {
+      const input = document.getElementById("pdf-file");
+      const file = input.files && input.files[0];
+      if (!file) {
+        setStatus("Select a PDF file first.");
+        return;
+      }
+      setStatus(`Uploading ${file.name} and rebuilding...`);
+      try {
+        const form = new FormData();
+        form.append("file", file);
+        form.append("rebuild", "1");
+        const res = await fetch("/api/admin/upload-pdf", { method: "POST", body: form });
+        const out = await res.json();
+        if (!res.ok || !out.ok) {
+          setStatus(`PDF upload failed: ${out.error || "Unknown error"}`);
+          return;
+        }
+        setStatus(`Upload complete: ${out.uploaded}\nRebuild complete.`);
+      } catch (err) {
+        setStatus(`PDF upload failed: ${err.message || err}`);
       }
     });
   </script>

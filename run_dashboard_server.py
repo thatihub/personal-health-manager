@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import base64
 import binascii
+import cgi
 import hmac
 import json
 import os
@@ -47,10 +48,12 @@ def rebuild_if_needed(skip: bool) -> None:
 
 
 def rebuild_now() -> None:
+    env = _rebuild_env()
     subprocess.run(
         ["python3", str(PROJECT_DIR / "rebuild_consolidation.py")],
         check=True,
         cwd=PROJECT_DIR.parent,
+        env=env,
     )
 
 
@@ -65,6 +68,23 @@ def _decode_env_text(plain_var: str, b64_var: str) -> str | None:
         return base64.b64decode(encoded).decode("utf-8")
     except (binascii.Error, UnicodeDecodeError):
         return None
+
+
+def _default_upload_dir() -> Path:
+    return Path(os.getenv("ADMIN_UPLOADS_DIR", str(PROJECT_DIR / "_uploaded_pdfs")))
+
+
+def _rebuild_env(upload_dir_override: Path | None = None) -> dict[str, str]:
+    env = os.environ.copy()
+    if env.get("LAB_RESULTS_DIR", "").strip():
+        return env
+    if upload_dir_override is not None:
+        env["LAB_RESULTS_DIR"] = str(upload_dir_override)
+        return env
+    default_upload = _default_upload_dir()
+    if default_upload.exists():
+        env["LAB_RESULTS_DIR"] = str(default_upload)
+    return env
 
 
 class DashboardHandler(SimpleHTTPRequestHandler):
@@ -306,6 +326,84 @@ class DashboardHandler(SimpleHTTPRequestHandler):
             self._json(400, {"ok": False, "error": str(exc)})
             return
 
+    def _run_rebuild(self, upload_dir_override: Path | None = None) -> subprocess.CompletedProcess[str]:
+        return subprocess.run(
+            ["python3", str(PROJECT_DIR / "rebuild_consolidation.py")],
+            cwd=PROJECT_DIR.parent,
+            check=False,
+            capture_output=True,
+            text=True,
+            env=_rebuild_env(upload_dir_override),
+        )
+
+    def _handle_admin_pdf_upload(self) -> None:
+        ctype = self.headers.get("Content-Type", "")
+        if "multipart/form-data" not in ctype:
+            self._json(400, {"ok": False, "error": "Use multipart/form-data with file field 'file'."})
+            return
+
+        form = cgi.FieldStorage(
+            fp=self.rfile,
+            headers=self.headers,
+            environ={"REQUEST_METHOD": "POST", "CONTENT_TYPE": ctype},
+        )
+        if "file" not in form:
+            self._json(400, {"ok": False, "error": "Missing file field."})
+            return
+
+        file_item = form["file"]
+        filename = Path(getattr(file_item, "filename", "") or "").name
+        if not filename:
+            self._json(400, {"ok": False, "error": "No file selected."})
+            return
+        if not filename.lower().endswith(".pdf"):
+            self._json(400, {"ok": False, "error": "Only PDF files are supported."})
+            return
+
+        upload_dir = _default_upload_dir()
+        upload_dir.mkdir(parents=True, exist_ok=True)
+        target = upload_dir / filename
+        if target.exists():
+            stem = target.stem
+            suffix = target.suffix
+            i = 1
+            while target.exists():
+                target = upload_dir / f"{stem}_{i}{suffix}"
+                i += 1
+
+        with target.open("wb") as f:
+            f.write(file_item.file.read())
+
+        do_rebuild = str(form.getfirst("rebuild", "1")).strip() != "0"
+        if not do_rebuild:
+            self._json(200, {"ok": True, "uploaded": target.name, "rebuild": False, "upload_dir": str(upload_dir)})
+            return
+
+        result = self._run_rebuild(upload_dir_override=upload_dir)
+        if result.returncode != 0:
+            self._json(
+                500,
+                {
+                    "ok": False,
+                    "error": "PDF uploaded but rebuild failed",
+                    "uploaded": target.name,
+                    "stdout": result.stdout,
+                    "stderr": result.stderr,
+                },
+            )
+            return
+
+        self._json(
+            200,
+            {
+                "ok": True,
+                "uploaded": target.name,
+                "rebuild": True,
+                "upload_dir": str(upload_dir),
+                "stdout": result.stdout,
+            },
+        )
+
     def _json(self, status: int, payload: dict[str, object]) -> None:
         body = json.dumps(payload).encode("utf-8")
         self.send_response(status)
@@ -338,6 +436,12 @@ class DashboardHandler(SimpleHTTPRequestHandler):
         super().do_HEAD()
 
     def do_POST(self) -> None:  # noqa: N802
+        if self.path == "/api/admin/upload-pdf":
+            if self._require_admin_auth():
+                return
+            self._handle_admin_pdf_upload()
+            return
+
         if self.path == "/api/admin/upload-data":
             if self._require_admin_auth():
                 return
@@ -353,13 +457,7 @@ class DashboardHandler(SimpleHTTPRequestHandler):
             return
 
         try:
-            result = subprocess.run(
-                ["python3", str(PROJECT_DIR / "rebuild_consolidation.py")],
-                cwd=PROJECT_DIR.parent,
-                check=False,
-                capture_output=True,
-                text=True,
-            )
+            result = self._run_rebuild()
             if result.returncode != 0:
                 self._json(
                     500,
