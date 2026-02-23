@@ -6,16 +6,16 @@
   <title>Prakash Lab Trends (2023-2026)</title>
   <style>
     :root {
-      --bg: #f2f7ff;
-      --ink: #102436;
-      --muted: #476176;
-      --panel: rgba(255, 255, 255, 0.86);
-      --line: #0f7ea6;
-      --line2: #ef6f59;
-      --line3: #3aa76d;
+      --bg: #eff8ff;
+      --ink: #102b3d;
+      --muted: #4a6578;
+      --panel: rgba(255, 255, 255, 0.96);
+      --line: #0b7ca5;
+      --line2: #e58d20;
+      --line3: #0e9a78;
       --warn: #b23a48;
       --ok: #3a7d44;
-      --shadow: 0 14px 34px rgba(16, 36, 54, 0.14);
+      --shadow: 0 14px 34px rgba(16, 43, 61, 0.12);
     }
 
     * { box-sizing: border-box; }
@@ -28,10 +28,10 @@
       -moz-osx-font-smoothing: grayscale;
       color: var(--ink);
       background:
-        radial-gradient(circle at 12% 10%, rgba(15, 126, 166, 0.24), transparent 42%),
-        radial-gradient(circle at 88% 18%, rgba(239, 111, 89, 0.2), transparent 36%),
-        radial-gradient(circle at 65% 80%, rgba(58, 167, 109, 0.2), transparent 34%),
-        linear-gradient(160deg, #eef6ff 0%, #f9f5ff 44%, #f8fffa 100%);
+        radial-gradient(circle at 12% 10%, rgba(11, 124, 165, 0.22), transparent 42%),
+        radial-gradient(circle at 88% 18%, rgba(229, 141, 32, 0.14), transparent 36%),
+        radial-gradient(circle at 65% 80%, rgba(14, 154, 120, 0.16), transparent 34%),
+        linear-gradient(160deg, #f3faff 0%, #fffaf1 44%, #f2fff9 100%);
       min-height: 100vh;
       padding: 24px;
     }
@@ -39,7 +39,7 @@
     .wrap { max-width: 1180px; margin: 0 auto; }
 
     h1 {
-      font-family: Georgia, "Times New Roman", serif;
+      font-family: "Avenir Next Condensed", "Trebuchet MS", sans-serif;
       font-size: clamp(28px, 4vw, 44px);
       margin: 0 0 6px;
       letter-spacing: 0.2px;
@@ -53,15 +53,15 @@
       gap: 8px;
       padding: 7px 10px;
       border-radius: 999px;
-      border: 1px solid rgba(16, 36, 54, 0.14);
-      background: rgba(255, 255, 255, 0.74);
+      border: 1px solid rgba(16, 43, 61, 0.14);
+      background: rgba(255, 255, 255, 0.88);
       color: #2f5569;
       font-size: 12px;
       font-weight: 700;
     }
     .top-nav { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
-    .top-nav a { text-decoration:none; padding:9px 12px; border-radius:12px; border:1px solid rgba(16,36,54,.14); background:rgba(255,255,255,.8); color:#274150; font-weight:700; font-size:13px; min-height:44px; display:inline-flex; align-items:center; }
-    .top-nav a.active { background:linear-gradient(120deg, #0f7ea6, #1a93bf); color:#fff; border-color: transparent; }
+    .top-nav a { text-decoration:none; padding:9px 12px; border-radius:12px; border:1px solid rgba(16,43,61,.14); background:rgba(255,255,255,.9); color:#274150; font-weight:700; font-size:13px; min-height:44px; display:inline-flex; align-items:center; }
+    .top-nav a.active { background:linear-gradient(120deg, #0b7ca5, #17a1c8); color:#fff; border-color: transparent; }
 
     .bottom-tab {
       display: none;
@@ -80,7 +80,7 @@
       justify-content: center;
     }
     .bottom-tab a.active {
-      background: linear-gradient(120deg, #0f7ea6, #1a93bf);
+      background: linear-gradient(120deg, #0b7ca5, #17a1c8);
       color: #fff;
     }
 
@@ -96,8 +96,8 @@
       gap: 8px;
     }
     .panel-btn {
-      border: 1px solid rgba(16, 36, 54, 0.2);
-      background: rgba(255,255,255,0.9);
+      border: 1px solid rgba(16, 43, 61, 0.2);
+      background: rgba(255,255,255,0.94);
       color: #1e4a60;
       padding: 9px 12px;
       border-radius: 10px;
@@ -116,7 +116,7 @@
 
     .card {
       background: var(--panel);
-      border: 1px solid rgba(16, 36, 54, 0.1);
+      border: 1px solid rgba(16, 43, 61, 0.12);
       border-radius: 16px;
       box-shadow: var(--shadow);
       backdrop-filter: blur(6px);
@@ -140,7 +140,7 @@
     .hidden { display: none !important; }
 
     .view-btn {
-      border: 1px solid rgba(20, 34, 46, 0.12);
+      border: 1px solid rgba(20, 34, 46, 0.16);
       background: #ffffff;
       color: var(--muted);
       padding: 7px 10px;
@@ -152,16 +152,16 @@
     }
 
     .view-btn.active {
-      background: linear-gradient(120deg, #0f7ea6, #1a93bf);
+      background: linear-gradient(120deg, #0b7ca5, #17a1c8);
       color: #fff;
     }
 
     .chart { padding: 14px; }
     .graph-shell {
-      border: 2px solid rgba(20, 34, 46, 0.22);
+      border: 2px solid rgba(20, 34, 46, 0.18);
       border-radius: 14px;
       padding: 10px;
-      background: rgba(255, 255, 255, 0.55);
+      background: rgba(255, 255, 255, 0.82);
       position: relative;
       overflow: hidden;
     }
@@ -172,23 +172,23 @@
       top: 0;
       width: 100%;
       height: 5px;
-      background: rgba(20, 34, 46, 0.28);
+      background: rgba(20, 34, 46, 0.18);
     }
     .graph-shell.blue {
-      border-color: rgba(31, 111, 139, 0.35);
-      background: linear-gradient(180deg, rgba(31, 111, 139, 0.1), rgba(255, 255, 255, 0.78));
+      border-color: rgba(31, 111, 139, 0.3);
+      background: linear-gradient(180deg, rgba(31, 111, 139, 0.12), rgba(255, 255, 255, 0.9));
     }
     .graph-shell.blue::before { background: #1f6f8b; }
     .graph-shell.orange {
-      border-color: rgba(238, 108, 77, 0.35);
-      background: linear-gradient(180deg, rgba(238, 108, 77, 0.1), rgba(255, 255, 255, 0.78));
+      border-color: rgba(229, 141, 32, 0.3);
+      background: linear-gradient(180deg, rgba(229, 141, 32, 0.12), rgba(255, 255, 255, 0.9));
     }
-    .graph-shell.orange::before { background: #ee6c4d; }
+    .graph-shell.orange::before { background: #e58d20; }
     .graph-shell.green {
-      border-color: rgba(42, 157, 143, 0.35);
-      background: linear-gradient(180deg, rgba(42, 157, 143, 0.1), rgba(255, 255, 255, 0.78));
+      border-color: rgba(14, 154, 120, 0.3);
+      background: linear-gradient(180deg, rgba(14, 154, 120, 0.12), rgba(255, 255, 255, 0.9));
     }
-    .graph-shell.green::before { background: #2a9d8f; }
+    .graph-shell.green::before { background: #0e9a78; }
     .chart-head {
       display: flex;
       justify-content: space-between;
@@ -201,7 +201,7 @@
       align-items: center;
     }
     .collapse-btn {
-      border: 1px solid rgba(16, 36, 54, 0.14);
+      border: 1px solid rgba(16, 43, 61, 0.14);
       background: #fff;
       color: #36566a;
       border-radius: 8px;
@@ -220,17 +220,31 @@
     .card.chart.collapsed .collapse-btn {
       background: rgba(16, 36, 54, 0.07);
     }
-    .chart h3 { margin: 2px 0 12px; font-size: 18px; }
+    .chart h3 {
+      margin: 2px 0 12px;
+      font-size: clamp(22px, 2.2vw, 28px);
+      line-height: 1.12;
+      letter-spacing: 0.2px;
+      font-family: "Avenir Next Condensed", "Trebuchet MS", sans-serif;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .grid .card:nth-child(1) .chart-head h3 { color: #0b7ca5; }
+    .grid .card:nth-child(2) .chart-head h3 { color: #b46a0a; }
+    .grid .card:nth-child(3) .chart-head h3 { color: #0e866a; }
+    .grid .card:nth-child(4) .chart-head h3 { color: #5b64b8; }
+    .grid .card:nth-child(5) .chart-head h3 { color: #a43e7f; }
+    .grid .card:nth-child(6) .chart-head h3 { color: #9a4b18; }
     .mini-grid {
       display: grid;
       grid-template-columns: 1fr;
       gap: 10px;
     }
     .mini {
-      border: 2px solid rgba(20, 34, 46, 0.18);
+      border: 2px solid rgba(20, 34, 46, 0.14);
       border-radius: 12px;
       padding: 8px;
-      background: rgba(255, 255, 255, 0.82);
+      background: rgba(255, 255, 255, 0.9);
       position: relative;
       overflow: hidden;
       transition: transform 0.18s ease, box-shadow 0.18s ease;
@@ -242,7 +256,7 @@
       top: 0;
       width: 100%;
       height: 4px;
-      background: rgba(20, 34, 46, 0.24);
+      background: rgba(20, 34, 46, 0.16);
     }
     .mini:hover {
       transform: translateY(-2px);
@@ -261,20 +275,20 @@
       margin-bottom: 6px;
     }
     .mini.blue {
-      border-color: rgba(31, 111, 139, 0.35);
-      background: linear-gradient(180deg, rgba(31, 111, 139, 0.13), rgba(255, 255, 255, 0.86));
+      border-color: rgba(31, 111, 139, 0.28);
+      background: linear-gradient(180deg, rgba(31, 111, 139, 0.12), rgba(255, 255, 255, 0.92));
     }
     .mini.blue::before { background: #1f6f8b; }
     .mini.orange {
-      border-color: rgba(238, 108, 77, 0.35);
-      background: linear-gradient(180deg, rgba(238, 108, 77, 0.13), rgba(255, 255, 255, 0.86));
+      border-color: rgba(229, 141, 32, 0.28);
+      background: linear-gradient(180deg, rgba(229, 141, 32, 0.12), rgba(255, 255, 255, 0.92));
     }
-    .mini.orange::before { background: #ee6c4d; }
+    .mini.orange::before { background: #e58d20; }
     .mini.green {
-      border-color: rgba(42, 157, 143, 0.35);
-      background: linear-gradient(180deg, rgba(42, 157, 143, 0.13), rgba(255, 255, 255, 0.86));
+      border-color: rgba(14, 154, 120, 0.28);
+      background: linear-gradient(180deg, rgba(14, 154, 120, 0.12), rgba(255, 255, 255, 0.92));
     }
-    .mini.green::before { background: #2a9d8f; }
+    .mini.green::before { background: #0e9a78; }
 
     svg {
       width: 100%;
@@ -308,9 +322,9 @@
     .table-wrap {
       padding: 10px;
       overflow: auto;
-      border: 2px solid #2e4356;
+      border: 1px solid rgba(16, 43, 61, 0.2);
       border-radius: 14px;
-      background: #0f1822;
+      background: #fbfdff;
       backdrop-filter: none;
       -webkit-backdrop-filter: none;
     }
@@ -321,21 +335,21 @@
       font-size: 14px;
       line-height: 1.35;
       letter-spacing: 0.01em;
-      color: #e8f0f7;
+      color: #123246;
       overflow: hidden;
       border-radius: 10px;
-      background: #0f1822;
-      border: 1px solid #2a3d50;
+      background: #ffffff;
+      border: 1px solid rgba(16, 43, 61, 0.16);
     }
     thead th {
       position: sticky;
       top: 0;
       z-index: 1;
-      background: #1f2f40;
-      color: #f3f8fc;
+      background: #e8f4fb;
+      color: #154059;
       text-align: center;
       padding: 11px 10px;
-      border-bottom: 1px solid #345069;
+      border-bottom: 1px solid rgba(21, 64, 89, 0.2);
       text-transform: uppercase;
       letter-spacing: 0.4px;
       font-size: 11px;
@@ -343,51 +357,51 @@
     }
     tbody td {
       padding: 10px;
-      border-bottom: 1px solid #24384b;
+      border-bottom: 1px solid rgba(16, 43, 61, 0.12);
       white-space: nowrap;
       font-variant-numeric: tabular-nums;
       text-align: center;
       backdrop-filter: none;
       -webkit-backdrop-filter: none;
-      color: #edf3f9;
+      color: #16384c;
       font-weight: 700;
     }
-    tbody tr:nth-child(odd) { background: #131f2b; }
-    tbody tr:nth-child(even) { background: #101a25; }
-    tbody tr:hover { background: #203244; }
+    tbody tr:nth-child(odd) { background: #ffffff; }
+    tbody tr:nth-child(even) { background: #f6fbff; }
+    tbody tr:hover { background: #eaf5fe; }
     td.num { text-align: center; font-weight: 600; }
-    td.date-cell { font-weight: 800; color: #f0f7ff; text-align: center; }
+    td.date-cell { font-weight: 800; color: #12374d; text-align: center; }
     .value-pill {
       display: inline-block;
       min-width: 40px;
       padding: 3px 10px;
       border-radius: 999px;
-      background: #264a66;
-      color: #f4f9ff;
+      background: #e6f3fd;
+      color: #164663;
       text-align: center;
-      border: 1px solid #3a6b90;
+      border: 1px solid #b8d6ec;
     }
     .value-pill.na {
-      background: #3a4652;
-      color: #e3e9ef;
-      border-color: #536477;
+      background: #edf1f4;
+      color: #526575;
+      border-color: #c5d0d8;
     }
     .value-pill.normal {
-      background: #315e38;
-      color: #eaf8ec;
-      border-color: #4c8756;
+      background: #e5f7eb;
+      color: #186b35;
+      border-color: #b7e6c6;
     }
     .value-pill.high, .value-pill.low {
-      background: #7a2f3a;
-      color: #ffe6eb;
+      background: #fdecef;
+      color: #9b2436;
       font-weight: 800;
-      border-color: #aa4b59;
+      border-color: #f5bcc7;
     }
     .range-flag {
       margin-left: 6px;
       padding: 1px 5px;
       border-radius: 8px;
-      background: rgba(178, 58, 72, 0.22);
+      background: rgba(178, 58, 72, 0.14);
       color: #8f1f2c;
       font-size: 10px;
       font-weight: 800;
@@ -429,8 +443,8 @@
         padding: 8px;
         border-radius: 14px;
         background: rgba(255,255,255,0.94);
-        border: 1px solid rgba(16,36,54,0.18);
-        box-shadow: 0 12px 26px rgba(16,36,54,0.18);
+        border: 1px solid rgba(16,43,61,0.18);
+        box-shadow: 0 12px 26px rgba(16,43,61,0.14);
         backdrop-filter: blur(8px);
       }
       h1 { font-size: clamp(24px, 7vw, 34px); }
@@ -439,60 +453,10 @@
       .kpi { padding: 10px; }
       .kpi .value { font-size: 22px; }
       .chart { padding: 10px; }
-      .chart-head h3 { font-size: 16px; }
+      .chart-head h3 { font-size: 20px; }
       svg { height: 120px; }
     }
 
-    /* Forced dark mode */
-    :root { color-scheme: dark; }
-    body {
-      color: #e7edf3;
-      background:
-        radial-gradient(circle at 12% 10%, rgba(46, 92, 122, 0.34), transparent 42%),
-        radial-gradient(circle at 88% 18%, rgba(118, 69, 60, 0.32), transparent 36%),
-        radial-gradient(circle at 65% 80%, rgba(38, 93, 78, 0.31), transparent 34%),
-        linear-gradient(160deg, #0b1219 0%, #101923 44%, #121b1a 100%);
-    }
-    h1, .chart h3, .kpi .value, .mini h4 { color: #f2f6fa; }
-    .sub, .legend, .mini-range, .kpi .label { color: #aab8c6; }
-    .top-nav a, .bottom-tab {
-      background: rgba(17, 26, 36, 0.92);
-      border-color: rgba(164, 185, 204, 0.2);
-      color: #d5e2ee;
-    }
-    .card, .kpi, .table-wrap, .mini, .graph-shell, .notes {
-      background: rgba(15, 23, 32, 0.88) !important;
-      border-color: rgba(163, 184, 201, 0.2) !important;
-      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.45);
-    }
-    .value-pill.na { background: #3a4652; color: #e3e9ef; }
-    .value-pill.normal { background: #315e38; color: #eaf8ec; }
-    .value-pill.high, .value-pill.low { background: #7a2f3a; color: #ffe6eb; }
-    thead th {
-      background: #182736;
-      color: #d9e5ef;
-      border-bottom-color: #345069;
-    }
-    tbody td {
-      color: #e6edf5;
-      border-bottom-color: #24384b;
-      background: #131f2b;
-      font-weight: 600;
-    }
-    tbody tr:nth-child(odd) td { background: #162432; }
-    tbody tr:nth-child(even) td { background: #121d29; }
-    tbody tr:hover td { background: #213447; }
-    .date-cell { color: #d8e4ef !important; }
-    .panel-btn, .view-btn, .collapse-btn {
-      background: rgba(20, 30, 40, 0.9);
-      border-color: rgba(167, 186, 203, 0.2);
-      color: #cfdbe6;
-    }
-    .updated-banner {
-      background: rgba(20, 30, 40, 0.9);
-      border-color: rgba(167, 186, 203, 0.2);
-      color: #cfdbe6;
-    }
   </style>
 </head>
 <body>
@@ -822,13 +786,20 @@
           }
         };
 
+        card.__setCollapsed = setCollapsed;
         collapseBtn.addEventListener("click", () => setCollapsed(!card.classList.contains("collapsed")));
+        const titleNode = head.querySelector("h3");
+        if (titleNode) {
+          titleNode.addEventListener("click", () => setCollapsed(!card.classList.contains("collapsed")));
+          titleNode.setAttribute("title", "Click to expand or collapse");
+        }
         setCollapsed(Boolean(saved[key]), false);
       });
 
       expandAllBtn.addEventListener("click", () => {
-        cards.forEach((card) => card.classList.remove("collapsed"));
-        document.querySelectorAll(".collapse-btn").forEach((btn) => btn.textContent = "Collapse");
+        cards.forEach((card) => {
+          if (typeof card.__setCollapsed === "function") card.__setCollapsed(false);
+        });
         const fresh = {};
         cards.forEach((card, idx) => {
           const title = card.querySelector(".chart-head h3")?.textContent?.trim() || `panel_${idx}`;
@@ -838,8 +809,9 @@
       });
 
       collapseAllBtn.addEventListener("click", () => {
-        cards.forEach((card) => card.classList.add("collapsed"));
-        document.querySelectorAll(".collapse-btn").forEach((btn) => btn.textContent = "Expand");
+        cards.forEach((card) => {
+          if (typeof card.__setCollapsed === "function") card.__setCollapsed(true);
+        });
         const fresh = {};
         cards.forEach((card, idx) => {
           const title = card.querySelector(".chart-head h3")?.textContent?.trim() || `panel_${idx}`;
@@ -983,9 +955,13 @@
       const btn = document.getElementById(buttonId);
       const graph = document.getElementById(graphId);
       const tableWrap = document.getElementById(tableWrapId);
+      const card = btn ? btn.closest(".card.chart") : null;
       let showingTable = false;
       btn.addEventListener("click", () => {
         showingTable = !showingTable;
+        if (showingTable && card && typeof card.__setCollapsed === "function") {
+          card.__setCollapsed(false);
+        }
         graph.classList.toggle("hidden", showingTable);
         tableWrap.classList.toggle("hidden", !showingTable);
         btn.textContent = showingTable ? "Switch to Graph" : "Switch to Table";

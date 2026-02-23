@@ -326,12 +326,14 @@
     function phoneLink(phone) {
       if (!phone) return "-";
       const cleaned = normalizePhone(phone);
+      if (!cleaned || cleaned === "+") return `${phone}${copyButton(phone)}`;
       return `<a class="phone-link" href="tel:${cleaned}">${phone}</a>${copyButton(phone)}`;
     }
 
     function phoneInline(phone) {
       if (!phone) return "-";
       const cleaned = normalizePhone(phone);
+      if (!cleaned || cleaned === "+") return `${phone}`;
       return `<a class="phone-link" href="tel:${cleaned}">${phone}</a>`;
     }
 

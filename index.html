@@ -6,15 +6,18 @@
   <title>Personal Health Manager</title>
   <style>
     :root {
-      --bg: #f2f7ff;
-      --ink: #102436;
-      --muted: #476176;
-      --panel: rgba(255, 255, 255, 0.84);
-      --shadow: 0 14px 34px rgba(16, 36, 54, 0.14);
-      --blue: #0f7ea6;
-      --coral: #ef6f59;
-      --lime: #3aa76d;
-      --violet: #6f7bf7;
+      --bg-a: #f1f9ff;
+      --bg-b: #fffaf0;
+      --bg-c: #f2fff8;
+      --ink: #102838;
+      --muted: #506979;
+      --panel: rgba(255, 255, 255, 0.95);
+      --line: rgba(16, 40, 56, 0.12);
+      --shadow: 0 14px 32px rgba(16, 40, 56, 0.1);
+      --blue: #0a7ca4;
+      --teal: #0e9b78;
+      --amber: #dd8a1f;
+      --rose: #d8576d;
     }
     * { box-sizing: border-box; }
     body {
@@ -22,14 +25,14 @@
       font-family: "Avenir Next", "Trebuchet MS", "Segoe UI", sans-serif;
       color: var(--ink);
       background:
-        radial-gradient(circle at 8% 8%, rgba(15,126,166,0.26), transparent 38%),
-        radial-gradient(circle at 90% 14%, rgba(239,111,89,0.24), transparent 34%),
-        radial-gradient(circle at 72% 86%, rgba(58,167,109,0.22), transparent 30%),
-        linear-gradient(160deg, #eef6ff 0%, #f9f5ff 44%, #f8fffa 100%);
+        radial-gradient(circle at 8% 8%, rgba(10,124,164,0.2), transparent 36%),
+        radial-gradient(circle at 90% 16%, rgba(221,138,31,0.16), transparent 32%),
+        radial-gradient(circle at 72% 86%, rgba(14,155,120,0.14), transparent 30%),
+        linear-gradient(160deg, var(--bg-a) 0%, var(--bg-b) 45%, var(--bg-c) 100%);
       min-height: 100vh;
       padding: 20px;
     }
-    .wrap { max-width: 1100px; margin: 0 auto; }
+    .wrap { max-width: 1160px; margin: 0 auto; }
     .nav {
       display: flex;
       gap: 8px;
@@ -40,8 +43,8 @@
       text-decoration: none;
       padding: 9px 12px;
       border-radius: 12px;
-      border: 1px solid rgba(16,36,54,0.13);
-      background: rgba(255,255,255,0.75);
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.88);
       color: #1f465c;
       font-weight: 700;
       font-size: 13px;
@@ -49,7 +52,7 @@
       display: inline-flex;
       align-items: center;
     }
-    .nav a.active { background: linear-gradient(120deg, var(--blue), #1a93bf); color: #fff; border-color: transparent; }
+    .nav a.active { background: linear-gradient(120deg, var(--blue), #1597c6); color: #fff; border-color: transparent; }
 
     .bottom-tab { display: none; }
     .bottom-tab a {
@@ -66,21 +69,46 @@
       justify-content: center;
     }
     .bottom-tab a.active {
-      background: linear-gradient(120deg, var(--blue), #1a93bf);
+      background: linear-gradient(120deg, var(--blue), #1597c6);
       color: #fff;
     }
 
+    .hero {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      padding: 20px;
+      margin-bottom: 14px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 280px;
+      height: 280px;
+      right: -90px;
+      top: -120px;
+      background: radial-gradient(circle, rgba(10,124,164,0.14), transparent 68%);
+      pointer-events: none;
+    }
     h1 {
       margin: 0 0 6px;
-      font-family: Georgia, "Times New Roman", serif;
+      font-family: "Avenir Next Condensed", "Trebuchet MS", sans-serif;
+      letter-spacing: .2px;
       font-size: clamp(28px, 4vw, 44px);
     }
-    .sub { color: var(--muted); margin-bottom: 10px; }
+    .sub {
+      color: var(--muted);
+      margin-bottom: 12px;
+      max-width: 720px;
+      line-height: 1.45;
+    }
     .status-row {
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
-      margin-bottom: 12px;
     }
     .status-badge {
       display: inline-flex;
@@ -88,72 +116,103 @@
       gap: 6px;
       padding: 6px 10px;
       border-radius: 999px;
-      border: 1px solid rgba(16,36,54,.14);
-      background: rgba(255,255,255,.78);
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.86);
       color: #2f5569;
       font-size: 12px;
       font-weight: 700;
     }
     .status-badge.locked {
-      border-color: rgba(42, 125, 68, .24);
-      color: #2f6a3a;
-      background: rgba(58, 125, 68, .12);
+      border-color: rgba(14, 155, 120, .3);
+      color: #186e58;
+      background: rgba(14, 155, 120, .13);
     }
     .status-badge.open {
-      border-color: rgba(178, 58, 72, .24);
-      color: #8f1f2c;
-      background: rgba(178, 58, 72, .12);
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 12px;
-    }
-    .card {
-      background: var(--panel);
-      border: 1px solid rgba(16,36,54,0.1);
-      border-radius: 18px;
-      box-shadow: var(--shadow);
-      padding: 14px;
-      backdrop-filter: blur(8px);
-    }
-    .grid .card:nth-child(1) { border-top: 5px solid var(--blue); }
-    .grid .card:nth-child(2) { border-top: 5px solid var(--coral); }
-    .card h3 { margin: 0 0 8px; }
-    .card p { margin: 0; color: var(--muted); line-height: 1.4; }
-    .cta {
-      display: inline-block;
-      margin-top: 12px;
-      text-decoration: none;
-      padding: 8px 12px;
-      border-radius: 10px;
-      background: linear-gradient(120deg, #183f52, #0f7ea6);
-      color: #fff;
-      font-weight: 700;
-      font-size: 12px;
-      min-height: 40px;
-      line-height: 24px;
+      border-color: rgba(216, 87, 109, .3);
+      color: #8f1f36;
+      background: rgba(216, 87, 109, .12);
     }
     .stats {
       margin-top: 14px;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 10px;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
     }
     .stat {
       padding: 12px;
       border-radius: 14px;
-      background: rgba(255,255,255,0.92);
-      border: 1px solid rgba(16,36,54,.08);
+      background: #fff;
+      border: 1px solid var(--line);
       box-shadow: var(--shadow);
     }
-    .stats .stat:nth-child(1) { background: linear-gradient(160deg, rgba(15,126,166,.16), rgba(255,255,255,.92)); }
-    .stats .stat:nth-child(2) { background: linear-gradient(160deg, rgba(239,111,89,.16), rgba(255,255,255,.92)); }
-    .stats .stat:nth-child(3) { background: linear-gradient(160deg, rgba(58,167,109,.16), rgba(255,255,255,.92)); }
-    .stats .stat:nth-child(4) { background: linear-gradient(160deg, rgba(111,123,247,.16), rgba(255,255,255,.92)); }
-    .stats .stat:nth-child(5) { background: linear-gradient(160deg, rgba(15,126,166,.16), rgba(255,255,255,.92)); }
-    .label { font-size: 11px; color: var(--muted); text-transform: uppercase; }
-    .val { font-size: 24px; font-weight: 800; margin-top: 3px; }
+    .stats .stat:nth-child(1) { border-top: 4px solid var(--blue); }
+    .stats .stat:nth-child(2) { border-top: 4px solid var(--teal); }
+    .stats .stat:nth-child(3) { border-top: 4px solid var(--amber); }
+    .stats .stat:nth-child(4) { border-top: 4px solid var(--rose); }
+    .stats .stat:nth-child(5) { border-top: 4px solid var(--blue); }
+    .label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .4px; }
+    .val { font-size: 24px; font-weight: 800; margin-top: 3px; color: #153347; }
+
+    .actions {
+      margin-top: 14px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 12px;
+    }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .actions .card:nth-child(5n+1) { border-top: 5px solid var(--blue); }
+    .actions .card:nth-child(5n+2) { border-top: 5px solid var(--teal); }
+    .actions .card:nth-child(5n+3) { border-top: 5px solid var(--amber); }
+    .actions .card:nth-child(5n+4) { border-top: 5px solid var(--rose); }
+    .actions .card:nth-child(5n+5) { border-top: 5px solid var(--blue); }
+    .card h3 { margin: 0 0 8px; }
+    .card p { margin: 0; color: var(--muted); line-height: 1.4; }
+    .cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 12px;
+      text-decoration: none;
+      padding: 9px 12px;
+      border-radius: 10px;
+      background: linear-gradient(120deg, #18465b, var(--blue));
+      color: #fff;
+      font-weight: 700;
+      font-size: 12px;
+      min-height: 40px;
+    }
+    .cta:hover { filter: brightness(1.05); }
+
+    .utility {
+      margin-top: 14px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .mini-panel {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      padding: 12px;
+    }
+    .mini-panel h4 {
+      margin: 0 0 6px;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: .4px;
+      color: #2d5165;
+    }
+    .mini-panel p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.45; }
     @media (max-width: 1024px) {
       body { padding: 16px; }
       .wrap { max-width: 100%; }
@@ -181,36 +240,11 @@
         backdrop-filter: blur(8px);
       }
       h1 { font-size: clamp(24px, 7vw, 34px); }
+      .hero { padding: 14px; border-radius: 14px; }
       .stats { grid-template-columns: 1fr 1fr; }
+      .actions { grid-template-columns: 1fr; }
+      .utility { grid-template-columns: 1fr; }
       .val { font-size: 20px; }
-    }
-
-    /* Forced dark mode */
-    :root { color-scheme: dark; }
-    body {
-      color: #e7edf3;
-      background:
-        radial-gradient(circle at 8% 8%, rgba(56,108,141,0.36), transparent 38%),
-        radial-gradient(circle at 90% 14%, rgba(127,74,68,0.34), transparent 34%),
-        radial-gradient(circle at 72% 86%, rgba(47,95,78,0.32), transparent 30%),
-        linear-gradient(160deg, #0b1219 0%, #101923 44%, #121b1a 100%);
-    }
-    .sub, .label, .card p { color: #aab8c6; }
-    .nav a, .bottom-tab {
-      background: rgba(17, 26, 36, 0.92);
-      border-color: rgba(164, 185, 204, 0.2);
-      color: #d5e2ee;
-    }
-    .card, .stat {
-      background: rgba(15, 23, 32, 0.88) !important;
-      border-color: rgba(163, 184, 201, 0.18);
-      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.45);
-    }
-    .val, h1, .card h3 { color: #f2f6fa; }
-    .status-badge {
-      background: rgba(17, 26, 36, 0.92);
-      border-color: rgba(164, 185, 204, 0.2);
-      color: #c9d8e5;
     }
   </style>
 </head>
@@ -226,16 +260,17 @@
       <a href="./history.html">History</a>
     </nav>
 
-    <h1>Personal Health Manager</h1>
-    <div class="sub" id="summary">One place for labs, scans, insurance links, and care contacts.</div>
-    <div class="status-row">
-      <div class="status-badge" id="vault-status">Vault: checking...</div>
-      <div class="status-badge" id="updated-status">Last updated: loading...</div>
-    </div>
+    <section class="hero">
+      <h1>Personal Health Manager</h1>
+      <div class="sub" id="summary">One place for labs, scans, insurance links, care contacts, and daily health operations.</div>
+      <div class="status-row">
+        <div class="status-badge" id="vault-status">Vault: checking...</div>
+        <div class="status-badge" id="updated-status">Last updated: loading...</div>
+      </div>
+      <section class="stats" id="stats"></section>
+    </section>
 
-    <section class="stats" id="stats"></section>
-
-    <section class="grid" style="margin-top:12px">
+    <section class="actions">
       <article class="card">
         <h3>Lab Results Dashboard</h3>
         <p>Lab trends, normal ranges, abnormal highlights, and latest value cards.</p>
@@ -260,6 +295,17 @@
         <h3>Project History</h3>
         <p>Track commits, stage-lock tags, and feature milestones.</p>
         <a class="cta" href="./history.html">Open History</a>
+      </article>
+    </section>
+
+    <section class="utility">
+      <article class="mini-panel">
+        <h4>How To Use</h4>
+        <p>Start with Lab Dashboard for trend review, then open Health Vault for member IDs, care contacts, and after-hours phone access.</p>
+      </article>
+      <article class="mini-panel">
+        <h4>Daily Workflow</h4>
+        <p>Use Admin when importing new files. Verify updates with the Last updated badge before sharing data or making care decisions.</p>
       </article>
     </section>
   </div>

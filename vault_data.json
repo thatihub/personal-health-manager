@@ -16,6 +16,12 @@
         "notes": "SCAN contact person"
       },
       {
+        "name": "Member Services Phone Support",
+        "phone": "Call number on back of ID card",
+        "hours": "Available 8am-8pm",
+        "notes": "7 days/week until March 31 • Weekdays only April 1-Sept 30 • Shorter wait times: Before 10am, After 3pm, Later in week, Weekends"
+      },
+      {
         "name": "24/7 After-Hours Care (No need to leave home) - Telehealth",
         "phone": "1-888-993-4087",
         "hours": "24/7"
