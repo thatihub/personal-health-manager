@@ -6,15 +6,17 @@
   <title>Health Vault</title>
   <style>
     :root {
-      --bg: #f2f7ff;
-      --ink: #102436;
-      --muted: #476176;
-      --panel: rgba(255, 255, 255, 0.9);
-      --shadow: 0 14px 34px rgba(16, 36, 54, 0.14);
-      --blue: #0f7ea6;
-      --coral: #ef6f59;
-      --lime: #3aa76d;
-      --violet: #6f7bf7;
+      --bg: #edf7ff;
+      --ink: #0f2b3d;
+      --muted: #456174;
+      --panel: rgba(255, 255, 255, 0.96);
+      --shadow: 0 16px 36px rgba(14, 43, 63, 0.12);
+      --blue: #0b7ca7;
+      --teal: #10a37f;
+      --amber: #e58f1f;
+      --rose: #de5a6c;
+      --sky: #d9f0ff;
+      --line: rgba(15, 43, 61, 0.12);
     }
     * { box-sizing: border-box; }
     body {
@@ -22,9 +24,9 @@
       font-family: "Avenir Next", "Trebuchet MS", "Segoe UI", sans-serif;
       color: var(--ink);
       background:
-        radial-gradient(circle at 85% 10%, rgba(15,126,166,0.24), transparent 35%),
-        radial-gradient(circle at 12% 90%, rgba(111,123,247,0.22), transparent 34%),
-        linear-gradient(160deg, #eef6ff 0%, #f9f5ff 42%, #f7fff8 100%);
+        radial-gradient(circle at 85% 8%, rgba(11,124,167,0.2), transparent 38%),
+        radial-gradient(circle at 15% 88%, rgba(16,163,127,0.16), transparent 36%),
+        linear-gradient(160deg, #f2f9ff 0%, #fffaf2 48%, #f0fff9 100%);
       min-height: 100vh;
       padding: 20px;
     }
@@ -34,7 +36,7 @@
       text-decoration: none;
       padding: 9px 12px;
       border-radius: 12px;
-      border: 1px solid rgba(16,36,54,.14);
+      border: 1px solid var(--line);
       background: rgba(255,255,255,0.82);
       color: #274150;
       font-weight: 700;
@@ -61,7 +63,7 @@
     }
     .bottom-tab a.active { background: linear-gradient(120deg, var(--blue), #1a93bf); color: #fff; }
 
-    h1 { margin: 0 0 6px; font-family: Georgia, "Times New Roman", serif; font-size: clamp(26px,4vw,40px); }
+    h1 { margin: 0 0 6px; font-family: "Avenir Next Condensed", "Trebuchet MS", sans-serif; letter-spacing: 0.2px; font-size: clamp(26px,4vw,40px); }
     .sub { color: var(--muted); margin-bottom: 8px; }
     .updated-banner {
       margin-bottom: 12px;
@@ -70,7 +72,7 @@
       gap: 8px;
       padding: 7px 10px;
       border-radius: 999px;
-      border: 1px solid rgba(16, 36, 54, 0.14);
+      border: 1px solid var(--line);
       background: rgba(255, 255, 255, 0.78);
       color: #2f5569;
       font-size: 12px;
@@ -87,30 +89,91 @@
       width: min(560px, 100%);
       min-height: 44px;
       border-radius: 12px;
-      border: 1px solid rgba(16,36,54,.2);
+      border: 1px solid var(--line);
       background: rgba(255,255,255,.92);
       padding: 10px 12px;
       font-size: 14px;
       color: var(--ink);
       outline: none;
     }
-    .search-input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(15,126,166,.15); }
+    .search-input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(11,124,167,.17); }
     .search-note { font-size: 12px; color: var(--muted); }
+    .toolbar {
+      margin: 0 0 14px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .toolbar-btn {
+      min-height: 40px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.9);
+      color: #24495c;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 8px 11px;
+      cursor: pointer;
+    }
+    .toolbar-btn:hover { background: #fff; }
+    .after-hours {
+      margin: 0 0 14px;
+      padding: 12px;
+      border-radius: 14px;
+      background: linear-gradient(120deg, #f2fbff, #edfff7);
+      border: 1px solid rgba(16,163,127,.24);
+      box-shadow: 0 10px 22px rgba(16,163,127,.12);
+    }
+    .after-hours h2 {
+      margin: 0 0 8px;
+      font-size: 16px;
+      color: #0e5f5f;
+      font-family: "Avenir Next Condensed", "Trebuchet MS", sans-serif;
+    }
+    .after-hours.hidden { display: none; }
     .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     .card {
       background: var(--panel);
-      border: 1px solid rgba(16,36,54,.08);
+      border: 1px solid var(--line);
       border-radius: 18px;
       box-shadow: var(--shadow);
-      padding: 14px;
+      padding: 0;
       backdrop-filter: blur(8px);
     }
-    .grid .card:nth-child(4n+1) { border-top: 5px solid var(--blue); }
-    .grid .card:nth-child(4n+2) { border-top: 5px solid var(--coral); }
-    .grid .card:nth-child(4n+3) { border-top: 5px solid var(--lime); }
-    .grid .card:nth-child(4n+4) { border-top: 5px solid var(--violet); }
-
-    .card h3 { margin: 0 0 10px; }
+    .card.accent-blue { border-top: 5px solid var(--blue); }
+    .card.accent-teal { border-top: 5px solid var(--teal); }
+    .card.accent-amber { border-top: 5px solid var(--amber); }
+    .card.accent-rose { border-top: 5px solid var(--rose); }
+    details.section { width: 100%; }
+    summary.section-head {
+      list-style: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 14px 14px 12px;
+      cursor: pointer;
+      user-select: none;
+    }
+    summary.section-head::-webkit-details-marker { display: none; }
+    .section-head h3 { margin: 0; font-size: 17px; }
+    .chev {
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+      font-size: 13px;
+      transition: transform .2s ease;
+    }
+    details[open] .chev { transform: rotate(180deg); }
+    .section-body {
+      padding: 0 14px 14px;
+      border-top: 1px solid rgba(20,34,46,.07);
+    }
     .row { border-top: 1px solid rgba(20,34,46,.08); padding: 9px 0; }
     .row:first-child { border-top: 0; padding-top: 0; }
     .k { font-size: 12px; color: var(--muted); }
@@ -122,7 +185,7 @@
     ul.list li { margin: 4px 0; }
     .phone-link { color: #124e67; font-weight: 700; text-decoration: none; }
     .mini-btn {
-      border: 1px solid rgba(16,36,54,.18);
+      border: 1px solid var(--line);
       background: #fff;
       color: #2f5267;
       border-radius: 8px;
@@ -163,44 +226,11 @@
         backdrop-filter: blur(8px);
       }
       h1 { font-size: clamp(24px, 7vw, 34px); }
-      .card { padding: 12px; border-radius: 14px; }
+      .card { border-radius: 14px; }
       .row { padding: 8px 0; }
+      summary.section-head { padding: 12px; }
+      .section-body { padding: 0 12px 12px; }
     }
-
-    /* Forced dark mode */
-    :root { color-scheme: dark; }
-    body {
-      color: #e7edf3;
-      background:
-        radial-gradient(circle at 85% 10%, rgba(48, 97, 124, 0.34), transparent 35%),
-        radial-gradient(circle at 12% 90%, rgba(72, 81, 140, 0.3), transparent 34%),
-        linear-gradient(160deg, #0b1219 0%, #101923 42%, #121b1a 100%);
-    }
-    h1, .card h3, .v { color: #f2f6fa; }
-    .sub, .k, .muted, .search-note { color: #aab8c6; }
-    .nav a, .bottom-tab {
-      background: rgba(17, 26, 36, 0.92);
-      border-color: rgba(164, 185, 204, 0.2);
-      color: #d5e2ee;
-    }
-    .card {
-      background: rgba(15, 23, 32, 0.88);
-      border-color: rgba(163, 184, 201, 0.18);
-      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.45);
-    }
-    .updated-banner {
-      background: rgba(20, 30, 40, 0.9);
-      border-color: rgba(167, 186, 203, 0.2);
-      color: #cfdbe6;
-    }
-    .search-input, .mini-btn {
-      background: rgba(20, 30, 40, 0.9);
-      border-color: rgba(167, 186, 203, 0.2);
-      color: #dce6ef;
-    }
-    .row { border-top-color: rgba(167, 186, 203, 0.15); }
-    a.link, .phone-link { color: #8fc8e5; }
-    .chip { background: rgba(61, 117, 145, 0.35); color: #d2e8f5; }
   </style>
 </head>
 <body>
@@ -220,16 +250,64 @@
       <input id="vault-search" class="search-input" type="search" placeholder="Search: phone, doctor, program, medication, vaccine..." />
       <span class="search-note">Type to filter cards</span>
     </div>
+    <div class="toolbar">
+      <button class="toolbar-btn" type="button" id="expand-all">Expand all sections</button>
+      <button class="toolbar-btn" type="button" id="collapse-all">Collapse all sections</button>
+    </div>
+    <section class="after-hours hidden" id="after-hours-panel">
+      <h2>24/7 After-Hours Care</h2>
+      <div id="after-hours-content"></div>
+    </section>
 
     <section class="grid">
-      <article class="card"><h3>Member</h3><div id="member"></div></article>
-      <article class="card"><h3>SCAN Support</h3><div id="support"></div></article>
-      <article class="card"><h3>Benefits & Programs</h3><div id="benefits"></div></article>
-      <article class="card"><h3>Pharmacy & Rx</h3><div id="pharmacy"></div></article>
-      <article class="card"><h3>Doctors & Networks</h3><div id="providers"></div></article>
-      <article class="card"><h3>Lab Test Plan</h3><div id="labtests"></div></article>
-      <article class="card"><h3>Vaccines</h3><div id="vaccines"></div></article>
-      <article class="card"><h3>Notes</h3><div id="notes"></div></article>
+      <article class="card accent-blue">
+        <details class="section">
+          <summary class="section-head"><h3>Member</h3><span class="chev">⌄</span></summary>
+          <div class="section-body" id="member"></div>
+        </details>
+      </article>
+      <article class="card accent-teal">
+        <details class="section">
+          <summary class="section-head"><h3>SCAN Support</h3><span class="chev">⌄</span></summary>
+          <div class="section-body" id="support"></div>
+        </details>
+      </article>
+      <article class="card accent-amber">
+        <details class="section">
+          <summary class="section-head"><h3>Benefits & Programs</h3><span class="chev">⌄</span></summary>
+          <div class="section-body" id="benefits"></div>
+        </details>
+      </article>
+      <article class="card accent-rose">
+        <details class="section">
+          <summary class="section-head"><h3>Pharmacy & Rx</h3><span class="chev">⌄</span></summary>
+          <div class="section-body" id="pharmacy"></div>
+        </details>
+      </article>
+      <article class="card accent-blue">
+        <details class="section">
+          <summary class="section-head"><h3>Doctors & Networks</h3><span class="chev">⌄</span></summary>
+          <div class="section-body" id="providers"></div>
+        </details>
+      </article>
+      <article class="card accent-teal">
+        <details class="section">
+          <summary class="section-head"><h3>Lab Test Plan</h3><span class="chev">⌄</span></summary>
+          <div class="section-body" id="labtests"></div>
+        </details>
+      </article>
+      <article class="card accent-amber">
+        <details class="section">
+          <summary class="section-head"><h3>Vaccines</h3><span class="chev">⌄</span></summary>
+          <div class="section-body" id="vaccines"></div>
+        </details>
+      </article>
+      <article class="card accent-rose">
+        <details class="section">
+          <summary class="section-head"><h3>Notes</h3><span class="chev">⌄</span></summary>
+          <div class="section-body" id="notes"></div>
+        </details>
+      </article>
     </section>
   </div>
 
@@ -304,8 +382,18 @@
           const text = card.innerText.toLowerCase();
           const show = !q || text.includes(q);
           card.classList.toggle("hidden-by-search", !show);
+          const details = card.querySelector("details.section");
+          if (details && q && show) details.open = true;
         });
       });
+    }
+
+    function bindSectionControls() {
+      const sections = Array.from(document.querySelectorAll("details.section"));
+      const expand = document.getElementById("expand-all");
+      const collapse = document.getElementById("collapse-all");
+      expand.addEventListener("click", () => sections.forEach((s) => { s.open = true; }));
+      collapse.addEventListener("click", () => sections.forEach((s) => { s.open = false; }));
     }
 
     async function load() {
@@ -321,6 +409,19 @@
       document.getElementById('support').innerHTML = (scan.support_contacts || []).map((c) =>
         `<div class="row"><div class="v">${c.name || '-'}</div><div>${phoneLink(c.phone)}</div>${c.hours ? `<div class="muted">${c.hours}</div>` : ''}${c.website ? `<div>${link(c.website)} ${copyButton(c.website)}</div>` : ''}${c.notes ? `<div class="muted">${linkifyPhones(c.notes)}</div>` : ''}</div>`
       ).join('') || row('Support', 'No data');
+      const afterHours = (scan.support_contacts || []).filter((c) =>
+        /after[- ]?hours|telehealth|nurse advice/i.test(`${c.name || ""} ${c.notes || ""}`)
+      );
+      const afterHoursPanel = document.getElementById("after-hours-panel");
+      const afterHoursContent = document.getElementById("after-hours-content");
+      if (afterHours.length) {
+        afterHoursContent.innerHTML = afterHours.map((c) =>
+          `<div class="row"><div class="v">${c.name || "-"}</div><div>${phoneLink(c.phone)}</div>${c.hours ? `<div class="muted">${c.hours}</div>` : ""}</div>`
+        ).join("");
+        afterHoursPanel.classList.remove("hidden");
+      } else {
+        afterHoursPanel.classList.add("hidden");
+      }
 
       document.getElementById('benefits').innerHTML = (scan.benefits_programs || []).map((b) =>
         `<div class="row"><div class="v">${b.title || '-'}</div>${b.phone ? `<div>${phoneLink(b.phone)}</div>` : ''}${b.email ? `<div>${b.email} ${copyButton(b.email)}</div>` : ''}${b.website ? `<div>${link(b.website)} ${copyButton(b.website)}</div>` : ''}${b.details ? list(b.details) : ''}</div>`
@@ -347,6 +448,7 @@
 
       bindCopyButtons();
       bindSearch();
+      bindSectionControls();
     }
 
     async function updateLastUpdatedBanner() {
