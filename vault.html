@@ -119,6 +119,72 @@
       transition: transform .18s ease, filter .18s ease;
     }
     .toolbar-btn:hover { background: #fff; transform: translateY(-1px); filter: brightness(1.03); }
+    .json-editor {
+      margin: 0 0 14px;
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(132, 166, 194, 0.28);
+      background: rgba(13, 22, 34, 0.86);
+      box-shadow: var(--shadow);
+    }
+    .json-editor h2 {
+      margin: 0 0 8px;
+      font-size: 16px;
+      color: #d9e9f5;
+      font-family: "Avenir Next Condensed", "Trebuchet MS", sans-serif;
+    }
+    .json-editor textarea {
+      width: 100%;
+      min-height: 280px;
+      border-radius: 10px;
+      border: 1px solid rgba(132, 166, 194, 0.28);
+      background: rgba(9, 17, 27, 0.95);
+      color: #e5f1fb;
+      padding: 10px;
+      font-size: 13px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      resize: vertical;
+      outline: none;
+    }
+    .json-editor .row-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+    .json-sections {
+      margin-top: 8px;
+      display: grid;
+      gap: 8px;
+    }
+    .json-sec {
+      border: 1px solid rgba(132, 166, 194, 0.28);
+      border-radius: 10px;
+      background: rgba(9, 17, 27, 0.7);
+      overflow: hidden;
+    }
+    .json-sec summary {
+      cursor: pointer;
+      list-style: none;
+      padding: 10px;
+      font-weight: 700;
+      color: #d9e9f5;
+      border-bottom: 1px solid rgba(132, 166, 194, 0.2);
+    }
+    .json-sec summary::-webkit-details-marker { display: none; }
+    .json-sec textarea {
+      border: 0;
+      border-top: 1px solid rgba(132, 166, 194, 0.18);
+      border-radius: 0;
+      min-height: 180px;
+    }
+    .json-editor .status {
+      margin-top: 8px;
+      font-size: 12px;
+      color: #b5cde0;
+      white-space: pre-wrap;
+    }
+    .hidden { display: none !important; }
     .after-hours {
       margin: 0 0 14px;
       padding: 12px;
@@ -262,7 +328,24 @@
     <div class="toolbar">
       <button class="toolbar-btn" type="button" id="expand-all">Expand all sections</button>
       <button class="toolbar-btn" type="button" id="collapse-all">Collapse all sections</button>
+      <button class="toolbar-btn" type="button" id="edit-json">Edit Vault JSON</button>
     </div>
+    <section class="json-editor hidden" id="json-editor-panel">
+      <h2>Vault JSON Editor (edit any field, add new fields)</h2>
+      <div class="row-actions">
+        <button class="toolbar-btn" type="button" id="view-sections">Section-wise View</button>
+        <button class="toolbar-btn" type="button" id="view-raw">Raw JSON View</button>
+        <button class="toolbar-btn" type="button" id="add-section">Add Section</button>
+      </div>
+      <div id="json-editor-sections" class="json-sections"></div>
+      <textarea id="json-editor-text" spellcheck="false"></textarea>
+      <div class="row-actions">
+        <button class="toolbar-btn" type="button" id="validate-json">Validate JSON</button>
+        <button class="toolbar-btn" type="button" id="save-json">Save to Server</button>
+        <button class="toolbar-btn" type="button" id="cancel-json">Cancel</button>
+      </div>
+      <div class="status" id="json-editor-status">Edit mode is off.</div>
+    </section>
     <section class="after-hours hidden" id="after-hours-panel">
       <h2>24/7 After-Hours Care</h2>
       <div id="after-hours-content"></div>
@@ -317,10 +400,20 @@
           <div class="section-body" id="notes"></div>
         </details>
       </article>
+      <article class="card accent-blue hidden" id="custom-sections-card">
+        <details class="section">
+          <summary class="section-head"><h3>Custom Sections</h3><span class="chev">⌄</span></summary>
+          <div class="section-body" id="custom-sections"></div>
+        </details>
+      </article>
     </section>
   </div>
 
   <script>
+    let controlsBound = false;
+    let editorBound = false;
+    let sectionView = true;
+
     function normalizePhone(phone) {
       if (!phone) return "";
       return String(phone).replace(/[^0-9+]/g, "");
@@ -361,8 +454,20 @@
     }
 
     function list(items) {
-      if (!items || !items.length) return "-";
-      return `<ul class="list">${items.map((x) => `<li>${linkifyPhones(x)}</li>`).join("")}</ul>`;
+      if (items === null || items === undefined) return "-";
+      if (Array.isArray(items)) {
+        if (!items.length) return "-";
+        return `<ul class="list">${items.map((x) => `<li>${linkifyPhones(typeof x === "string" ? x : JSON.stringify(x))}</li>`).join("")}</ul>`;
+      }
+      if (typeof items === "string" || typeof items === "number" || typeof items === "boolean") {
+        return `<ul class="list"><li>${linkifyPhones(String(items))}</li></ul>`;
+      }
+      if (typeof items === "object") {
+        const entries = Object.entries(items);
+        if (!entries.length) return "-";
+        return `<ul class="list">${entries.map(([k, v]) => `<li><strong>${k}:</strong> ${linkifyPhones(typeof v === "string" ? v : JSON.stringify(v))}</li>`).join("")}</ul>`;
+      }
+      return "-";
     }
 
     function bindCopyButtons() {
@@ -387,6 +492,8 @@
     function bindSearch() {
       const input = document.getElementById("vault-search");
       const cards = Array.from(document.querySelectorAll(".grid .card"));
+      if (input.dataset.bound === "1") return;
+      input.dataset.bound = "1";
       input.addEventListener("input", () => {
         const q = input.value.trim().toLowerCase();
         cards.forEach((card) => {
@@ -400,6 +507,8 @@
     }
 
     function bindSectionControls() {
+      if (controlsBound) return;
+      controlsBound = true;
       const sections = Array.from(document.querySelectorAll("details.section"));
       const expand = document.getElementById("expand-all");
       const collapse = document.getElementById("collapse-all");
@@ -407,11 +516,174 @@
       collapse.addEventListener("click", () => sections.forEach((s) => { s.open = false; }));
     }
 
+    function bindJsonEditor() {
+      if (editorBound) return;
+      editorBound = true;
+      const editBtn = document.getElementById("edit-json");
+      const panel = document.getElementById("json-editor-panel");
+      const text = document.getElementById("json-editor-text");
+      const sectionsRoot = document.getElementById("json-editor-sections");
+      const status = document.getElementById("json-editor-status");
+      const validateBtn = document.getElementById("validate-json");
+      const saveBtn = document.getElementById("save-json");
+      const cancelBtn = document.getElementById("cancel-json");
+      const viewSectionsBtn = document.getElementById("view-sections");
+      const viewRawBtn = document.getElementById("view-raw");
+      const addSectionBtn = document.getElementById("add-section");
+      if (!editBtn || !panel || !text || !sectionsRoot || !status || !validateBtn || !saveBtn || !cancelBtn || !viewSectionsBtn || !viewRawBtn || !addSectionBtn) return;
+
+      const setStatus = (msg) => { status.textContent = msg; };
+      const setView = (asSections) => {
+        sectionView = asSections;
+        sectionsRoot.classList.toggle("hidden", !asSections);
+        text.classList.toggle("hidden", asSections);
+      };
+      const renderSectionEditors = (payload) => {
+        const scan = payload && payload.scan_2026 && typeof payload.scan_2026 === "object" ? payload.scan_2026 : {};
+        const keys = Object.keys(scan);
+        sectionsRoot.innerHTML = keys.map((k, idx) => `
+          <details class="json-sec" ${idx === 0 ? "open" : ""}>
+            <summary>${k}</summary>
+            <textarea data-section="${k}" spellcheck="false">${JSON.stringify(scan[k], null, 2)}</textarea>
+          </details>
+        `).join("");
+      };
+      const applySectionEditsToRaw = () => {
+        let base = {};
+        try { base = JSON.parse(text.value); } catch (_e) {}
+        if (!base || typeof base !== "object") base = {};
+        if (!base.scan_2026 || typeof base.scan_2026 !== "object") base.scan_2026 = {};
+        sectionsRoot.querySelectorAll("textarea[data-section]").forEach((ta) => {
+          const key = ta.getAttribute("data-section");
+          if (!key) return;
+          const val = JSON.parse(ta.value);
+          base.scan_2026[key] = val;
+        });
+        text.value = JSON.stringify(base, null, 2);
+      };
+
+      editBtn.addEventListener("click", async () => {
+        setStatus("Loading current vault JSON...");
+        panel.classList.remove("hidden");
+        try {
+          const res = await fetch(`./vault_data.json?ts=${Date.now()}`, { cache: "no-store" });
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          const data = await res.json();
+          text.value = JSON.stringify(data, null, 2);
+          renderSectionEditors(data);
+          setView(true);
+          setStatus("Edit mode enabled. You can edit any field and add new fields.");
+        } catch (err) {
+          setStatus(`Failed to load vault JSON: ${err.message || err}`);
+        }
+      });
+
+      viewSectionsBtn.addEventListener("click", () => {
+        try {
+          const parsed = JSON.parse(text.value);
+          renderSectionEditors(parsed);
+          setView(true);
+          setStatus("Section-wise view enabled.");
+        } catch (err) {
+          setStatus(`Cannot open section view: invalid raw JSON: ${err.message || err}`);
+        }
+      });
+
+      viewRawBtn.addEventListener("click", () => {
+        try {
+          if (sectionView) applySectionEditsToRaw();
+          setView(false);
+          setStatus("Raw JSON view enabled.");
+        } catch (err) {
+          setStatus(`Cannot switch to raw view: ${err.message || err}`);
+        }
+      });
+
+      addSectionBtn.addEventListener("click", () => {
+        const name = prompt("New section key under scan_2026 (example: appointments)");
+        if (!name) return;
+        const key = name.trim();
+        if (!key) return;
+        if (sectionsRoot.querySelector(`textarea[data-section="${key.replace(/"/g, '\\"')}"]`)) {
+          setStatus(`Section "${key}" already exists.`);
+          return;
+        }
+        const box = document.createElement("details");
+        box.className = "json-sec";
+        box.open = true;
+        box.innerHTML = `<summary>${key}</summary><textarea data-section="${key}" spellcheck="false">[\n  \"\"\n]</textarea>`;
+        sectionsRoot.appendChild(box);
+        setView(true);
+        setStatus(`Section "${key}" added. Fill JSON and save.`);
+      });
+
+      validateBtn.addEventListener("click", () => {
+        try {
+          if (sectionView) applySectionEditsToRaw();
+          JSON.parse(text.value);
+          setStatus("JSON is valid.");
+        } catch (err) {
+          setStatus(`Invalid JSON: ${err.message || err}`);
+        }
+      });
+
+      saveBtn.addEventListener("click", async () => {
+        let parsed;
+        try {
+          if (sectionView) applySectionEditsToRaw();
+          parsed = JSON.parse(text.value);
+        } catch (err) {
+          setStatus(`Cannot save: invalid JSON: ${err.message || err}`);
+          return;
+        }
+        setStatus("Saving to server...");
+        try {
+          const res = await fetch("/api/admin/upload-data", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ target: "vault", content: parsed })
+          });
+          let out = {};
+          try { out = await res.json(); } catch (_ignore) {}
+          if (!res.ok || !out.ok) {
+            setStatus(`Save failed: ${out.error || `HTTP ${res.status}`}`);
+            return;
+          }
+          setStatus("Saved successfully. Refreshing vault view...");
+          await load();
+          const search = document.getElementById("vault-search");
+          if (search) {
+            search.value = "";
+            search.dispatchEvent(new Event("input"));
+          }
+          document.querySelectorAll("details.section").forEach((sec) => { sec.open = true; });
+          panel.classList.add("hidden");
+          setStatus("Saved and UI refreshed.");
+        } catch (err) {
+          setStatus(`Save failed: ${err.message || err}`);
+        }
+      });
+
+      cancelBtn.addEventListener("click", () => {
+        panel.classList.add("hidden");
+        setStatus("Edit mode is off.");
+      });
+    }
+
     async function load() {
+      bindSearch();
+      bindSectionControls();
+      bindJsonEditor();
       await updateLastUpdatedBanner();
-      const res = await fetch('./vault_data.json');
-      const data = await res.json();
-      const scan = data.scan_2026 || {};
+      let scan = {};
+      try {
+        const res = await fetch(`./vault_data.json?ts=${Date.now()}`, { cache: "no-store" });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        scan = data.scan_2026 || {};
+      } catch (_err) {
+        scan = {};
+      }
 
       document.getElementById('member').innerHTML =
         row('Plan', scan.member?.plan) +
@@ -457,9 +729,31 @@
         row('Symptom Note', scan.symptom_note || '-') +
         `<div class="row"><div class="v">Night Tips</div>${list(scan.night_tips || [])}</div>`;
 
+      const known = new Set([
+        "member",
+        "support_contacts",
+        "benefits_programs",
+        "pharmacy_prescriptions",
+        "providers",
+        "lab_test_plan",
+        "vaccines",
+        "symptom_note",
+        "night_tips"
+      ]);
+      const customEntries = Object.entries(scan).filter(([k]) => !known.has(k));
+      const customCard = document.getElementById("custom-sections-card");
+      const customRoot = document.getElementById("custom-sections");
+      if (customEntries.length) {
+        customRoot.innerHTML = customEntries.map(([k, v]) =>
+          `<div class="row"><div class="v">${k}</div>${typeof v === "object" ? list(v) : `<div>${linkifyPhones(String(v))}</div>`}</div>`
+        ).join("");
+        customCard.classList.remove("hidden");
+      } else {
+        customRoot.innerHTML = "";
+        customCard.classList.add("hidden");
+      }
+
       bindCopyButtons();
-      bindSearch();
-      bindSectionControls();
     }
 
     async function updateLastUpdatedBanner() {

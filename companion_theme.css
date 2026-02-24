@@ -78,6 +78,28 @@ h3, .chart h3, .section-head h3 { font-size: clamp(22px, 2.2vw, 32px) !important
   background: linear-gradient(165deg, rgba(25, 40, 58, 0.72), rgba(14, 24, 36, 0.9)) !important;
 }
 
+/* Home card readability */
+body.page-home .actions .card {
+  background: linear-gradient(165deg, rgba(19, 32, 48, 0.9), rgba(12, 21, 33, 0.95)) !important;
+}
+body.page-home .actions .card h3 {
+  color: #f4f9ff !important;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
+}
+body.page-home .actions .card p {
+  color: #d6e5f3 !important;
+  font-size: 15px !important;
+  line-height: 1.5 !important;
+}
+body.page-home .dexcom-badge {
+  background: rgba(14, 35, 52, 0.92) !important;
+  color: #9fdfff !important;
+  border-color: rgba(92, 142, 181, 0.45) !important;
+}
+body.page-home .actions .card .cta {
+  font-weight: 800 !important;
+}
+
 .status-badge, .updated-banner, .chip, .tag, .hash, .mini-meta {
   background: rgba(21, 34, 50, 0.88) !important;
   border-color: var(--comp-line) !important;

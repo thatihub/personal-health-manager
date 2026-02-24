@@ -403,11 +403,9 @@ class DashboardHandler(SimpleHTTPRequestHandler):
         if not self._is_admin_protected_path():
             return False
         if not self._admin_auth_enabled():
-            self._json(
-                403,
-                {"ok": False, "error": "Admin auth disabled. Set ADMIN_BASIC_AUTH_USER and ADMIN_BASIC_AUTH_PASS."},
-            )
-            return True
+            # Dev/local mode: if admin creds are not configured, allow access.
+            # When creds are configured, Basic Auth is enforced below.
+            return False
         if self._is_authorized(ADMIN_AUTH_USER, ADMIN_AUTH_PASS):
             return False
         self.send_response(401)
