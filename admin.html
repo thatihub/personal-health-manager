@@ -5,13 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Health Admin</title>
   <style>
-    :root { color-scheme: dark; }
+    :root {
+      --ink: #102b3d;
+      --muted: #4f6a7b;
+      --line: rgba(16, 43, 61, 0.14);
+      --panel: rgba(255,255,255,0.86);
+      --shadow: 0 14px 30px rgba(16, 43, 61, 0.12);
+      --blue: #0b7ca5;
+      --teal: #0e9a78;
+    }
     * { box-sizing: border-box; }
     body {
       margin: 0;
       font-family: "Avenir Next", "Trebuchet MS", "Segoe UI", sans-serif;
-      color: #e7edf3;
-      background: linear-gradient(160deg, #0b1219 0%, #101923 44%, #121b1a 100%);
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 10% 8%, rgba(11,124,165,.2), transparent 35%),
+        radial-gradient(circle at 84% 12%, rgba(14,154,120,.15), transparent 32%),
+        linear-gradient(160deg, #f3faff 0%, #fffaf1 44%, #f2fff9 100%);
       min-height: 100vh;
       padding: 18px;
     }
@@ -21,39 +32,44 @@
       text-decoration: none;
       padding: 9px 12px;
       border-radius: 12px;
-      border: 1px solid rgba(164, 185, 204, 0.2);
-      background: rgba(17, 26, 36, 0.92);
-      color: #d5e2ee;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.9);
+      color: #264a5f;
       font-weight: 700;
       font-size: 13px;
       min-height: 44px;
       display: inline-flex;
       align-items: center;
+      transition: transform .18s ease, box-shadow .18s ease;
     }
-    .nav a.active { background: linear-gradient(120deg, #0f7ea6, #1a93bf); color: #fff; border-color: transparent; }
-    h1 { margin: 0 0 6px; font-family: Georgia, "Times New Roman", serif; font-size: clamp(26px,4vw,40px); color: #f2f6fa; }
-    .sub { color: #aab8c6; margin-bottom: 14px; }
+    .nav a:hover { transform: translateY(-1px); box-shadow: 0 8px 16px rgba(16,43,61,.12); }
+    .nav a.active { background: linear-gradient(120deg, #0b7ca5, #17a1c8); color: #fff; border-color: transparent; }
+    h1 { margin: 0 0 6px; font-family: "Avenir Next Condensed", "Trebuchet MS", sans-serif; letter-spacing: .2px; font-size: clamp(26px,4vw,40px); color: #163f57; }
+    .sub { color: var(--muted); margin-bottom: 14px; }
     .card {
-      background: rgba(15, 23, 32, 0.88);
-      border: 1px solid rgba(163, 184, 201, 0.2);
+      background: var(--panel);
+      border: 1px solid var(--line);
       border-radius: 14px;
       padding: 14px;
       margin-bottom: 10px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
     }
     .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-    .row label { min-width: 180px; font-weight: 700; color: #cfdbe6; }
+    .row label { min-width: 180px; font-weight: 700; color: #2e5267; }
     input[type="file"] {
       flex: 1;
       min-width: 280px;
-      background: rgba(20, 30, 40, 0.9);
-      border: 1px solid rgba(167, 186, 203, 0.2);
-      color: #dce6ef;
+      background: rgba(255,255,255,.88);
+      border: 1px solid var(--line);
+      color: var(--ink);
       border-radius: 8px;
       padding: 7px 8px;
     }
     .btn {
-      border: 1px solid rgba(16, 36, 54, 0.2);
-      background: linear-gradient(120deg, #0f7ea6, #1a93bf);
+      border: 1px solid rgba(255,255,255,.4);
+      background: linear-gradient(120deg, #0b7ca5, #17a1c8);
       color: #fff;
       padding: 9px 14px;
       border-radius: 10px;
@@ -61,26 +77,31 @@
       font-size: 13px;
       cursor: pointer;
       min-height: 42px;
+      box-shadow: 0 10px 18px rgba(16,88,126,.2);
+      transition: transform .18s ease, filter .18s ease;
     }
+    .btn:hover { transform: translateY(-1px); filter: brightness(1.05); }
     .btn.secondary {
-      background: rgba(20, 30, 40, 0.9);
-      border-color: rgba(167, 186, 203, 0.2);
-      color: #dce6ef;
+      background: rgba(255,255,255,.9);
+      border-color: var(--line);
+      color: #33566c;
+      box-shadow: none;
     }
     .status {
       margin-top: 10px;
-      background: rgba(20, 30, 40, 0.9);
-      border: 1px solid rgba(167, 186, 203, 0.2);
+      background: rgba(255,255,255,.86);
+      border: 1px solid var(--line);
       border-radius: 10px;
       padding: 10px;
-      color: #b7c7d6;
+      color: #35596f;
       font-size: 13px;
       white-space: pre-wrap;
     }
-    .hint { color: #aab8c6; font-size: 12px; margin-top: 6px; }
+    .hint { color: var(--muted); font-size: 12px; margin-top: 6px; }
   </style>
+  <link rel="stylesheet" href="./companion_theme.css" />
 </head>
-<body>
+<body class="page-admin">
   <div class="wrap">
     <nav class="nav">
       <a href="./index.html">Home</a>

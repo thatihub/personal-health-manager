@@ -5,63 +5,82 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Project History</title>
   <style>
-    :root { color-scheme: dark; }
+    :root {
+      --ink: #102b3d;
+      --muted: #4f6a7b;
+      --line: rgba(16, 43, 61, 0.14);
+      --panel: rgba(255,255,255,0.86);
+      --shadow: 0 14px 30px rgba(16, 43, 61, 0.12);
+      --blue: #0b7ca5;
+    }
     * { box-sizing: border-box; }
     body {
       margin: 0;
       font-family: "Avenir Next", "Trebuchet MS", "Segoe UI", sans-serif;
-      background: linear-gradient(160deg, #0b1219 0%, #101923 44%, #121b1a 100%);
-      color: #e7edf3;
+      background:
+        radial-gradient(circle at 10% 8%, rgba(11,124,165,.2), transparent 35%),
+        radial-gradient(circle at 84% 12%, rgba(216,87,109,.14), transparent 30%),
+        linear-gradient(160deg, #f3faff 0%, #fffaf1 44%, #f2fff9 100%);
+      color: var(--ink);
       padding: 18px;
     }
     .wrap { max-width: 1180px; margin: 0 auto; }
     .nav { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
     .nav a {
       text-decoration:none; padding:9px 12px; border-radius:12px;
-      border:1px solid rgba(164,185,204,.2); background:rgba(17,26,36,.92);
-      color:#d5e2ee; font-weight:700; font-size:13px; min-height:44px; display:inline-flex; align-items:center;
+      border:1px solid var(--line); background:rgba(255,255,255,.9);
+      color:#264a5f; font-weight:700; font-size:13px; min-height:44px; display:inline-flex; align-items:center;
+      transition: transform .18s ease, box-shadow .18s ease;
     }
-    .nav a.active { background:linear-gradient(120deg,#0f7ea6,#1a93bf); color:#fff; border-color:transparent; }
-    h1 { margin:0 0 6px; font-family: Georgia, "Times New Roman", serif; }
-    .sub { color:#aab8c6; margin-bottom:12px; }
+    .nav a:hover { transform: translateY(-1px); box-shadow: 0 8px 16px rgba(16,43,61,.12); }
+    .nav a.active { background:linear-gradient(120deg,#0b7ca5,#17a1c8); color:#fff; border-color:transparent; }
+    h1 { margin:0 0 6px; font-family: "Avenir Next Condensed", "Trebuchet MS", sans-serif; letter-spacing:.2px; }
+    .sub { color:var(--muted); margin-bottom:12px; }
     .grid { display:grid; grid-template-columns: 1fr 2fr; gap:12px; }
     .card {
-      border: 1px solid #2b4155;
+      border: 1px solid var(--line);
       border-radius: 14px;
-      background: #101a25;
+      background: var(--panel);
       padding: 12px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
     }
     h3 { margin: 0 0 10px; }
     .tag {
       display: inline-block;
       padding: 4px 8px;
       border-radius: 999px;
-      border: 1px solid #3b5f7d;
-      background: #1a2e41;
-      color: #eaf4fc;
+      border: 1px solid #bfd7e7;
+      background: #edf7fd;
+      color: #1c546f;
       font-size: 12px;
       margin: 0 6px 6px 0;
       font-weight: 700;
     }
-    .row { border-top: 1px solid #223546; padding: 8px 0; }
+    .row { border-top: 1px solid rgba(16,43,61,.12); padding: 8px 0; }
     .row:first-child { border-top: 0; padding-top: 0; }
-    .meta { color: #9fb4c8; font-size: 12px; }
-    .subject { color: #e7f0f8; font-weight: 700; margin-top: 2px; }
-    .feature li { margin: 6px 0; color: #d2e0ed; }
+    .meta { color: #5e7b90; font-size: 12px; }
+    .subject { color: #173f57; font-weight: 700; margin-top: 2px; }
+    .feature li { margin: 6px 0; color: #2a4e63; }
     .hash {
       display: inline-block;
       margin-left: 6px;
       padding: 1px 7px;
       border-radius: 999px;
-      border: 1px solid #3b5f7d;
-      background: #162b3e;
-      color: #eaf4fc;
+      border: 1px solid #bfd7e7;
+      background: #edf7fd;
+      color: #1c546f;
       font-size: 11px;
       font-weight: 800;
     }
+    @media (max-width: 920px) {
+      .grid { grid-template-columns: 1fr; }
+    }
   </style>
+  <link rel="stylesheet" href="./companion_theme.css" />
 </head>
-<body>
+<body class="page-history">
   <div class="wrap">
     <nav class="nav">
       <a href="./index.html">Home</a>

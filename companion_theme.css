@@ -1,0 +1,264 @@
+/* Unified Diabetes Companion-style theme override */
+:root {
+  color-scheme: dark;
+  --comp-bg-1: #090f17;
+  --comp-bg-2: #0d1521;
+  --comp-bg-3: #0b1a1b;
+  --comp-ink: #ebf3fb;
+  --comp-muted: #98adbf;
+  --comp-line: rgba(140, 168, 194, 0.2);
+  --comp-panel: rgba(13, 22, 34, 0.7);
+  --comp-panel-strong: rgba(11, 19, 30, 0.9);
+  --comp-shadow: 0 16px 36px rgba(0, 0, 0, 0.46);
+  --comp-blue: #12a4d4;
+  --comp-green: #1bc471;
+  --comp-purple: #7268f2;
+  --page-accent: #12a4d4;
+  --page-accent-2: #0d8bb8;
+  --sec-1: #12a4d4;
+  --sec-2: #1bc471;
+  --sec-3: #f0a43a;
+  --sec-4: #9f7aea;
+  --sec-5: #ef6f59;
+  --sec-6: #14b8a6;
+}
+
+body {
+  font-family: "Avenir Next", "Trebuchet MS", "Segoe UI", sans-serif !important;
+  font-size: 17px;
+  letter-spacing: .1px;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: geometricPrecision;
+  color: var(--comp-ink) !important;
+  background:
+    radial-gradient(circle at 10% 8%, rgba(18, 164, 212, 0.16), transparent 36%),
+    radial-gradient(circle at 88% 12%, rgba(114, 104, 242, 0.14), transparent 30%),
+    radial-gradient(circle at 68% 88%, rgba(27, 196, 113, 0.1), transparent 30%),
+    linear-gradient(160deg, var(--comp-bg-1) 0%, var(--comp-bg-2) 45%, var(--comp-bg-3) 100%) !important;
+}
+
+h1, h2, h3, h4, .v, .subject, .val, .kpi-val, .chart h3, .section-head h3 { color: #f4f8fc !important; }
+h1 { font-size: clamp(34px, 4.3vw, 54px) !important; line-height: 1.06; }
+h2 { font-size: clamp(28px, 3.3vw, 42px) !important; }
+h3, .chart h3, .section-head h3 { font-size: clamp(22px, 2.2vw, 32px) !important; }
+.sub, .muted, .k, .label, .meta, .search-note, .kpi-label { color: var(--comp-muted) !important; font-size: 14px !important; }
+.v, .subject { font-size: 18px !important; }
+.val, .kpi-val { font-size: clamp(28px, 2.8vw, 40px) !important; }
+
+.nav a, .top-nav a, .bottom-tab, .bottom-tab a {
+  background: rgba(17, 28, 42, 0.82) !important;
+  border-color: var(--comp-line) !important;
+  color: #d6e4f2 !important;
+  font-size: 15px !important;
+  min-height: 48px !important;
+  transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+}
+.nav a:hover, .top-nav a:hover, .bottom-tab a:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 18px rgba(0, 0, 0, .28);
+}
+.nav a.active, .top-nav a.active, .bottom-tab a.active {
+  background: linear-gradient(120deg, var(--page-accent-2), var(--page-accent)) !important;
+  color: #fff !important;
+  border-color: transparent !important;
+}
+
+.hero, .card, .mini-panel, .stat, .kpi, .after-hours, .table-wrap, .status, .search, .search-input {
+  background: var(--comp-panel) !important;
+  border-color: var(--comp-line) !important;
+  box-shadow: var(--comp-shadow) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 16px !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.card, .mini, .graph-shell {
+  background: linear-gradient(165deg, rgba(25, 40, 58, 0.72), rgba(14, 24, 36, 0.9)) !important;
+}
+
+.status-badge, .updated-banner, .chip, .tag, .hash, .mini-meta {
+  background: rgba(21, 34, 50, 0.88) !important;
+  border-color: var(--comp-line) !important;
+  color: #cfe0ef !important;
+}
+
+.cta, .btn, .panel-btn, .view-btn.active, .toolbar-btn, .collapse-btn {
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 12px 22px rgba(0, 0, 0, 0.3) !important;
+  transition: transform .18s ease, filter .18s ease;
+  font-size: 14px !important;
+  min-height: 46px !important;
+  padding: 10px 14px !important;
+}
+.cta:hover, .btn:hover, .panel-btn:hover, .toolbar-btn:hover, .collapse-btn:hover, .view-btn:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.05);
+}
+
+.cta,
+.btn,
+.panel-btn,
+.view-btn.active,
+.toolbar-btn {
+  background: linear-gradient(120deg, var(--page-accent-2), var(--page-accent)) !important;
+  color: #f5fbff !important;
+}
+/* Keep Diabetes Companion card CTA green on home page */
+.actions .card:nth-child(4) .cta {
+  background: linear-gradient(120deg, #0e995d, var(--comp-green)) !important;
+  color: #f7fffb !important;
+}
+
+.btn.secondary, .view-btn, .collapse-btn, .mini-btn {
+  background: rgba(19, 31, 46, 0.9) !important;
+  border-color: var(--comp-line) !important;
+  color: #d2dfec !important;
+}
+
+.table-wrap {
+  background: rgba(8, 15, 24, 0.94) !important;
+  border: 1px solid rgba(110, 144, 178, 0.34) !important;
+}
+table {
+  background: #0d1826 !important;
+  color: #f2f7fc !important;
+  border: 1px solid rgba(124, 158, 191, 0.34) !important;
+}
+thead th {
+  background: linear-gradient(120deg, #1a3047, #203a54) !important;
+  color: #f5fbff !important;
+  border-bottom: 1px solid rgba(150, 182, 212, 0.42) !important;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
+}
+tbody td {
+  color: #eef5fc !important;
+  border-bottom: 1px solid rgba(127, 161, 194, 0.26) !important;
+  font-weight: 700 !important;
+}
+tbody tr:nth-child(odd) td { background: #0f1c2b !important; }
+tbody tr:nth-child(even) td { background: #132335 !important; }
+tbody tr:hover td { background: #1c324a !important; }
+
+/* High-contrast value states in tables (plain text, no pills) */
+td .value-pill.normal { color: #85f2b8 !important; }
+td .value-pill.high,
+td .value-pill.low { color: #ff8fa0 !important; }
+td .value-pill.na { color: #b7c8d8 !important; }
+td .range-flag { color: #ff667d !important; font-size: 11px !important; }
+
+a.link, .phone-link { color: #8dcdf5 !important; }
+
+input[type="file"], .search, .search-input {
+  color: #dfebf7 !important;
+}
+
+.hero::before, .card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(130deg, rgba(255,255,255,.14), rgba(255,255,255,0) 45%);
+}
+
+/* Distinct subsection colors across all pages */
+.actions .card,
+.grid > .card,
+.kpis .kpi,
+.chart-grid .mini,
+.utility .mini-panel,
+#root .card,
+body.page-admin .wrap > section.card,
+body.page-history .wrap > section.card {
+  border-top: 4px solid var(--page-accent) !important;
+}
+
+.actions .card:nth-child(6n+1),
+.grid > .card:nth-child(6n+1),
+.kpis .kpi:nth-child(6n+1),
+.chart-grid .mini:nth-child(6n+1),
+.utility .mini-panel:nth-child(6n+1),
+#root .card:nth-child(6n+1),
+body.page-admin .wrap > section.card:nth-of-type(1),
+body.page-history .wrap > section.card:nth-of-type(1) { border-top-color: var(--sec-1) !important; }
+
+.actions .card:nth-child(6n+2),
+.grid > .card:nth-child(6n+2),
+.kpis .kpi:nth-child(6n+2),
+.chart-grid .mini:nth-child(6n+2),
+.utility .mini-panel:nth-child(6n+2),
+#root .card:nth-child(6n+2),
+body.page-admin .wrap > section.card:nth-of-type(2),
+body.page-history .wrap > section.card:nth-of-type(2) { border-top-color: var(--sec-2) !important; }
+
+.actions .card:nth-child(6n+3),
+.grid > .card:nth-child(6n+3),
+.kpis .kpi:nth-child(6n+3),
+.chart-grid .mini:nth-child(6n+3),
+.utility .mini-panel:nth-child(6n+3),
+#root .card:nth-child(6n+3),
+body.page-admin .wrap > section.card:nth-of-type(3),
+body.page-history .wrap > section.card:nth-of-type(3) { border-top-color: var(--sec-3) !important; }
+
+.actions .card:nth-child(6n+4),
+.grid > .card:nth-child(6n+4),
+.kpis .kpi:nth-child(6n+4),
+.chart-grid .mini:nth-child(6n+4),
+.utility .mini-panel:nth-child(6n+4),
+#root .card:nth-child(6n+4),
+body.page-admin .wrap > section.card:nth-of-type(4),
+body.page-history .wrap > section.card:nth-of-type(4) { border-top-color: var(--sec-4) !important; }
+
+.actions .card:nth-child(6n+5),
+.grid > .card:nth-child(6n+5),
+.kpis .kpi:nth-child(6n+5),
+.chart-grid .mini:nth-child(6n+5),
+.utility .mini-panel:nth-child(6n+5),
+#root .card:nth-child(6n+5),
+body.page-admin .wrap > section.card:nth-of-type(5),
+body.page-history .wrap > section.card:nth-of-type(5) { border-top-color: var(--sec-5) !important; }
+
+.actions .card:nth-child(6n+6),
+.grid > .card:nth-child(6n+6),
+.kpis .kpi:nth-child(6n+6),
+.chart-grid .mini:nth-child(6n+6),
+.utility .mini-panel:nth-child(6n+6),
+#root .card:nth-child(6n+6),
+body.page-admin .wrap > section.card:nth-of-type(6),
+body.page-history .wrap > section.card:nth-of-type(6) { border-top-color: var(--sec-6) !important; }
+
+.actions .card:nth-child(6n+1) h3,
+.grid > .card:nth-child(6n+1) h3,
+.kpis .kpi:nth-child(6n+1) .label,
+.chart-grid .mini:nth-child(6n+1) h3 { color: #67d8ff !important; }
+.actions .card:nth-child(6n+2) h3,
+.grid > .card:nth-child(6n+2) h3,
+.kpis .kpi:nth-child(6n+2) .label,
+.chart-grid .mini:nth-child(6n+2) h3 { color: #73ecb4 !important; }
+.actions .card:nth-child(6n+3) h3,
+.grid > .card:nth-child(6n+3) h3,
+.kpis .kpi:nth-child(6n+3) .label,
+.chart-grid .mini:nth-child(6n+3) h3 { color: #ffd081 !important; }
+.actions .card:nth-child(6n+4) h3,
+.grid > .card:nth-child(6n+4) h3,
+.kpis .kpi:nth-child(6n+4) .label,
+.chart-grid .mini:nth-child(6n+4) h3 { color: #c9bbff !important; }
+.actions .card:nth-child(6n+5) h3,
+.grid > .card:nth-child(6n+5) h3,
+.kpis .kpi:nth-child(6n+5) .label,
+.chart-grid .mini:nth-child(6n+5) h3 { color: #ffb0be !important; }
+.actions .card:nth-child(6n+6) h3,
+.grid > .card:nth-child(6n+6) h3,
+.kpis .kpi:nth-child(6n+6) .label,
+.chart-grid .mini:nth-child(6n+6) h3 { color: #8beee0 !important; }
+
+/* Per-page distinct accent colors */
+body.page-home { --page-accent: #12a4d4; --page-accent-2: #0d8bb8; }
+body.page-dashboard { --page-accent: #9f7aea; --page-accent-2: #7b5dd6; }
+body.page-bp { --page-accent: #1bc471; --page-accent-2: #0f9a57; }
+body.page-vault { --page-accent: #f0a43a; --page-accent-2: #cf8417; }
+body.page-cabinet { --page-accent: #ef6f59; --page-accent-2: #cf5541; }
+body.page-admin { --page-accent: #14b8a6; --page-accent-2: #0f8f82; }
+body.page-history { --page-accent: #60a5fa; --page-accent-2: #3c84db; }

@@ -160,22 +160,75 @@
       gap: 12px;
     }
     .card {
-      background: var(--panel);
-      border: 1px solid var(--line);
+      background: linear-gradient(160deg, rgba(255,255,255,0.78), rgba(255,255,255,0.56));
+      border: 1px solid rgba(255,255,255,0.55);
       border-radius: 18px;
       box-shadow: var(--shadow);
       padding: 14px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      position: relative;
+      overflow: hidden;
     }
-    .actions .card:nth-child(5n+1) { border-top: 5px solid var(--blue); }
-    .actions .card:nth-child(5n+2) { border-top: 5px solid var(--teal); }
-    .actions .card:nth-child(5n+3) { border-top: 5px solid var(--amber); }
-    .actions .card:nth-child(5n+4) { border-top: 5px solid var(--rose); }
-    .actions .card:nth-child(5n+5) { border-top: 5px solid var(--blue); }
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(130deg, rgba(255,255,255,0.42), rgba(255,255,255,0));
+      pointer-events: none;
+    }
+    .actions .card:nth-child(1) {
+      border-top: 5px solid #0c86b3;
+      background: linear-gradient(160deg, rgba(200,240,255,0.66), rgba(255,255,255,0.58));
+    }
+    .actions .card:nth-child(2) {
+      border-top: 5px solid #00a47a;
+      background: linear-gradient(160deg, rgba(206,255,240,0.64), rgba(255,255,255,0.58));
+    }
+    .actions .card:nth-child(3) {
+      border-top: 5px solid #dc8920;
+      background: linear-gradient(160deg, rgba(255,241,212,0.66), rgba(255,255,255,0.58));
+    }
+    .actions .card:nth-child(4) {
+      border-top: 5px solid #0f78b6;
+      background: linear-gradient(160deg, rgba(215,240,255,0.7), rgba(255,255,255,0.58));
+    }
+    .actions .card:nth-child(5) {
+      border-top: 5px solid #d8576d;
+      background: linear-gradient(160deg, rgba(255,225,233,0.66), rgba(255,255,255,0.58));
+    }
+    .actions .card:nth-child(6) {
+      border-top: 5px solid #755ae4;
+      background: linear-gradient(160deg, rgba(234,226,255,0.68), rgba(255,255,255,0.58));
+    }
     .card h3 { margin: 0 0 8px; }
-    .card p { margin: 0; color: var(--muted); line-height: 1.4; }
+    .card p { margin: 0; color: #365464; line-height: 1.4; }
+    .dexcom-badge {
+      width: fit-content;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(15, 98, 146, 0.18);
+      background: linear-gradient(120deg, #e8f6ff, #f5fcff);
+      color: #0f6292;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .dexcom-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: linear-gradient(160deg, #0f78b6, #2bb6ea);
+      box-shadow: 0 0 0 2px rgba(15, 120, 182, 0.2);
+    }
     .cta {
       display: inline-flex;
       align-items: center;
@@ -189,8 +242,19 @@
       font-weight: 700;
       font-size: 12px;
       min-height: 40px;
+      border: 1px solid rgba(255,255,255,0.35);
+      box-shadow: 0 8px 16px rgba(18, 63, 89, 0.18);
     }
     .cta:hover { filter: brightness(1.05); }
+    .actions .card:nth-child(1) .cta { background: linear-gradient(120deg, #0d5f80, #0c86b3); }
+    .actions .card:nth-child(2) .cta { background: linear-gradient(120deg, #0b6d58, #00a47a); }
+    .actions .card:nth-child(3) .cta { background: linear-gradient(120deg, #9b5f11, #dc8920); }
+    .actions .card:nth-child(4) .cta {
+      background: linear-gradient(120deg, #0a7a4e, #17b26a);
+      box-shadow: 0 10px 20px rgba(20, 131, 85, 0.28);
+    }
+    .actions .card:nth-child(5) .cta { background: linear-gradient(120deg, #9d2d40, #d8576d); }
+    .actions .card:nth-child(6) .cta { background: linear-gradient(120deg, #4b37ad, #755ae4); }
 
     .utility {
       margin-top: 14px;
@@ -247,8 +311,9 @@
       .val { font-size: 20px; }
     }
   </style>
+  <link rel="stylesheet" href="./companion_theme.css" />
 </head>
-<body>
+<body class="page-home">
   <div class="wrap">
     <nav class="nav">
       <a class="active" href="./index.html">Home</a>
@@ -285,6 +350,12 @@
         <h3>Blood Pressure</h3>
         <p>Uploads append historical BP data; view last 90 days of SYS, DIAS, and Pulse.</p>
         <a class="cta" href="./bp.html">Open BP Dashboard</a>
+      </article>
+      <article class="card">
+        <div class="dexcom-badge"><span class="dexcom-dot"></span>Dexcom</div>
+        <h3>Diabetes Companion</h3>
+        <p>Open the Dex Diabetes Companion app for daily glucose-focused workflows and coaching tools.</p>
+        <a class="cta" href="https://diabetes-companion-web.onrender.com" target="_blank" rel="noopener">Open Diabetes Companion</a>
       </article>
       <article class="card">
         <h3>Admin Upload</h3>

@@ -44,7 +44,9 @@
       min-height: 44px;
       display: inline-flex;
       align-items: center;
+      transition: transform .18s ease, box-shadow .18s ease;
     }
+    .nav a:hover { transform: translateY(-1px); box-shadow: 0 8px 16px rgba(16,43,61,.12); }
     .nav a.active { background: linear-gradient(120deg, var(--blue), #1a93bf); color: #fff; border-color: transparent; }
 
     .bottom-tab { display: none; }
@@ -114,8 +116,9 @@
       font-weight: 700;
       padding: 8px 11px;
       cursor: pointer;
+      transition: transform .18s ease, filter .18s ease;
     }
-    .toolbar-btn:hover { background: #fff; }
+    .toolbar-btn:hover { background: #fff; transform: translateY(-1px); filter: brightness(1.03); }
     .after-hours {
       margin: 0 0 14px;
       padding: 12px;
@@ -139,7 +142,10 @@
       box-shadow: var(--shadow);
       padding: 0;
       backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      transition: transform .2s ease, box-shadow .2s ease;
     }
+    .card:hover { transform: translateY(-2px); box-shadow: 0 18px 34px rgba(16,43,61,.16); }
     .card.accent-blue { border-top: 5px solid var(--blue); }
     .card.accent-teal { border-top: 5px solid var(--teal); }
     .card.accent-amber { border-top: 5px solid var(--amber); }
@@ -195,7 +201,9 @@
       margin-left: 6px;
       cursor: pointer;
       vertical-align: middle;
+      transition: transform .18s ease, filter .18s ease;
     }
+    .mini-btn:hover { transform: translateY(-1px); filter: brightness(1.03); }
     .card.hidden-by-search { display: none; }
 
     @media (max-width: 1024px) {
@@ -232,8 +240,9 @@
       .section-body { padding: 0 12px 12px; }
     }
   </style>
+  <link rel="stylesheet" href="./companion_theme.css" />
 </head>
-<body>
+<body class="page-vault">
   <div class="wrap">
     <nav class="nav">
       <a href="./index.html">Home</a>

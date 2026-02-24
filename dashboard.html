@@ -60,7 +60,8 @@
       font-weight: 700;
     }
     .top-nav { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
-    .top-nav a { text-decoration:none; padding:9px 12px; border-radius:12px; border:1px solid rgba(16,43,61,.14); background:rgba(255,255,255,.9); color:#274150; font-weight:700; font-size:13px; min-height:44px; display:inline-flex; align-items:center; }
+    .top-nav a { text-decoration:none; padding:9px 12px; border-radius:12px; border:1px solid rgba(16,43,61,.14); background:rgba(255,255,255,.9); color:#274150; font-weight:700; font-size:13px; min-height:44px; display:inline-flex; align-items:center; transition: transform .18s ease, box-shadow .18s ease; }
+    .top-nav a:hover { transform: translateY(-1px); box-shadow: 0 8px 16px rgba(16,43,61,.12); }
     .top-nav a.active { background:linear-gradient(120deg, #0b7ca5, #17a1c8); color:#fff; border-color: transparent; }
 
     .bottom-tab {
@@ -105,7 +106,9 @@
       font-size: 12px;
       min-height: 44px;
       cursor: pointer;
+      transition: transform .18s ease, filter .18s ease;
     }
+    .panel-btn:hover { transform: translateY(-1px); filter: brightness(1.04); }
 
     .kpis {
       display: grid;
@@ -120,7 +123,10 @@
       border-radius: 16px;
       box-shadow: var(--shadow);
       backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      transition: transform .2s ease, box-shadow .2s ease;
     }
+    .card:hover { transform: translateY(-2px); box-shadow: 0 18px 34px rgba(16,43,61,.16); }
 
     .kpi { padding: 14px; }
     .kpis .kpi:nth-child(1) { border-top: 5px solid #0f7ea6; }
@@ -149,7 +155,9 @@
       font-size: 12px;
       cursor: pointer;
       min-height: 40px;
+      transition: transform .18s ease, filter .18s ease;
     }
+    .view-btn:hover { transform: translateY(-1px); filter: brightness(1.03); }
 
     .view-btn.active {
       background: linear-gradient(120deg, #0b7ca5, #17a1c8);
@@ -210,7 +218,9 @@
       font-weight: 700;
       font-size: 12px;
       cursor: pointer;
+      transition: transform .18s ease, filter .18s ease;
     }
+    .collapse-btn:hover { transform: translateY(-1px); filter: brightness(1.03); }
     .panel-content {
       margin-top: 10px;
     }
@@ -372,36 +382,36 @@
     td.num { text-align: center; font-weight: 600; }
     td.date-cell { font-weight: 800; color: #12374d; text-align: center; }
     .value-pill {
-      display: inline-block;
-      min-width: 40px;
-      padding: 3px 10px;
-      border-radius: 999px;
-      background: #e6f3fd;
+      display: inline;
+      min-width: 0;
+      padding: 0;
+      border-radius: 0;
+      background: transparent;
       color: #164663;
-      text-align: center;
-      border: 1px solid #b8d6ec;
+      text-align: inherit;
+      border: 0;
     }
     .value-pill.na {
-      background: #edf1f4;
+      background: transparent;
       color: #526575;
-      border-color: #c5d0d8;
+      border-color: transparent;
     }
     .value-pill.normal {
-      background: #e5f7eb;
+      background: transparent;
       color: #186b35;
-      border-color: #b7e6c6;
+      border-color: transparent;
     }
     .value-pill.high, .value-pill.low {
-      background: #fdecef;
+      background: transparent;
       color: #9b2436;
       font-weight: 800;
-      border-color: #f5bcc7;
+      border-color: transparent;
     }
     .range-flag {
       margin-left: 6px;
-      padding: 1px 5px;
-      border-radius: 8px;
-      background: rgba(178, 58, 72, 0.14);
+      padding: 0;
+      border-radius: 0;
+      background: transparent;
       color: #8f1f2c;
       font-size: 10px;
       font-weight: 800;
@@ -458,8 +468,9 @@
     }
 
   </style>
+  <link rel="stylesheet" href="./companion_theme.css" />
 </head>
-<body>
+<body class="page-dashboard">
   <div class="wrap">
     <nav class="top-nav">
       <a href="./index.html">Home</a>
