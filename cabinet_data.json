@@ -21,10 +21,17 @@
       "name": "Insurance and Contacts",
       "items": [
         { "title": "Health Vault", "type": "app-link", "href": "./vault.html", "note": "SCAN and healthcare references." },
+        { "title": "Vault JSON Editor", "type": "feature", "href": "./vault.html", "note": "Use 'Edit Vault JSON' for section-wise edits and custom sections." },
         { "title": "Vault Data JSON", "type": "file", "note": "vault_data.json" },
         { "title": "24/7 After-Hours Care - Telehealth", "type": "contact", "href": "tel:18889934087", "note": "1-888-993-4087" },
         { "title": "24/7 After-Hours Care - Nurse Advice Line", "type": "contact", "href": "tel:18554315537", "note": "1-855-431-5537" },
         { "title": "Member Services Phone Support", "type": "reference", "note": "Call number on back of ID card. Available 8am-8pm. 7 days/week until March 31; weekdays only April 1-Sept 30." }
+      ]
+    },
+    {
+      "name": "Diabetes Companion",
+      "items": [
+        { "title": "Dex Diabetes Companion", "type": "external-app", "href": "https://diabetes-companion-web.onrender.com", "note": "Daily glucose-focused workflows and coaching tools." }
       ]
     },
     {
