@@ -38,6 +38,11 @@ def parse_args() -> argparse.Namespace:
         help="Port to bind (default: 3002).",
     )
     parser.add_argument(
+        "--host",
+        default=os.getenv("HOST", "127.0.0.1"),
+        help="Host/interface to bind (default: 127.0.0.1; use 0.0.0.0 to listen on all).",
+    )
+    parser.add_argument(
         "--no-rebuild",
         action="store_true",
         help="Skip rebuilding consolidated files before serving.",
@@ -855,8 +860,10 @@ def main() -> None:
     rebuild_if_needed(args.no_rebuild)
 
     os.chdir(PROJECT_DIR)
-    server = ThreadingHTTPServer(("0.0.0.0", args.port), DashboardHandler)
-    print(f"Personal Health Manager running at http://localhost:{args.port}/index.html")
+    server = ThreadingHTTPServer((args.host, args.port), DashboardHandler)
+    print(
+        f"Personal Health Manager running at http://{args.host}:{args.port}/index.html"
+    )
     print("Press Ctrl+C to stop.")
     server.serve_forever()
 

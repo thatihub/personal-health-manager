@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kaiser Health Summary</title>
+  <style>
+    :root {
+      --ink: #ebf3fb;
+      --muted: #9db2c7;
+      --line: rgba(116, 144, 172, 0.34);
+      --shadow: 0 14px 28px rgba(0, 0, 0, 0.34);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Avenir Next", "Trebuchet MS", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 10% 8%, rgba(18, 164, 212, 0.1), transparent 34%),
+        radial-gradient(circle at 88% 12%, rgba(114, 104, 242, 0.08), transparent 28%),
+        linear-gradient(160deg, #040a1a 0%, #061126 45%, #040d20 100%);
+      padding: 18px;
+    }
+    .wrap { max-width: 1180px; margin: 0 auto; }
+    .nav { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+    .nav a {
+      text-decoration: none;
+      padding: 9px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: rgba(17, 28, 42, 0.82);
+      color: #d6e4f2;
+      font-weight: 700;
+      font-size: 15px;
+      min-height: 48px;
+      display: inline-flex;
+      align-items: center;
+      transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .nav a:hover { transform: translateY(-1px); box-shadow: 0 10px 18px rgba(0,0,0,.28); }
+    .nav a.active { background: linear-gradient(120deg, #0d8bb8, #12a4d4); color: #fff; border-color: transparent; }
+    h1 { margin: 0 0 6px; font-family: "Avenir Next Condensed", "Trebuchet MS", sans-serif; letter-spacing: .2px; font-size: clamp(34px, 4.3vw, 54px); line-height: 1.06; }
+    .sub { color: var(--muted); margin-bottom: 14px; font-size: 14px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 12px; }
+    .card {
+      background: linear-gradient(165deg, rgba(58, 74, 96, 0.98), rgba(47, 63, 84, 0.98));
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      padding: 14px;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+    .card:hover { transform: translateY(-2px); box-shadow: 0 18px 34px rgba(0,0,0,.24); }
+    .card h3 { margin: 0 0 8px; color: #67d8ff; }
+    .muted { color: var(--muted); font-size: 12px; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { padding: 6px 4px; text-align: left; border-bottom: 1px solid rgba(116, 144, 172, 0.25); }
+    th { color: #bfe5ff; font-size: 12px; letter-spacing: .2px; }
+    .tag {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(13, 155, 120, 0.18);
+      border: 1px solid rgba(118, 201, 175, 0.4);
+      color: #a8f1d4;
+      font-size: 11px;
+      font-weight: 800;
+      margin-right: 6px;
+    }
+    .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-top: 8px; }
+    .kpi {
+      background: rgba(18, 26, 38, 0.7);
+      border: 1px solid rgba(116, 144, 172, 0.25);
+      border-radius: 14px;
+      padding: 10px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+    }
+    .kpi .label { color: var(--muted); font-size: 12px; }
+    .kpi .value { font-size: 18px; font-weight: 800; color: #f4f8fc; }
+    .pill { display: inline-block; padding: 2px 8px; border-radius: 999px; background: rgba(82, 116, 255, 0.2); border: 1px solid rgba(82, 116, 255, 0.4); font-size: 11px; color: #cdd8ff; }
+  </style>
+  <link rel="stylesheet" href="./companion_theme.css" />
+</head>
+<body class="page-history">
+  <div class="wrap">
+    <nav class="nav">
+      <a href="./index.html">Home</a>
+      <a href="./dashboard.html">Lab Results Dashboard</a>
+      <a href="./bp.html">Blood Pressure</a>
+      <a href="./vault.html">Health Vault</a>
+      <a href="./immunizations.html">Immunizations</a>
+      <a class="active" href="./kaiser-health-summary.html">Kaiser Summary</a>
+      <a href="./cabinet.html">Cabinet</a>
+    </nav>
+
+    <h1>Kaiser Health Summary</h1>
+    <div class="sub">Condensed view of Kaiser Permanente record (latest available through Mar 03, 2026).</div>
+
+    <section class="grid">
+      <article class="card">
+        <h3>Patient Snapshot</h3>
+        <div class="muted">Demographics & contact</div>
+        <table>
+          <tr><th>Name</th><td>Prakash R Thatikunta</td></tr>
+          <tr><th>DOB</th><td>Mar 12, 1960</td></tr>
+          <tr><th>Sex</th><td>Male</td></tr>
+          <tr><th>Language</th><td>English (spoken & written)</td></tr>
+          <tr><th>Race / Ethnicity</th><td>Asian / Not Hispanic or Latino</td></tr>
+          <tr><th>Marital status</th><td>Unknown</td></tr>
+          <tr><th>Current address</th><td>10281 TORRE AVE #820, Cupertino, CA 95014</td></tr>
+          <tr><th>Phones</th><td>Home 408-863-0644 · Mobile/Work 408-309-4950</td></tr>
+          <tr><th>Email</th><td>pkt2005@gmail.com; thatikunta@gmail.com</td></tr>
+        </table>
+      </article>
+
+      <article class="card">
+        <h3>Allergies</h3>
+        <div class="muted">Known reactions</div>
+        <table>
+          <tr><th>Agent</th><th>Details</th></tr>
+          <tr><td>Non-Steroidal Anti-Inflammatory Agents</td><td>Listed allergy</td></tr>
+        </table>
+        <h3 style="margin-top:14px;">Medications</h3>
+        <div class="muted">Active outpatient</div>
+        <table>
+          <tr><th>Medication</th><th>Sig</th></tr>
+          <tr><td>Cyanocobalamin (Vitamin B-12) 1,000 mcg tab</td><td>1 tablet orally daily</td></tr>
+          <tr><td>Cholecalciferol (Vitamin D3) 1,000 unit cap</td><td>1 capsule orally daily</td></tr>
+          <tr><td>HumuLIN N NPH KwikPen</td><td>24 units SC before lunch; 12 units at bedtime</td></tr>
+          <tr><td>Sharps container</td><td>Use for sharps disposal</td></tr>
+        </table>
+      </article>
+
+      <article class="card">
+        <h3>Active Problems</h3>
+        <div class="muted">Key ongoing conditions</div>
+        <table>
+          <tr><th>Problem</th><th>Notes</th></tr>
+          <tr><td>Type 2 diabetes with mild CKD</td><td></td></tr>
+          <tr><td>Type 2 diabetes with neuropathy</td><td></td></tr>
+          <tr><td>Type 2 diabetes with macular edema & retinopathy</td><td></td></tr>
+          <tr><td>Type 2 diabetes with low HDL / high triglycerides</td><td></td></tr>
+          <tr><td>Colonoscopic follow-up</td><td>Unable to reach patient</td></tr>
+        </table>
+        <div class="muted" style="margin-top:6px;">Resolved (high level): hypertension, vitamin B12 & D deficiency, hypertriglyceridemia, HDL deficiency, prior cough.</div>
+      </article>
+
+      <article class="card">
+        <h3>Latest Vitals</h3>
+        <div class="muted">Most recent on file</div>
+        <div class="kpis">
+          <div class="kpi"><div class="label">Blood pressure</div><div class="value">130/80</div><div class="label">Aug 28, 2022</div></div>
+          <div class="kpi"><div class="label">Pulse</div><div class="value">72</div></div>
+          <div class="kpi"><div class="label">SpO₂</div><div class="value">99%</div><div class="label">Nov 27, 2018</div></div>
+          <div class="kpi"><div class="label">Weight</div><div class="value">75.3 kg</div></div>
+          <div class="kpi"><div class="label">Height</div><div class="value">157.5 cm</div></div>
+          <div class="kpi"><div class="label">BMI</div><div class="value">30.38</div></div>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3>Recent Labs (Dec 18, 2022 unless noted)</h3>
+        <table>
+          <tr><th>Test</th><th>Result</th><th>Ref</th></tr>
+          <tr><td>Hemoglobin A1c</td><td>7.6% (eAG 171 mg/dL)</td><td>≤5.6</td></tr>
+          <tr><td>Cholesterol</td><td>139 mg/dL</td><td>≤239</td></tr>
+          <tr><td>Triglyceride (non-fasting)</td><td>423 mg/dL</td><td>≤879</td></tr>
+          <tr><td>HDL</td><td>38 mg/dL</td><td>≥40</td></tr>
+          <tr><td>LDL direct</td><td>72 mg/dL</td><td>≤159</td></tr>
+          <tr><td>Creatinine / eGFR</td><td>0.87 mg/dL / &gt;60 mL/min</td><td>≤1.34 / ≥60</td></tr>
+          <tr><td>Electrolytes</td><td>Na 141, K 4.4, Cl 101, CO₂ 31</td><td>See panel</td></tr>
+          <tr><td>ALT</td><td>16 U/L</td><td>0–47</td></tr>
+          <tr><td>TSH</td><td>4.8 uIU/mL</td><td>0.4–4.5</td></tr>
+          <tr><td>PSA</td><td>0.8 ng/mL</td><td>0.0–4.5</td></tr>
+          <tr><td>CBC</td><td>WBC 8.5, Hgb 14.1, Hct 42.6, Plt 316</td><td>Within ref</td></tr>
+        </table>
+        <div class="muted" style="margin-top:6px;">Older results available back to 2009; see full record for trend history.</div>
+      </article>
+
+      <article class="card">
+        <h3>Immunizations (core)</h3>
+        <table>
+          <tr><th>Vaccine</th><th>Dates</th></tr>
+          <tr><td>COVID-19 Moderna</td><td>10/31/2021, 04/24/2021, 03/29/2021</td></tr>
+          <tr><td>Shingrix</td><td>03/07/2025, 08/28/2024</td></tr>
+          <tr><td>PPSV23</td><td>08/08/2019, 05/23/2000</td></tr>
+          <tr><td>TD (Tenivac)</td><td>11/27/2018</td></tr>
+          <tr><td>Tdap (Adacel)</td><td>08/26/2008</td></tr>
+          <tr><td>Influenza (assorted)</td><td>See influenza history (many yearly doses)</td></tr>
+        </table>
+        <div class="muted" style="margin-top:6px;"><a class="link" href="./immunizations.html">See full immunization record →</a></div>
+      </article>
+
+      <article class="card">
+        <h3>Care Team & Coverage</h3>
+        <table>
+          <tr><th>Primary Care</th><td>Clement Changbum Kim, MD (Internal Medicine)</td></tr>
+          <tr><th>Clinic</th><td>710 Lawrence Expressway, Santa Clara, CA 95051 · 408-851-2033</td></tr>
+          <tr><th>System</th><td>Kaiser Permanente Northern California</td></tr>
+          <tr><th>Coverage dates</th><td>Mar 12, 1960 – Mar 03, 2026 (document range)</td></tr>
+          <tr><th>Custodian</th><td>Kaiser Permanente Northern California, Pleasanton, CA 94588</td></tr>
+        </table>
+      </article>
+    </section>
+  </div>
+</body>
+</html>

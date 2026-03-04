@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kaiser Lab Results</title>
+  <style>
+    :root { --ink:#ebf3fb; --muted:#9db2c7; --line:rgba(116,144,172,0.34); --shadow:0 14px 28px rgba(0,0,0,0.34); }
+    *{box-sizing:border-box;}
+    body{margin:0;font-family:"Avenir Next","Trebuchet MS","Segoe UI",sans-serif;color:var(--ink);background:
+      radial-gradient(circle at 10% 8%, rgba(18,164,212,.1), transparent 34%),
+      radial-gradient(circle at 88% 12%, rgba(114,104,242,.08), transparent 28%),
+      linear-gradient(160deg,#040a1a 0%,#061126 45%,#040d20 100%);
+      padding:18px;}
+    .wrap{max-width:1180px;margin:0 auto;}
+    .nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+    .nav a{padding:9px 12px;border-radius:12px;border:1px solid var(--line);text-decoration:none;background:rgba(17,28,42,.82);color:#d6e4f2;font-weight:700;font-size:15px;min-height:48px;display:inline-flex;align-items:center;transition:transform .18s ease,box-shadow .18s ease,filter .18s ease;}
+    .nav a:hover{transform:translateY(-1px);box-shadow:0 10px 18px rgba(0,0,0,.28);} .nav a.active{background:linear-gradient(120deg,#0d8bb8,#12a4d4);color:#fff;border-color:transparent;}
+    h1{margin:0 0 6px;font-family:"Avenir Next Condensed","Trebuchet MS",sans-serif;font-size:clamp(34px,4.3vw,54px);} .sub{color:var(--muted);margin-bottom:14px;font-size:14px;}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:12px;}
+    .card{background:linear-gradient(165deg,rgba(58,74,96,.98),rgba(47,63,84,.98));border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);padding:14px;backdrop-filter:blur(4px);transition:transform .2s ease,box-shadow .2s ease;}
+    .card:hover{transform:translateY(-2px);box-shadow:0 18px 34px rgba(0,0,0,.24);} .card h3{margin:0 0 8px;color:#67d8ff;}
+    table{width:100%;border-collapse:collapse;font-size:13px;} th,td{padding:6px 4px;text-align:left;border-bottom:1px solid rgba(116,144,172,.25);} th{color:#bfe5ff;font-size:12px;letter-spacing:.2px;}
+    .muted{color:var(--muted);font-size:12px;} .tag{display:inline-block;padding:3px 8px;border-radius:999px;background:rgba(13,155,120,.18);border:1px solid rgba(118,201,175,.4);color:#a8f1d4;font-size:11px;font-weight:800;margin-right:6px;}
+    .timeline{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0 4px;} .pill{padding:6px 10px;border-radius:12px;border:1px solid var(--line);background:rgba(17,28,42,.7);color:#d6e4f2;font-weight:700;font-size:12px;cursor:pointer;transition:transform .15s ease;} .pill:hover{transform:translateY(-1px);} .pill.active{background:linear-gradient(120deg,#0d8bb8,#12a4d4);border-color:transparent;}
+  </style>
+  <link rel="stylesheet" href="./companion_theme.css" />
+  <script src="./kaiser_labs_data.js"></script>
+</head>
+<body class="page-history">
+  <div class="wrap">
+    <nav class="nav">
+      <a href="./index.html">Home</a>
+      <a href="./dashboard.html">Lab Results Dashboard</a>
+      <a href="./bp.html">Blood Pressure</a>
+      <a class="active" href="./kaiser-labs.html">Kaiser Labs</a>
+      <a href="./vault.html">Health Vault</a>
+      <a href="./immunizations.html">Immunizations</a>
+      <a href="./cabinet.html">Cabinet</a>
+    </nav>
+
+    <h1>Kaiser Lab Results</h1>
+    <div class="sub">Historical Kaiser Permanente labs (2009–2022) in the same style as the main dashboard.</div>
+
+    <div class="card">
+      <h3>Quick selectors</h3>
+      <div class="timeline" id="year-filter"></div>
+      <div class="muted">Click a year to filter rows; showing all by default.</div>
+    </div>
+
+    <section class="grid">
+      <article class="card">
+        <h3>Glycemic & Lipids</h3>
+        <table id="trend-table">
+          <thead>
+            <tr><th>Date</th><th>Source</th><th>A1c %</th><th>Glucose (fast)</th><th>Chol</th><th>LDL</th><th>HDL</th><th>TG</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </article>
+
+      <article class="card">
+        <h3>Kidney</h3>
+        <table id="kidney-table">
+          <thead>
+            <tr><th>Date</th><th>Creat</th><th>eGFR</th><th>BUN</th><th>ACR</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </article>
+
+      <article class="card">
+        <h3>Electrolytes & Liver</h3>
+        <table id="chem-table">
+          <thead>
+            <tr><th>Date</th><th>Na</th><th>K</th><th>Cl</th><th>CO₂</th><th>ALT</th><th>AST</th><th>PSA</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </article>
+
+      <article class="card">
+        <h3>Thyroid</h3>
+        <table id="thyroid-table">
+          <thead>
+            <tr><th>Date</th><th>TSH</th><th>Free T4</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </article>
+
+      <article class="card">
+        <h3>Vitamins & Inflammation</h3>
+        <table id="vit-table">
+          <thead>
+            <tr><th>Date</th><th>Vitamin D</th><th>B12</th><th>hs-CRP</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </article>
+
+      <article class="card">
+        <h3>CBC</h3>
+        <table id="cbc-table">
+          <thead>
+            <tr><th>Date</th><th>WBC</th><th>Hgb</th><th>Hct</th><th>Plt</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </article>
+    </section>
+  </div>
+
+  <script>
+    const rows = window.KAISER_LABS || [];
+    const yearFilterEl = document.getElementById('year-filter');
+    let activeYear = 'all';
+
+    function yearOf(d) { return String(d).slice(0,4); }
+
+    function buildYearFilters() {
+      const years = Array.from(new Set(rows.map(r => yearOf(r.date)))).sort().reverse();
+      const pills = [`<div class="pill active" data-year="all">All</div>`]
+        .concat(years.map(y => `<div class="pill" data-year="${y}">${y}</div>`));
+      yearFilterEl.innerHTML = pills.join('');
+      yearFilterEl.addEventListener('click', (e) => {
+        const p = e.target.closest('.pill');
+        if (!p) return;
+        activeYear = p.dataset.year;
+        document.querySelectorAll('.pill').forEach(el => el.classList.toggle('active', el === p));
+        renderTables();
+      });
+    }
+
+    function fmt(v, digits=1) {
+      if (v === null || v === undefined) return '';
+      return Number(v).toFixed(digits);
+    }
+
+    function renderTables() {
+      const data = activeYear === 'all' ? rows : rows.filter(r => yearOf(r.date) === activeYear);
+
+      const trendTbody = document.querySelector('#trend-table tbody');
+      trendTbody.innerHTML = data.map(r => `
+        <tr>
+          <td>${r.date}</td>
+          <td>${r.source}</td>
+          <td>${fmt(r.hba1c,1)}</td>
+          <td>${fmt(r.glucoseFasting,0)}</td>
+          <td>${fmt(r.totalChol,0)}</td>
+          <td>${fmt(r.ldl,0)}</td>
+          <td>${fmt(r.hdl,0)}</td>
+          <td>${fmt(r.triglycerides,0)}</td>
+        </tr>`).join('');
+
+      const kidneyTbody = document.querySelector('#kidney-table tbody');
+      kidneyTbody.innerHTML = data.map(r => `
+        <tr>
+          <td>${r.date}</td>
+          <td>${fmt(r.creatinine,2)}</td>
+          <td>${fmt(r.egfr,0)}</td>
+          <td>${fmt(r.bun,0)}</td>
+          <td>${fmt(r.acr,1)}</td>
+        </tr>`).join('');
+
+      const chemTbody = document.querySelector('#chem-table tbody');
+      chemTbody.innerHTML = data.map(r => `
+        <tr>
+          <td>${r.date}</td>
+          <td>${fmt(r.sodium,0)}</td>
+          <td>${fmt(r.potassium,1)}</td>
+          <td>${fmt(r.chloride,0)}</td>
+          <td>${fmt(r.co2,0)}</td>
+          <td>${fmt(r.alt,0)}</td>
+          <td>${fmt(r.ast,0)}</td>
+          <td>${r.psa ? fmt(r.psa,1) : ''}</td>
+        </tr>`).join('');
+
+      const thyroidTbody = document.querySelector('#thyroid-table tbody');
+      thyroidTbody.innerHTML = data.map(r => `
+        <tr>
+          <td>${r.date}</td>
+          <td>${fmt(r.tsh,1)}</td>
+          <td>${fmt(r.freeT4,2)}</td>
+        </tr>`).join('');
+
+      const vitTbody = document.querySelector('#vit-table tbody');
+      vitTbody.innerHTML = data.map(r => `
+        <tr>
+          <td>${r.date}</td>
+          <td>${fmt(r.vitaminD,0)}</td>
+          <td>${fmt(r.b12,0)}</td>
+          <td>${fmt(r.crp,1)}</td>
+        </tr>`).join('');
+
+      const cbcTbody = document.querySelector('#cbc-table tbody');
+      cbcTbody.innerHTML = data.map(r => `
+        <tr>
+          <td>${r.date}</td>
+          <td>${fmt(r.wbc,1)}</td>
+          <td>${fmt(r.hgb,1)}</td>
+          <td>${fmt(r.hct,1)}</td>
+          <td>${fmt(r.plt,0)}</td>
+        </tr>`).join('');
+    }
+
+    buildYearFilters();
+    renderTables();
+  </script>
+</body>
+</html>

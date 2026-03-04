@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -18,26 +19,41 @@
       --sky: #d9f0ff;
       --line: rgba(15, 43, 61, 0.12);
     }
-    * { box-sizing: border-box; }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       font-family: "Avenir Next", "Trebuchet MS", "Segoe UI", sans-serif;
       color: var(--ink);
       background:
-        radial-gradient(circle at 85% 8%, rgba(11,124,167,0.2), transparent 38%),
-        radial-gradient(circle at 15% 88%, rgba(16,163,127,0.16), transparent 36%),
+        radial-gradient(circle at 85% 8%, rgba(11, 124, 167, 0.2), transparent 38%),
+        radial-gradient(circle at 15% 88%, rgba(16, 163, 127, 0.16), transparent 36%),
         linear-gradient(160deg, #f2f9ff 0%, #fffaf2 48%, #f0fff9 100%);
       min-height: 100vh;
       padding: 20px;
     }
-    .wrap { max-width: 1150px; margin: 0 auto; }
-    .nav { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+
+    .wrap {
+      max-width: 1150px;
+      margin: 0 auto;
+    }
+
+    .nav {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
     .nav a {
       text-decoration: none;
       padding: 9px 12px;
       border-radius: 12px;
       border: 1px solid var(--line);
-      background: rgba(255,255,255,0.82);
+      background: rgba(255, 255, 255, 0.82);
       color: #274150;
       font-weight: 700;
       font-size: 13px;
@@ -46,10 +62,22 @@
       align-items: center;
       transition: transform .18s ease, box-shadow .18s ease;
     }
-    .nav a:hover { transform: translateY(-1px); box-shadow: 0 8px 16px rgba(16,43,61,.12); }
-    .nav a.active { background: linear-gradient(120deg, var(--blue), #1a93bf); color: #fff; border-color: transparent; }
 
-    .bottom-tab { display: none; }
+    .nav a:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 16px rgba(16, 43, 61, .12);
+    }
+
+    .nav a.active {
+      background: linear-gradient(120deg, var(--blue), #1a93bf);
+      color: #fff;
+      border-color: transparent;
+    }
+
+    .bottom-tab {
+      display: none;
+    }
+
     .bottom-tab a {
       text-decoration: none;
       color: #2b4655;
@@ -63,10 +91,24 @@
       align-items: center;
       justify-content: center;
     }
-    .bottom-tab a.active { background: linear-gradient(120deg, var(--blue), #1a93bf); color: #fff; }
 
-    h1 { margin: 0 0 6px; font-family: "Avenir Next Condensed", "Trebuchet MS", sans-serif; letter-spacing: 0.2px; font-size: clamp(26px,4vw,40px); }
-    .sub { color: var(--muted); margin-bottom: 8px; }
+    .bottom-tab a.active {
+      background: linear-gradient(120deg, var(--blue), #1a93bf);
+      color: #fff;
+    }
+
+    h1 {
+      margin: 0 0 6px;
+      font-family: "Avenir Next Condensed", "Trebuchet MS", sans-serif;
+      letter-spacing: 0.2px;
+      font-size: clamp(26px, 4vw, 40px);
+    }
+
+    .sub {
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
     .updated-banner {
       margin-bottom: 12px;
       display: inline-flex;
@@ -80,6 +122,7 @@
       font-size: 12px;
       font-weight: 700;
     }
+
     .search-wrap {
       margin-bottom: 14px;
       display: flex;
@@ -87,38 +130,59 @@
       align-items: center;
       flex-wrap: wrap;
     }
+
     .search-input {
       width: min(560px, 100%);
       min-height: 44px;
       border-radius: 12px;
       border: 1px solid var(--line);
-      background: rgba(255,255,255,.92);
+      background: rgba(255, 255, 255, .92);
       padding: 10px 12px;
       font-size: 14px;
       color: var(--ink);
       outline: none;
     }
-    .search-input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(11,124,167,.17); }
-    .search-note { font-size: 12px; color: var(--muted); }
+
+    .search-input:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(11, 124, 167, .17);
+    }
+
+    .search-note {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
     .toolbar {
       margin: 0 0 14px;
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
     }
+
     .toolbar-btn {
       min-height: 40px;
       border-radius: 10px;
       border: 1px solid var(--line);
-      background: rgba(255,255,255,.9);
+      background: rgba(255, 255, 255, .9);
       color: #24495c;
       font-size: 12px;
       font-weight: 700;
       padding: 8px 11px;
       cursor: pointer;
       transition: transform .18s ease, filter .18s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
     }
-    .toolbar-btn:hover { background: #fff; transform: translateY(-1px); filter: brightness(1.03); }
+
+    .toolbar-btn:hover {
+      background: #fff;
+      transform: translateY(-1px);
+      filter: brightness(1.03);
+    }
+
     .json-editor {
       margin: 0 0 14px;
       padding: 12px;
@@ -127,12 +191,14 @@
       background: rgba(13, 22, 34, 0.86);
       box-shadow: var(--shadow);
     }
+
     .json-editor h2 {
       margin: 0 0 8px;
       font-size: 16px;
       color: #d9e9f5;
       font-family: "Avenir Next Condensed", "Trebuchet MS", sans-serif;
     }
+
     .json-editor textarea {
       width: 100%;
       min-height: 280px;
@@ -146,23 +212,27 @@
       resize: vertical;
       outline: none;
     }
+
     .json-editor .row-actions {
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
       margin-top: 8px;
     }
+
     .json-sections {
       margin-top: 8px;
       display: grid;
       gap: 8px;
     }
+
     .json-sec {
       border: 1px solid rgba(132, 166, 194, 0.28);
       border-radius: 10px;
       background: rgba(9, 17, 27, 0.7);
       overflow: hidden;
     }
+
     .json-sec summary {
       cursor: pointer;
       list-style: none;
@@ -171,36 +241,55 @@
       color: #d9e9f5;
       border-bottom: 1px solid rgba(132, 166, 194, 0.2);
     }
-    .json-sec summary::-webkit-details-marker { display: none; }
+
+    .json-sec summary::-webkit-details-marker {
+      display: none;
+    }
+
     .json-sec textarea {
       border: 0;
       border-top: 1px solid rgba(132, 166, 194, 0.18);
       border-radius: 0;
       min-height: 180px;
     }
+
     .json-editor .status {
       margin-top: 8px;
       font-size: 12px;
       color: #b5cde0;
       white-space: pre-wrap;
     }
-    .hidden { display: none !important; }
+
+    .hidden {
+      display: none !important;
+    }
+
     .after-hours {
       margin: 0 0 14px;
       padding: 12px;
       border-radius: 14px;
       background: linear-gradient(120deg, #f2fbff, #edfff7);
-      border: 1px solid rgba(16,163,127,.24);
-      box-shadow: 0 10px 22px rgba(16,163,127,.12);
+      border: 1px solid rgba(16, 163, 127, .24);
+      box-shadow: 0 10px 22px rgba(16, 163, 127, .12);
     }
+
     .after-hours h2 {
       margin: 0 0 8px;
       font-size: 16px;
       color: #0e5f5f;
       font-family: "Avenir Next Condensed", "Trebuchet MS", sans-serif;
     }
-    .after-hours.hidden { display: none; }
-    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    .after-hours.hidden {
+      display: none;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
     .card {
       background: var(--panel);
       border: 1px solid var(--line);
@@ -211,12 +300,32 @@
       -webkit-backdrop-filter: blur(8px);
       transition: transform .2s ease, box-shadow .2s ease;
     }
-    .card:hover { transform: translateY(-2px); box-shadow: 0 18px 34px rgba(16,43,61,.16); }
-    .card.accent-blue { border-top: 5px solid var(--blue); }
-    .card.accent-teal { border-top: 5px solid var(--teal); }
-    .card.accent-amber { border-top: 5px solid var(--amber); }
-    .card.accent-rose { border-top: 5px solid var(--rose); }
-    details.section { width: 100%; }
+
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 34px rgba(16, 43, 61, .16);
+    }
+
+    .card.accent-blue {
+      border-top: 5px solid var(--blue);
+    }
+
+    .card.accent-teal {
+      border-top: 5px solid var(--teal);
+    }
+
+    .card.accent-amber {
+      border-top: 5px solid var(--amber);
+    }
+
+    .card.accent-rose {
+      border-top: 5px solid var(--rose);
+    }
+
+    details.section {
+      width: 100%;
+    }
+
     summary.section-head {
       list-style: none;
       display: flex;
@@ -227,8 +336,16 @@
       cursor: pointer;
       user-select: none;
     }
-    summary.section-head::-webkit-details-marker { display: none; }
-    .section-head h3 { margin: 0; font-size: 17px; }
+
+    summary.section-head::-webkit-details-marker {
+      display: none;
+    }
+
+    .section-head h3 {
+      margin: 0;
+      font-size: 17px;
+    }
+
     .chev {
       width: 26px;
       height: 26px;
@@ -241,21 +358,72 @@
       font-size: 13px;
       transition: transform .2s ease;
     }
-    details[open] .chev { transform: rotate(180deg); }
+
+    details[open] .chev {
+      transform: rotate(180deg);
+    }
+
     .section-body {
       padding: 0 14px 14px;
-      border-top: 1px solid rgba(20,34,46,.07);
+      border-top: 1px solid rgba(20, 34, 46, .07);
     }
-    .row { border-top: 1px solid rgba(20,34,46,.08); padding: 9px 0; }
-    .row:first-child { border-top: 0; padding-top: 0; }
-    .k { font-size: 12px; color: var(--muted); }
-    .v { font-weight: 700; margin-top: 2px; }
-    .muted { color: var(--muted); font-size: 12px; margin-top: 3px; }
-    a.link { color: #124e67; word-break: break-all; }
-    .chip { display: inline-block; background: rgba(15,126,166,.16); color: #104f67; padding: 2px 8px; border-radius: 999px; font-size: 11px; margin-right: 6px; }
-    ul.list { margin: 6px 0 0 18px; padding: 0; }
-    ul.list li { margin: 4px 0; }
-    .phone-link { color: #124e67; font-weight: 700; text-decoration: none; }
+
+    .row {
+      border-top: 1px solid rgba(20, 34, 46, .08);
+      padding: 9px 0;
+    }
+
+    .row:first-child {
+      border-top: 0;
+      padding-top: 0;
+    }
+
+    .k {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .v {
+      font-weight: 700;
+      margin-top: 2px;
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 3px;
+    }
+
+    a.link {
+      color: #124e67;
+      word-break: break-all;
+    }
+
+    .chip {
+      display: inline-block;
+      background: rgba(15, 126, 166, .16);
+      color: #104f67;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      margin-right: 6px;
+    }
+
+    ul.list {
+      margin: 6px 0 0 18px;
+      padding: 0;
+    }
+
+    ul.list li {
+      margin: 4px 0;
+    }
+
+    .phone-link {
+      color: #124e67;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
     .mini-btn {
       border: 1px solid var(--line);
       background: #fff;
@@ -269,25 +437,36 @@
       vertical-align: middle;
       transition: transform .18s ease, filter .18s ease;
     }
-    .mini-btn:hover { transform: translateY(-1px); filter: brightness(1.03); }
-    .card.hidden-by-search { display: none; }
+
+    .mini-btn:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.03);
+    }
+
+    .card.hidden-by-search {
+      display: none;
+    }
+
     .vacc-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       gap: 10px;
     }
+
     .vacc-card {
-      border: 1px solid rgba(116,144,172,0.34);
+      border: 1px solid rgba(116, 144, 172, 0.34);
       border-radius: 14px;
       padding: 10px;
-      background: rgba(37,55,76,0.85);
-      box-shadow: 0 6px 14px rgba(0,0,0,0.18);
+      background: rgba(37, 55, 76, 0.85);
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
     }
+
     .vacc-card h4 {
       margin: 0 0 6px;
       color: #f4f8fc;
       font-size: 15px;
     }
+
     .vacc-card .dates {
       color: #d6e4f2;
       font-weight: 700;
@@ -295,16 +474,29 @@
     }
 
     @media (max-width: 1024px) {
-      body { padding: 16px; }
-      .wrap { max-width: 100%; }
-      .grid { grid-template-columns: 1fr; }
+      body {
+        padding: 16px;
+      }
+
+      .wrap {
+        max-width: 100%;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
     }
+
     @media (max-width: 640px) {
       body {
         padding: 12px;
         padding-bottom: calc(86px + env(safe-area-inset-bottom));
       }
-      .nav { display: none; }
+
+      .nav {
+        display: none;
+      }
+
       .bottom-tab {
         position: fixed;
         left: 12px;
@@ -316,25 +508,42 @@
         gap: 8px;
         padding: 8px;
         border-radius: 14px;
-        background: rgba(255,255,255,0.94);
-        border: 1px solid rgba(16,36,54,0.18);
-        box-shadow: 0 12px 26px rgba(16,36,54,0.18);
+        background: rgba(255, 255, 255, 0.94);
+        border: 1px solid rgba(16, 36, 54, 0.18);
+        box-shadow: 0 12px 26px rgba(16, 36, 54, 0.18);
         backdrop-filter: blur(8px);
       }
-      h1 { font-size: clamp(24px, 7vw, 34px); }
-      .card { border-radius: 14px; }
-      .row { padding: 8px 0; }
-      summary.section-head { padding: 12px; }
-      .section-body { padding: 0 12px 12px; }
+
+      h1 {
+        font-size: clamp(24px, 7vw, 34px);
+      }
+
+      .card {
+        border-radius: 14px;
+      }
+
+      .row {
+        padding: 8px 0;
+      }
+
+      summary.section-head {
+        padding: 12px;
+      }
+
+      .section-body {
+        padding: 0 12px 12px;
+      }
     }
   </style>
   <link rel="stylesheet" href="./companion_theme.css" />
 </head>
+
 <body class="page-vault">
   <div class="wrap">
     <nav class="nav">
       <a href="./index.html">Home</a>
       <a href="./dashboard.html">Lab Results Dashboard</a>
+      <a href="./kaiser-labs.html">Kaiser Labs</a>
       <a href="./bp.html">Blood Pressure</a>
       <a class="active" href="./vault.html">Health Vault</a>
       <a href="./immunizations.html">Immunizations</a>
@@ -345,13 +554,15 @@
     <div class="sub">SCAN 2026, benefits, contacts, medications, and care references.</div>
     <div class="updated-banner" id="last-updated-banner">Last updated: loading...</div>
     <div class="search-wrap">
-      <input id="vault-search" class="search-input" type="search" placeholder="Search: phone, doctor, program, medication, vaccine..." />
+      <input id="vault-search" class="search-input" type="search"
+        placeholder="Search: phone, doctor, program, medication, vaccine..." />
       <span class="search-note">Type to filter cards</span>
     </div>
     <div class="toolbar">
       <button class="toolbar-btn" type="button" id="expand-all">Expand all sections</button>
       <button class="toolbar-btn" type="button" id="collapse-all">Collapse all sections</button>
       <button class="toolbar-btn" type="button" id="edit-json">Edit Vault JSON</button>
+      <a class="toolbar-btn" href="./kaiser-health-summary.html" target="_blank" rel="noopener">Open Kaiser summary</a>
     </div>
     <section class="json-editor hidden" id="json-editor-panel">
       <h2>Vault JSON Editor (edit any field, add new fields)</h2>
@@ -377,55 +588,86 @@
     <section class="grid">
       <article class="card accent-blue">
         <details class="section">
-          <summary class="section-head"><h3>Member</h3><span class="chev">⌄</span></summary>
+          <summary class="section-head">
+            <h3>Member</h3><span class="chev">⌄</span>
+          </summary>
           <div class="section-body" id="member"></div>
         </details>
       </article>
       <article class="card accent-teal">
         <details class="section">
-          <summary class="section-head"><h3>SCAN Support</h3><span class="chev">⌄</span></summary>
+          <summary class="section-head">
+            <h3>SCAN Support</h3><span class="chev">⌄</span>
+          </summary>
           <div class="section-body" id="support"></div>
         </details>
       </article>
       <article class="card accent-amber">
         <details class="section">
-          <summary class="section-head"><h3>Benefits & Programs</h3><span class="chev">⌄</span></summary>
+          <summary class="section-head">
+            <h3>Benefits & Programs</h3><span class="chev">⌄</span>
+          </summary>
           <div class="section-body" id="benefits"></div>
         </details>
       </article>
       <article class="card accent-rose">
         <details class="section">
-          <summary class="section-head"><h3>Pharmacy & Rx</h3><span class="chev">⌄</span></summary>
+          <summary class="section-head">
+            <h3>Pharmacy & Rx</h3><span class="chev">⌄</span>
+          </summary>
           <div class="section-body" id="pharmacy"></div>
         </details>
       </article>
       <article class="card accent-blue">
         <details class="section">
-          <summary class="section-head"><h3>Doctors & Networks</h3><span class="chev">⌄</span></summary>
+          <summary class="section-head">
+            <h3>Doctors & Networks</h3><span class="chev">⌄</span>
+          </summary>
           <div class="section-body" id="providers"></div>
         </details>
       </article>
       <article class="card accent-teal">
         <details class="section">
-          <summary class="section-head"><h3>Lab Test Plan</h3><span class="chev">⌄</span></summary>
+          <summary class="section-head">
+            <h3>Lab Test Plan</h3><span class="chev">⌄</span>
+          </summary>
           <div class="section-body" id="labtests"></div>
         </details>
       </article>
       <article class="card accent-amber">
         <details class="section">
-          <summary class="section-head"><h3>Vaccines & Immunizations</h3><span class="chev">⌄</span></summary>
+          <summary class="section-head">
+            <h3>Vaccines & Immunizations</h3><span class="chev">⌄</span>
+          </summary>
           <div class="section-body" id="vaccines"></div>
         </details>
       </article>
       <article class="card accent-rose">
         <details class="section">
-          <summary class="section-head"><h3>Notes</h3><span class="chev">⌄</span></summary>
+          <summary class="section-head">
+            <h3>Notes</h3><span class="chev">⌄</span>
+          </summary>
           <div class="section-body" id="notes"></div>
+        </details>
+      </article>
+      <article class="card accent-teal">
+        <details class="section">
+          <summary class="section-head">
+            <h3>Kaiser Data</h3><span class="chev">⌄</span>
+          </summary>
+          <div class="section-body">
+            <div id="kaiser-data"></div>
+            <div class="muted" style="margin-top:8px;">
+              <a class="link" href="./kaiser-health-summary.html" target="_blank" rel="noopener">Open detailed Kaiser health summary</a>
+            </div>
+          </div>
         </details>
       </article>
       <article class="card accent-blue hidden" id="custom-sections-card">
         <details class="section">
-          <summary class="section-head"><h3>Custom Sections</h3><span class="chev">⌄</span></summary>
+          <summary class="section-head">
+            <h3>Custom Sections</h3><span class="chev">⌄</span>
+          </summary>
           <div class="section-body" id="custom-sections"></div>
         </details>
       </article>
@@ -446,6 +688,19 @@
       if (!text) return "";
       const safe = String(text).replace(/"/g, "&quot;");
       return `<button class="mini-btn copy-btn" type="button" data-copy="${safe}">${label}</button>`;
+    }
+
+    // -------------------------------------------------
+    // Helper: renderKaiserData
+    // -------------------------------------------------
+    function renderKaiserData(data) {
+      if (!data) return '<div class="muted">No Kaiser Permanente data available.</div>';
+      // Escape HTML entities to avoid injection, then preserve line breaks
+      const escaped = String(data)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+      return `<div class="kaiser-text">${escaped.replace(/\n/g, "<br>")}</div>`;
     }
 
     function phoneLink(phone) {
@@ -573,7 +828,7 @@
       };
       const applySectionEditsToRaw = () => {
         let base = {};
-        try { base = JSON.parse(text.value); } catch (_e) {}
+        try { base = JSON.parse(text.value); } catch (_e) { }
         if (!base || typeof base !== "object") base = {};
         if (!base.scan_2026 || typeof base.scan_2026 !== "object") base.scan_2026 = {};
         sectionsRoot.querySelectorAll("textarea[data-section]").forEach((ta) => {
@@ -667,7 +922,7 @@
             body: JSON.stringify({ target: "vault", content: parsed })
           });
           let out = {};
-          try { out = await res.json(); } catch (_ignore) {}
+          try { out = await res.json(); } catch (_ignore) { }
           if (!res.ok || !out.ok) {
             setStatus(`Save failed: ${out.error || `HTTP ${res.status}`}`);
             return;
@@ -750,16 +1005,19 @@
       const vacc = scan.vaccines || [];
       const vaccHtml = Array.isArray(vacc) && vacc.length
         ? `<div class="vacc-grid">${vacc.map((v, i) => {
-            const parts = String(v).split(":");
-            const title = parts[0] || `Vaccine ${i+1}`;
-            const dates = parts.slice(1).join(":").trim();
-            return `<div class="vacc-card"><h4>${title}</h4><div class="dates">${dates || ""}</div></div>`;
-          }).join("")}</div>`
+          const parts = String(v).split(":");
+          const title = parts[0] || `Vaccine ${i + 1}`;
+          const dates = parts.slice(1).join(":").trim();
+          return `<div class="vacc-card"><h4>${title}</h4><div class="dates">${dates || ""}</div></div>`;
+        }).join("")}</div>`
         : list(vacc);
       document.getElementById('vaccines').innerHTML = vaccHtml;
       document.getElementById('notes').innerHTML =
         row('Symptom Note', scan.symptom_note || '-') +
         `<div class="row"><div class="v">Night Tips</div>${list(scan.night_tips || [])}</div>`;
+
+      const kaiser = scan.kaiser_permanent_summary || scan.kaiser_permanente_summary || scan.kaiser_data || scan.kaiser;
+      document.getElementById('kaiser-data').innerHTML = renderKaiserData(kaiser);
 
       const known = new Set([
         "member",
@@ -770,7 +1028,11 @@
         "lab_test_plan",
         "vaccines",
         "symptom_note",
-        "night_tips"
+        "night_tips",
+        "kaiser_permanent_summary",
+        "kaiser_permanente_summary",
+        "kaiser_data",
+        "kaiser"
       ]);
       const customEntries = Object.entries(scan).filter(([k]) => !known.has(k));
       const customCard = document.getElementById("custom-sections-card");
@@ -812,4 +1074,5 @@
     <a href="./cabinet.html">Cabinet</a>
   </nav>
 </body>
+
 </html>
