@@ -97,7 +97,7 @@
     </nav>
 
     <h1>Kaiser Health Summary</h1>
-    <div class="sub">Condensed view of Kaiser Permanente record (latest available through Mar 03, 2026).</div>
+    <div class="sub">Full Kaiser Permanente snapshot (records through Mar 03, 2026).</div>
 
     <section class="grid">
       <article class="card">
@@ -117,14 +117,23 @@
       </article>
 
       <article class="card">
-        <h3>Allergies</h3>
-        <div class="muted">Known reactions</div>
+        <h3>Care Team & Coverage</h3>
         <table>
-          <tr><th>Agent</th><th>Details</th></tr>
+          <tr><th>Primary Care</th><td>Clement Changbum Kim, MD (Internal Medicine)</td></tr>
+          <tr><th>Clinic</th><td>710 Lawrence Expressway, Santa Clara, CA 95051 · 408-851-2033</td></tr>
+          <tr><th>System</th><td>Kaiser Permanente Northern California</td></tr>
+          <tr><th>Coverage dates</th><td>Mar 12, 1960 – Mar 03, 2026 (document range)</td></tr>
+          <tr><th>Custodian</th><td>Kaiser Permanente Northern California, Pleasanton, CA 94588</td></tr>
+        </table>
+      </article>
+
+      <article class="card">
+        <h3>Allergies & Medications</h3>
+        <table>
+          <tr><th>Allergy</th><th>Notes</th></tr>
           <tr><td>Non-Steroidal Anti-Inflammatory Agents</td><td>Listed allergy</td></tr>
         </table>
-        <h3 style="margin-top:14px;">Medications</h3>
-        <div class="muted">Active outpatient</div>
+        <div class="muted" style="margin-top:10px;">Active outpatient meds</div>
         <table>
           <tr><th>Medication</th><th>Sig</th></tr>
           <tr><td>Cyanocobalamin (Vitamin B-12) 1,000 mcg tab</td><td>1 tablet orally daily</td></tr>
@@ -136,7 +145,6 @@
 
       <article class="card">
         <h3>Active Problems</h3>
-        <div class="muted">Key ongoing conditions</div>
         <table>
           <tr><th>Problem</th><th>Notes</th></tr>
           <tr><td>Type 2 diabetes with mild CKD</td><td></td></tr>
@@ -145,12 +153,11 @@
           <tr><td>Type 2 diabetes with low HDL / high triglycerides</td><td></td></tr>
           <tr><td>Colonoscopic follow-up</td><td>Unable to reach patient</td></tr>
         </table>
-        <div class="muted" style="margin-top:6px;">Resolved (high level): hypertension, vitamin B12 & D deficiency, hypertriglyceridemia, HDL deficiency, prior cough.</div>
+        <div class="muted" style="margin-top:6px;">Resolved: hypertension, vitamin B12 & D deficiency, hypertriglyceridemia, HDL deficiency, prior cough.</div>
       </article>
 
       <article class="card">
-        <h3>Latest Vitals</h3>
-        <div class="muted">Most recent on file</div>
+        <h3>Vitals (latest on file)</h3>
         <div class="kpis">
           <div class="kpi"><div class="label">Blood pressure</div><div class="value">130/80</div><div class="label">Aug 28, 2022</div></div>
           <div class="kpi"><div class="label">Pulse</div><div class="value">72</div></div>
@@ -162,7 +169,21 @@
       </article>
 
       <article class="card">
-        <h3>Recent Labs (Dec 18, 2022 unless noted)</h3>
+        <h3>Immunizations (core)</h3>
+        <table>
+          <tr><th>Vaccine</th><th>Dates</th></tr>
+          <tr><td>COVID-19 Moderna</td><td>10/31/2021, 04/24/2021, 03/29/2021</td></tr>
+          <tr><td>Shingrix</td><td>03/07/2025, 08/28/2024</td></tr>
+          <tr><td>PPSV23</td><td>08/08/2019, 05/23/2000</td></tr>
+          <tr><td>TD (Tenivac)</td><td>11/27/2018</td></tr>
+          <tr><td>Tdap (Adacel)</td><td>08/26/2008</td></tr>
+          <tr><td>Influenza</td><td>See influenza history (many yearly doses)</td></tr>
+        </table>
+        <div class="muted" style="margin-top:6px;"><a class="link" href="./immunizations.html">See full immunization record →</a></div>
+      </article>
+
+      <article class="card">
+        <h3>Lab Highlights (latest set: Dec 18, 2022)</h3>
         <table>
           <tr><th>Test</th><th>Result</th><th>Ref</th></tr>
           <tr><td>Hemoglobin A1c</td><td>7.6% (eAG 171 mg/dL)</td><td>≤5.6</td></tr>
@@ -177,32 +198,45 @@
           <tr><td>PSA</td><td>0.8 ng/mL</td><td>0.0–4.5</td></tr>
           <tr><td>CBC</td><td>WBC 8.5, Hgb 14.1, Hct 42.6, Plt 316</td><td>Within ref</td></tr>
         </table>
-        <div class="muted" style="margin-top:6px;">Older results available back to 2009; see full record for trend history.</div>
+        <div class="muted" style="margin-top:6px;"><a class="link" href="./kaiser-labs.html">See full Kaiser labs (2009–2022) →</a></div>
       </article>
 
       <article class="card">
-        <h3>Immunizations (core)</h3>
-        <table>
-          <tr><th>Vaccine</th><th>Dates</th></tr>
-          <tr><td>COVID-19 Moderna</td><td>10/31/2021, 04/24/2021, 03/29/2021</td></tr>
-          <tr><td>Shingrix</td><td>03/07/2025, 08/28/2024</td></tr>
-          <tr><td>PPSV23</td><td>08/08/2019, 05/23/2000</td></tr>
-          <tr><td>TD (Tenivac)</td><td>11/27/2018</td></tr>
-          <tr><td>Tdap (Adacel)</td><td>08/26/2008</td></tr>
-          <tr><td>Influenza (assorted)</td><td>See influenza history (many yearly doses)</td></tr>
-        </table>
-        <div class="muted" style="margin-top:6px;"><a class="link" href="./immunizations.html">See full immunization record →</a></div>
+        <details open>
+          <summary style="cursor:pointer;font-weight:800;color:#c9bbff;">Social History</summary>
+          <table style="margin-top:8px;">
+            <tr><th>Tobacco</th><td>Never smoker; smokeless: never</td></tr>
+            <tr><th>Alcohol</th><td>Yes; 0 standard drinks/week</td></tr>
+            <tr><th>Substance use</th><td>No</td></tr>
+            <tr><th>Occupation</th><td>Software engineer</td></tr>
+            <tr><th>Sex/Gender fields</th><td>Legal sex: Male; other fields not on file</td></tr>
+          </table>
+        </details>
       </article>
 
       <article class="card">
-        <h3>Care Team & Coverage</h3>
-        <table>
-          <tr><th>Primary Care</th><td>Clement Changbum Kim, MD (Internal Medicine)</td></tr>
-          <tr><th>Clinic</th><td>710 Lawrence Expressway, Santa Clara, CA 95051 · 408-851-2033</td></tr>
-          <tr><th>System</th><td>Kaiser Permanente Northern California</td></tr>
-          <tr><th>Coverage dates</th><td>Mar 12, 1960 – Mar 03, 2026 (document range)</td></tr>
-          <tr><th>Custodian</th><td>Kaiser Permanente Northern California, Pleasanton, CA 94588</td></tr>
-        </table>
+        <details>
+          <summary style="cursor:pointer;font-weight:800;color:#c9bbff;">Micro / Other Tests</summary>
+          <table style="margin-top:8px;">
+            <tr><th>Date</th><th>Test</th><th>Result</th></tr>
+            <tr><td>2016-11-16</td><td>Stool occult blood (immunoassay)</td><td>Positive</td></tr>
+            <tr><td>2016-11-08</td><td>Stool occult blood (immunoassay)</td><td>Positive</td></tr>
+            <tr><td>2016-10-15</td><td>Chlamydia/Gonorrhea NAAT (urine)</td><td>Negative</td></tr>
+            <tr><td>2016-10-15</td><td>Urine culture</td><td>No growth</td></tr>
+            <tr><td>2016-06-07</td><td>Strep A PCR (throat)</td><td>Negative</td></tr>
+            <tr><td>2010-04-27</td><td>Helicobacter pylori Ab</td><td>Positive (index 2.02)</td></tr>
+          </table>
+        </details>
+      </article>
+
+      <article class="card">
+        <details>
+          <summary style="cursor:pointer;font-weight:800;color:#c9bbff;">Document Metadata</summary>
+          <table style="margin-top:8px;">
+            <tr><th>Coverage dates (document)</th><td>Mar 12, 1960 – Mar 03, 2026</td></tr>
+            <tr><th>Authenticator</th><td>Careeverywhere, Backgrounduser</td></tr>
+          </table>
+        </details>
       </article>
     </section>
   </div>
