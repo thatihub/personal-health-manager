@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Immunizations</title>
+  <style>
+    :root {
+      --ink: #ebf3fb;
+      --muted: #98adbf;
+      --line: rgba(116, 144, 172, 0.34);
+      --shadow: 0 14px 28px rgba(0, 0, 0, 0.34);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Avenir Next", "Trebuchet MS", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 10% 8%, rgba(18, 164, 212, 0.1), transparent 34%),
+        radial-gradient(circle at 88% 12%, rgba(114, 104, 242, 0.08), transparent 28%),
+        linear-gradient(160deg, #040a1a 0%, #061126 45%, #040d20 100%);
+      padding: 18px;
+    }
+    .wrap { max-width: 1180px; margin: 0 auto; }
+    .nav { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+    .nav a {
+      text-decoration: none;
+      padding: 9px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: rgba(17, 28, 42, 0.82);
+      color: #d6e4f2;
+      font-weight: 700;
+      font-size: 15px;
+      min-height: 48px;
+      display: inline-flex;
+      align-items: center;
+      transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .nav a:hover { transform: translateY(-1px); box-shadow: 0 10px 18px rgba(0,0,0,.28); }
+    .nav a.active { background: linear-gradient(120deg, #0d8bb8, #12a4d4); color: #fff; border-color: transparent; }
+    h1 { margin: 0 0 6px; font-family: "Avenir Next Condensed", "Trebuchet MS", sans-serif; letter-spacing: .2px; font-size: clamp(34px, 4.3vw, 54px); line-height: 1.06; }
+    .sub { color: var(--muted); margin-bottom: 12px; font-size: 14px; }
+    .search-wrap { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+    .search-input {
+      width: min(520px, 100%);
+      min-height: 44px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.1);
+      color: var(--ink);
+      padding: 10px 12px;
+      font-size: 14px;
+    }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 12px; }
+    .card {
+      background: linear-gradient(165deg, rgba(58, 74, 96, 0.98), rgba(47, 63, 84, 0.98));
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      padding: 14px;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+    .card:hover { transform: translateY(-2px); box-shadow: 0 18px 34px rgba(0,0,0,.24); }
+    .card h3 { margin: 0 0 6px; color: #67d8ff; }
+    .card .muted { color: var(--muted); font-size: 12px; margin-bottom: 6px; }
+    .dates { color: #f4f8fc; font-weight: 700; }
+    .tag { display: inline-block; padding: 3px 8px; border-radius: 999px; background: rgba(13, 155, 120, 0.18); border: 1px solid rgba(118, 201, 175, 0.4); color: #a8f1d4; font-size: 11px; font-weight: 800; margin-right: 6px; }
+    .hidden { display: none !important; }
+  </style>
+  <link rel="stylesheet" href="./companion_theme.css" />
+</head>
+<body class="page-history">
+  <div class="wrap">
+    <nav class="nav">
+      <a href="./index.html">Home</a>
+      <a href="./dashboard.html">Lab Results Dashboard</a>
+      <a href="./bp.html">Blood Pressure</a>
+      <a href="./vault.html">Health Vault</a>
+      <a href="./cabinet.html">Cabinet</a>
+      <a class="active" href="./immunizations.html">Immunizations</a>
+    </nav>
+
+    <h1>Immunizations</h1>
+    <div class="sub">Latest vaccines on file with dates and product names.</div>
+    <div class="search-wrap">
+      <input id="imm-search" class="search-input" type="search" placeholder="Search vaccine or date..." />
+    </div>
+
+    <section class="grid" id="imm-grid"></section>
+  </div>
+
+  <script>
+    const IMM_DATA = [
+      { title: "COVID-19 Moderna (External Administration)", dates: ["10/31/2021", "04/24/2021", "03/29/2021"], tag: "COVID-19" },
+      { title: "Shingrix dose 1", dates: ["03/07/2025"], tag: "Shingles" },
+      { title: "Shingrix dose 2", dates: ["08/28/2024"], tag: "Shingles" },
+      { title: "PCV (status to confirm)", dates: [], tag: "Pneumococcal" },
+      { title: "RSV (status to confirm)", dates: [], tag: "RSV" },
+      { title: "Tetanus (every 10 years)", dates: [], tag: "Tetanus/Diphtheria" },
+      { title: "PPSV23 (Pneumococcal polysaccharide)", dates: ["08/08/2019", "05/23/2000"], tag: "Pneumococcal" },
+      { title: "TD pres free (Tetanus, Diphtheria) (Tenivac), adsorbed", dates: ["11/27/2018"], tag: "Tetanus/Diphtheria" },
+      { title: "Tdap (ADACEL) (Tetanus, diphtheria, acellular pertussis)", dates: ["08/26/2008"], tag: "Tdap" },
+      { title: "INFs (Influenza split virus)", dates: ["10/18/2013", "11/17/2007", "11/11/2006", "11/02/2005", "11/06/2002", "11/13/2001", "11/18/2000", "10/12/1999"], tag: "Influenza" },
+      { title: "INFs (Quadrivalent) (Influenza)", dates: ["09/20/2019"], tag: "Influenza" },
+      { title: "INFs 4yrs and over (FLUVIRIN) (Influenza)", dates: ["10/16/2017", "10/20/2015"], tag: "Influenza" },
+      { title: "INFs 4yrs-adult (influenza)", dates: ["10/16/2009"], tag: "Influenza" },
+      { title: "INFS Pres Free 18yrs-adult (Flublok quadrivalent) recomb (influenza)", dates: ["09/27/2018"], tag: "Influenza" },
+      { title: "INFs pres free 18yrs-adult (influenza)", dates: ["11/01/2008"], tag: "Influenza" },
+      { title: "INFs pres free 3yrs-adult (Influenza)", dates: ["11/01/2014", "09/19/2012", "10/15/2011"], tag: "Influenza" },
+      { title: "INFS pres free 6mos-adult (Fluarix quadrivalent) (influenza)", dates: ["10/12/2022"], tag: "Influenza" },
+      { title: "INFS pres free 6mos-adult (quadrivalent) (influenza)", dates: ["10/24/2021", "09/18/2020"], tag: "Influenza" },
+      { title: "INFs pres free 9yrs-adult (AFLURIA) (Influenza)", dates: ["10/06/2016"], tag: "Influenza" }
+    ];
+
+    const CORE_DATA = IMM_DATA.filter((v) => v.tag !== "Influenza");
+    const FLU_DATA = IMM_DATA.filter((v) => v.tag === "Influenza");
+
+    function render(data) {
+      const grid = document.getElementById("imm-grid");
+      grid.innerHTML = data.map((v) => `
+        <article class="card">
+          <div class="tag">${v.tag || "Vaccine"}</div>
+          <h3>${v.title}</h3>
+          <div class="muted">Dates on file:</div>
+          <div class="dates">${v.dates.join(", ")}</div>
+        </article>
+      `).join("");
+    }
+
+    function bindSearch() {
+      const input = document.getElementById("imm-search");
+      input.addEventListener("input", () => {
+        const q = input.value.trim().toLowerCase();
+        const filtered = CORE_DATA.filter((v) =>
+          v.title.toLowerCase().includes(q) ||
+          v.tag.toLowerCase().includes(q) ||
+          v.dates.some((d) => d.toLowerCase().includes(q))
+        );
+        render(filtered);
+      });
+    }
+
+    render(CORE_DATA);
+    bindSearch();
+
+    // Render flu history in collapsible panel
+    (function renderFlu() {
+      if (!FLU_DATA.length) return;
+      const panel = document.createElement("details");
+      panel.className = "card";
+      panel.style.marginTop = "12px";
+      panel.open = false;
+      panel.innerHTML = `
+        <summary style="cursor:pointer;font-weight:800;color:#c9bbff;">Influenza history (expand to view)</summary>
+        <div style="margin-top:8px;">${FLU_DATA.map((v) => `
+          <div style="border-top:1px solid rgba(116,144,172,0.34); padding:8px 0;">
+            <div class="tag">Influenza</div>
+            <h3 style="margin:0 0 4px; font-size:16px; color:#f0f4ff;">${v.title}</h3>
+            <div class="muted">Dates on file:</div>
+            <div class="dates">${v.dates.join(", ")}</div>
+          </div>
+        `).join("")}</div>
+      `;
+      document.querySelector(".wrap").appendChild(panel);
+    })();
+  </script>
+</body>
+</html>

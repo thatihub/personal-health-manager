@@ -35,6 +35,12 @@
       ]
     },
     {
+      "name": "Immunizations",
+      "items": [
+        { "title": "Immunizations", "type": "app-link", "href": "./immunizations.html", "note": "Full vaccine record; influenza history is collapsible." }
+      ]
+    },
+    {
       "name": "Admin and Uploads",
       "items": [
         { "title": "Admin Upload", "type": "app-link", "href": "./admin.html", "note": "Upload PDFs and BP CSVs." },

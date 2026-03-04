@@ -271,6 +271,28 @@
     }
     .mini-btn:hover { transform: translateY(-1px); filter: brightness(1.03); }
     .card.hidden-by-search { display: none; }
+    .vacc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 10px;
+    }
+    .vacc-card {
+      border: 1px solid rgba(116,144,172,0.34);
+      border-radius: 14px;
+      padding: 10px;
+      background: rgba(37,55,76,0.85);
+      box-shadow: 0 6px 14px rgba(0,0,0,0.18);
+    }
+    .vacc-card h4 {
+      margin: 0 0 6px;
+      color: #f4f8fc;
+      font-size: 15px;
+    }
+    .vacc-card .dates {
+      color: #d6e4f2;
+      font-weight: 700;
+      font-size: 13px;
+    }
 
     @media (max-width: 1024px) {
       body { padding: 16px; }
@@ -315,6 +337,7 @@
       <a href="./dashboard.html">Lab Results Dashboard</a>
       <a href="./bp.html">Blood Pressure</a>
       <a class="active" href="./vault.html">Health Vault</a>
+      <a href="./immunizations.html">Immunizations</a>
       <a href="./cabinet.html">Cabinet</a>
     </nav>
 
@@ -390,7 +413,7 @@
       </article>
       <article class="card accent-amber">
         <details class="section">
-          <summary class="section-head"><h3>Vaccines</h3><span class="chev">⌄</span></summary>
+          <summary class="section-head"><h3>Vaccines & Immunizations</h3><span class="chev">⌄</span></summary>
           <div class="section-body" id="vaccines"></div>
         </details>
       </article>
@@ -724,7 +747,16 @@
         `<div class="row"><div class="v">Network</div>${list((prov.network || []).map((n) => `${n.name || '-'}${n.phone ? ` • ${phoneInline(n.phone)}` : ''}${n.support ? ` • support ${phoneInline(n.support)}` : ''}${n.website ? ` • ${link(n.website)}` : ''}`))}</div>`;
 
       document.getElementById('labtests').innerHTML = list(scan.lab_test_plan || []);
-      document.getElementById('vaccines').innerHTML = list(scan.vaccines || []);
+      const vacc = scan.vaccines || [];
+      const vaccHtml = Array.isArray(vacc) && vacc.length
+        ? `<div class="vacc-grid">${vacc.map((v, i) => {
+            const parts = String(v).split(":");
+            const title = parts[0] || `Vaccine ${i+1}`;
+            const dates = parts.slice(1).join(":").trim();
+            return `<div class="vacc-card"><h4>${title}</h4><div class="dates">${dates || ""}</div></div>`;
+          }).join("")}</div>`
+        : list(vacc);
+      document.getElementById('vaccines').innerHTML = vaccHtml;
       document.getElementById('notes').innerHTML =
         row('Symptom Note', scan.symptom_note || '-') +
         `<div class="row"><div class="v">Night Tips</div>${list(scan.night_tips || [])}</div>`;
