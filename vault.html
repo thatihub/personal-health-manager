@@ -74,6 +74,31 @@
       border-color: transparent;
     }
 
+    .pill-nav {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 10px 0 14px;
+    }
+
+    .pill {
+      text-decoration: none;
+      padding: 7px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.9);
+      color: #24526a;
+      font-weight: 700;
+      font-size: 12px;
+      transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+    }
+
+    .pill:hover {
+      background: #fff;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 16px rgba(16, 43, 61, .12);
+    }
+
     .bottom-tab {
       display: none;
     }
@@ -553,6 +578,18 @@
     <h1>Health Vault</h1>
     <div class="sub">SCAN 2026, benefits, contacts, medications, and care references.</div>
     <div class="updated-banner" id="last-updated-banner">Last updated: loading...</div>
+    <div class="pill-nav" aria-label="Jump to section">
+      <a class="pill" href="#member-card">Member</a>
+      <a class="pill" href="#support-card">Support</a>
+      <a class="pill" href="#benefits-card">Benefits</a>
+      <a class="pill" href="#pharmacy-card">Pharmacy</a>
+      <a class="pill" href="#providers-card">Doctors</a>
+      <a class="pill" href="#labtests-card">Lab Tests</a>
+      <a class="pill" href="#vaccines-card">Vaccines</a>
+      <a class="pill" href="#notes-card">Notes</a>
+      <a class="pill" href="#kaiser-card">Kaiser Data</a>
+      <a class="pill" href="#custom-sections-card">Custom</a>
+    </div>
     <div class="search-wrap">
       <input id="vault-search" class="search-input" type="search"
         placeholder="Search: phone, doctor, program, medication, vaccine..." />
@@ -586,7 +623,7 @@
     </section>
 
     <section class="grid">
-      <article class="card accent-blue">
+      <article class="card accent-blue" id="member-card">
         <details class="section">
           <summary class="section-head">
             <h3>Member</h3><span class="chev">⌄</span>
@@ -594,7 +631,7 @@
           <div class="section-body" id="member"></div>
         </details>
       </article>
-      <article class="card accent-teal">
+      <article class="card accent-teal" id="support-card">
         <details class="section">
           <summary class="section-head">
             <h3>SCAN Support</h3><span class="chev">⌄</span>
@@ -602,7 +639,7 @@
           <div class="section-body" id="support"></div>
         </details>
       </article>
-      <article class="card accent-amber">
+      <article class="card accent-amber" id="benefits-card">
         <details class="section">
           <summary class="section-head">
             <h3>Benefits & Programs</h3><span class="chev">⌄</span>
@@ -610,7 +647,7 @@
           <div class="section-body" id="benefits"></div>
         </details>
       </article>
-      <article class="card accent-rose">
+      <article class="card accent-rose" id="pharmacy-card">
         <details class="section">
           <summary class="section-head">
             <h3>Pharmacy & Rx</h3><span class="chev">⌄</span>
@@ -618,7 +655,7 @@
           <div class="section-body" id="pharmacy"></div>
         </details>
       </article>
-      <article class="card accent-blue">
+      <article class="card accent-blue" id="providers-card">
         <details class="section">
           <summary class="section-head">
             <h3>Doctors & Networks</h3><span class="chev">⌄</span>
@@ -626,7 +663,7 @@
           <div class="section-body" id="providers"></div>
         </details>
       </article>
-      <article class="card accent-teal">
+      <article class="card accent-teal" id="labtests-card">
         <details class="section">
           <summary class="section-head">
             <h3>Lab Test Plan</h3><span class="chev">⌄</span>
@@ -634,7 +671,7 @@
           <div class="section-body" id="labtests"></div>
         </details>
       </article>
-      <article class="card accent-amber">
+      <article class="card accent-amber" id="vaccines-card">
         <details class="section">
           <summary class="section-head">
             <h3>Vaccines & Immunizations</h3><span class="chev">⌄</span>
@@ -642,7 +679,7 @@
           <div class="section-body" id="vaccines"></div>
         </details>
       </article>
-      <article class="card accent-rose">
+      <article class="card accent-rose" id="notes-card">
         <details class="section">
           <summary class="section-head">
             <h3>Notes</h3><span class="chev">⌄</span>
@@ -650,7 +687,7 @@
           <div class="section-body" id="notes"></div>
         </details>
       </article>
-      <article class="card accent-teal">
+      <article class="card accent-teal" id="kaiser-card">
         <details class="section">
           <summary class="section-head">
             <h3>Kaiser Data</h3><span class="chev">⌄</span>
