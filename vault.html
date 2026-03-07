@@ -99,6 +99,33 @@
       box-shadow: 0 8px 16px rgba(16, 43, 61, .12);
     }
 
+    .sub-pills {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+
+    .sub-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 5px 10px;
+      border-radius: 12px;
+      background: rgba(15, 43, 61, 0.06);
+      color: #1f475c;
+      font-weight: 700;
+      font-size: 11px;
+      text-decoration: none;
+      border: 1px solid rgba(15, 43, 61, 0.12);
+      transition: transform .14s ease, background .14s ease, box-shadow .14s ease;
+    }
+
+    .sub-pill:hover {
+      background: rgba(15, 43, 61, 0.12);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 12px rgba(16, 43, 61, .12);
+    }
+
     .bottom-tab {
       display: none;
     }
@@ -628,7 +655,13 @@
           <summary class="section-head">
             <h3>Member</h3><span class="chev">⌄</span>
           </summary>
-          <div class="section-body" id="member"></div>
+          <div class="section-body">
+            <div class="sub-pills">
+              <span class="sub-pill">Plan</span>
+              <span class="sub-pill">Member ID</span>
+            </div>
+            <div id="member"></div>
+          </div>
         </details>
       </article>
       <article class="card accent-teal" id="support-card">
@@ -636,7 +669,10 @@
           <summary class="section-head">
             <h3>SCAN Support</h3><span class="chev">⌄</span>
           </summary>
-          <div class="section-body" id="support"></div>
+          <div class="section-body">
+            <div class="sub-pills" id="support-subpills"></div>
+            <div id="support"></div>
+          </div>
         </details>
       </article>
       <article class="card accent-amber" id="benefits-card">
@@ -644,7 +680,10 @@
           <summary class="section-head">
             <h3>Benefits & Programs</h3><span class="chev">⌄</span>
           </summary>
-          <div class="section-body" id="benefits"></div>
+          <div class="section-body">
+            <div class="sub-pills" id="benefits-subpills"></div>
+            <div id="benefits"></div>
+          </div>
         </details>
       </article>
       <article class="card accent-rose" id="pharmacy-card">
@@ -652,7 +691,14 @@
           <summary class="section-head">
             <h3>Pharmacy & Rx</h3><span class="chev">⌄</span>
           </summary>
-          <div class="section-body" id="pharmacy"></div>
+          <div class="section-body">
+            <div class="sub-pills">
+              <span class="sub-pill">Contacts</span>
+              <span class="sub-pill">Medications</span>
+              <span class="sub-pill">Device Notes</span>
+            </div>
+            <div id="pharmacy"></div>
+          </div>
         </details>
       </article>
       <article class="card accent-blue" id="providers-card">
@@ -660,7 +706,15 @@
           <summary class="section-head">
             <h3>Doctors & Networks</h3><span class="chev">⌄</span>
           </summary>
-          <div class="section-body" id="providers"></div>
+          <div class="section-body">
+            <div class="sub-pills">
+              <span class="sub-pill">Primary Care</span>
+              <span class="sub-pill">Endocrinology</span>
+              <span class="sub-pill">Doctor Lookup & Telehealth</span>
+              <span class="sub-pill">Network</span>
+            </div>
+            <div id="providers"></div>
+          </div>
         </details>
       </article>
       <article class="card accent-teal" id="labtests-card">
@@ -668,7 +722,12 @@
           <summary class="section-head">
             <h3>Lab Test Plan</h3><span class="chev">⌄</span>
           </summary>
-          <div class="section-body" id="labtests"></div>
+          <div class="section-body">
+            <div class="sub-pills">
+              <span class="sub-pill">Panel</span>
+            </div>
+            <div id="labtests"></div>
+          </div>
         </details>
       </article>
       <article class="card accent-amber" id="vaccines-card">
@@ -676,7 +735,12 @@
           <summary class="section-head">
             <h3>Vaccines & Immunizations</h3><span class="chev">⌄</span>
           </summary>
-          <div class="section-body" id="vaccines"></div>
+          <div class="section-body">
+            <div class="sub-pills">
+              <span class="sub-pill">Vaccines</span>
+            </div>
+            <div id="vaccines"></div>
+          </div>
         </details>
       </article>
       <article class="card accent-rose" id="notes-card">
@@ -684,7 +748,13 @@
           <summary class="section-head">
             <h3>Notes</h3><span class="chev">⌄</span>
           </summary>
-          <div class="section-body" id="notes"></div>
+          <div class="section-body">
+            <div class="sub-pills">
+              <span class="sub-pill">Symptom Note</span>
+              <span class="sub-pill">Night Tips</span>
+            </div>
+            <div id="notes"></div>
+          </div>
         </details>
       </article>
       <article class="card accent-teal" id="kaiser-card">
@@ -693,6 +763,9 @@
             <h3>Kaiser Data</h3><span class="chev">⌄</span>
           </summary>
           <div class="section-body">
+            <div class="sub-pills">
+              <span class="sub-pill">Summary</span>
+            </div>
             <div id="kaiser-data"></div>
             <div class="muted" style="margin-top:8px;">
               <a class="link" href="./kaiser-health-summary.html" target="_blank" rel="noopener">Open detailed Kaiser health summary</a>
@@ -705,7 +778,10 @@
           <summary class="section-head">
             <h3>Custom Sections</h3><span class="chev">⌄</span>
           </summary>
-          <div class="section-body" id="custom-sections"></div>
+          <div class="section-body">
+            <div class="sub-pills" id="custom-subpills"></div>
+            <div id="custom-sections"></div>
+          </div>
         </details>
       </article>
     </section>
@@ -1004,9 +1080,11 @@
         row('Plan', scan.member?.plan) +
         row('Member ID', `${scan.member?.member_id || "-"} ${copyButton(scan.member?.member_id)}`);
 
-      document.getElementById('support').innerHTML = (scan.support_contacts || []).map((c) =>
+      const supportContacts = scan.support_contacts || [];
+      document.getElementById('support').innerHTML = supportContacts.map((c) =>
         `<div class="row"><div class="v">${c.name || '-'}</div><div>${phoneLink(c.phone)}</div>${c.hours ? `<div class="muted">${c.hours}</div>` : ''}${c.website ? `<div>${link(c.website)} ${copyButton(c.website)}</div>` : ''}${c.notes ? `<div class="muted">${linkifyPhones(c.notes)}</div>` : ''}</div>`
       ).join('') || row('Support', 'No data');
+      document.getElementById('support-subpills').innerHTML = supportContacts.map((c) => `<span class="sub-pill">${c.name || 'Contact'}</span>`).join('');
       const afterHours = (scan.support_contacts || []).filter((c) =>
         /after[- ]?hours|telehealth|nurse advice/i.test(`${c.name || ""} ${c.notes || ""}`)
       );
@@ -1021,9 +1099,11 @@
         afterHoursPanel.classList.add("hidden");
       }
 
-      document.getElementById('benefits').innerHTML = (scan.benefits_programs || []).map((b) =>
+      const benefitsPrograms = scan.benefits_programs || [];
+      document.getElementById('benefits').innerHTML = benefitsPrograms.map((b) =>
         `<div class="row"><div class="v">${b.title || '-'}</div>${b.phone ? `<div>${phoneLink(b.phone)}</div>` : ''}${b.email ? `<div>${b.email} ${copyButton(b.email)}</div>` : ''}${b.website ? `<div>${link(b.website)} ${copyButton(b.website)}</div>` : ''}${b.details ? list(b.details) : ''}</div>`
       ).join('') || row('Benefits', 'No data');
+      document.getElementById('benefits-subpills').innerHTML = benefitsPrograms.map((b) => `<span class="sub-pill">${b.title || 'Program'}</span>`).join('');
 
       const rx = scan.pharmacy_prescriptions || {};
       document.getElementById('pharmacy').innerHTML =
@@ -1032,11 +1112,22 @@
         `<div class="row"><div class="v">Device Notes</div>${list(rx.device_notes || [])}</div>`;
 
       const prov = scan.providers || {};
+      const primaryCare = prov.primary_care || [];
+      const endo = prov.endocrinology || [];
+      const lookup = prov.doctor_lookup || [];
+      const networks = prov.network || [];
       document.getElementById('providers').innerHTML =
-        `<div class="row"><div class="v">Primary Care</div>${list((prov.primary_care || []).map((d) => `${d.name || '-'}${d.phone ? ` • ${phoneInline(d.phone)}` : ''}${d.address ? ` • ${d.address}` : ''}${d.appointment ? ` • ${d.appointment}` : ''}`))}</div>` +
-        `<div class="row"><div class="v">Endocrinology</div>${list((prov.endocrinology || []).map((d) => `${d.name || '-'}${d.phone ? ` • ${phoneInline(d.phone)}` : ''}${d.address ? ` • ${d.address}` : ''}`))}</div>` +
-        `<div class="row"><div class="v">Doctor Lookup & Telehealth</div>${list((prov.doctor_lookup || []).map((d) => `${d.title || '-'}${d.url ? ` • ${link(d.url)}` : ''}${d.notes ? ` • ${d.notes}` : ''}`))}</div>` +
-        `<div class="row"><div class="v">Network</div>${list((prov.network || []).map((n) => `${n.name || '-'}${n.phone ? ` • ${phoneInline(n.phone)}` : ''}${n.support ? ` • support ${phoneInline(n.support)}` : ''}${n.website ? ` • ${link(n.website)}` : ''}`))}</div>`;
+        `<div class="row"><div class="v">Primary Care</div>${list(primaryCare.map((d) => `${d.name || '-'}${d.phone ? ` • ${phoneInline(d.phone)}` : ''}${d.address ? ` • ${d.address}` : ''}${d.appointment ? ` • ${d.appointment}` : ''}`))}</div>` +
+        `<div class="row"><div class="v">Endocrinology</div>${list(endo.map((d) => `${d.name || '-'}${d.phone ? ` • ${phoneInline(d.phone)}` : ''}${d.address ? ` • ${d.address}` : ''}`))}</div>` +
+        `<div class="row"><div class="v">Doctor Lookup & Telehealth</div>${list(lookup.map((d) => `${d.title || '-'}${d.url ? ` • ${link(d.url)}` : ''}${d.notes ? ` • ${d.notes}` : ''}`))}</div>` +
+        `<div class="row"><div class="v">Network</div>${list(networks.map((n) => `${n.name || '-'}${n.phone ? ` • ${phoneInline(n.phone)}` : ''}${n.support ? ` • support ${phoneInline(n.support)}` : ''}${n.website ? ` • ${link(n.website)}` : ''}`))}</div>`;
+      document.getElementById('custom-subpills').innerHTML = '';
+      const providerPills = [];
+      if (primaryCare.length) providerPills.push('Primary Care');
+      if (endo.length) providerPills.push('Endocrinology');
+      if (lookup.length) providerPills.push('Doctor Lookup & Telehealth');
+      if (networks.length) providerPills.push('Network');
+      document.getElementById('providers-card').querySelector('.sub-pills').innerHTML = providerPills.map((t) => `<span class="sub-pill">${t}</span>`).join('');
 
       document.getElementById('labtests').innerHTML = list(scan.lab_test_plan || []);
       const vacc = scan.vaccines || [];
@@ -1074,13 +1165,16 @@
       const customEntries = Object.entries(scan).filter(([k]) => !known.has(k));
       const customCard = document.getElementById("custom-sections-card");
       const customRoot = document.getElementById("custom-sections");
+      const customPillRoot = document.getElementById("custom-subpills");
       if (customEntries.length) {
         customRoot.innerHTML = customEntries.map(([k, v]) =>
           `<div class="row"><div class="v">${k}</div>${typeof v === "object" ? list(v) : `<div>${linkifyPhones(String(v))}</div>`}</div>`
         ).join("");
+        customPillRoot.innerHTML = customEntries.map(([k]) => `<span class="sub-pill">${k}</span>`).join("");
         customCard.classList.remove("hidden");
       } else {
         customRoot.innerHTML = "";
+        customPillRoot.innerHTML = "";
         customCard.classList.add("hidden");
       }
 
