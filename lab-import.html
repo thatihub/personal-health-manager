@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lab Import + Review</title>
+  <style>
+    :root {
+      --ink: #123449;
+      --muted: #4d697a;
+      --line: rgba(18, 52, 73, .16);
+      --panel: rgba(255, 255, 255, .92);
+      --shadow: 0 14px 30px rgba(18, 52, 73, .12);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Avenir Next", "Trebuchet MS", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 8%, rgba(11,126,166,.18), transparent 34%),
+        radial-gradient(circle at 86% 16%, rgba(227,143,31,.14), transparent 32%),
+        linear-gradient(160deg, #f2faff 0%, #fffaf2 48%, #f3fff9 100%);
+      min-height: 100vh;
+      padding: 18px;
+    }
+    .wrap { max-width: 1120px; margin: 0 auto; }
+    .nav { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+    .nav a {
+      text-decoration: none;
+      padding: 9px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.9);
+      color: #264a5f;
+      font-weight: 700;
+      font-size: 13px;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+    }
+    .nav a.active { background: linear-gradient(120deg, #0b7ea8, #e38f1f); color: #fff; border-color: transparent; }
+    h1 { margin: 0 0 6px; font-family: "Avenir Next Condensed", "Trebuchet MS", sans-serif; font-size: clamp(26px, 4vw, 42px); }
+    .sub { color: var(--muted); margin-bottom: 12px; }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+    .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 10px; }
+    .row label { font-weight: 700; color: #2c5065; }
+    input, select, textarea {
+      min-height: 40px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      padding: 8px 10px;
+      font-size: 14px;
+    }
+    textarea { width: 100%; min-height: 190px; resize: vertical; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    .btn {
+      min-height: 40px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,.25);
+      background: linear-gradient(120deg, #0b7ea8, #16a584);
+      color: #fff;
+      padding: 8px 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .btn.secondary {
+      background: #fff;
+      color: #285066;
+      border: 1px solid var(--line);
+    }
+    .status {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 10px;
+      background: rgba(255,255,255,.86);
+      color: #32586e;
+      white-space: pre-wrap;
+      font-size: 13px;
+    }
+    .hint { font-size: 12px; color: var(--muted); margin-top: 6px; }
+    .table-wrap { overflow: auto; border: 1px solid var(--line); border-radius: 12px; }
+    table { width: 100%; border-collapse: collapse; min-width: 980px; background: #fff; }
+    th, td { border-bottom: 1px solid var(--line); text-align: left; padding: 8px; font-size: 13px; }
+    th { background: #f2f8fc; font-size: 11px; text-transform: uppercase; letter-spacing: .4px; color: #2f5367; }
+    .pill {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 3px 8px;
+      background: #eef4f8;
+      color: #34596e;
+      font-size: 11px;
+      font-weight: 700;
+    }
+  </style>
+  <link rel="stylesheet" href="./companion_theme.css" />
+</head>
+<body class="page-import">
+  <div class="wrap">
+    <nav class="nav">
+      <a href="./index.html">Home</a>
+      <a href="./dashboard.html">Lab Results Dashboard</a>
+      <a href="./bio-age.html">Biological Age</a>
+      <a class="active" href="./lab-import.html">Lab Import + Review</a>
+      <a href="./admin.html">Admin</a>
+    </nav>
+
+    <h1>Lab Import + Review</h1>
+    <div class="sub">Paste CSV/text from Quest, Labcorp, Kaiser, screenshots/OCR, or portal exports. Review normalized rows, then save.</div>
+
+    <section class="panel">
+      <div class="row">
+        <label for="source">Source</label>
+        <select id="source">
+          <option>Quest</option>
+          <option>Labcorp</option>
+          <option>Kaiser</option>
+          <option>Sutter</option>
+          <option>Stanford</option>
+          <option>El Camino / MyChart</option>
+          <option selected>Unknown</option>
+        </select>
+        <label for="source-type">Input Type</label>
+        <select id="source-type">
+          <option value="text" selected>Pasted text</option>
+          <option value="csv">CSV</option>
+          <option value="ocr">Screenshot OCR</option>
+          <option value="pdf">PDF text</option>
+        </select>
+        <label for="collection-date">Collection Date</label>
+        <input id="collection-date" type="date" />
+        <label for="file-name">File Name (optional)</label>
+        <input id="file-name" type="text" placeholder="Labcorp Feb 2026.pdf" />
+      </div>
+      <textarea id="raw-input" placeholder="Examples:
+test,value,unit,collection_date,ref_low,ref_high
+HbA1c,7.4,%,2025-09-12,4.8,5.6
+Glucose,147,mg/dL,2025-09-12,65,99
+
+Or pipe format:
+TSH | 12.7 | uIU/mL | 2026-02-01"></textarea>
+      <div class="row" style="margin-top:10px;">
+        <button class="btn" id="preview-btn" type="button">Preview Extraction</button>
+        <button class="btn secondary" id="save-btn" type="button">Save Normalized Rows</button>
+        <a class="btn secondary" href="./admin.html" style="text-decoration:none;display:inline-flex;align-items:center;">Upload PDF via Admin</a>
+      </div>
+      <div class="hint">For PDFs/images: use OCR or Admin PDF upload, then paste text here for review and correction.</div>
+    </section>
+
+    <section class="panel">
+      <div id="status" class="status">Ready. Paste rows and click Preview Extraction.</div>
+    </section>
+
+    <section class="panel">
+      <h3 style="margin:0 0 8px;">Preview Rows</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Source</th>
+              <th>Original Test</th>
+              <th>Standard Test</th>
+              <th>Value</th>
+              <th>Unit</th>
+              <th>Section</th>
+              <th>Flag</th>
+            </tr>
+          </thead>
+          <tbody id="preview-body">
+            <tr><td colspan="8">No preview yet.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    let currentPreview = [];
+    let currentDuplicates = [];
+    const statusNode = document.getElementById("status");
+    const previewBody = document.getElementById("preview-body");
+    const setStatus = (msg) => { statusNode.textContent = msg; };
+
+    function renderPreviewRows(rows) {
+      if (!rows.length) {
+        previewBody.innerHTML = "<tr><td colspan='8'>No normalized rows found.</td></tr>";
+        return;
+      }
+      previewBody.innerHTML = rows.map((r) => `
+        <tr>
+          <td>${r.collection_date || "-"}</td>
+          <td>${r.lab_source || "-"}</td>
+          <td>${r.original_test_name || "-"}</td>
+          <td>${r.standard_test_name || "-"}</td>
+          <td>${r.value_numeric ?? "-"}</td>
+          <td>${r.standard_unit || "-"}</td>
+          <td>${r.section_name || "-"}</td>
+          <td><span class="pill">${r.flag || "-"}</span></td>
+        </tr>
+      `).join("");
+    }
+
+    function payloadForPreview() {
+      return {
+        source: document.getElementById("source").value,
+        source_type: document.getElementById("source-type").value,
+        collection_date: document.getElementById("collection-date").value,
+        file_name: document.getElementById("file-name").value,
+        text: document.getElementById("raw-input").value
+      };
+    }
+
+    async function previewImport() {
+      const payload = payloadForPreview();
+      if (!payload.text.trim()) {
+        setStatus("Paste text or CSV content first.");
+        return;
+      }
+      setStatus("Running extraction + normalization preview...");
+      try {
+        const res = await fetch("/api/ag-import/preview", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        const out = await res.json();
+        if (!res.ok || !out.ok) {
+          setStatus(`Preview failed: ${out.error || "Unknown error"}`);
+          return;
+        }
+        currentPreview = out.normalized_rows || [];
+        currentDuplicates = out.likely_duplicates || [];
+        renderPreviewRows(currentPreview);
+        const uncertainCount = (out.uncertain_rows || []).length;
+        setStatus(
+          `Preview complete.\nRows found: ${out.rows_found}\nNormalized rows: ${currentPreview.length}\nLikely duplicates: ${currentDuplicates.length}\nUncertain rows: ${uncertainCount}`
+        );
+      } catch (err) {
+        setStatus(`Preview failed: ${err.message || err}`);
+      }
+    }
+
+    async function saveImport() {
+      if (!currentPreview.length) {
+        setStatus("Run preview first so we only save reviewed normalized rows.");
+        return;
+      }
+      const payload = payloadForPreview();
+      setStatus("Saving normalized rows...");
+      try {
+        const res = await fetch("/api/ag-import/commit", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            source: payload.source,
+            source_type: payload.source_type,
+            file_name: payload.file_name,
+            collection_date: payload.collection_date,
+            raw_text: payload.text,
+            normalized_rows: currentPreview
+          })
+        });
+        const out = await res.json();
+        if (!res.ok || !out.ok) {
+          setStatus(`Save failed: ${out.error || "Unknown error"}`);
+          return;
+        }
+        setStatus(`Saved.\nReport ID: ${out.report_id}\nRows saved: ${out.saved_rows}\nRows skipped (duplicates/invalid): ${out.skipped_rows}`);
+      } catch (err) {
+        setStatus(`Save failed: ${err.message || err}`);
+      }
+    }
+
+    document.getElementById("preview-btn").addEventListener("click", previewImport);
+    document.getElementById("save-btn").addEventListener("click", saveImport);
+  </script>
+</body>
+</html>

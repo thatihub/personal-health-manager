@@ -216,6 +216,8 @@ body.page-vault { --page-accent: #f0a43a; --page-accent-2: #cf8417; }
 body.page-cabinet { --page-accent: #ef6f59; --page-accent-2: #cf5541; }
 body.page-admin { --page-accent: #14b8a6; --page-accent-2: #0f8f82; }
 body.page-history { --page-accent: #60a5fa; --page-accent-2: #3c84db; }
+body.page-bioage { --page-accent: #1aa672; --page-accent-2: #0f8368; }
+body.page-import { --page-accent: #e38f1f; --page-accent-2: #be7415; }
 
 /* Distinct graph panel title colors (Dashboard) */
 body.page-dashboard .grid > .card:nth-child(1) .chart-head h3 { color: #67d8ff !important; }

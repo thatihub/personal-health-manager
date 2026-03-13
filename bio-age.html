@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Biological Age Dashboard</title>
+  <style>
+    :root {
+      --ink: #103145;
+      --muted: #4f6d7f;
+      --line: rgba(16, 49, 69, 0.16);
+      --panel: rgba(255, 255, 255, 0.9);
+      --shadow: 0 14px 30px rgba(16, 49, 69, 0.12);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Avenir Next", "Trebuchet MS", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 10% 8%, rgba(20, 166, 128, .18), transparent 34%),
+        radial-gradient(circle at 90% 18%, rgba(11, 126, 166, .16), transparent 32%),
+        linear-gradient(160deg, #f2fbff 0%, #fffaf2 45%, #f3fff8 100%);
+      min-height: 100vh;
+      padding: 18px;
+    }
+    .wrap { max-width: 1180px; margin: 0 auto; }
+    .nav {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+    .nav a {
+      text-decoration: none;
+      padding: 9px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, .9);
+      color: #26495f;
+      font-weight: 700;
+      font-size: 13px;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+    }
+    .nav a.active { background: linear-gradient(120deg, #0b7ea8, #16a989); color: #fff; border-color: transparent; }
+    .hero {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+    h1 { margin: 0 0 6px; font-size: clamp(26px, 4vw, 42px); font-family: "Avenir Next Condensed", "Trebuchet MS", sans-serif; }
+    .sub { color: var(--muted); margin-bottom: 12px; }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 10px;
+    }
+    .stat {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 10px;
+    }
+    .label { font-size: 11px; text-transform: uppercase; color: var(--muted); letter-spacing: .4px; }
+    .val { font-size: 24px; font-weight: 800; margin-top: 3px; }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+    .row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .row select, .row input {
+      min-height: 40px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      padding: 8px 10px;
+      background: #fff;
+      color: var(--ink);
+    }
+    .section-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 10px;
+    }
+    .section-card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-left: 7px solid #9ca3af;
+      border-radius: 12px;
+      padding: 10px;
+    }
+    .section-name { font-weight: 800; font-size: 14px; }
+    .section-score { font-size: 26px; font-weight: 900; margin-top: 3px; }
+    .meta { color: var(--muted); font-size: 12px; margin-top: 2px; }
+    .table-wrap { overflow: auto; border-radius: 12px; border: 1px solid var(--line); }
+    table { width: 100%; border-collapse: collapse; background: #fff; min-width: 860px; }
+    th, td { padding: 8px; border-bottom: 1px solid var(--line); text-align: left; font-size: 13px; }
+    th { text-transform: uppercase; letter-spacing: .4px; font-size: 11px; color: #2e5367; background: #f3f8fc; }
+    .pill {
+      display: inline-block;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 11px;
+      padding: 3px 9px;
+      background: #eef4f8;
+      color: #32566b;
+    }
+  </style>
+  <link rel="stylesheet" href="./companion_theme.css" />
+</head>
+<body class="page-bioage">
+  <div class="wrap">
+    <nav class="nav">
+      <a href="./index.html">Home</a>
+      <a href="./dashboard.html">Lab Results Dashboard</a>
+      <a class="active" href="./bio-age.html">Biological Age</a>
+      <a href="./lab-import.html">Lab Import + Review</a>
+      <a href="./vault.html">Health Vault</a>
+      <a href="./admin.html">Admin</a>
+    </nav>
+
+    <section class="hero">
+      <h1>Biological + Metabolic Age</h1>
+      <div class="sub">Educational trend score based on longitudinal labs. Not a diagnosis.</div>
+      <div class="stats" id="summary-stats"></div>
+    </section>
+
+    <section class="panel">
+      <div class="row">
+        <label for="source-filter"><strong>Lab source</strong></label>
+        <select id="source-filter">
+          <option value="">All sources</option>
+        </select>
+        <label for="test-filter"><strong>Standard test</strong></label>
+        <select id="test-filter">
+          <option value="">All tests</option>
+        </select>
+      </div>
+      <div class="section-grid" id="section-cards"></div>
+    </section>
+
+    <section class="panel">
+      <h3 style="margin:0 0 8px;">Normalized Timeline</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Source</th>
+              <th>Section</th>
+              <th>Test</th>
+              <th>Value</th>
+              <th>Unit</th>
+              <th>Flag</th>
+            </tr>
+          </thead>
+          <tbody id="timeline-body">
+            <tr><td colspan="7">Loading...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    function colorFor(borderColor) {
+      if (borderColor === "green") return "#1b9d6f";
+      if (borderColor === "yellow") return "#c2911a";
+      if (borderColor === "orange") return "#d47b16";
+      if (borderColor === "red") return "#c83f4f";
+      return "#9ca3af";
+    }
+
+    function fmt(v) {
+      if (v === null || v === undefined || v === "") return "-";
+      if (typeof v === "number") return Number.isInteger(v) ? String(v) : v.toFixed(1);
+      return String(v);
+    }
+
+    function trendArrow(t) {
+      if (t === "up") return "Improving";
+      if (t === "down") return "Worsening";
+      if (t === "flat") return "Stable";
+      return "No trend";
+    }
+
+    async function loadDashboard() {
+      const res = await fetch("/api/ag-dashboard-data");
+      const data = await res.json();
+      if (!res.ok || !data.ok) {
+        document.getElementById("timeline-body").innerHTML = "<tr><td colspan='7'>Failed to load AG data.</td></tr>";
+        return;
+      }
+
+      const summary = [
+        ["Chronological Age", data.chronological_age],
+        ["Overall Score", data.overall_score],
+        ["Estimated Bio Age", data.estimated_bio_age],
+        ["Age Delta", `${data.age_delta_years >= 0 ? "+" : ""}${data.age_delta_years} years`],
+        ["Confidence", String(data.confidence || "").toUpperCase()],
+        ["Last Updated", data.latest_date || "-"],
+      ];
+      document.getElementById("summary-stats").innerHTML = summary
+        .map(([label, value]) => `<div class="stat"><div class="label">${label}</div><div class="val">${value}</div></div>`)
+        .join("");
+
+      document.getElementById("section-cards").innerHTML = (data.section_scores || []).map((sec) => `
+        <article class="section-card" style="border-left-color:${colorFor(sec.border_color)};">
+          <div class="section-name">${sec.section_name}</div>
+          <div class="section-score">${sec.score === null ? "-" : sec.score}</div>
+          <div class="meta">${trendArrow(sec.trend)} • ${sec.markers_present}/${sec.markers_total} markers</div>
+          <div class="meta">Weight ${sec.weight}% • ${sec.border_color.toUpperCase()} border</div>
+        </article>
+      `).join("");
+
+      const sourceFilter = document.getElementById("source-filter");
+      const testFilter = document.getElementById("test-filter");
+      const rows = Array.isArray(data.normalized_results) ? data.normalized_results : [];
+      const sources = [...new Set(rows.map((r) => String(r.lab_source || "Unknown")))].sort();
+      const tests = [...new Set(rows.map((r) => String(r.standard_test_name || "")))].filter(Boolean).sort();
+      sourceFilter.innerHTML = `<option value="">All sources</option>${sources.map((s) => `<option value="${s}">${s}</option>`).join("")}`;
+      testFilter.innerHTML = `<option value="">All tests</option>${tests.map((t) => `<option value="${t}">${t}</option>`).join("")}`;
+
+      const renderRows = () => {
+        const selectedSource = sourceFilter.value;
+        const selectedTest = testFilter.value;
+        const filtered = rows.filter((r) => {
+          if (selectedSource && String(r.lab_source || "") !== selectedSource) return false;
+          if (selectedTest && String(r.standard_test_name || "") !== selectedTest) return false;
+          return true;
+        });
+        filtered.sort((a, b) => String(a.collection_date || "").localeCompare(String(b.collection_date || "")));
+        const html = filtered.slice(-500).reverse().map((r) => `
+          <tr>
+            <td>${fmt(r.collection_date)}</td>
+            <td>${fmt(r.lab_source)}</td>
+            <td>${fmt(r.section_name)}</td>
+            <td>${fmt(r.standard_test_name)}</td>
+            <td>${fmt(r.value_numeric)}</td>
+            <td>${fmt(r.standard_unit)}</td>
+            <td><span class="pill">${fmt(r.flag)}</span></td>
+          </tr>
+        `).join("");
+        document.getElementById("timeline-body").innerHTML = html || "<tr><td colspan='7'>No matching rows.</td></tr>";
+      };
+
+      sourceFilter.addEventListener("change", renderRows);
+      testFilter.addEventListener("change", renderRows);
+      renderRows();
+    }
+
+    loadDashboard();
+  </script>
+</body>
+</html>

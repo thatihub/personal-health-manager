@@ -4,6 +4,8 @@ Personal health workspace with:
 
 - `index.html` - Home
 - `dashboard.html` - Lab Results Dashboard (lab trends)
+- `bio-age.html` - Biological/Metabolic age dashboard (section scores + age delta)
+- `lab-import.html` - Multi-lab import/review (paste CSV/text -> normalize -> save)
 - `bp.html` - Blood Pressure Dashboard (last 90 days)
 - `vault.html` - Health Vault (insurance links, contacts, scanned-doc index)
 
@@ -28,6 +30,12 @@ This regenerates:
 - `consolidated_labs.csv`
 - `consolidated_labs.json`
 - `dashboard_data.js`
+
+## AG / Biological Age APIs
+
+- `GET /api/ag-dashboard-data` -> normalized timeline + section scores + age estimate snapshot
+- `POST /api/ag-import/preview` -> parse/normalize pasted text or CSV rows and return review preview
+- `POST /api/ag-import/commit` -> save reviewed normalized rows to `ag_lab_imports.json`
 
 ## Configure source folder (optional)
 
