@@ -1072,6 +1072,19 @@
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
         scan = data.scan_2026 || {};
+        // Ensure ExtraCare number is always shown in full, even if an older source has a masked value.
+        if (Array.isArray(scan.benefits_programs)) {
+          scan.benefits_programs = scan.benefits_programs.map((item) => {
+            if (!item || typeof item !== "object") return item;
+            const title = String(item.title || "").toLowerCase();
+            if (!title.includes("extracare")) return item;
+            const details = Array.isArray(item.details) ? item.details : [];
+            const nextDetails = details.map((d) =>
+              String(d).replace(/ExtraCare number:\s*\*+\s*\*+\s*8878/i, "ExtraCare number: 4879312548878")
+            );
+            return { ...item, details: nextDetails };
+          });
+        }
       } catch (_err) {
         scan = {};
       }
