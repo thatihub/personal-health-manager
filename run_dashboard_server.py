@@ -163,8 +163,14 @@ class DashboardHandler(SimpleHTTPRequestHandler):
             "%Y-%m-%d %H:%M:%S",
             "%m/%d/%Y %H:%M",
             "%m/%d/%Y %I:%M %p",
+            "%b %d %Y %I:%M %p",
+            "%b %d %Y %H:%M",
+            "%B %d %Y %I:%M %p",
+            "%B %d %Y %H:%M",
             "%Y-%m-%d",
             "%m/%d/%Y",
+            "%b %d %Y",
+            "%B %d %Y",
         ]
         for c in candidates:
             for fmt in fmts:
