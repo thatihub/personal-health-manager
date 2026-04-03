@@ -203,6 +203,18 @@
       return t;
     }
 
+    function showNoDataInChart(svgId, message = "No BP data for last 90 days") {
+      const svg = document.getElementById(svgId);
+      if (!svg) return;
+      const w = svg.clientWidth || 1000;
+      const h = svg.clientHeight || 230;
+      svg.setAttribute("viewBox", `0 0 ${w} ${h}`);
+      svg.innerHTML = `
+        <rect x="0" y="0" width="${w}" height="${h}" fill="rgba(9,16,24,0.35)"></rect>
+        <text x="${w / 2}" y="${h / 2}" text-anchor="middle" fill="#c7d8e6" font-size="14" font-weight="700">${message}</text>
+      `;
+    }
+
     function drawSingle(rows, svgId, key, color, metaId) {
       const svg = document.getElementById(svgId);
       const w = svg.clientWidth || 1000;
@@ -265,8 +277,14 @@
         const out = await res.json();
         const rows = (out.rows || []).slice();
         if (!rows.length) {
-          kpis.innerHTML = `<div class="card empty">No BP data for last 90 days.</div>`;
+          kpis.innerHTML = `
+            <div><div class="kpi-label">Status</div><div class="kpi-val empty" style="font-size:20px;">No BP data in last 90 days</div></div>
+            <div><div class="kpi-label">Next step</div><div class="kpi-val" style="font-size:18px;">Upload BP CSV from Admin page</div></div>
+          `;
           body.innerHTML = `<tr><td colspan="5" class="empty">No BP data for last 90 days.</td></tr>`;
+          showNoDataInChart("bp-chart-sys");
+          showNoDataInChart("bp-chart-dias");
+          showNoDataInChart("bp-chart-pulse");
           return;
         }
         const latest = rows[rows.length - 1];
