@@ -183,6 +183,26 @@
       return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
     }
 
+    function fmtTime(timeRaw) {
+      const t = String(timeRaw || "").trim();
+      if (!t) return "-";
+      const m24 = t.match(/^(\d{1,2}):(\d{2})(?::\d{2})?$/);
+      if (m24) {
+        let h = Number(m24[1]);
+        const mm = m24[2];
+        const ampm = h >= 12 ? "PM" : "AM";
+        h = h % 12 || 12;
+        return `${h}:${mm} ${ampm}`;
+      }
+      const m12 = t.match(/^(\d{1,2}):(\d{2})\s*([AaPp][Mm])$/);
+      if (m12) {
+        const h = Number(m12[1]) % 12 || 12;
+        const mm = m12[2];
+        return `${h}:${mm} ${m12[3].toUpperCase()}`;
+      }
+      return t;
+    }
+
     function drawSingle(rows, svgId, key, color, metaId) {
       const svg = document.getElementById(svgId);
       const w = svg.clientWidth || 1000;
@@ -209,17 +229,23 @@
         const frac = i / 3;
         const yy = pad.t + frac * innerH;
         const tickVal = (max - frac * (max - min)).toFixed(0);
-        html += `<line x1="${pad.l}" y1="${yy}" x2="${pad.l + innerW}" y2="${yy}" stroke="#95b1c7" stroke-dasharray="3 4"/>`;
+        html += `<line x1="${pad.l}" y1="${yy}" x2="${pad.l + innerW}" y2="${yy}" stroke="#95b1c7" stroke-opacity="0.45" stroke-dasharray="3 4" stroke-width="0.9"/>`;
         html += `<text x="${pad.l - 6}" y="${yy + 4}" text-anchor="end" fill="#5b7890" font-size="10" font-weight="700">${tickVal}</text>`;
       }
-      html += `<line x1="${pad.l}" y1="${centerY}" x2="${pad.l + innerW}" y2="${centerY}" stroke="#c5d9e8" stroke-dasharray="5 5" stroke-width="1.1"/>`;
+      html += `<line x1="${pad.l}" y1="${centerY}" x2="${pad.l + innerW}" y2="${centerY}" stroke="#c5d9e8" stroke-opacity="0.65" stroke-dasharray="5 5" stroke-width="0.9"/>`;
       html += `<text x="${pad.l + 6}" y="${centerY - 6}" fill="#35566d" font-size="11" font-weight="800">${centerVal}</text>`;
 
       const path = rows.map((r, i) => `${i ? "L" : "M"}${x(i)} ${y(Number(r[key]))}`).join(" ");
-      html += `<path d="${path}" fill="none" stroke="${color}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`;
+      html += `<path d="${path}" fill="none" stroke="${color}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>`;
 
+      const markerStep = Math.max(4, Math.floor(rows.length / 18));
       rows.forEach((r, i) => {
-        html += `<circle cx="${x(i)}" cy="${y(Number(r[key]))}" r="3.8" fill="${color}" stroke="#ffffff" stroke-width="1.1"/>`;
+        const isMajor = i === 0 || i === rows.length - 1 || i % markerStep === 0;
+        if (!isMajor) return;
+        const isLast = i === rows.length - 1;
+        const radius = isLast ? 2.6 : 1.8;
+        const strokeWidth = isLast ? 1.0 : 0.7;
+        html += `<circle cx="${x(i)}" cy="${y(Number(r[key]))}" r="${radius}" fill="${color}" stroke="#ffffff" stroke-width="${strokeWidth}"/>`;
       });
 
       const last = rows.length - 1;
@@ -252,7 +278,7 @@
           <div class="card"><div class="kpi-label">90d Avg SYS/DIAS</div><div class="kpi-val">${avg("systolic")}/${avg("diastolic")}</div></div>
         `;
         body.innerHTML = rows.slice().reverse().map(r =>
-          `<tr><td>${fmtDate(r.date)}</td><td>${r.time}</td><td>${r.systolic}</td><td>${r.diastolic}</td><td>${r.pulse}</td></tr>`
+          `<tr><td>${fmtDate(r.date)}</td><td>${fmtTime(r.time)}</td><td>${r.systolic}</td><td>${r.diastolic}</td><td>${r.pulse}</td></tr>`
         ).join("");
         drawSingle(rows, "bp-chart-sys", "systolic", "#58c8ff", "meta-sys");
         drawSingle(rows, "bp-chart-dias", "diastolic", "#7ee08f", "meta-dias");
