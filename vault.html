@@ -1120,7 +1120,16 @@
       document.getElementById('benefits-subpills').innerHTML = benefitsPrograms.map((b) => `<span class="sub-pill">${b.title || 'Program'}</span>`).join('');
 
       const rx = scan.pharmacy_prescriptions || {};
-      const savingsCard = rx.prescription_savings_card || {};
+      const savingsCard = {
+        title: 'Prescription Savings Card',
+        description: 'Show this card to your pharmacist and save up to 80% on prescriptions.',
+        member_id: scan.member?.member_id,
+        member_id_note: 'Your 11-digit SCAN Health Member ID',
+        bin: '025219',
+        pcn: 'WDBRX',
+        group: 'SCAN',
+        ...(rx.prescription_savings_card || {})
+      };
       const savingsCardHtml = savingsCard.title
         ? `<div class="row">
             <div class="v">${savingsCard.title}</div>
