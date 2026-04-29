@@ -92,6 +92,15 @@
       }
     ],
     "pharmacy_prescriptions": {
+      "prescription_savings_card": {
+        "title": "Prescription Savings Card",
+        "description": "Show this card to your pharmacist and save up to 80% on prescriptions.",
+        "member_id": "40083848601",
+        "member_id_note": "Your 11-digit SCAN Health Member ID",
+        "bin": "025219",
+        "pcn": "WDBRX",
+        "group": "SCAN"
+      },
       "pharmacy_contacts": [
         {
           "name": "Express Scripts",

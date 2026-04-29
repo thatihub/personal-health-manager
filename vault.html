@@ -693,6 +693,7 @@
           </summary>
           <div class="section-body">
             <div class="sub-pills">
+              <span class="sub-pill">Savings Card</span>
               <span class="sub-pill">Contacts</span>
               <span class="sub-pill">Medications</span>
               <span class="sub-pill">Device Notes</span>
@@ -1119,7 +1120,20 @@
       document.getElementById('benefits-subpills').innerHTML = benefitsPrograms.map((b) => `<span class="sub-pill">${b.title || 'Program'}</span>`).join('');
 
       const rx = scan.pharmacy_prescriptions || {};
+      const savingsCard = rx.prescription_savings_card || {};
+      const savingsCardHtml = savingsCard.title
+        ? `<div class="row">
+            <div class="v">${savingsCard.title}</div>
+            ${savingsCard.description ? `<div class="muted">${savingsCard.description}</div>` : ''}
+            <div><span class="chip">Member ID</span> ${savingsCard.member_id || scan.member?.member_id || '-'} ${copyButton(savingsCard.member_id || scan.member?.member_id)}</div>
+            ${savingsCard.member_id_note ? `<div class="muted">${savingsCard.member_id_note}</div>` : ''}
+            <div><span class="chip">BIN</span> ${savingsCard.bin || '-'} ${copyButton(savingsCard.bin)}</div>
+            <div><span class="chip">PCN</span> ${savingsCard.pcn || '-'} ${copyButton(savingsCard.pcn)}</div>
+            <div><span class="chip">GROUP</span> ${savingsCard.group || '-'} ${copyButton(savingsCard.group)}</div>
+          </div>`
+        : '';
       document.getElementById('pharmacy').innerHTML =
+        savingsCardHtml +
         `<div class="row"><div class="v">Contacts</div>${(rx.pharmacy_contacts || []).map((p) => `<div><span class="chip">${p.name || '-'}</span> ${phoneLink(p.phone)} ${p.website ? `• ${link(p.website)} ${copyButton(p.website)}` : ''}${p.notes ? `<div class="muted">${linkifyPhones(p.notes)}</div>` : ''}</div>`).join('')}</div>` +
         `<div class="row"><div class="v">Medications</div>${list(rx.active_medications || [])}</div>` +
         `<div class="row"><div class="v">Device Notes</div>${list(rx.device_notes || [])}</div>`;
