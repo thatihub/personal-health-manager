@@ -147,13 +147,15 @@ def fetch_youtube_comments(video_url: str, max_comments: int, include_replies: b
             tags.append("Possible useful pattern")
         c["aiTags"] = tags
     
+    transcript_err = ""
     result = {
         "ok": True,
         "videoInfo": video_info,
         "totalFetched": len(all_comments),
         "totalReplies": sum(1 for c in all_comments if c["isReply"]),
         "comments": all_comments,
-        "transcript": ""
+        "transcript": "",
+        "transcriptError": ""
     }
     
     if analysis_mode in ["video_only", "both"]:
@@ -163,8 +165,10 @@ def fetch_youtube_comments(video_url: str, max_comments: int, include_replies: b
             transcript_text = " ".join([snippet.text for snippet in transcript_obj.snippets])
             result["transcript"] = transcript_text
         except Exception as e:
-            print("Failed to fetch transcript:", str(e))
+            transcript_err = str(e)
+            print("Failed to fetch transcript:", transcript_err)
             result["transcript"] = ""
+            result["transcriptError"] = transcript_err
 
     return result
 
@@ -210,7 +214,8 @@ def analyze_ai_summary(comments: list, user_context: dict, transcript: str = "")
             # Limit transcript length to roughly 10000 chars to save tokens
             prompt += f"Video Transcript:\n{transcript[:10000]}\n\n"
         else:
-            prompt += "Video Transcript: [No transcript available for this video.]\nPlease note: Return an error message in the summary that no transcript was found, instead of hallucinating content.\n\n"
+            err_msg = user_context.get("transcriptError", "Unknown error")
+            prompt += f"Video Transcript: [No transcript available for this video.]\nError Details: {err_msg}\nPlease note: Return an error message in the summary that no transcript was found, and explicitly mention the Error Details ({err_msg}) so the user can debug it, instead of hallucinating content.\n\n"
         
     if comments and mode in ["comments_only", "both"]:
         prompt += "Comments:\n"

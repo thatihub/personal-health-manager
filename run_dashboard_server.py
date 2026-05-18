@@ -1590,9 +1590,11 @@ class DashboardHandler(SimpleHTTPRequestHandler):
             comments = payload.get("comments", [])
             user_context = payload.get("userContext", {})
             transcript = payload.get("transcript", "")
+            transcript_error = payload.get("transcriptError", "")
             
             if "mode" in payload:
                 user_context["mode"] = payload["mode"]
+            user_context["transcriptError"] = transcript_error
                 
             import importlib
             importlib.reload(youtube_analyzer)

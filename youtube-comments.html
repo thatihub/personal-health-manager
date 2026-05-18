@@ -494,7 +494,7 @@
         const aiRes = await fetch('/api/youtube-comments/ai-summary', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ comments: data.comments, transcript: data.transcript, userContext, mode: req.analysisMode })
+          body: JSON.stringify({ comments: data.comments, transcript: data.transcript, transcriptError: data.transcriptError, userContext, mode: req.analysisMode })
         });
         const aiData = await aiRes.json();
         globalSummary = aiData;
