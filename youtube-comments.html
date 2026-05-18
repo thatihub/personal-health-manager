@@ -73,7 +73,17 @@
     .panel h2 { margin: 0 0 16px; font-size: 18px; border-bottom: 1px solid var(--dark-line); padding-bottom: 10px; }
     
     .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    @media (max-width: 768px) { .form-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 768px) { 
+      .form-grid { grid-template-columns: 1fr; } 
+      body { padding: 10px; }
+      .hero { padding: 16px; }
+      .panel { padding: 16px; }
+      .hero h1 { font-size: 22px; }
+      .timeline { flex-direction: column; align-items: flex-start; }
+      .tl-arrow { transform: rotate(90deg); margin: 4px 0 4px 16px; }
+      .btn { width: 100%; }
+      .modal-content { width: 95%; padding: 16px; }
+    }
     
     .form-group { display: flex; flex-direction: column; gap: 6px; }
     .form-group label { font-size: 13px; font-weight: 600; color: var(--dark-muted); }
@@ -226,8 +236,8 @@
         <div class="form-group" style="grid-column: 1 / -1;">
           <label>Analysis Mode</label>
           <select id="analysisMode" class="form-control" style="border-color: var(--teal); background: rgba(14, 155, 120, 0.1);">
-            <option value="both" selected>Summarize Both (Video + Comments)</option>
-            <option value="video_only">Summarize Video Transcript Only</option>
+            <option value="both">Summarize Both (Video + Comments)</option>
+            <option value="video_only" selected>Summarize Video Transcript Only</option>
           </select>
         </div>
 
