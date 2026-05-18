@@ -190,6 +190,19 @@
     
     .theme-card { cursor: pointer; transition: transform 0.2s; }
     .theme-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
+    .colorful-title {
+      background: linear-gradient(135deg, #FF0050, #00F2FE, #4FACFE);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-size: 200% 200%;
+      animation: gradientShift 5s ease infinite;
+      display: inline-block;
+    }
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
   </style>
 </head>
 <body>
@@ -198,12 +211,12 @@
       <a href="./index.html">Home</a>
       <a href="./dashboard.html">Lab Results</a>
       <a href="./bio-age.html">Bio Age</a>
-      <a href="/health/youtube-comments" class="active">YT Comment Analyzer</a>
+      <a href="/health/youtube-comments" class="active">YT Analyzer</a>
       <a href="./vault.html">Vault</a>
     </nav>
 
     <div class="hero">
-      <h1>🎥 Universal YouTube Analyzer</h1>
+      <h1 class="colorful-title">🎥 YouTube Analyzer</h1>
       <div class="sub">Extract transcripts, analyze community comments, and discover insights from any YouTube video.</div>
     </div>
 
