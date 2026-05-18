@@ -160,13 +160,15 @@ def fetch_youtube_comments(video_url: str, max_comments: int, include_replies: b
     
     if analysis_mode in ["video_only", "both"]:
         try:
-            proxies = {}
             http_proxy = os.getenv("HTTP_PROXY") or os.getenv("http_proxy")
             https_proxy = os.getenv("HTTPS_PROXY") or os.getenv("https_proxy")
-            if http_proxy: proxies["http"] = http_proxy
-            if https_proxy: proxies["https"] = https_proxy
             
-            api = YouTubeTranscriptApi(proxies=proxies if proxies else None)
+            proxy_config = None
+            if http_proxy or https_proxy:
+                from youtube_transcript_api.proxies import GenericProxyConfig
+                proxy_config = GenericProxyConfig(http_url=http_proxy, https_url=https_proxy)
+            
+            api = YouTubeTranscriptApi(proxy_config=proxy_config)
             transcript_obj = api.fetch(video_id, languages=["en", "en-US", "en-GB"])
             transcript_text = " ".join([snippet.text for snippet in transcript_obj.snippets])
             result["transcript"] = transcript_text
