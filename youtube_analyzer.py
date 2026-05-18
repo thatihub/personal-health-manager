@@ -158,8 +158,9 @@ def fetch_youtube_comments(video_url: str, max_comments: int, include_replies: b
     
     if analysis_mode in ["video_only", "both"]:
         try:
-            transcript_list = YouTubeTranscriptApi.get_transcript(video_id)
-            transcript_text = " ".join([t['text'] for t in transcript_list])
+            api = YouTubeTranscriptApi()
+            transcript_obj = api.fetch(video_id, languages=["en", "en-US", "en-GB"])
+            transcript_text = " ".join([snippet.text for snippet in transcript_obj.snippets])
             result["transcript"] = transcript_text
         except Exception as e:
             print("Failed to fetch transcript:", str(e))
@@ -204,9 +205,12 @@ def analyze_ai_summary(comments: list, user_context: dict, transcript: str = "")
     prompt += "1. 'summary': list of strings (up to 10 key takeaway bullet points summarizing the content).\n"
     prompt += "2. 'dynamicThemes': list of objects representing the top 4 to 6 themes found in the content. Each object must have: 'themeName' (string, short title), 'themeDescription' (string, 1-2 sentences explaining the theme), 'icon' (string, a single emoji representing the theme), and 'representativeComments' (list of strings, 3-5 actual or paraphrased quotes showing this theme).\n\n"
     
-    if transcript and mode in ["video_only", "both"]:
-        # Limit transcript length to roughly 10000 chars to save tokens
-        prompt += f"Video Transcript:\n{transcript[:10000]}\n\n"
+    if mode in ["video_only", "both"]:
+        if transcript:
+            # Limit transcript length to roughly 10000 chars to save tokens
+            prompt += f"Video Transcript:\n{transcript[:10000]}\n\n"
+        else:
+            prompt += "Video Transcript: [No transcript available for this video.]\nPlease note: Return an error message in the summary that no transcript was found, instead of hallucinating content.\n\n"
         
     if comments and mode in ["comments_only", "both"]:
         prompt += "Comments:\n"
