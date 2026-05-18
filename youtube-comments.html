@@ -372,10 +372,18 @@
       <button class="modal-close" onclick="closeThemeModal()">&times;</button>
       <h2 id="modalThemeTitle" style="margin-top: 0; color: var(--blue);">Theme</h2>
       <div id="modalThemeLoading" style="color: var(--dark-muted); font-size: 14px; margin-bottom: 12px;">✨ Generating AI summary for this theme...</div>
+      
+      <div style="display: flex; gap: 10px; margin-bottom: 16px;">
+        <button class="btn btn-outline" style="padding: 6px 12px; font-size: 13px;" onclick="speakThemeSummary()">🔊 Read Summary</button>
+        <button class="btn btn-outline" style="padding: 6px 12px; font-size: 13px;" onclick="toggleModalComments()">💬 View Comments</button>
+      </div>
+
       <ul id="modalThemeBullets" style="font-size: 15px; line-height: 1.6; margin-bottom: 24px; padding-left: 20px;"></ul>
       
-      <h3 style="font-size: 15px; border-bottom: 1px solid var(--dark-line); padding-bottom: 8px; margin-top: 24px;">Top Comments for Theme</h3>
-      <div id="modalThemeComments" class="comment-list" style="margin-top: 12px;"></div>
+      <div id="modalCommentsSection" class="hidden">
+        <h3 style="font-size: 15px; border-bottom: 1px solid var(--dark-line); padding-bottom: 8px; margin-top: 24px;">Top Comments for Theme</h3>
+        <div id="modalThemeComments" class="comment-list" style="margin-top: 12px;"></div>
+      </div>
     </div>
   </div>
 
@@ -632,6 +640,7 @@
       document.getElementById('modalThemeLoading').style.display = 'block';
       document.getElementById('modalThemeBullets').innerHTML = '';
       document.getElementById('modalThemeComments').innerHTML = '';
+      document.getElementById('modalCommentsSection').classList.add('hidden');
       
       const filtered = globalComments.filter(c => c.matchedBuckets.includes(theme));
       
@@ -671,6 +680,33 @@
     
     function closeThemeModal() {
       document.getElementById('themeModal').classList.remove('active');
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+    }
+    
+    function toggleModalComments() {
+      const sec = document.getElementById('modalCommentsSection');
+      sec.classList.toggle('hidden');
+    }
+
+    function speakThemeSummary() {
+      const items = document.querySelectorAll('#modalThemeBullets li');
+      if (items.length === 0) return;
+      
+      let textToSpeak = document.getElementById('modalThemeTitle').innerText + " Theme Summary. ";
+      items.forEach(li => {
+        textToSpeak += li.innerText + ". ";
+      });
+      
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(textToSpeak);
+        utterance.rate = 1.0;
+        window.speechSynthesis.speak(utterance);
+      } else {
+        alert("Text-to-speech is not supported in this browser.");
+      }
     }
   </script>
 </body>
