@@ -228,18 +228,7 @@
           <label>YouTube Video URL</label>
           <input type="text" id="videoUrl" class="form-control" placeholder="https://www.youtube.com/watch?v=...">
         </div>
-        
-        <div class="form-group" style="grid-column: 1 / -1;">
-          <label>Focus Keywords (comma separated)</label>
-          <input type="text" id="focusKeywords" class="form-control" placeholder="e.g. gameplay, review, pricing, setup">
-        </div>
 
-        <!-- Internal config options removed for clean UI -->
-        
-        <div class="form-group" style="grid-column: 1 / -1;">
-          <label>Personal Context (Optional guidance for AI)</label>
-          <textarea id="mySituation" class="form-control" rows="2" placeholder="e.g. I am a beginner looking to understand the basics of this topic."></textarea>
-        </div>
       </div>
       
       <div style="margin-top: 20px;">
@@ -365,7 +354,7 @@
           includeReplies: true,
           sortOrder: 'relevance',
           analysisMode: 'video_only',
-          focusKeywords: document.getElementById('focusKeywords').value.split(',').map(s => s.trim()).filter(Boolean)
+          focusKeywords: []
         };
         
         msg.textContent = 'Fetching YouTube transcript and comments...';
@@ -393,8 +382,7 @@
         
         // Run AI Summary
         // Run AI Summary
-        msg.textContent = 'Generating AI Video Summary...';
-        const userContext = { text: document.getElementById('mySituation').value.trim() };
+        const userContext = { text: "" };
         
         const aiRes = await fetch('/api/youtube-comments/ai-summary', {
           method: 'POST',
@@ -424,7 +412,7 @@
       msg.style.display = 'block';
       
       try {
-        const userContext = { text: document.getElementById('mySituation').value.trim() };
+        const userContext = { text: "" };
         
         const aiRes = await fetch('/api/youtube-comments/ai-summary', {
           method: 'POST',
