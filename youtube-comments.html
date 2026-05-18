@@ -291,29 +291,7 @@
 
 
 
-      <!-- Section 5: Representative Comments -->
-      <div id="repCommentsPanel" class="panel hidden">
-        <h2 class="collapsible-header collapsed" onclick="toggleCollapse(this, 'repComments')">Representative Comments</h2>
-        <div id="repComments" class="collapsible-content collapsed">
-          <div class="form-group" style="margin-bottom: 16px; width: 250px;">
-            <select id="themeFilter" class="form-control" onchange="filterComments()">
-              <option value="all">All Themes</option>
-            </select>
-          </div>
-          <div id="commentList" class="comment-list">
-            <!-- Filled by JS -->
-          </div>
-        </div>
-      </div>
 
-      <!-- Section 8: Export Options -->
-      <div class="panel">
-        <h2 class="collapsible-header collapsed" onclick="toggleCollapse(this, 'exportOptions')">Export Options</h2>
-        <div id="exportOptions" class="collapsible-content collapsed" style="display: flex; gap: 10px; flex-wrap: wrap;">
-          <button class="btn btn-outline" onclick="exportJSON()">Export AI Summary JSON</button>
-          <button class="btn btn-outline" onclick="exportCSV()">Export Comments CSV</button>
-        </div>
-      </div>
       
     </div>
   </div>
@@ -364,7 +342,6 @@
       
       // Hide later panels in case they are running again
       document.getElementById('themesPanel').classList.add('hidden');
-      document.getElementById('repCommentsPanel').classList.add('hidden');
       document.getElementById('commentsBtn').style.display = 'none';
       
       try {
@@ -447,10 +424,8 @@
         globalSummary.dynamicThemes = aiData.dynamicThemes;
         
         document.getElementById('themesPanel').classList.remove('hidden');
-        document.getElementById('repCommentsPanel').classList.remove('hidden');
         
         renderThemes(aiData);
-        renderComments();
         
       } catch (e) {
         alert("Error: " + e.message);
@@ -515,69 +490,7 @@
       });
     }
 
-    function renderComments() {
-      const filter = document.getElementById('themeFilter').value;
-      const list = document.getElementById('commentList');
-      
-      const filtered = filter === 'all' ? globalComments : globalComments.filter(c => c.matchedBuckets.includes(filter));
-      
-      let html = '';
-      filtered.slice(0, 100).forEach(c => {
-        const isReply = c.isReply ? '↳ Reply' : 'Top Level';
-        const buckets = c.matchedBuckets.map(b => `<span class="c-tag">${b}</span>`).join('');
-        
-        let aiTagsHtml = '';
-        if (c.aiTags && c.aiTags.length) {
-          c.aiTags.forEach(t => {
-            let cls = 'anecdote';
-            if (t.includes('useful')) cls = 'useful';
-            if (t.includes('unsafe')) cls = 'unsafe';
-            if (t.includes('doctor')) cls = 'doc';
-            aiTagsHtml += `<span class="c-tag ai-tag ${cls}">${t}</span>`;
-          });
-        }
-        
-        html += `
-          <div class="comment">
-            <div class="comment-header">
-              <span><strong>${c.author}</strong> • ${isReply} • ${c.likeCount} likes</span>
-              <span>${new Date(c.publishedAt).toLocaleDateString()}</span>
-            </div>
-            <div class="comment-text">${c.text.replace(/\n/g, '<br>')}</div>
-            <div class="comment-tags">
-              ${buckets} ${aiTagsHtml}
-            </div>
-          </div>
-        `;
-      });
-      list.innerHTML = html;
-    }
 
-    function filterComments() {
-      renderComments();
-    }
-
-    function exportJSON() {
-      if (!globalSummary) return alert('Run analysis first.');
-      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(globalSummary, null, 2));
-      const dlAnchorElem = document.createElement('a');
-      dlAnchorElem.setAttribute("href", dataStr);
-      dlAnchorElem.setAttribute("download", "ai_summary.json");
-      dlAnchorElem.click();
-    }
-
-    function exportCSV() {
-      if (!globalComments.length) return alert('Run analysis first.');
-      const headers = ['ID', 'ParentID', 'Author', 'IsReply', 'Likes', 'Date', 'Text'];
-      const rows = globalComments.map(c => [
-        c.id, c.parentId || '', `"${c.author}"`, c.isReply, c.likeCount, c.publishedAt, `"${c.text.replace(/"/g, '""')}"`
-      ]);
-      const csvContent = "data:text/csv;charset=utf-8," + [headers.join(','), ...rows.map(e => e.join(','))].join("\n");
-      const dlAnchorElem = document.createElement('a');
-      dlAnchorElem.setAttribute("href", csvContent);
-      dlAnchorElem.setAttribute("download", "youtube_comments.csv");
-      dlAnchorElem.click();
-    }
 
     async function openThemeModal(theme, index) {
       document.getElementById('themeModal').classList.add('active');
