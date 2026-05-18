@@ -175,13 +175,9 @@
     <div class="hero">
       <h1>🎥 YouTube Health Comment Analyzer</h1>
       <div class="sub">Extract real-world patient comments, replies, side effects, dose patterns, and safety signals from health-related YouTube videos.</div>
-      <div class="disclaimer">
-        IMPORTANT MEDICAL DISCLAIMER: Comments are patient anecdotes, not medical advice. Always confirm medication and dose changes with your clinician, especially if using insulin or diabetes medication.
-      </div>
       <div class="badges">
         <span class="badge">🧪 Patient Experience Mining</span>
         <span class="badge">💬 Comments + Replies</span>
-        <span class="badge">⚠️ Anecdotes ≠ Medical Advice</span>
         <span class="badge">💉 GLP-1 / Mounjaro Ready</span>
       </div>
     </div>
@@ -273,12 +269,7 @@
         </div>
       </div>
       
-      <!-- Section 7: Safety Warnings -->
-      <div id="safetyWarningBox" class="safety-warning hidden">
-        <h3>⚠️ Do Not Copy This Without Medical Guidance</h3>
-        <p style="margin-top: 0; font-size: 13px;">The following risky claims were detected in the comments:</p>
-        <ul id="safetyWarningsList"></ul>
-      </div>
+      
 
       <!-- Section 3: Theme Dashboard -->
       <div class="panel">
@@ -500,15 +491,7 @@
         list.innerHTML += `<li>${item}</li>`;
       });
       
-      const safetyBox = document.getElementById('safetyWarningBox');
-      const sList = document.getElementById('safetyWarningsList');
-      sList.innerHTML = '';
-      if (data.safetyWarnings && data.safetyWarnings.length > 0) {
-        data.safetyWarnings.forEach(w => { sList.innerHTML += `<li>${w}</li>`; });
-        safetyBox.classList.remove('hidden');
-      } else {
-        safetyBox.classList.add('hidden');
-      }
+      
       
       // Doc msg
       const msg = document.getElementById('doctorMessage');

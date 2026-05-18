@@ -201,8 +201,7 @@ def analyze_ai_summary(comments: list, user_context: dict) -> dict:
     if user_context:
         prompt += f"User context: {json.dumps(user_context)}\n"
     
-    prompt += "Provide a structured JSON output with the exact following keys: summary, topThemes, dosePatterns, sideEffects, microdosingMentions, maintenanceMentions, diabetesMentions, safetyWarnings, misleadingClaims, questionsToAskDoctor, appliesToUserCase (all values must be list of strings, except summary which is a string).\n"
-    prompt += "Important: Do not give direct medical instructions. Always say 'Discuss with prescriber' and 'Do not change dose without clinician approval'.\n\nComments:\n"
+    prompt += "Provide a structured JSON output with the exact following keys: summary, topThemes, dosePatterns, sideEffects, microdosingMentions, maintenanceMentions, diabetesMentions, safetyWarnings, misleadingClaims, questionsToAskDoctor, appliesToUserCase (all values must be list of strings, except summary which is a string).\n\nComments:\n"
     
     sample = [c["text"] for c in comments[:30]]
     prompt += "\n".join(sample)
