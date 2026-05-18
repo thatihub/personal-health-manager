@@ -476,23 +476,14 @@
         document.getElementById('resReplies').textContent = data.totalReplies;
         document.getElementById('resTime').textContent = new Date().toLocaleString();
         
-        // Group Themes
-        globalThemes = {};
-        globalComments.forEach(c => {
-          c.matchedBuckets.forEach(b => {
-            globalThemes[b] = (globalThemes[b] || 0) + 1;
-          });
-        });
-        
+        // Run AI Summary
+        msg.textContent = 'Generating AI Summary...';
         if (req.analysisMode === 'video_only') {
           document.getElementById('themesGrid').parentElement.style.display = 'none';
-          document.getElementById('doseTimeline').parentElement.style.display = 'none';
           document.getElementById('repComments').parentElement.style.display = 'none';
         } else {
           document.getElementById('themesGrid').parentElement.style.display = 'block';
-          document.getElementById('doseTimeline').parentElement.style.display = 'block';
           document.getElementById('repComments').parentElement.style.display = 'block';
-          renderThemes(data.totalFetched);
           renderComments();
         }
         
@@ -509,6 +500,9 @@
         globalSummary = aiData;
         
         renderAISummary(aiData);
+        if (req.analysisMode !== 'video_only') {
+          renderThemes(aiData);
+        }
         
         document.getElementById('resultsArea').classList.remove('hidden');
       } catch (e) {
@@ -519,40 +513,37 @@
       }
     }
 
-    function renderThemes(totalCount) {
+    function renderThemes(aiData) {
       const grid = document.getElementById('themesGrid');
       const themeFilter = document.getElementById('themeFilter');
       
       let gridHtml = '';
       let filterHtml = '<option value="all">All Themes</option>';
       
-      const icons = {
-        "Dose 2.5 mg": "💉", "Dose 5 mg": "⬆️", "Dose reduction": "⬇️",
-        "Microdosing / split dosing": "🧪", "Nausea / GI issues": "🤢",
-        "Food noise / appetite": "🍽️", "Weight loss": "⚖️", "Diabetes / glucose": "🩸",
-        "Maintenance dose": "🎯", "Safety concern": "🛡️"
-      };
+      const themes = aiData.dynamicThemes || [];
       
-      for (const [theme, count] of Object.entries(globalThemes)) {
-        if (count === 0) continue;
-        const pct = Math.round((count / totalCount) * 100);
-        let type = 'success';
-        if (["Nausea / GI issues", "Dose reduction", "Safety concern"].includes(theme)) type = 'danger';
-        else if (["Microdosing / split dosing", "Dose 5 mg"].includes(theme)) type = 'warning';
+      themes.forEach((themeObj, index) => {
+        const title = themeObj.themeName;
+        const icon = themeObj.icon || "📌";
+        const desc = themeObj.themeDescription || "";
         
-        const safeTheme = theme.replace(/'/g, "\\'");
+        // Randomly assign a color type for visual variety
+        const types = ['success', 'warning', 'danger', ''];
+        const type = types[index % types.length];
+        
+        const safeTitle = title.replace(/'/g, "\\'");
+        
         gridHtml += `
-          <div class="theme-card ${type}" onclick="openThemeModal('${safeTheme}')">
+          <div class="theme-card ${type}" onclick="openThemeModal('${safeTitle}', ${index})">
             <div class="theme-header">
-              <div class="theme-title">${icons[theme] || '📌'} ${theme}</div>
-              <div class="theme-count">${count}</div>
+              <div class="theme-title">${icon} ${title}</div>
             </div>
-            <div class="theme-desc">${pct}% of fetched comments</div>
+            <div class="theme-desc">${desc}</div>
           </div>
         `;
         
-        filterHtml += `<option value="${theme}">${theme}</option>`;
-      }
+        filterHtml += `<option value="${title}">${title}</option>`;
+      });
       
       grid.innerHTML = gridHtml;
       themeFilter.innerHTML = filterHtml;
@@ -574,14 +565,6 @@
       summaries.forEach(s => {
         summaryList.innerHTML += `<li>${s}</li>`;
       });
-      
-      const list = document.getElementById('aiAppliesList');
-      list.innerHTML = '';
-      (data.appliesToUserCase || []).forEach(item => {
-        list.innerHTML += `<li>${item}</li>`;
-      });
-      
-      
       
       // Doc msg
       const msg = document.getElementById('doctorMessage');
@@ -665,48 +648,37 @@
       dlAnchorElem.click();
     }
 
-    async function openThemeModal(theme) {
+    async function openThemeModal(theme, index) {
       document.getElementById('themeModal').classList.add('active');
       document.getElementById('modalThemeTitle').textContent = theme;
-      document.getElementById('modalThemeLoading').style.display = 'block';
+      document.getElementById('modalThemeLoading').style.display = 'none';
       document.getElementById('modalThemeBullets').innerHTML = '';
       document.getElementById('modalThemeComments').innerHTML = '';
       document.getElementById('modalCommentsSection').classList.add('hidden');
       
-      const filtered = globalComments.filter(c => c.matchedBuckets.includes(theme));
+      const themeObj = globalSummary.dynamicThemes[index];
+      
+      let bHtml = '';
+      if (themeObj && themeObj.themeDescription) {
+        bHtml += `<li>${themeObj.themeDescription}</li>`;
+      } else {
+        bHtml = `<li>No insights returned.</li>`;
+      }
+      document.getElementById('modalThemeBullets').innerHTML = bHtml;
       
       let cHtml = '';
-      filtered.slice(0, 15).forEach(c => {
-         const isReply = c.isReply ? '↳ Reply' : 'Top Level';
-         cHtml += `
-          <div class="comment" style="padding: 12px; font-size: 13px; margin-bottom: 8px;">
-            <div style="color: var(--dark-muted); margin-bottom: 6px; font-size: 12px;"><strong>${c.author}</strong> • ${isReply}</div>
-            <div style="line-height: 1.4;">${c.text.replace(/\n/g, '<br>')}</div>
-          </div>
-         `;
-      });
-      document.getElementById('modalThemeComments').innerHTML = cHtml;
-      
-      try {
-        const res = await fetch('/api/youtube-comments/ai-theme', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ comments: filtered, theme: theme })
+      if (themeObj && themeObj.representativeComments && themeObj.representativeComments.length > 0) {
+        themeObj.representativeComments.forEach(c => {
+           cHtml += `
+            <div class="comment" style="padding: 12px; font-size: 13px; margin-bottom: 8px;">
+              <div style="line-height: 1.4;">"${c}"</div>
+            </div>
+           `;
         });
-        const data = await res.json();
-        
-        let bHtml = '';
-        if (data.bullets && data.bullets.length) {
-            data.bullets.forEach(b => { bHtml += `<li>${b}</li>`; });
-        } else {
-            bHtml = `<li>No insights returned.</li>`;
-        }
-        document.getElementById('modalThemeBullets').innerHTML = bHtml;
-      } catch (e) {
-        document.getElementById('modalThemeBullets').innerHTML = `<li style="color: var(--rose);">Error: ${e.message}</li>`;
-      } finally {
-        document.getElementById('modalThemeLoading').style.display = 'none';
+      } else {
+        cHtml = '<div style="color: var(--dark-muted);">No comments found for this theme.</div>';
       }
+      document.getElementById('modalThemeComments').innerHTML = cHtml;
     }
     
     function closeThemeModal() {

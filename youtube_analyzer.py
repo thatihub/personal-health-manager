@@ -15,27 +15,8 @@ def extract_video_id(url: str) -> str:
     return ""
 
 def classify_comment(text: str) -> list:
-    text_lower = text.lower()
-    buckets = []
-    
-    keywords = {
-        "Dose 2.5 mg": ["2.5", "2.5mg", "2.5 mg", "lowest dose", "starter dose"],
-        "Dose 5 mg": ["5mg", "5 mg", "went up to 5", "titrated to 5"],
-        "Dose reduction": ["went back down", "reduced dose", "lowered dose", "back to 2.5", "dose down"],
-        "Microdosing / split dosing": ["microdose", "microdosing", "split dose", "twice a week", "3.5 mg", "3 mg", "compound", "compounded"],
-        "Nausea / GI issues": ["nausea", "nauseous", "vomit", "diarrhea", "constipation", "gi", "stomach", "acid reflux"],
-        "Food noise / appetite": ["food noise", "appetite", "hungry", "cravings", "suppression"],
-        "Weight loss": ["lost", "lbs", "pounds", "kg", "goal weight", "weight loss"],
-        "Diabetes / glucose": ["diabetes", "a1c", "blood sugar", "glucose", "insulin", "hypoglycemia", "low sugar"],
-        "Maintenance dose": ["maintenance", "maintain", "goal weight", "staying on", "long term"],
-        "Safety concern": ["doctor", "prescriber", "er", "hospital", "pancreatitis", "gallbladder", "kidney", "dehydration", "severe"]
-    }
-    
-    for bucket, words in keywords.items():
-        if any(word in text_lower for word in words):
-            buckets.append(bucket)
-            
-    return buckets
+    # Deprecated: The AI now handles all dynamic theme classification.
+    return []
 
 def fetch_youtube_comments(video_url: str, max_comments: int, include_replies: bool, sort_order: str, focus_keywords: list, analysis_mode: str = "comments_only") -> dict:
     api_key = os.getenv("YOUTUBE_API_KEY")
@@ -191,17 +172,15 @@ def analyze_ai_summary(comments: list, user_context: dict, transcript: str = "")
     gemini_key = os.getenv("GEMINI_API_KEY", "").strip()
     
     default_summary = {
-        "summary": ["AI summary based on the fetched comments."],
-        "topThemes": ["Dose changes", "Side effects", "Appetite suppression"],
-        "dosePatterns": ["Many start at 2.5mg", "Titrating to 5mg causes side effects for some"],
-        "sideEffects": ["Nausea", "Fatigue", "GI issues"],
-        "microdosingMentions": ["Some users mention split dosing"],
-        "maintenanceMentions": ["A few reached goal weight and maintain"],
-        "diabetesMentions": ["Better glucose control reported"],
-        "safetyWarnings": ["Always consult a doctor before changing dosage.", "Do not split pens without guidance."],
-        "misleadingClaims": ["Claims that side effects mean it is working faster are unverified."],
-        "questionsToAskDoctor": ["Is staying on 2.5mg longer an option?", "How to manage mild body aches?"],
-        "appliesToUserCase": ["Discuss with prescriber.", "Do not change dose without clinician approval.", "Especially important because insulin use increases hypoglycemia risk."]
+        "summary": ["AI summary based on the fetched content."],
+        "dynamicThemes": [
+            {
+                "themeName": "General Discussion",
+                "themeDescription": "Common points raised in the comments.",
+                "icon": "💬",
+                "representativeComments": ["Could not load specific comments."]
+            }
+        ]
     }
     
     if not api_key and not gemini_key:
@@ -214,14 +193,16 @@ def analyze_ai_summary(comments: list, user_context: dict, transcript: str = "")
     if mode == "video_only":
         prompt += "Analyze the following YouTube video transcript.\n"
     elif mode == "both":
-        prompt += "Analyze the following YouTube video transcript AND user comments.\n"
+        prompt += "Analyze the following YouTube video transcript AND user comments. Pay attention to what the video claims vs what the audience experiences.\n"
     else:
         prompt += "Analyze the following YouTube user comments.\n"
         
     if user_context and "text" in user_context and user_context["text"]:
-        prompt += f"User context: {user_context['text']}\n"
+        prompt += f"User specific context or question: {user_context['text']}\n"
     
-    prompt += "Provide a structured JSON output with the exact following keys: summary (list of up to 10 key takeaway bullet points), topThemes, dosePatterns, sideEffects, microdosingMentions, maintenanceMentions, diabetesMentions, safetyWarnings, misleadingClaims, questionsToAskDoctor, appliesToUserCase (all values must be list of strings).\n\n"
+    prompt += "Provide a structured JSON output with the exact following keys:\n"
+    prompt += "1. 'summary': list of strings (up to 10 key takeaway bullet points summarizing the content).\n"
+    prompt += "2. 'dynamicThemes': list of objects representing the top 4 to 6 themes found in the content. Each object must have: 'themeName' (string, short title), 'themeDescription' (string, 1-2 sentences explaining the theme), 'icon' (string, a single emoji representing the theme), and 'representativeComments' (list of strings, 3-5 actual or paraphrased quotes showing this theme).\n\n"
     
     if transcript and mode in ["video_only", "both"]:
         # Limit transcript length to roughly 10000 chars to save tokens
@@ -241,7 +222,7 @@ def analyze_ai_summary(comments: list, user_context: dict, transcript: str = "")
             }
             data = {
                 "model": "gpt-4o-mini",
-                "messages": [{"role": "system", "content": "You are a medical data analyst. Output ONLY valid JSON."}, {"role": "user", "content": prompt}],
+                "messages": [{"role": "system", "content": "You are an expert data analyst. Output ONLY valid JSON."}, {"role": "user", "content": prompt}],
                 "response_format": {"type": "json_object"}
             }
             req = urllib.request.Request(url, headers=headers, data=json.dumps(data).encode('utf-8'))
@@ -252,7 +233,7 @@ def analyze_ai_summary(comments: list, user_context: dict, transcript: str = "")
             url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={gemini_key}"
             headers = {"Content-Type": "application/json"}
             data = {
-                "contents": [{"parts": [{"text": "You are a medical data analyst. Output ONLY valid JSON.\n" + prompt}]}]
+                "contents": [{"parts": [{"text": "You are an expert data analyst. Output ONLY valid JSON.\n" + prompt}]}]
             }
             req = urllib.request.Request(url, headers=headers, data=json.dumps(data).encode('utf-8'))
             with urllib.request.urlopen(req) as response:
@@ -272,56 +253,4 @@ def analyze_ai_summary(comments: list, user_context: dict, transcript: str = "")
     return default_summary
 
 def analyze_theme_summary(comments: list, theme: str) -> dict:
-    api_key = os.getenv("OPENAI_API_KEY", "").strip()
-    gemini_key = os.getenv("GEMINI_API_KEY", "").strip()
-    
-    default_res = {
-        "theme": theme,
-        "bullets": ["Could not fetch AI summary."]
-    }
-    
-    if not api_key and not gemini_key:
-        default_res["bullets"] = ["AI API Key not found.", "Please set OPENAI_API_KEY or GEMINI_API_KEY."]
-        return default_res
-        
-    prompt = f"Analyze the following YouTube comments specifically regarding the theme '{theme}'.\n"
-    prompt += "Extract the 3 to 5 most important insights, patterns, or experiences users share about this theme.\n"
-    prompt += "Provide a structured JSON output with the exact key 'bullets' containing a list of strings.\n\nComments:\n"
-    
-    sample = [c["text"] for c in comments[:30]]
-    prompt += "\n".join(sample)
-    
-    try:
-        if api_key:
-            url = "https://api.openai.com/v1/chat/completions"
-            headers = {
-                "Content-Type": "application/json",
-                "Authorization": f"Bearer {api_key}"
-            }
-            data = {
-                "model": "gpt-4o-mini",
-                "messages": [{"role": "system", "content": "You are a medical data analyst. Output ONLY valid JSON."}, {"role": "user", "content": prompt}],
-                "response_format": {"type": "json_object"}
-            }
-            req = urllib.request.Request(url, headers=headers, data=json.dumps(data).encode('utf-8'))
-            with urllib.request.urlopen(req) as response:
-                res_data = json.loads(response.read().decode('utf-8'))
-                return json.loads(res_data["choices"][0]["message"]["content"])
-        elif gemini_key:
-            url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={gemini_key}"
-            headers = {"Content-Type": "application/json"}
-            data = {
-                "contents": [{"parts": [{"text": "You are a medical data analyst. Output ONLY valid JSON.\n" + prompt}]}]
-            }
-            req = urllib.request.Request(url, headers=headers, data=json.dumps(data).encode('utf-8'))
-            with urllib.request.urlopen(req) as response:
-                res_data = json.loads(response.read().decode('utf-8'))
-                text = res_data["candidates"][0]["content"]["parts"][0]["text"]
-                if text.startswith("```json"):
-                    text = text[7:-3]
-                return json.loads(text)
-    except Exception as e:
-        default_res["bullets"] = [f"API Error: {str(e)}"]
-        return default_res
-        
-    return default_res
+    return {"theme": theme, "bullets": []}
