@@ -223,7 +223,7 @@ def analyze_ai_summary(comments: list, user_context: dict) -> dict:
                 res_data = json.loads(response.read().decode('utf-8'))
                 return json.loads(res_data["choices"][0]["message"]["content"])
         elif gemini_key:
-            url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={gemini_key}"
+            url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={gemini_key}"
             headers = {"Content-Type": "application/json"}
             data = {
                 "contents": [{"parts": [{"text": "You are a medical data analyst. Output ONLY valid JSON.\n" + prompt}]}]
@@ -282,7 +282,7 @@ def analyze_theme_summary(comments: list, theme: str) -> dict:
                 res_data = json.loads(response.read().decode('utf-8'))
                 return json.loads(res_data["choices"][0]["message"]["content"])
         elif gemini_key:
-            url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={gemini_key}"
+            url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={gemini_key}"
             headers = {"Content-Type": "application/json"}
             data = {
                 "contents": [{"parts": [{"text": "You are a medical data analyst. Output ONLY valid JSON.\n" + prompt}]}]
