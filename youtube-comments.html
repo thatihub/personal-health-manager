@@ -160,6 +160,26 @@
     .collapsible-header.collapsed::after { transform: rotate(-90deg); }
     .collapsible-content { margin-top: 16px; }
     .collapsible-content.collapsed { display: none; }
+    
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center;
+      z-index: 1000; opacity: 0; pointer-events: none; transition: 0.3s;
+    }
+    .modal-overlay.active { opacity: 1; pointer-events: auto; }
+    .modal-content {
+      background: var(--dark-panel); width: 90%; max-width: 600px; max-height: 85vh;
+      border-radius: 16px; padding: 24px; overflow-y: auto; position: relative;
+      border: 1px solid var(--dark-line); box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    }
+    .modal-close {
+      position: absolute; top: 16px; right: 16px; background: none; border: none;
+      color: var(--dark-muted); font-size: 24px; cursor: pointer;
+    }
+    .modal-close:hover { color: #fff; }
+    
+    .theme-card { cursor: pointer; transition: transform 0.2s; }
+    .theme-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
   </style>
 </head>
 <body>
@@ -347,6 +367,18 @@
     </div>
   </div>
 
+  <div id="themeModal" class="modal-overlay">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeThemeModal()">&times;</button>
+      <h2 id="modalThemeTitle" style="margin-top: 0; color: var(--blue);">Theme</h2>
+      <div id="modalThemeLoading" style="color: var(--dark-muted); font-size: 14px; margin-bottom: 12px;">✨ Generating AI summary for this theme...</div>
+      <ul id="modalThemeBullets" style="font-size: 15px; line-height: 1.6; margin-bottom: 24px; padding-left: 20px;"></ul>
+      
+      <h3 style="font-size: 15px; border-bottom: 1px solid var(--dark-line); padding-bottom: 8px; margin-top: 24px;">Top Comments for Theme</h3>
+      <div id="modalThemeComments" class="comment-list" style="margin-top: 12px;"></div>
+    </div>
+  </div>
+
   <script>
     let globalComments = [];
     let globalSummary = null;
@@ -469,8 +501,9 @@
         if (["Nausea / GI issues", "Dose reduction", "Safety concern"].includes(theme)) type = 'danger';
         else if (["Microdosing / split dosing", "Dose 5 mg"].includes(theme)) type = 'warning';
         
+        const safeTheme = theme.replace(/'/g, "\\'");
         gridHtml += `
-          <div class="theme-card ${type}">
+          <div class="theme-card ${type}" onclick="openThemeModal('${safeTheme}')">
             <div class="theme-header">
               <div class="theme-title">${icons[theme] || '📌'} ${theme}</div>
               <div class="theme-count">${count}</div>
@@ -591,6 +624,53 @@
       dlAnchorElem.setAttribute("href", csvContent);
       dlAnchorElem.setAttribute("download", "youtube_comments.csv");
       dlAnchorElem.click();
+    }
+
+    async function openThemeModal(theme) {
+      document.getElementById('themeModal').classList.add('active');
+      document.getElementById('modalThemeTitle').textContent = theme;
+      document.getElementById('modalThemeLoading').style.display = 'block';
+      document.getElementById('modalThemeBullets').innerHTML = '';
+      document.getElementById('modalThemeComments').innerHTML = '';
+      
+      const filtered = globalComments.filter(c => c.matchedBuckets.includes(theme));
+      
+      let cHtml = '';
+      filtered.slice(0, 15).forEach(c => {
+         const isReply = c.isReply ? '↳ Reply' : 'Top Level';
+         cHtml += `
+          <div class="comment" style="padding: 12px; font-size: 13px; margin-bottom: 8px;">
+            <div style="color: var(--dark-muted); margin-bottom: 6px; font-size: 12px;"><strong>${c.author}</strong> • ${isReply}</div>
+            <div style="line-height: 1.4;">${c.text.replace(/\n/g, '<br>')}</div>
+          </div>
+         `;
+      });
+      document.getElementById('modalThemeComments').innerHTML = cHtml;
+      
+      try {
+        const res = await fetch('/api/youtube-comments/ai-theme', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ comments: filtered, theme: theme })
+        });
+        const data = await res.json();
+        
+        let bHtml = '';
+        if (data.bullets && data.bullets.length) {
+            data.bullets.forEach(b => { bHtml += `<li>${b}</li>`; });
+        } else {
+            bHtml = `<li>No insights returned.</li>`;
+        }
+        document.getElementById('modalThemeBullets').innerHTML = bHtml;
+      } catch (e) {
+        document.getElementById('modalThemeBullets').innerHTML = `<li style="color: var(--rose);">Error: ${e.message}</li>`;
+      } finally {
+        document.getElementById('modalThemeLoading').style.display = 'none';
+      }
+    }
+    
+    function closeThemeModal() {
+      document.getElementById('themeModal').classList.remove('active');
     }
   </script>
 </body>

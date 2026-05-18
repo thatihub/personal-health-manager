@@ -237,10 +237,65 @@ def analyze_ai_summary(comments: list, user_context: dict) -> dict:
                 return json.loads(text)
     except urllib.error.HTTPError as e:
         error_body = e.read().decode('utf-8')
-        default_summary["summary"] = f"AI API Error: {str(e)}. Details: {error_body}"
+        default_summary["summary"] = [f"AI API Error: {str(e)}", f"Details: {error_body}"]
         return default_summary
     except Exception as e:
-        default_summary["summary"] = f"AI API Error: {str(e)}. Returning default."
+        default_summary["summary"] = [f"AI API Error: {str(e)}", "Returning default."]
         return default_summary
     
     return default_summary
+
+def analyze_theme_summary(comments: list, theme: str) -> dict:
+    api_key = os.getenv("OPENAI_API_KEY", "").strip()
+    gemini_key = os.getenv("GEMINI_API_KEY", "").strip()
+    
+    default_res = {
+        "theme": theme,
+        "bullets": ["Could not fetch AI summary."]
+    }
+    
+    if not api_key and not gemini_key:
+        default_res["bullets"] = ["AI API Key not found.", "Please set OPENAI_API_KEY or GEMINI_API_KEY."]
+        return default_res
+        
+    prompt = f"Analyze the following YouTube comments specifically regarding the theme '{theme}'.\n"
+    prompt += "Extract the 3 to 5 most important insights, patterns, or experiences users share about this theme.\n"
+    prompt += "Provide a structured JSON output with the exact key 'bullets' containing a list of strings.\n\nComments:\n"
+    
+    sample = [c["text"] for c in comments[:30]]
+    prompt += "\n".join(sample)
+    
+    try:
+        if api_key:
+            url = "https://api.openai.com/v1/chat/completions"
+            headers = {
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {api_key}"
+            }
+            data = {
+                "model": "gpt-4o-mini",
+                "messages": [{"role": "system", "content": "You are a medical data analyst. Output ONLY valid JSON."}, {"role": "user", "content": prompt}],
+                "response_format": {"type": "json_object"}
+            }
+            req = urllib.request.Request(url, headers=headers, data=json.dumps(data).encode('utf-8'))
+            with urllib.request.urlopen(req) as response:
+                res_data = json.loads(response.read().decode('utf-8'))
+                return json.loads(res_data["choices"][0]["message"]["content"])
+        elif gemini_key:
+            url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key={gemini_key}"
+            headers = {"Content-Type": "application/json"}
+            data = {
+                "contents": [{"parts": [{"text": "You are a medical data analyst. Output ONLY valid JSON.\n" + prompt}]}]
+            }
+            req = urllib.request.Request(url, headers=headers, data=json.dumps(data).encode('utf-8'))
+            with urllib.request.urlopen(req) as response:
+                res_data = json.loads(response.read().decode('utf-8'))
+                text = res_data["candidates"][0]["content"]["parts"][0]["text"]
+                if text.startswith("```json"):
+                    text = text[7:-3]
+                return json.loads(text)
+    except Exception as e:
+        default_res["bullets"] = [f"API Error: {str(e)}"]
+        return default_res
+        
+    return default_res

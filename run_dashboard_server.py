@@ -1590,6 +1590,20 @@ class DashboardHandler(SimpleHTTPRequestHandler):
             self._json(200, summary)
             return
 
+        if self.path == "/api/youtube-comments/ai-theme":
+            length = int(self.headers.get("Content-Length", "0"))
+            raw = self.rfile.read(length) if length else b"{}"
+            try:
+                payload = json.loads(raw.decode("utf-8"))
+            except Exception as e:
+                self._json(400, {"ok": False, "error": "Invalid JSON"})
+                return
+            comments = payload.get("comments", [])
+            theme = payload.get("theme", "")
+            summary = youtube_analyzer.analyze_theme_summary(comments, theme)
+            self._json(200, summary)
+            return
+
         if self.path != "/api/rebuild":
             self._json(404, {"ok": False, "error": "Not found"})
             return
