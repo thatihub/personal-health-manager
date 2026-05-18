@@ -203,13 +203,8 @@
     </nav>
 
     <div class="hero">
-      <h1>🎥 YouTube Health Comment Analyzer</h1>
-      <div class="sub">Extract real-world patient comments, replies, side effects, dose patterns, and safety signals from health-related YouTube videos.</div>
-      <div class="badges">
-        <span class="badge">🧪 Patient Experience Mining</span>
-        <span class="badge">💬 Comments + Replies</span>
-        <span class="badge">💉 GLP-1 / Mounjaro Ready</span>
-      </div>
+      <h1>🎥 Universal YouTube Analyzer</h1>
+      <div class="sub">Extract transcripts, analyze community comments, and discover insights from any YouTube video.</div>
     </div>
 
     <!-- Section 1: Input -->
@@ -223,21 +218,14 @@
         
         <div class="form-group" style="grid-column: 1 / -1;">
           <label>Focus Keywords (comma separated)</label>
-          <input type="text" id="focusKeywords" class="form-control" placeholder="Mounjaro, tirzepatide, 2.5 mg, 5 mg, microdosing, nausea">
-          <div class="presets">
-            <button class="preset-btn" onclick="applyPreset('glp1')">GLP-1 / Mounjaro</button>
-            <button class="preset-btn" onclick="applyPreset('diabetes')">Diabetes</button>
-            <button class="preset-btn" onclick="applyPreset('kidney')">Kidney Health</button>
-            <button class="preset-btn" onclick="applyPreset('cholesterol')">Cholesterol / Statins</button>
-            <button class="preset-btn" onclick="applyPreset('weight')">Weight Loss</button>
-          </div>
+          <input type="text" id="focusKeywords" class="form-control" placeholder="e.g. gameplay, review, pricing, setup">
         </div>
 
         <!-- Internal config options removed for clean UI -->
         
         <div class="form-group" style="grid-column: 1 / -1;">
-          <label>My Situation (Optional context for AI)</label>
-          <textarea id="mySituation" class="form-control" rows="2" placeholder="Medication: Mounjaro. Current dose: 2.5 mg. Goal: glucose control."></textarea>
+          <label>Personal Context (Optional guidance for AI)</label>
+          <textarea id="mySituation" class="form-control" rows="2" placeholder="e.g. I am a beginner looking to understand the basics of this topic."></textarea>
         </div>
       </div>
       
@@ -301,40 +289,7 @@
         </div>
       </div>
 
-      <!-- Section 4: Dose Pattern Timeline -->
-      <div class="panel">
-        <h2>Dose Pattern Timeline</h2>
-        <div class="timeline" id="doseTimeline">
-          <!-- Filled by JS -->
-          <div class="tl-node start">2.5 mg</div>
-          <div class="tl-arrow">→</div>
-          <div class="tl-node mid">5 mg</div>
-          <div class="tl-arrow">→</div>
-          <div class="tl-node warn">Side Effects</div>
-          <div class="tl-arrow">→</div>
-          <div class="tl-node doc">Reduced Dose</div>
-          <div class="tl-arrow">→</div>
-          <div class="tl-node start">Maintenance</div>
-        </div>
-        <p style="text-align: center; font-size: 13px; color: var(--dark-muted); margin: 0;">Simplified visual based on common patterns found in the AI summary.</p>
-      </div>
-      
-      <!-- AI Summary -->
-      <div class="panel">
-        <h2>AI Insights & Personal Context</h2>
-        <div style="background: rgba(0,0,0,0.2); padding: 16px; border-radius: 8px;">
-          <h4 style="margin: 0 0 8px; color: var(--teal);">How this applies to your case:</h4>
-          <ul id="aiAppliesList" style="margin: 0; padding-left: 20px; font-size: 14px; color: #ddd;"></ul>
-        </div>
-      </div>
 
-      <!-- Section 6: Doctor Discussion Generator -->
-      <div class="panel">
-        <h2>Doctor Discussion Generator</h2>
-        <p style="font-size: 14px; color: var(--dark-muted);">Based on these comments and your situation, you might ask your prescriber:</p>
-        <textarea id="doctorMessage" class="form-control" rows="4" style="margin-bottom: 12px;"></textarea>
-        <button class="btn btn-outline" onclick="copyDocMessage()">Copy Message</button>
-      </div>
 
       <!-- Section 5: Representative Comments -->
       <div id="repCommentsPanel" class="panel hidden">
@@ -387,21 +342,6 @@
     let globalComments = [];
     let globalSummary = null;
     let globalThemes = {};
-
-    function applyPreset(type) {
-      const el = document.getElementById('focusKeywords');
-      if (type === 'glp1') {
-        el.value = "mounjaro, tirzepatide, zepbound, 2.5 mg, 5 mg, nausea, food noise, microdosing, maintenance, insulin, glucose, a1c";
-      } else if (type === 'diabetes') {
-        el.value = "diabetes, insulin, glucose, a1c, blood sugar, hypoglycemia, neuropathy";
-      } else if (type === 'kidney') {
-        el.value = "kidney, egfr, creatinine, bun, protein, urine";
-      } else if (type === 'cholesterol') {
-        el.value = "cholesterol, ldl, statin, heart, plaque, lipid";
-      } else if (type === 'weight') {
-        el.value = "weight loss, lbs, goal weight, plateau, metabolism";
-      }
-    }
 
     function toggleCollapse(header, contentId) {
       header.classList.toggle('collapsed');
@@ -573,17 +513,6 @@
       summaries.forEach(s => {
         summaryList.innerHTML += `<li>${s}</li>`;
       });
-      
-      // Doc msg
-      const msg = document.getElementById('doctorMessage');
-      if (data.questionsToAskDoctor && data.questionsToAskDoctor.length > 0) {
-        msg.value = `Based on my current situation, I've noticed many patients report similar patterns.\n\nQuestions for consideration:\n` + 
-          data.questionsToAskDoctor.map(q => `- ${q}`).join('\n');
-      } else {
-        msg.value = "Many patient comments mention tolerability issues. Can we discuss my current dosage and options?";
-      }
-      
-      // Update timeline loosely based on AI data if possible. (Static visual for now as per requirements)
     }
 
     function renderComments() {
@@ -626,12 +555,6 @@
 
     function filterComments() {
       renderComments();
-    }
-
-    function copyDocMessage() {
-      const text = document.getElementById('doctorMessage').value;
-      navigator.clipboard.writeText(text);
-      alert('Copied to clipboard');
     }
 
     function exportJSON() {
