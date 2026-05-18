@@ -19,6 +19,7 @@ from datetime import datetime, timedelta
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from uuid import uuid4
+import youtube_analyzer
 
 
 PROJECT_DIR = Path(__file__).resolve().parent
@@ -1508,6 +1509,10 @@ class DashboardHandler(SimpleHTTPRequestHandler):
             return
         if self._require_vault_auth():
             return
+        if path == "/health/youtube-comments":
+            self.path = "/youtube-comments.html"
+            super().do_GET()
+            return
         if self._serve_env_override(path):
             return
         super().do_GET()
@@ -1551,6 +1556,38 @@ class DashboardHandler(SimpleHTTPRequestHandler):
             if self._require_admin_auth():
                 return
             self._handle_admin_upload()
+            return
+
+        if self.path == "/api/youtube-comments/analyze":
+            length = int(self.headers.get("Content-Length", "0"))
+            raw = self.rfile.read(length) if length else b"{}"
+            try:
+                payload = json.loads(raw.decode("utf-8"))
+            except Exception as e:
+                self._json(400, {"ok": False, "error": "Invalid JSON"})
+                return
+            video_url = payload.get("videoUrl", "")
+            max_comments = int(payload.get("maxComments", 500))
+            include_replies = bool(payload.get("includeReplies", True))
+            sort_order = payload.get("sortOrder", "relevance")
+            focus_keywords = payload.get("focusKeywords", [])
+            result = youtube_analyzer.fetch_youtube_comments(video_url, max_comments, include_replies, sort_order, focus_keywords)
+            status = 200 if result.get("ok") else 400
+            self._json(status, result)
+            return
+
+        if self.path == "/api/youtube-comments/ai-summary":
+            length = int(self.headers.get("Content-Length", "0"))
+            raw = self.rfile.read(length) if length else b"{}"
+            try:
+                payload = json.loads(raw.decode("utf-8"))
+            except Exception as e:
+                self._json(400, {"ok": False, "error": "Invalid JSON"})
+                return
+            comments = payload.get("comments", [])
+            user_context = payload.get("userContext", {})
+            summary = youtube_analyzer.analyze_ai_summary(comments, user_context)
+            self._json(200, summary)
             return
 
         if self.path != "/api/rebuild":

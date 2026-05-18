@@ -1,0 +1,592 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YouTube Health Comment Analyzer</title>
+  <style>
+    :root {
+      --bg-a: #f1f9ff;
+      --bg-b: #fffaf0;
+      --bg-c: #f2fff8;
+      --ink: #102838;
+      --muted: #506979;
+      --panel: rgba(255, 255, 255, 0.95);
+      --line: rgba(16, 40, 56, 0.12);
+      --shadow: 0 14px 32px rgba(16, 40, 56, 0.1);
+      --blue: #0a7ca4;
+      --teal: #0e9b78;
+      --amber: #dd8a1f;
+      --rose: #d8576d;
+      
+      --dark-bg: #12181b;
+      --dark-panel: #1e262b;
+      --dark-card: #273138;
+      --dark-text: #e8f0f4;
+      --dark-muted: #8b9ca8;
+      --dark-line: rgba(255, 255, 255, 0.1);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Avenir Next", "Trebuchet MS", "Segoe UI", sans-serif;
+      color: var(--dark-text);
+      background: var(--dark-bg);
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .wrap { max-width: 1160px; margin: 0 auto; }
+    
+    .nav {
+      display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px;
+    }
+    .nav a {
+      text-decoration: none; padding: 9px 12px; border-radius: 12px;
+      border: 1px solid var(--dark-line); background: rgba(255,255,255,0.05);
+      color: var(--dark-text); font-weight: 700; font-size: 13px;
+      min-height: 44px; display: inline-flex; align-items: center;
+    }
+    .nav a.active { background: linear-gradient(120deg, var(--blue), #1597c6); color: #fff; border-color: transparent; }
+
+    .hero {
+      background: var(--dark-panel); border: 1px solid var(--dark-line); border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5); padding: 24px; margin-bottom: 20px; position: relative; overflow: hidden;
+    }
+    .hero h1 { margin: 0 0 10px; font-size: clamp(26px, 4vw, 38px); letter-spacing: 0.5px; }
+    .hero .sub { color: var(--dark-muted); margin-bottom: 16px; max-width: 800px; font-size: 15px; line-height: 1.5; }
+    
+    .disclaimer {
+      background: rgba(216, 87, 109, 0.15); border-left: 4px solid var(--rose);
+      padding: 12px 16px; border-radius: 8px; margin-bottom: 16px; color: #ffb3c1; font-weight: 500; font-size: 14px;
+    }
+    
+    .badges { display: flex; gap: 8px; flex-wrap: wrap; }
+    .badge {
+      display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px;
+      border-radius: 999px; background: rgba(255,255,255,0.08); font-size: 12px; font-weight: 600; border: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .panel {
+      background: var(--dark-panel); border: 1px solid var(--dark-line); border-radius: 16px;
+      padding: 20px; margin-bottom: 20px;
+    }
+    .panel h2 { margin: 0 0 16px; font-size: 18px; border-bottom: 1px solid var(--dark-line); padding-bottom: 10px; }
+    
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 768px) { .form-grid { grid-template-columns: 1fr; } }
+    
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group label { font-size: 13px; font-weight: 600; color: var(--dark-muted); }
+    .form-control {
+      background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px;
+      padding: 10px 12px; color: #fff; font-size: 14px; outline: none; transition: 0.2s;
+    }
+    .form-control:focus { border-color: var(--blue); }
+    
+    .presets { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+    .preset-btn {
+      background: rgba(255,255,255,0.1); border: none; padding: 4px 10px; border-radius: 6px;
+      color: #ccc; font-size: 12px; cursor: pointer;
+    }
+    .preset-btn:hover { background: rgba(255,255,255,0.2); }
+
+    .btn {
+      background: linear-gradient(120deg, var(--blue), #1597c6); color: #fff; border: none;
+      padding: 12px 20px; border-radius: 10px; font-weight: 700; font-size: 15px; cursor: pointer;
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .btn:hover { filter: brightness(1.1); }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    
+    .btn-outline {
+      background: transparent; border: 1px solid var(--dark-line); color: var(--dark-text);
+    }
+    .btn-outline:hover { background: rgba(255,255,255,0.05); }
+
+    .themes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+    .theme-card {
+      background: var(--dark-card); border-radius: 12px; padding: 16px;
+      border-top: 4px solid var(--blue); display: flex; flex-direction: column;
+    }
+    .theme-card.danger { border-top-color: var(--rose); }
+    .theme-card.warning { border-top-color: var(--amber); }
+    .theme-card.success { border-top-color: var(--teal); }
+    
+    .theme-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+    .theme-title { font-size: 14px; font-weight: 700; }
+    .theme-count { font-size: 20px; font-weight: 800; color: var(--blue); }
+    .theme-card.danger .theme-count { color: var(--rose); }
+    .theme-card.warning .theme-count { color: var(--amber); }
+    .theme-card.success .theme-count { color: var(--teal); }
+    
+    .theme-desc { font-size: 12px; color: var(--dark-muted); line-height: 1.4; flex-grow: 1; }
+
+    .timeline {
+      display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 8px; padding: 20px;
+      background: var(--dark-card); border-radius: 12px; margin-bottom: 20px;
+    }
+    .tl-node { padding: 8px 16px; border-radius: 999px; font-size: 13px; font-weight: 600; }
+    .tl-node.start { background: rgba(14, 155, 120, 0.2); color: #2cd4aa; }
+    .tl-node.mid { background: rgba(221, 138, 31, 0.2); color: #f5b356; }
+    .tl-node.warn { background: rgba(216, 87, 109, 0.2); color: #ff8fa3; }
+    .tl-node.doc { background: rgba(10, 124, 164, 0.2); color: #5bc8f2; }
+    .tl-arrow { color: var(--dark-muted); }
+
+    .comment-list { display: flex; flex-direction: column; gap: 12px; }
+    .comment { background: var(--dark-card); padding: 14px; border-radius: 12px; border-left: 3px solid var(--dark-line); }
+    .comment-header { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 12px; color: var(--dark-muted); }
+    .comment-text { font-size: 14px; line-height: 1.5; margin-bottom: 10px; }
+    .comment-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .c-tag { font-size: 11px; padding: 3px 8px; border-radius: 4px; background: rgba(255,255,255,0.08); }
+    
+    .ai-tag.anecdote { background: rgba(255,255,255,0.1); }
+    .ai-tag.useful { background: rgba(14,155,120,0.15); color: #2cd4aa; }
+    .ai-tag.doc { background: rgba(221,138,31,0.15); color: #f5b356; }
+    .ai-tag.unsafe { background: rgba(216,87,109,0.15); color: #ff8fa3; }
+
+    .safety-warning {
+      background: rgba(216,87,109,0.1); border: 1px solid var(--rose); border-radius: 12px; padding: 16px;
+      margin-bottom: 20px;
+    }
+    .safety-warning h3 { margin: 0 0 10px; color: #ff8fa3; display: flex; align-items: center; gap: 8px; }
+    .safety-warning ul { margin: 0; padding-left: 20px; color: #e8f0f4; font-size: 14px; }
+    
+    .hidden { display: none !important; }
+    
+    .collapsible-header {
+      cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+    }
+    .collapsible-header::after { content: '▼'; font-size: 12px; transition: 0.3s; }
+    .collapsible-header.collapsed::after { transform: rotate(-90deg); }
+    .collapsible-content { margin-top: 16px; }
+    .collapsible-content.collapsed { display: none; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <nav class="nav">
+      <a href="./index.html">Home</a>
+      <a href="./dashboard.html">Lab Results</a>
+      <a href="./bio-age.html">Bio Age</a>
+      <a href="/health/youtube-comments" class="active">YT Comment Analyzer</a>
+      <a href="./vault.html">Vault</a>
+    </nav>
+
+    <div class="hero">
+      <h1>🎥 YouTube Health Comment Analyzer</h1>
+      <div class="sub">Extract real-world patient comments, replies, side effects, dose patterns, and safety signals from health-related YouTube videos.</div>
+      <div class="disclaimer">
+        IMPORTANT MEDICAL DISCLAIMER: Comments are patient anecdotes, not medical advice. Always confirm medication and dose changes with your clinician, especially if using insulin or diabetes medication.
+      </div>
+      <div class="badges">
+        <span class="badge">🧪 Patient Experience Mining</span>
+        <span class="badge">💬 Comments + Replies</span>
+        <span class="badge">⚠️ Anecdotes ≠ Medical Advice</span>
+        <span class="badge">💉 GLP-1 / Mounjaro Ready</span>
+      </div>
+    </div>
+
+    <!-- Section 1: Input -->
+    <div class="panel">
+      <h2>Input Panel</h2>
+      <div class="form-grid">
+        <div class="form-group" style="grid-column: 1 / -1;">
+          <label>YouTube Video URL</label>
+          <input type="text" id="videoUrl" class="form-control" placeholder="https://www.youtube.com/watch?v=...">
+        </div>
+        
+        <div class="form-group" style="grid-column: 1 / -1;">
+          <label>Focus Keywords (comma separated)</label>
+          <input type="text" id="focusKeywords" class="form-control" placeholder="Mounjaro, tirzepatide, 2.5 mg, 5 mg, microdosing, nausea">
+          <div class="presets">
+            <button class="preset-btn" onclick="applyPreset('glp1')">GLP-1 / Mounjaro</button>
+            <button class="preset-btn" onclick="applyPreset('diabetes')">Diabetes</button>
+            <button class="preset-btn" onclick="applyPreset('kidney')">Kidney Health</button>
+            <button class="preset-btn" onclick="applyPreset('cholesterol')">Cholesterol / Statins</button>
+            <button class="preset-btn" onclick="applyPreset('weight')">Weight Loss</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Max Comments</label>
+          <select id="maxComments" class="form-control">
+            <option value="100">100</option>
+            <option value="250">250</option>
+            <option value="500" selected>500</option>
+            <option value="1000">1000</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label>Sort Order</label>
+          <select id="sortOrder" class="form-control">
+            <option value="relevance">Relevance</option>
+            <option value="time">Time</option>
+          </select>
+        </div>
+        
+        <div class="form-group" style="flex-direction: row; align-items: center; gap: 10px; grid-column: 1 / -1;">
+          <input type="checkbox" id="includeReplies" checked style="width: 16px; height: 16px;">
+          <label for="includeReplies">Include Replies</label>
+        </div>
+        
+        <div class="form-group" style="grid-column: 1 / -1;">
+          <label>My Situation (Optional context for AI)</label>
+          <textarea id="mySituation" class="form-control" rows="2" placeholder="Medication: Mounjaro. Current dose: 2.5 mg. Goal: glucose control."></textarea>
+        </div>
+      </div>
+      
+      <div style="margin-top: 20px;">
+        <button id="analyzeBtn" class="btn" onclick="runAnalysis()">Fetch & Analyze Comments</button>
+        <span id="loadingMsg" style="margin-left: 10px; color: var(--dark-muted); display: none;">Fetching data... Please wait...</span>
+        <div style="font-size: 11px; color: var(--dark-muted); margin-top: 8px;">YouTube API quota may limit very large exports. Start with 250–500 comments.</div>
+      </div>
+    </div>
+
+    <!-- Results Area (Hidden initially) -->
+    <div id="resultsArea" class="hidden">
+      
+      <!-- Section 2: Video Summary -->
+      <div class="panel">
+        <h2 class="collapsible-header" onclick="toggleCollapse(this, 'videoSummary')">Video Summary</h2>
+        <div id="videoSummary" class="collapsible-content form-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+          <div class="form-group">
+            <label>Title</label>
+            <div id="resTitle" style="font-weight: 600;">-</div>
+          </div>
+          <div class="form-group">
+            <label>Channel</label>
+            <div id="resChannel">-</div>
+          </div>
+          <div class="form-group">
+            <label>Total Comments Fetched</label>
+            <div id="resTotal">-</div>
+          </div>
+          <div class="form-group">
+            <label>Replies Fetched</label>
+            <div id="resReplies">-</div>
+          </div>
+          <div class="form-group">
+            <label>Last Analyzed</label>
+            <div id="resTime">-</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Section 7: Safety Warnings -->
+      <div id="safetyWarningBox" class="safety-warning hidden">
+        <h3>⚠️ Do Not Copy This Without Medical Guidance</h3>
+        <p style="margin-top: 0; font-size: 13px;">The following risky claims were detected in the comments:</p>
+        <ul id="safetyWarningsList"></ul>
+      </div>
+
+      <!-- Section 3: Theme Dashboard -->
+      <div class="panel">
+        <h2>Theme Dashboard</h2>
+        <div id="themesGrid" class="themes-grid">
+          <!-- Filled by JS -->
+        </div>
+      </div>
+
+      <!-- Section 4: Dose Pattern Timeline -->
+      <div class="panel">
+        <h2>Dose Pattern Timeline</h2>
+        <div class="timeline" id="doseTimeline">
+          <!-- Filled by JS -->
+          <div class="tl-node start">2.5 mg</div>
+          <div class="tl-arrow">→</div>
+          <div class="tl-node mid">5 mg</div>
+          <div class="tl-arrow">→</div>
+          <div class="tl-node warn">Side Effects</div>
+          <div class="tl-arrow">→</div>
+          <div class="tl-node doc">Reduced Dose</div>
+          <div class="tl-arrow">→</div>
+          <div class="tl-node start">Maintenance</div>
+        </div>
+        <p style="text-align: center; font-size: 13px; color: var(--dark-muted); margin: 0;">Simplified visual based on common patterns found in the AI summary.</p>
+      </div>
+      
+      <!-- AI Summary -->
+      <div class="panel">
+        <h2>AI Summary</h2>
+        <p id="aiSummaryText" style="line-height: 1.5; font-size: 14px;"></p>
+        
+        <div style="margin-top: 16px; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 8px;">
+          <h4 style="margin: 0 0 8px; color: var(--teal);">How this applies to your case:</h4>
+          <ul id="aiAppliesList" style="margin: 0; padding-left: 20px; font-size: 14px; color: #ddd;"></ul>
+        </div>
+      </div>
+
+      <!-- Section 6: Doctor Discussion Generator -->
+      <div class="panel">
+        <h2>Doctor Discussion Generator</h2>
+        <p style="font-size: 14px; color: var(--dark-muted);">Based on these comments and your situation, you might ask your prescriber:</p>
+        <textarea id="doctorMessage" class="form-control" rows="4" style="margin-bottom: 12px;"></textarea>
+        <button class="btn btn-outline" onclick="copyDocMessage()">Copy Message</button>
+      </div>
+
+      <!-- Section 5: Representative Comments -->
+      <div class="panel">
+        <h2 class="collapsible-header collapsed" onclick="toggleCollapse(this, 'repComments')">Representative Comments</h2>
+        <div id="repComments" class="collapsible-content collapsed">
+          <div class="form-group" style="margin-bottom: 16px; width: 250px;">
+            <select id="themeFilter" class="form-control" onchange="filterComments()">
+              <option value="all">All Themes</option>
+            </select>
+          </div>
+          <div id="commentList" class="comment-list">
+            <!-- Filled by JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 8: Export Options -->
+      <div class="panel">
+        <h2 class="collapsible-header collapsed" onclick="toggleCollapse(this, 'exportOptions')">Export Options</h2>
+        <div id="exportOptions" class="collapsible-content collapsed" style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <button class="btn btn-outline" onclick="exportJSON()">Export AI Summary JSON</button>
+          <button class="btn btn-outline" onclick="exportCSV()">Export Comments CSV</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+  <script>
+    let globalComments = [];
+    let globalSummary = null;
+    let globalThemes = {};
+
+    function applyPreset(type) {
+      const el = document.getElementById('focusKeywords');
+      if (type === 'glp1') {
+        el.value = "mounjaro, tirzepatide, zepbound, 2.5 mg, 5 mg, nausea, food noise, microdosing, maintenance, insulin, glucose, a1c";
+      } else if (type === 'diabetes') {
+        el.value = "diabetes, insulin, glucose, a1c, blood sugar, hypoglycemia, neuropathy";
+      } else if (type === 'kidney') {
+        el.value = "kidney, egfr, creatinine, bun, protein, urine";
+      } else if (type === 'cholesterol') {
+        el.value = "cholesterol, ldl, statin, heart, plaque, lipid";
+      } else if (type === 'weight') {
+        el.value = "weight loss, lbs, goal weight, plateau, metabolism";
+      }
+    }
+
+    function toggleCollapse(header, contentId) {
+      header.classList.toggle('collapsed');
+      const content = document.getElementById(contentId);
+      content.classList.toggle('collapsed');
+    }
+
+    async function runAnalysis() {
+      const videoUrl = document.getElementById('videoUrl').value.trim();
+      if (!videoUrl) { alert('Please enter a YouTube URL'); return; }
+      
+      const btn = document.getElementById('analyzeBtn');
+      const msg = document.getElementById('loadingMsg');
+      
+      btn.disabled = true;
+      msg.style.display = 'inline';
+      
+      try {
+        // Fetch comments
+        const req = {
+          videoUrl: videoUrl,
+          maxComments: parseInt(document.getElementById('maxComments').value),
+          includeReplies: document.getElementById('includeReplies').checked,
+          sortOrder: document.getElementById('sortOrder').value,
+          focusKeywords: document.getElementById('focusKeywords').value.split(',').map(s => s.trim()).filter(Boolean)
+        };
+        
+        msg.textContent = 'Fetching YouTube comments...';
+        const res = await fetch('/api/youtube-comments/analyze', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(req)
+        });
+        const data = await res.json();
+        
+        if (!data.ok) {
+          throw new Error(data.error || 'Failed to fetch comments');
+        }
+        
+        globalComments = data.comments;
+        
+        // Populate Video Summary
+        document.getElementById('resTitle').textContent = data.videoInfo.title;
+        document.getElementById('resChannel').textContent = data.videoInfo.channelTitle;
+        document.getElementById('resTotal').textContent = data.totalFetched;
+        document.getElementById('resReplies').textContent = data.totalReplies;
+        document.getElementById('resTime').textContent = new Date().toLocaleString();
+        
+        // Group Themes
+        globalThemes = {};
+        globalComments.forEach(c => {
+          c.matchedBuckets.forEach(b => {
+            globalThemes[b] = (globalThemes[b] || 0) + 1;
+          });
+        });
+        
+        renderThemes(data.totalFetched);
+        renderComments();
+        
+        // Run AI Summary
+        msg.textContent = 'Generating AI Summary...';
+        const userContext = { text: document.getElementById('mySituation').value.trim() };
+        
+        const aiRes = await fetch('/api/youtube-comments/ai-summary', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ comments: data.comments, userContext })
+        });
+        const aiData = await aiRes.json();
+        globalSummary = aiData;
+        
+        renderAISummary(aiData);
+        
+        document.getElementById('resultsArea').classList.remove('hidden');
+      } catch (e) {
+        alert("Error: " + e.message);
+      } finally {
+        btn.disabled = false;
+        msg.style.display = 'none';
+      }
+    }
+
+    function renderThemes(totalCount) {
+      const grid = document.getElementById('themesGrid');
+      grid.innerHTML = '';
+      
+      const themeFilter = document.getElementById('themeFilter');
+      themeFilter.innerHTML = '<option value="all">All Themes</option>';
+      
+      const icons = {
+        "Dose 2.5 mg": "💉", "Dose 5 mg": "⬆️", "Dose reduction": "⬇️",
+        "Microdosing / split dosing": "🧪", "Nausea / GI issues": "🤢",
+        "Food noise / appetite": "🍽️", "Weight loss": "⚖️", "Diabetes / glucose": "🩸",
+        "Maintenance dose": "🎯", "Safety concern": "🛡️"
+      };
+      
+      for (const [theme, count] of Object.entries(globalThemes)) {
+        if (count === 0) continue;
+        const pct = Math.round((count / totalCount) * 100);
+        let type = 'success';
+        if (["Nausea / GI issues", "Dose reduction", "Safety concern"].includes(theme)) type = 'danger';
+        else if (["Microdosing / split dosing", "Dose 5 mg"].includes(theme)) type = 'warning';
+        
+        grid.innerHTML += `
+          <div class="theme-card ${type}">
+            <div class="theme-header">
+              <div class="theme-title">${icons[theme] || '📌'} ${theme}</div>
+              <div class="theme-count">${count}</div>
+            </div>
+            <div class="theme-desc">${pct}% of fetched comments</div>
+          </div>
+        `;
+        
+        themeFilter.innerHTML += `<option value="${theme}">${theme}</option>`;
+      }
+    }
+
+    function renderAISummary(data) {
+      document.getElementById('aiSummaryText').textContent = data.summary || "No summary provided.";
+      
+      const list = document.getElementById('aiAppliesList');
+      list.innerHTML = '';
+      (data.appliesToUserCase || []).forEach(item => {
+        list.innerHTML += `<li>${item}</li>`;
+      });
+      
+      const safetyBox = document.getElementById('safetyWarningBox');
+      const sList = document.getElementById('safetyWarningsList');
+      sList.innerHTML = '';
+      if (data.safetyWarnings && data.safetyWarnings.length > 0) {
+        data.safetyWarnings.forEach(w => { sList.innerHTML += `<li>${w}</li>`; });
+        safetyBox.classList.remove('hidden');
+      } else {
+        safetyBox.classList.add('hidden');
+      }
+      
+      // Doc msg
+      const msg = document.getElementById('doctorMessage');
+      if (data.questionsToAskDoctor && data.questionsToAskDoctor.length > 0) {
+        msg.value = `Based on my current situation, I've noticed many patients report similar patterns.\n\nQuestions for consideration:\n` + 
+          data.questionsToAskDoctor.map(q => `- ${q}`).join('\n');
+      } else {
+        msg.value = "Many patient comments mention tolerability issues. Can we discuss my current dosage and options?";
+      }
+      
+      // Update timeline loosely based on AI data if possible. (Static visual for now as per requirements)
+    }
+
+    function renderComments() {
+      const filter = document.getElementById('themeFilter').value;
+      const list = document.getElementById('commentList');
+      list.innerHTML = '';
+      
+      const filtered = filter === 'all' ? globalComments : globalComments.filter(c => c.matchedBuckets.includes(filter));
+      
+      filtered.slice(0, 100).forEach(c => {
+        const isReply = c.isReply ? '↳ Reply' : 'Top Level';
+        const buckets = c.matchedBuckets.map(b => `<span class="c-tag">${b}</span>`).join('');
+        
+        let aiTagsHtml = '';
+        if (c.aiTags && c.aiTags.length) {
+          c.aiTags.forEach(t => {
+            let cls = 'anecdote';
+            if (t.includes('useful')) cls = 'useful';
+            if (t.includes('unsafe')) cls = 'unsafe';
+            if (t.includes('doctor')) cls = 'doc';
+            aiTagsHtml += `<span class="c-tag ai-tag ${cls}">${t}</span>`;
+          });
+        }
+        
+        list.innerHTML += `
+          <div class="comment">
+            <div class="comment-header">
+              <span><strong>${c.author}</strong> • ${isReply} • ${c.likeCount} likes</span>
+              <span>${new Date(c.publishedAt).toLocaleDateString()}</span>
+            </div>
+            <div class="comment-text">${c.text.replace(/\n/g, '<br>')}</div>
+            <div class="comment-tags">
+              ${buckets} ${aiTagsHtml}
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function filterComments() {
+      renderComments();
+    }
+
+    function copyDocMessage() {
+      const text = document.getElementById('doctorMessage').value;
+      navigator.clipboard.writeText(text);
+      alert('Copied to clipboard');
+    }
+
+    function exportJSON() {
+      if (!globalSummary) return alert('Run analysis first.');
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(globalSummary, null, 2));
+      const dlAnchorElem = document.createElement('a');
+      dlAnchorElem.setAttribute("href", dataStr);
+      dlAnchorElem.setAttribute("download", "ai_summary.json");
+      dlAnchorElem.click();
+    }
+
+    function exportCSV() {
+      if (!globalComments.length) return alert('Run analysis first.');
+      const headers = ['ID', 'ParentID', 'Author', 'IsReply', 'Likes', 'Date', 'Text'];
+      const rows = globalComments.map(c => [
+        c.id, c.parentId || '', `"${c.author}"`, c.isReply, c.likeCount, c.publishedAt, `"${c.text.replace(/"/g, '""')}"`
+      ]);
+      const csvContent = "data:text/csv;charset=utf-8," + [headers.join(','), ...rows.map(e => e.join(','))].join("\n");
+      const dlAnchorElem = document.createElement('a');
+      dlAnchorElem.setAttribute("href", csvContent);
+      dlAnchorElem.setAttribute("download", "youtube_comments.csv");
+      dlAnchorElem.click();
+    }
+  </script>
+</body>
+</html>
