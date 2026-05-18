@@ -266,6 +266,12 @@
             <label>Last Analyzed</label>
             <div id="resTime">-</div>
           </div>
+          <div class="form-group" style="grid-column: 1 / -1; margin-top: 12px; border-top: 1px solid var(--dark-line); padding-top: 12px;">
+            <label>AI Key Takeaways</label>
+            <ul id="resAiBullets" style="margin: 8px 0 0; padding-left: 20px; font-size: 14px; line-height: 1.6; color: #e8f0f4;">
+              <li style="color: var(--dark-muted);">Waiting for AI analysis...</li>
+            </ul>
+          </div>
         </div>
       </div>
       
@@ -299,10 +305,8 @@
       
       <!-- AI Summary -->
       <div class="panel">
-        <h2>AI Summary</h2>
-        <p id="aiSummaryText" style="line-height: 1.5; font-size: 14px;"></p>
-        
-        <div style="margin-top: 16px; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 8px;">
+        <h2>AI Insights & Personal Context</h2>
+        <div style="background: rgba(0,0,0,0.2); padding: 16px; border-radius: 8px;">
           <h4 style="margin: 0 0 8px; color: var(--teal);">How this applies to your case:</h4>
           <ul id="aiAppliesList" style="margin: 0; padding-left: 20px; font-size: 14px; color: #ddd;"></ul>
         </div>
@@ -483,7 +487,21 @@
     }
 
     function renderAISummary(data) {
-      document.getElementById('aiSummaryText').textContent = data.summary || "No summary provided.";
+      const summaryList = document.getElementById('resAiBullets');
+      summaryList.innerHTML = '';
+      
+      let summaries = [];
+      if (Array.isArray(data.summary)) {
+        summaries = data.summary;
+      } else if (typeof data.summary === 'string') {
+        summaries = [data.summary];
+      } else {
+        summaries = ["No summary provided."];
+      }
+      
+      summaries.forEach(s => {
+        summaryList.innerHTML += `<li>${s}</li>`;
+      });
       
       const list = document.getElementById('aiAppliesList');
       list.innerHTML = '';
