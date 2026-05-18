@@ -533,7 +533,7 @@
       themes.forEach((themeObj, index) => {
         const title = themeObj.themeName;
         const icon = themeObj.icon || "📌";
-        const desc = themeObj.themeDescription || "";
+        const desc = Array.isArray(themeObj.themeDescription) ? themeObj.themeDescription[0] : (themeObj.themeDescription || "");
         
         // Randomly assign a color type for visual variety
         const types = ['success', 'warning', 'danger', ''];
@@ -668,7 +668,13 @@
       
       let bHtml = '';
       if (themeObj && themeObj.themeDescription) {
-        bHtml += `<li>${themeObj.themeDescription}</li>`;
+        if (Array.isArray(themeObj.themeDescription)) {
+          themeObj.themeDescription.forEach(point => {
+            bHtml += `<li>${point}</li>`;
+          });
+        } else {
+          bHtml += `<li>${themeObj.themeDescription}</li>`;
+        }
       } else {
         bHtml = `<li>No insights returned.</li>`;
       }
