@@ -451,10 +451,8 @@
 
     function renderThemes(aiData) {
       const grid = document.getElementById('themesGrid');
-      const themeFilter = document.getElementById('themeFilter');
       
       let gridHtml = '';
-      let filterHtml = '<option value="all">All Themes</option>';
       
       const themes = aiData.dynamicThemes || [];
       
@@ -477,12 +475,9 @@
             <div class="theme-desc">${desc}</div>
           </div>
         `;
-        
-        filterHtml += `<option value="${title}">${title}</option>`;
       });
       
       grid.innerHTML = gridHtml;
-      themeFilter.innerHTML = filterHtml;
     }
 
     function renderAISummary(data) {
