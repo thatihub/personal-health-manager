@@ -214,7 +214,7 @@ def analyze_ai_summary(comments: list, user_context: dict, transcript: str = "")
         prompt += f"User specific context or question: {user_context['text']}\n"
     
     prompt += "Provide a structured JSON output with the exact following keys:\n"
-    prompt += "1. 'summary': list of strings (up to 10 key takeaway bullet points summarizing the content. Start EVERY bullet point with a distinct emoji!).\n"
+    prompt += "1. 'summary': list of strings (up to 10 key takeaway bullet points summarizing the content).\n"
     prompt += "2. 'dynamicThemes': list of objects representing the top 4 to 6 themes found in the content. Each object must have: 'themeName' (string, short title), 'themeDescription' (list of strings, 3-4 bullet points detailing the community's perspective, specific concerns, or praises regarding the theme. Start EVERY single bullet point with a distinct emoji!), 'icon' (string, a single emoji representing the theme), and 'representativeComments' (list of strings, 3-5 actual or paraphrased quotes showing this theme).\n\n"
     
     if mode in ["video_only", "both"]:
