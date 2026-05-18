@@ -176,8 +176,8 @@ def fetch_youtube_comments(video_url: str, max_comments: int, include_replies: b
     }
 
 def analyze_ai_summary(comments: list, user_context: dict) -> dict:
-    api_key = os.getenv("OPENAI_API_KEY")
-    gemini_key = os.getenv("GEMINI_API_KEY")
+    api_key = os.getenv("OPENAI_API_KEY", "").strip()
+    gemini_key = os.getenv("GEMINI_API_KEY", "").strip()
     
     default_summary = {
         "summary": "AI summary based on the fetched comments.",
@@ -224,7 +224,7 @@ def analyze_ai_summary(comments: list, user_context: dict) -> dict:
                 res_data = json.loads(response.read().decode('utf-8'))
                 return json.loads(res_data["choices"][0]["message"]["content"])
         elif gemini_key:
-            url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={gemini_key}"
+            url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key={gemini_key}"
             headers = {"Content-Type": "application/json"}
             data = {
                 "contents": [{"parts": [{"text": "You are a medical data analyst. Output ONLY valid JSON.\n" + prompt}]}]
@@ -236,6 +236,10 @@ def analyze_ai_summary(comments: list, user_context: dict) -> dict:
                 if text.startswith("```json"):
                     text = text[7:-3]
                 return json.loads(text)
+    except urllib.error.HTTPError as e:
+        error_body = e.read().decode('utf-8')
+        default_summary["summary"] = f"AI API Error: {str(e)}. Details: {error_body}"
+        return default_summary
     except Exception as e:
         default_summary["summary"] = f"AI API Error: {str(e)}. Returning default."
         return default_summary
