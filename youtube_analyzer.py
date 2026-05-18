@@ -3,6 +3,7 @@ import urllib.parse
 import json
 import re
 import os
+from youtube_transcript_api import YouTubeTranscriptApi
 
 def extract_video_id(url: str) -> str:
     if "youtu.be/" in url:
@@ -36,7 +37,7 @@ def classify_comment(text: str) -> list:
             
     return buckets
 
-def fetch_youtube_comments(video_url: str, max_comments: int, include_replies: bool, sort_order: str, focus_keywords: list) -> dict:
+def fetch_youtube_comments(video_url: str, max_comments: int, include_replies: bool, sort_order: str, focus_keywords: list, analysis_mode: str = "comments_only") -> dict:
     api_key = os.getenv("YOUTUBE_API_KEY")
     if not api_key:
         return {"error": "YOUTUBE_API_KEY environment variable is not set."}
@@ -152,7 +153,6 @@ def fetch_youtube_comments(video_url: str, max_comments: int, include_replies: b
         
     all_comments = all_comments[:max_comments]
     
-    # Tagging AI tags locally for simplicity based on text
     for c in all_comments:
         tags = []
         lower_t = c["text"].lower()
@@ -166,21 +166,32 @@ def fetch_youtube_comments(video_url: str, max_comments: int, include_replies: b
             tags.append("Possible useful pattern")
         c["aiTags"] = tags
     
-    return {
+    result = {
         "ok": True,
         "videoInfo": video_info,
-        "comments": all_comments,
         "totalFetched": len(all_comments),
-        "totalTopLevel": len([c for c in all_comments if not c["isReply"]]),
-        "totalReplies": len([c for c in all_comments if c["isReply"]])
+        "totalReplies": sum(1 for c in all_comments if c["isReply"]),
+        "comments": all_comments,
+        "transcript": ""
     }
+    
+    if analysis_mode in ["video_only", "both"]:
+        try:
+            transcript_list = YouTubeTranscriptApi.get_transcript(video_id)
+            transcript_text = " ".join([t['text'] for t in transcript_list])
+            result["transcript"] = transcript_text
+        except Exception as e:
+            print("Failed to fetch transcript:", str(e))
+            result["transcript"] = ""
 
-def analyze_ai_summary(comments: list, user_context: dict) -> dict:
+    return result
+
+def analyze_ai_summary(comments: list, user_context: dict, transcript: str = "") -> dict:
     api_key = os.getenv("OPENAI_API_KEY", "").strip()
     gemini_key = os.getenv("GEMINI_API_KEY", "").strip()
     
     default_summary = {
-        "summary": "AI summary based on the fetched comments.",
+        "summary": ["AI summary based on the fetched comments."],
         "topThemes": ["Dose changes", "Side effects", "Appetite suppression"],
         "dosePatterns": ["Many start at 2.5mg", "Titrating to 5mg causes side effects for some"],
         "sideEffects": ["Nausea", "Fatigue", "GI issues"],
@@ -194,17 +205,32 @@ def analyze_ai_summary(comments: list, user_context: dict) -> dict:
     }
     
     if not api_key and not gemini_key:
-        default_summary["summary"] = "AI API Key not found. Please set OPENAI_API_KEY or GEMINI_API_KEY environment variable. Returning mock summary."
+        default_summary["summary"] = ["AI API Key not found. Please set OPENAI_API_KEY or GEMINI_API_KEY."]
         return default_summary
         
-    prompt = "Analyze the following YouTube comments regarding GLP-1/Mounjaro/Tirzepatide.\n"
-    if user_context:
-        prompt += f"User context: {json.dumps(user_context)}\n"
+    prompt = ""
+    mode = user_context.get("mode", "comments_only") if user_context else "comments_only"
     
-    prompt += "Provide a structured JSON output with the exact following keys: summary (list of 3-5 key takeaway bullet points), topThemes, dosePatterns, sideEffects, microdosingMentions, maintenanceMentions, diabetesMentions, safetyWarnings, misleadingClaims, questionsToAskDoctor, appliesToUserCase (all values must be list of strings).\n\nComments:\n"
+    if mode == "video_only":
+        prompt += "Analyze the following YouTube video transcript.\n"
+    elif mode == "both":
+        prompt += "Analyze the following YouTube video transcript AND user comments.\n"
+    else:
+        prompt += "Analyze the following YouTube user comments.\n"
+        
+    if user_context and "text" in user_context and user_context["text"]:
+        prompt += f"User context: {user_context['text']}\n"
     
-    sample = [c["text"] for c in comments[:30]]
-    prompt += "\n".join(sample)
+    prompt += "Provide a structured JSON output with the exact following keys: summary (list of up to 10 key takeaway bullet points), topThemes, dosePatterns, sideEffects, microdosingMentions, maintenanceMentions, diabetesMentions, safetyWarnings, misleadingClaims, questionsToAskDoctor, appliesToUserCase (all values must be list of strings).\n\n"
+    
+    if transcript and mode in ["video_only", "both"]:
+        # Limit transcript length to roughly 10000 chars to save tokens
+        prompt += f"Video Transcript:\n{transcript[:10000]}\n\n"
+        
+    if comments and mode in ["comments_only", "both"]:
+        prompt += "Comments:\n"
+        sample = [c["text"] for c in comments[:30]]
+        prompt += "\n".join(sample)
     
     try:
         if api_key:

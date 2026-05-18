@@ -1571,7 +1571,8 @@ class DashboardHandler(SimpleHTTPRequestHandler):
             include_replies = bool(payload.get("includeReplies", True))
             sort_order = payload.get("sortOrder", "relevance")
             focus_keywords = payload.get("focusKeywords", [])
-            result = youtube_analyzer.fetch_youtube_comments(video_url, max_comments, include_replies, sort_order, focus_keywords)
+            analysis_mode = payload.get("analysisMode", "comments_only")
+            result = youtube_analyzer.fetch_youtube_comments(video_url, max_comments, include_replies, sort_order, focus_keywords, analysis_mode)
             status = 200 if result.get("ok") else 400
             self._json(status, result)
             return
@@ -1586,7 +1587,12 @@ class DashboardHandler(SimpleHTTPRequestHandler):
                 return
             comments = payload.get("comments", [])
             user_context = payload.get("userContext", {})
-            summary = youtube_analyzer.analyze_ai_summary(comments, user_context)
+            transcript = payload.get("transcript", "")
+            
+            if "mode" in payload:
+                user_context["mode"] = payload["mode"]
+                
+            summary = youtube_analyzer.analyze_ai_summary(comments, user_context, transcript)
             self._json(200, summary)
             return
 

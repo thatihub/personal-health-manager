@@ -223,6 +223,15 @@
           </div>
         </div>
 
+        <div class="form-group" style="grid-column: 1 / -1;">
+          <label>Analysis Mode</label>
+          <select id="analysisMode" class="form-control" style="border-color: var(--teal); background: rgba(14, 155, 120, 0.1);">
+            <option value="comments_only" selected>Summarize Video Comments Only</option>
+            <option value="video_only">Summarize Video Transcript Only</option>
+            <option value="both">Summarize Both (Video + Comments)</option>
+          </select>
+        </div>
+
         <div class="form-group">
           <label>Max Comments</label>
           <select id="maxComments" class="form-control">
@@ -287,8 +296,11 @@
             <div id="resTime">-</div>
           </div>
           <div class="form-group" style="grid-column: 1 / -1; margin-top: 12px; border-top: 1px solid var(--dark-line); padding-top: 12px;">
-            <label>AI Key Takeaways</label>
-            <ul id="resAiBullets" style="margin: 8px 0 0; padding-left: 20px; font-size: 14px; line-height: 1.6; color: #e8f0f4;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <label style="margin: 0;">AI Key Takeaways</label>
+              <button class="btn btn-outline" style="padding: 4px 8px; font-size: 12px;" onclick="speakMainSummary()">🔊 Read Summary</button>
+            </div>
+            <ul id="resAiBullets" style="margin: 0; padding-left: 20px; font-size: 14px; line-height: 1.6; color: #e8f0f4;">
               <li style="color: var(--dark-muted);">Waiting for AI analysis...</li>
             </ul>
           </div>
@@ -430,6 +442,7 @@
           maxComments: parseInt(document.getElementById('maxComments').value),
           includeReplies: document.getElementById('includeReplies').checked,
           sortOrder: document.getElementById('sortOrder').value,
+          analysisMode: document.getElementById('analysisMode').value,
           focusKeywords: document.getElementById('focusKeywords').value.split(',').map(s => s.trim()).filter(Boolean)
         };
         
@@ -462,8 +475,17 @@
           });
         });
         
-        renderThemes(data.totalFetched);
-        renderComments();
+        if (req.analysisMode === 'video_only') {
+          document.getElementById('themesGrid').parentElement.style.display = 'none';
+          document.getElementById('doseTimeline').parentElement.style.display = 'none';
+          document.getElementById('repComments').parentElement.style.display = 'none';
+        } else {
+          document.getElementById('themesGrid').parentElement.style.display = 'block';
+          document.getElementById('doseTimeline').parentElement.style.display = 'block';
+          document.getElementById('repComments').parentElement.style.display = 'block';
+          renderThemes(data.totalFetched);
+          renderComments();
+        }
         
         // Run AI Summary
         msg.textContent = 'Generating AI Summary...';
@@ -472,7 +494,7 @@
         const aiRes = await fetch('/api/youtube-comments/ai-summary', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ comments: data.comments, userContext })
+          body: JSON.stringify({ comments: data.comments, transcript: data.transcript, userContext, mode: req.analysisMode })
         });
         const aiData = await aiRes.json();
         globalSummary = aiData;
@@ -690,6 +712,25 @@
       sec.classList.toggle('hidden');
     }
 
+    function speakMainSummary() {
+      const items = document.querySelectorAll('#resAiBullets li');
+      if (items.length === 0) return;
+      
+      let textToSpeak = "Main Video Summary. ";
+      items.forEach(li => {
+        textToSpeak += li.innerText + ". ";
+      });
+      
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(textToSpeak);
+        utterance.rate = 1.0;
+        window.speechSynthesis.speak(utterance);
+      } else {
+        alert("Text-to-speech is not supported in this browser.");
+      }
+    }
+    
     function speakThemeSummary() {
       const items = document.querySelectorAll('#modalThemeBullets li');
       if (items.length === 0) return;
