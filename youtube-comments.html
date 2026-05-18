@@ -233,36 +233,7 @@
           </div>
         </div>
 
-        <div class="form-group" style="grid-column: 1 / -1;">
-          <label>Analysis Mode</label>
-          <select id="analysisMode" class="form-control" style="border-color: var(--teal); background: rgba(14, 155, 120, 0.1);">
-            <option value="both">Summarize Both (Video + Comments)</option>
-            <option value="video_only" selected>Summarize Video Transcript Only</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label>Max Comments</label>
-          <select id="maxComments" class="form-control">
-            <option value="100">100</option>
-            <option value="250">250</option>
-            <option value="500" selected>500</option>
-            <option value="1000">1000</option>
-          </select>
-        </div>
-        
-        <div class="form-group">
-          <label>Sort Order</label>
-          <select id="sortOrder" class="form-control">
-            <option value="relevance">Relevance</option>
-            <option value="time">Time</option>
-          </select>
-        </div>
-        
-        <div class="form-group" style="flex-direction: row; align-items: center; gap: 10px; grid-column: 1 / -1;">
-          <input type="checkbox" id="includeReplies" checked style="width: 16px; height: 16px;">
-          <label for="includeReplies">Include Replies</label>
-        </div>
+        <!-- Internal config options removed for clean UI -->
         
         <div class="form-group" style="grid-column: 1 / -1;">
           <label>My Situation (Optional context for AI)</label>
@@ -271,7 +242,7 @@
       </div>
       
       <div style="margin-top: 20px;">
-        <button id="analyzeBtn" class="btn" onclick="runAnalysis()">Fetch & Analyze Comments</button>
+        <button id="analyzeBtn" class="btn" onclick="runAnalysis()">Get Video Summary</button>
         <span id="loadingMsg" style="margin-left: 10px; color: var(--dark-muted); display: none;">Fetching data... Please wait...</span>
         <div style="font-size: 11px; color: var(--dark-muted); margin-top: 8px;">YouTube API quota may limit very large exports. Start with 250–500 comments.</div>
       </div>
@@ -312,6 +283,10 @@
             <ul id="resAiBullets" style="margin: 0; padding-left: 20px; font-size: 14px; line-height: 1.6; color: #e8f0f4;">
               <li style="color: var(--dark-muted);">Waiting for AI analysis...</li>
             </ul>
+            <div style="margin-top: 20px; text-align: center;">
+              <button id="commentsBtn" class="btn btn-secondary" onclick="runCommentsAnalysis()" style="display: none; width: 100%;">Summarize Community Comments & Themes</button>
+              <div id="commentsLoadingMsg" style="margin-top: 10px; color: var(--dark-muted); display: none;">Generating comment themes...</div>
+            </div>
           </div>
         </div>
       </div>
@@ -319,7 +294,7 @@
       
 
       <!-- Section 3: Theme Dashboard -->
-      <div class="panel">
+      <div id="themesPanel" class="panel hidden">
         <h2>Theme Dashboard</h2>
         <div id="themesGrid" class="themes-grid">
           <!-- Filled by JS -->
@@ -362,7 +337,7 @@
       </div>
 
       <!-- Section 5: Representative Comments -->
-      <div class="panel">
+      <div id="repCommentsPanel" class="panel hidden">
         <h2 class="collapsible-header collapsed" onclick="toggleCollapse(this, 'repComments')">Representative Comments</h2>
         <div id="repComments" class="collapsible-content collapsed">
           <div class="form-group" style="margin-bottom: 16px; width: 250px;">
@@ -434,6 +409,9 @@
       content.classList.toggle('collapsed');
     }
 
+    let globalTranscript = "";
+    let globalTranscriptError = "";
+
     async function runAnalysis() {
       const videoUrl = document.getElementById('videoUrl').value.trim();
       if (!videoUrl) { alert('Please enter a YouTube URL'); return; }
@@ -444,18 +422,23 @@
       btn.disabled = true;
       msg.style.display = 'inline';
       
+      // Hide later panels in case they are running again
+      document.getElementById('themesPanel').classList.add('hidden');
+      document.getElementById('repCommentsPanel').classList.add('hidden');
+      document.getElementById('commentsBtn').style.display = 'none';
+      
       try {
         // Fetch comments
         const req = {
           videoUrl: videoUrl,
-          maxComments: parseInt(document.getElementById('maxComments').value),
-          includeReplies: document.getElementById('includeReplies').checked,
-          sortOrder: document.getElementById('sortOrder').value,
-          analysisMode: document.getElementById('analysisMode').value,
+          maxComments: 500,
+          includeReplies: true,
+          sortOrder: 'relevance',
+          analysisMode: 'video_only',
           focusKeywords: document.getElementById('focusKeywords').value.split(',').map(s => s.trim()).filter(Boolean)
         };
         
-        msg.textContent = 'Fetching YouTube comments...';
+        msg.textContent = 'Fetching YouTube transcript and comments...';
         const res = await fetch('/api/youtube-comments/analyze', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -468,6 +451,8 @@
         }
         
         globalComments = data.comments;
+        globalTranscript = data.transcript;
+        globalTranscriptError = data.transcriptError;
         
         // Populate Video Summary
         document.getElementById('resTitle').textContent = data.videoInfo.title;
@@ -477,39 +462,62 @@
         document.getElementById('resTime').textContent = new Date().toLocaleString();
         
         // Run AI Summary
-        msg.textContent = 'Generating AI Summary...';
-        if (req.analysisMode === 'video_only') {
-          document.getElementById('themesGrid').parentElement.style.display = 'none';
-          document.getElementById('repComments').parentElement.style.display = 'none';
-        } else {
-          document.getElementById('themesGrid').parentElement.style.display = 'block';
-          document.getElementById('repComments').parentElement.style.display = 'block';
-          renderComments();
-        }
-        
         // Run AI Summary
-        msg.textContent = 'Generating AI Summary...';
+        msg.textContent = 'Generating AI Video Summary...';
         const userContext = { text: document.getElementById('mySituation').value.trim() };
         
         const aiRes = await fetch('/api/youtube-comments/ai-summary', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ comments: data.comments, transcript: data.transcript, transcriptError: data.transcriptError, userContext, mode: req.analysisMode })
+          body: JSON.stringify({ comments: data.comments, transcript: data.transcript, transcriptError: data.transcriptError, userContext, mode: 'video_only' })
         });
         const aiData = await aiRes.json();
         globalSummary = aiData;
         
         renderAISummary(aiData);
-        if (req.analysisMode !== 'video_only') {
-          renderThemes(aiData);
-        }
         
         document.getElementById('resultsArea').classList.remove('hidden');
+        document.getElementById('commentsBtn').style.display = 'inline-block';
       } catch (e) {
         alert("Error: " + e.message);
       } finally {
         btn.disabled = false;
         msg.style.display = 'none';
+      }
+    }
+
+    async function runCommentsAnalysis() {
+      const btn = document.getElementById('commentsBtn');
+      const msg = document.getElementById('commentsLoadingMsg');
+      
+      btn.disabled = true;
+      msg.style.display = 'block';
+      
+      try {
+        const userContext = { text: document.getElementById('mySituation').value.trim() };
+        
+        const aiRes = await fetch('/api/youtube-comments/ai-summary', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ comments: globalComments, transcript: globalTranscript, transcriptError: globalTranscriptError, userContext, mode: 'both' })
+        });
+        const aiData = await aiRes.json();
+        
+        // Merge dynamic themes into the global summary
+        globalSummary.dynamicThemes = aiData.dynamicThemes;
+        
+        document.getElementById('themesPanel').classList.remove('hidden');
+        document.getElementById('repCommentsPanel').classList.remove('hidden');
+        
+        renderThemes(aiData);
+        renderComments();
+        
+      } catch (e) {
+        alert("Error: " + e.message);
+      } finally {
+        btn.disabled = false;
+        msg.style.display = 'none';
+        btn.style.display = 'none';
       }
     }
 
