@@ -244,40 +244,28 @@
       <!-- Section 2: Video Summary -->
       <div class="panel">
         <h2 class="collapsible-header" onclick="toggleCollapse(this, 'videoSummary')">Video Summary</h2>
-        <div id="videoSummary" class="collapsible-content form-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
-          <div class="form-group">
-            <label>Title</label>
-            <div id="resTitle" style="font-weight: 600;">-</div>
+        <div id="videoSummary" class="collapsible-content">
+          
+          <div style="margin-bottom: 20px;">
+            <div id="resTitle" style="font-weight: 700; font-size: 18px; color: #fff;"></div>
+            <div id="resChannel" style="font-size: 14px; color: var(--dark-muted); margin-top: 4px;"></div>
           </div>
-          <div class="form-group">
-            <label>Channel</label>
-            <div id="resChannel">-</div>
-          </div>
-          <div class="form-group">
-            <label>Total Comments Fetched</label>
-            <div id="resTotal">-</div>
-          </div>
-          <div class="form-group">
-            <label>Replies Fetched</label>
-            <div id="resReplies">-</div>
-          </div>
-          <div class="form-group">
-            <label>Last Analyzed</label>
-            <div id="resTime">-</div>
-          </div>
-          <div class="form-group" style="grid-column: 1 / -1; margin-top: 12px; border-top: 1px solid var(--dark-line); padding-top: 12px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-              <label style="margin: 0;">AI Key Takeaways</label>
+          
+          <div style="background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 16px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+              <h3 style="margin: 0; font-size: 16px; color: var(--teal);">AI Key Takeaways</h3>
               <button id="mainSpeechBtn" class="btn btn-outline" style="padding: 4px 8px; font-size: 12px;" onclick="speakMainSummary()">🔊 Read Summary</button>
             </div>
             <ul id="resAiBullets" style="margin: 0; padding-left: 20px; font-size: 14px; line-height: 1.6; color: #e8f0f4;">
               <li style="color: var(--dark-muted);">Waiting for AI analysis...</li>
             </ul>
-            <div style="margin-top: 20px; text-align: center;">
-              <button id="commentsBtn" class="btn btn-secondary" onclick="runCommentsAnalysis()" style="display: none; width: 100%;">Summarize Community Comments & Themes</button>
-              <div id="commentsLoadingMsg" style="margin-top: 10px; color: var(--dark-muted); display: none;">Generating comment themes...</div>
-            </div>
           </div>
+
+          <div style="margin-top: 20px; text-align: center;">
+            <button id="commentsBtn" class="btn btn-secondary" onclick="runCommentsAnalysis()" style="display: none; width: 100%;">Summarize Community Comments & Themes</button>
+            <div id="commentsLoadingMsg" style="margin-top: 10px; color: var(--dark-muted); display: none;">Generating comment themes...</div>
+          </div>
+          
         </div>
       </div>
       
@@ -373,12 +361,8 @@
         globalTranscript = data.transcript;
         globalTranscriptError = data.transcriptError;
         
-        // Populate Video Summary
         document.getElementById('resTitle').textContent = data.videoInfo.title;
         document.getElementById('resChannel').textContent = data.videoInfo.channelTitle;
-        document.getElementById('resTotal').textContent = data.totalFetched;
-        document.getElementById('resReplies').textContent = data.totalReplies;
-        document.getElementById('resTime').textContent = new Date().toLocaleString();
         
         // Run AI Summary
         // Run AI Summary
