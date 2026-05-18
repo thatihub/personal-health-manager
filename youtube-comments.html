@@ -575,12 +575,12 @@
     }
     
     function speakThemeSummary() {
-      const items = document.querySelectorAll('#modalThemeBullets li');
+      const items = document.querySelectorAll('#modalThemeBullets div');
       if (items.length === 0) return;
       
       let textToSpeak = document.getElementById('modalThemeTitle').innerText + " Theme Summary. ";
-      items.forEach(li => {
-        textToSpeak += li.innerText + ". ";
+      items.forEach(el => {
+        textToSpeak += el.innerText + ". ";
       });
       
       if ('speechSynthesis' in window) {
