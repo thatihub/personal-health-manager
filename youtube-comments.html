@@ -455,10 +455,10 @@
 
     function renderThemes(totalCount) {
       const grid = document.getElementById('themesGrid');
-      grid.innerHTML = '';
-      
       const themeFilter = document.getElementById('themeFilter');
-      themeFilter.innerHTML = '<option value="all">All Themes</option>';
+      
+      let gridHtml = '';
+      let filterHtml = '<option value="all">All Themes</option>';
       
       const icons = {
         "Dose 2.5 mg": "💉", "Dose 5 mg": "⬆️", "Dose reduction": "⬇️",
@@ -474,7 +474,7 @@
         if (["Nausea / GI issues", "Dose reduction", "Safety concern"].includes(theme)) type = 'danger';
         else if (["Microdosing / split dosing", "Dose 5 mg"].includes(theme)) type = 'warning';
         
-        grid.innerHTML += `
+        gridHtml += `
           <div class="theme-card ${type}">
             <div class="theme-header">
               <div class="theme-title">${icons[theme] || '📌'} ${theme}</div>
@@ -484,8 +484,11 @@
           </div>
         `;
         
-        themeFilter.innerHTML += `<option value="${theme}">${theme}</option>`;
+        filterHtml += `<option value="${theme}">${theme}</option>`;
       }
+      
+      grid.innerHTML = gridHtml;
+      themeFilter.innerHTML = filterHtml;
     }
 
     function renderAISummary(data) {
@@ -522,10 +525,10 @@
     function renderComments() {
       const filter = document.getElementById('themeFilter').value;
       const list = document.getElementById('commentList');
-      list.innerHTML = '';
       
       const filtered = filter === 'all' ? globalComments : globalComments.filter(c => c.matchedBuckets.includes(filter));
       
+      let html = '';
       filtered.slice(0, 100).forEach(c => {
         const isReply = c.isReply ? '↳ Reply' : 'Top Level';
         const buckets = c.matchedBuckets.map(b => `<span class="c-tag">${b}</span>`).join('');
@@ -541,7 +544,7 @@
           });
         }
         
-        list.innerHTML += `
+        html += `
           <div class="comment">
             <div class="comment-header">
               <span><strong>${c.author}</strong> • ${isReply} • ${c.likeCount} likes</span>
@@ -554,6 +557,7 @@
           </div>
         `;
       });
+      list.innerHTML = html;
     }
 
     function filterComments() {
