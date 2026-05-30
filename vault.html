@@ -742,26 +742,17 @@
     </section>
 
     <section class="grid">
-      <article class="card accent-blue" id="member-card">
-        <details class="section">
-          <summary class="section-head">
-            <h3>Member</h3><span class="chev">⌄</span>
-          </summary>
-          <div class="section-body">
-            <div class="sub-pills">
-              <span class="sub-pill">Plan</span>
-              <span class="sub-pill">Member ID</span>
-            </div>
-            <div id="member"></div>
-          </div>
-        </details>
-      </article>
       <article class="card accent-teal" id="support-benefits-card">
         <details class="section">
           <summary class="section-head">
-            <h3>SCAN Support & Benefits</h3><span class="chev">⌄</span>
+            <h3>SCAN Member Support & Benefits</h3><span class="chev">⌄</span>
           </summary>
-          <div class="section-body" style="padding-top: 6px !important;">
+          <div class="section-body">
+            <div class="sub-pills">
+              <span class="sub-pill">Member Plan</span>
+              <span class="sub-pill">Support Contacts</span>
+              <span class="sub-pill">Benefits Programs</span>
+            </div>
             <div id="support-benefits-content"></div>
           </div>
         </details>
@@ -1185,9 +1176,7 @@
         scan = {};
       }
 
-      document.getElementById('member').innerHTML =
-        row('Plan', scan.member?.plan) +
-        row('Member ID', `${scan.member?.member_id || "-"} ${copyButton(scan.member?.member_id)}`);
+
 
        const supportContacts = scan.support_contacts || [];
        const benefitsPrograms = scan.benefits_programs || [];
@@ -1343,10 +1332,32 @@
 
         document.getElementById('onepass-content').innerHTML = onepassHtml;
 
+        const planVal = scan.member?.plan || "SCAN Medicare 2026";
+        const memberIdVal = scan.member?.member_id || "40083848601";
+        const memberInfoHtml = `
+          <div class="vault-item-card" style="border-left-color: #67d8ff !important; margin-bottom: 16px;">
+            <div class="vault-item-header" style="margin-bottom: 4px; padding-bottom: 4px;">
+              <div class="vault-item-title"><span class="vault-item-emoji">💳</span> Member Information</div>
+            </div>
+            <div class="vault-item-body" style="gap: 4px;">
+              <div class="row" style="display: flex; justify-content: space-between; align-items: center; border-top: 0; padding: 4px 0 !important;">
+                <div class="k" style="font-size: 13px;">Plan</div>
+                <div class="v" style="margin-top: 0; font-size: 13.5px; font-weight: 700;">${planVal}</div>
+              </div>
+              <div class="row" style="display: flex; justify-content: space-between; align-items: center; padding: 4px 0 !important; margin-top: 0;">
+                <div class="k" style="font-size: 13px;">Member ID</div>
+                <div class="v" style="margin-top: 0; font-size: 13.5px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px;">${memberIdVal} ${copyButton(memberIdVal)}</div>
+              </div>
+            </div>
+          </div>
+        `;
+
         document.getElementById('support-benefits-content').innerHTML = `
-          <h4 style="margin: 0 0 12px; color: #8fcff5 !important; font-size: 14px; text-transform: uppercase; letter-spacing: 0.8px;">📞 SCAN Support Contacts</h4>
+          <h4 style="margin: 0 0 12px; color: #67d8ff !important; font-size: 14px; text-transform: uppercase; letter-spacing: 0.8px;">🛡️ SCAN Member Plan</h4>
+          ${memberInfoHtml}
+          <h4 style="margin: 20px 0 12px; color: #8fcff5 !important; font-size: 14px; text-transform: uppercase; letter-spacing: 0.8px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 14px;">📞 SCAN Support Contacts</h4>
           ${supportContentHtml}
-          <h4 style="margin: 24px 0 12px; color: #ffd081 !important; font-size: 14px; text-transform: uppercase; letter-spacing: 0.8px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 18px;">🎁 Benefits & Programs</h4>
+          <h4 style="margin: 20px 0 12px; color: #ffd081 !important; font-size: 14px; text-transform: uppercase; letter-spacing: 0.8px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 14px;">🎁 Benefits & Programs</h4>
           ${benefitsContentHtml}
         `;
 
