@@ -318,18 +318,72 @@
 
     .after-hours {
       margin: 0 0 14px;
-      padding: 12px;
-      border-radius: 14px;
+      padding: 16px;
+      border-radius: 16px;
       background: linear-gradient(120deg, #f2fbff, #edfff7);
-      border: 1px solid rgba(16, 163, 127, .24);
+      border: 1px solid rgba(16, 163, 127, .28);
       box-shadow: 0 10px 22px rgba(16, 163, 127, .12);
     }
 
     .after-hours h2 {
-      margin: 0 0 8px;
-      font-size: 16px;
+      margin: 0 0 12px;
+      font-size: 20px;
       color: #0e5f5f;
       font-family: "Avenir Next Condensed", "Trebuchet MS", sans-serif;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .after-hours-member-id {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 16px;
+      font-weight: 800;
+      color: #0c5050;
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(16, 163, 127, 0.16);
+    }
+
+    .after-hours-member-id .label {
+      color: #0e5f5f;
+      opacity: 0.9;
+    }
+
+    .after-hours-member-id .val {
+      background: rgba(16, 163, 127, 0.1);
+      padding: 3px 8px;
+      border-radius: 6px;
+      letter-spacing: 0.5px;
+    }
+
+    .after-hours .row {
+      font-size: 12.5px !important;
+      padding: 8px 0;
+      border-top: 1px solid rgba(16, 163, 127, 0.08);
+    }
+
+    .after-hours .row:first-child {
+      border-top: 0;
+      padding-top: 0;
+    }
+
+    .after-hours .v {
+      font-size: 12.5px !important;
+      font-weight: 700;
+      color: #124e67;
+    }
+
+    .after-hours .phone-link {
+      font-size: 12.5px !important;
+    }
+
+    .after-hours .muted {
+      font-size: 11px !important;
     }
 
     .after-hours.hidden {
@@ -1367,9 +1421,19 @@
        const afterHoursPanel = document.getElementById("after-hours-panel");
        const afterHoursContent = document.getElementById("after-hours-content");
        if (afterHours.length) {
-         afterHoursContent.innerHTML = afterHours.map((c) =>
+         const memberIdVal = scan.member?.member_id || "40083848601";
+         const memberIdRow = `
+           <div class="after-hours-member-id">
+             <span class="label">💳 Member ID:</span>
+             <span class="val">${memberIdVal}</span>
+             ${copyButton(memberIdVal)}
+           </div>
+         `;
+         const rowsHtml = afterHours.map((c) =>
            `<div class="row"><div class="v">${c.name || "-"}</div><div>${phoneLink(c.phone)}</div>${c.hours ? `<div class="muted">${c.hours}</div>` : ""}</div>`
          ).join("");
+         
+         afterHoursContent.innerHTML = memberIdRow + rowsHtml;
          afterHoursPanel.classList.remove("hidden");
        } else {
          afterHoursPanel.classList.add("hidden");
