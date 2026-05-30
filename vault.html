@@ -340,6 +340,7 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 12px;
+      align-items: start;
     }
 
     .card {
@@ -399,15 +400,11 @@
     }
 
     .chev {
-      width: 26px;
-      height: 26px;
-      border-radius: 999px;
-      border: 1px solid var(--line);
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      background: #fff;
-      font-size: 13px;
+      font-size: 16px;
+      color: var(--muted);
       transition: transform .2s ease;
     }
 
@@ -586,6 +583,112 @@
         padding: 0 12px 12px;
       }
     }
+
+    /* Premium Sub-item Cards for Support & Benefits */
+    .vault-item-card {
+      background: rgba(14, 25, 44, 0.45) !important;
+      border: 1px solid rgba(116, 144, 172, 0.18) !important;
+      border-left: 4px solid #1bc471 !important;
+      border-radius: 12px !important;
+      padding: 14px !important;
+      margin-bottom: 12px !important;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15) !important;
+      transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .vault-item-card:hover {
+      transform: translateY(-1.5px);
+      border-color: rgba(116, 144, 172, 0.35) !important;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.28) !important;
+    }
+    
+    .vault-item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 6px;
+      margin-bottom: 4px;
+    }
+    
+    .vault-item-title {
+      font-size: 15px !important;
+      font-weight: 800 !important;
+      color: #f4f8fc !important;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .vault-item-emoji {
+      font-size: 16px;
+      line-height: 1;
+    }
+    
+    .vault-item-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-size: 11px !important;
+      font-weight: 700 !important;
+      background: rgba(18, 164, 212, 0.15);
+      border: 1px solid rgba(18, 164, 212, 0.3);
+      color: #8fcff5 !important;
+    }
+    
+    .vault-item-body {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 13.5px !important;
+      line-height: 1.45;
+    }
+    
+    .vault-phone-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      color: #73ecb4 !important;
+    }
+    .vault-phone-row a {
+      color: #73ecb4 !important;
+      text-decoration: none;
+      border-bottom: 1px dashed rgba(115, 236, 180, 0.5);
+    }
+    .vault-phone-row a:hover {
+      border-bottom-style: solid;
+      filter: brightness(1.1);
+    }
+    
+    .vault-detail-bullet {
+      position: relative;
+      padding-left: 14px;
+      color: #d6e5f3 !important;
+      font-size: 13px !important;
+    }
+    .vault-detail-bullet::before {
+      content: "✦";
+      position: absolute;
+      left: 0;
+      color: #ffd081;
+      font-size: 9px;
+      top: 1px;
+    }
+    .gym-badge a {
+      color: #73ecb4 !important;
+      text-decoration: none;
+      border-bottom: 1px dashed rgba(115, 236, 180, 0.5);
+      font-weight: 700;
+    }
+    .gym-badge a:hover {
+      border-bottom-style: solid;
+      filter: brightness(1.1);
+    }
   </style>
   <link rel="stylesheet" href="./companion_theme.css" />
 </head>
@@ -595,6 +698,7 @@
     <nav class="nav">
       <a href="./index.html">Home</a>
       <a href="./dashboard.html">Lab Results Dashboard</a>
+      <a href="./composition.html">Body Composition</a>
       <a href="./kaiser-labs.html">Kaiser Labs</a>
       <a href="./bp.html">Blood Pressure</a>
       <a class="active" href="./vault.html">Health Vault</a>
@@ -605,18 +709,6 @@
     <h1>Health Vault</h1>
     <div class="sub">SCAN 2026, benefits, contacts, medications, and care references.</div>
     <div class="updated-banner" id="last-updated-banner">Last updated: loading...</div>
-    <div class="pill-nav" aria-label="Jump to section">
-      <a class="pill" href="#member-card">Member</a>
-      <a class="pill" href="#support-card">Support</a>
-      <a class="pill" href="#benefits-card">Benefits</a>
-      <a class="pill" href="#pharmacy-card">Pharmacy</a>
-      <a class="pill" href="#providers-card">Doctors</a>
-      <a class="pill" href="#labtests-card">Lab Tests</a>
-      <a class="pill" href="#vaccines-card">Vaccines</a>
-      <a class="pill" href="#notes-card">Notes</a>
-      <a class="pill" href="#kaiser-card">Kaiser Data</a>
-      <a class="pill" href="#custom-sections-card">Custom</a>
-    </div>
     <div class="search-wrap">
       <input id="vault-search" class="search-input" type="search"
         placeholder="Search: phone, doctor, program, medication, vaccine..." />
@@ -664,25 +756,28 @@
           </div>
         </details>
       </article>
-      <article class="card accent-teal" id="support-card">
+      <article class="card accent-teal" id="support-benefits-card">
         <details class="section">
           <summary class="section-head">
-            <h3>SCAN Support</h3><span class="chev">⌄</span>
+            <h3>SCAN Support & Benefits</h3><span class="chev">⌄</span>
           </summary>
-          <div class="section-body">
-            <div class="sub-pills" id="support-subpills"></div>
-            <div id="support"></div>
+          <div class="section-body" style="padding-top: 6px !important;">
+            <div id="support-benefits-content"></div>
           </div>
         </details>
       </article>
-      <article class="card accent-amber" id="benefits-card">
+      <article class="card accent-amber" id="onepass-card">
         <details class="section">
           <summary class="section-head">
-            <h3>Benefits & Programs</h3><span class="chev">⌄</span>
+            <h3>One Pass Fitness</h3><span class="chev">⌄</span>
           </summary>
           <div class="section-body">
-            <div class="sub-pills" id="benefits-subpills"></div>
-            <div id="benefits"></div>
+            <div class="sub-pills">
+              <span class="sub-pill">Member Code</span>
+              <span class="sub-pill">Credentials</span>
+              <span class="sub-pill">Gyms</span>
+            </div>
+            <div id="onepass-content"></div>
           </div>
         </details>
       </article>
@@ -1094,30 +1189,180 @@
         row('Plan', scan.member?.plan) +
         row('Member ID', `${scan.member?.member_id || "-"} ${copyButton(scan.member?.member_id)}`);
 
-      const supportContacts = scan.support_contacts || [];
-      document.getElementById('support').innerHTML = supportContacts.map((c) =>
-        `<div class="row"><div class="v">${c.name || '-'}</div><div>${phoneLink(c.phone)}</div>${c.hours ? `<div class="muted">${c.hours}</div>` : ''}${c.website ? `<div>${link(c.website)} ${copyButton(c.website)}</div>` : ''}${c.notes ? `<div class="muted">${linkifyPhones(c.notes)}</div>` : ''}</div>`
-      ).join('') || row('Support', 'No data');
-      document.getElementById('support-subpills').innerHTML = supportContacts.map((c) => `<span class="sub-pill">${c.name || 'Contact'}</span>`).join('');
-      const afterHours = (scan.support_contacts || []).filter((c) =>
-        /after[- ]?hours|telehealth|nurse advice/i.test(`${c.name || ""} ${c.notes || ""}`)
-      );
-      const afterHoursPanel = document.getElementById("after-hours-panel");
-      const afterHoursContent = document.getElementById("after-hours-content");
-      if (afterHours.length) {
-        afterHoursContent.innerHTML = afterHours.map((c) =>
-          `<div class="row"><div class="v">${c.name || "-"}</div><div>${phoneLink(c.phone)}</div>${c.hours ? `<div class="muted">${c.hours}</div>` : ""}</div>`
-        ).join("");
-        afterHoursPanel.classList.remove("hidden");
-      } else {
-        afterHoursPanel.classList.add("hidden");
-      }
+       const supportContacts = scan.support_contacts || [];
+       const benefitsPrograms = scan.benefits_programs || [];
 
-      const benefitsPrograms = scan.benefits_programs || [];
-      document.getElementById('benefits').innerHTML = benefitsPrograms.map((b) =>
-        `<div class="row"><div class="v">${b.title || '-'}</div>${b.phone ? `<div>${phoneLink(b.phone)}</div>` : ''}${b.email ? `<div>${b.email} ${copyButton(b.email)}</div>` : ''}${b.website ? `<div>${link(b.website)} ${copyButton(b.website)}</div>` : ''}${b.details ? list(b.details) : ''}</div>`
-      ).join('') || row('Benefits', 'No data');
-      document.getElementById('benefits-subpills').innerHTML = benefitsPrograms.map((b) => `<span class="sub-pill">${b.title || 'Program'}</span>`).join('');
+       // Helper function to map emojis based on contact name
+       function emojiForName(name) {
+         const n = String(name || "").toLowerCase();
+         if (n.includes("customer service") || n.includes("main")) return "📞";
+         if (n.includes("hector") || n.includes("rep") || n.includes("person")) return "👨‍💼";
+         if (n.includes("member services")) return "💳";
+         if (n.includes("telehealth") || n.includes("hours care")) return "🚑";
+         if (n.includes("nurse")) return "👩‍⚕️";
+         if (n.includes("transportation") || n.includes("taxi")) return "🚗";
+         if (n.includes("emergency") || n.includes("connect")) return "🚨";
+         
+         if (n.includes("otc health") || n.includes("solutions")) return "💊";
+         if (n.includes("extracare")) return "🏷️";
+         if (n.includes("walmart")) return "🛒";
+         if (n.includes("skechers") || n.includes("discount")) return "👟";
+         if (n.includes("fitness") || n.includes("one pass")) return "💪";
+         return "✨";
+       }
+
+       // Support Contacts rendering as sub-cards
+       const supportContentHtml = supportContacts.map((c) => {
+         const emoji = emojiForName(c.name);
+         const hrsBadge = c.hours ? `<span class="vault-item-badge">${c.hours}</span>` : "";
+         return `
+           <div class="vault-item-card" style="border-left-color: #12a4d4 !important;">
+             <div class="vault-item-header">
+               <div class="vault-item-title"><span class="vault-item-emoji">${emoji}</span> ${c.name || '-'}</div>
+               ${hrsBadge}
+             </div>
+             <div class="vault-item-body">
+               ${c.phone ? `<div class="vault-phone-row">📞 ${phoneLink(c.phone)}</div>` : ''}
+               ${c.website ? `<div>🌐 ${link(c.website)} ${copyButton(c.website)}</div>` : ''}
+               ${c.notes ? `<div class="muted" style="margin-top: 2px;">ℹ️ ${linkifyPhones(c.notes)}</div>` : ''}
+             </div>
+           </div>
+         `;
+       }).join('') || `<div class="vault-item-card" style="border-left-color: #12a4d4 !important;"><div class="vault-item-body">No support contacts found.</div></div>`;
+
+        // Separate One Pass Fitness from general benefits
+        const onepassProgram = benefitsPrograms.find(b => String(b.title || "").toLowerCase().includes("one pass"));
+        const generalBenefits = benefitsPrograms.filter(b => !String(b.title || "").toLowerCase().includes("one pass"));
+
+        // General Benefits Programs rendering as sub-cards
+        const benefitsContentHtml = generalBenefits.map((b) => {
+          const emoji = emojiForName(b.title);
+          const bulletList = b.details ? b.details.map(d => `<div class="vault-detail-bullet">${linkifyPhones(String(d))}</div>`).join('') : "";
+          return `
+            <div class="vault-item-card" style="border-left-color: #f0a43a !important;">
+              <div class="vault-item-header">
+                <div class="vault-item-title"><span class="vault-item-emoji">${emoji}</span> ${b.title || '-'}</div>
+              </div>
+              <div class="vault-item-body">
+                ${b.phone ? `<div class="vault-phone-row">📞 ${phoneLink(b.phone)}</div>` : ''}
+                ${b.email ? `<div>✉️ ${b.email} ${copyButton(b.email)}</div>` : ''}
+                ${b.website ? `<div>🌐 ${link(b.website)} ${copyButton(b.website)}</div>` : ''}
+                ${bulletList ? `<div style="margin-top: 4px; display: flex; flex-direction: column; gap: 4px;">${bulletList}</div>` : ''}
+              </div>
+            </div>
+          `;
+        }).join('') || `<div class="vault-item-card" style="border-left-color: #f0a43a !important;"><div class="vault-item-body">No benefits programs found.</div></div>`;
+
+        // Render One Pass Fitness content in its own dedicated card
+        let onepassHtml = '';
+        if (onepassProgram) {
+          const details = onepassProgram.details || [];
+          const credentials = [];
+          const gyms = [];
+
+          details.forEach(d => {
+            const str = String(d);
+            if (str.startsWith("Gyms:")) {
+              gyms.push(str.replace(/^Gyms:\s*/i, "").trim());
+            } else {
+              credentials.push(str);
+            }
+          });
+
+          // Render Website & phone if present
+          if (onepassProgram.website) {
+            onepassHtml += row('Website', `${link(onepassProgram.website)} ${copyButton(onepassProgram.website)}`);
+          }
+          if (onepassProgram.phone) {
+            onepassHtml += row('Phone', phoneLink(onepassProgram.phone));
+          }
+          if (onepassProgram.email) {
+            onepassHtml += row('Email', `${onepassProgram.email} ${copyButton(onepassProgram.email)}`);
+          }
+
+          // Render credentials
+          credentials.forEach(c => {
+            const parts = c.split(":");
+            if (parts.length >= 2) {
+              const label = parts[0].trim();
+              const val = parts.slice(1).join(":").trim();
+              let formattedVal = val;
+              if (label.toLowerCase().includes("code") || label.toLowerCase().includes("username") || label.toLowerCase().includes("email")) {
+                formattedVal = `${val} ${copyButton(val)}`;
+              }
+              onepassHtml += row(label, formattedVal);
+            } else {
+              onepassHtml += row('Info', linkifyPhones(c));
+            }
+          });
+
+          // Render Gyms as a gorgeous grid of badges
+          if (gyms.length) {
+            const gymsGrid = `
+              <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 8.5px; margin-top: 6px;">
+                ${gyms.map(gym => {
+                  const parts = gym.split(" - ");
+                  const name = parts[0];
+                  const address = parts.slice(1).join(" - ");
+                  
+                  let addressText = address;
+                  let phoneHtml = "";
+                  
+                  if (address.includes("•")) {
+                    const addrParts = address.split("•");
+                    addressText = addrParts[0].trim();
+                    const phoneText = addrParts[1].trim();
+                    phoneHtml = ` • ${phoneInline(phoneText)}`;
+                  }
+                  
+                  return `
+                    <div class="gym-badge" style="background: rgba(240, 164, 58, 0.08); border: 1px solid rgba(240, 164, 58, 0.22); padding: 10px 14px; border-radius: 12px; font-weight: 700; color: #ffd081; display: flex; flex-direction: column; gap: 4px; font-size: 13.5px; transition: transform 0.15s ease, background 0.15s ease;" onmouseover="this.style.transform='translateY(-1.5px)'; this.style.background='rgba(240, 164, 58, 0.12)';" onmouseout="this.style.transform='none'; this.style.background='rgba(240, 164, 58, 0.08)';">
+                      <div style="display: flex; align-items: center; gap: 6px;">
+                        🏋️ ${name}
+                      </div>
+                      ${addressText ? `
+                        <div style="font-size: 11px; font-weight: 500; color: #ffd081; opacity: 0.85; margin-left: 22px; display: flex; align-items: center; gap: 4px; flex-wrap: wrap;">
+                          📍 <span>
+                            <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(addressText)}" target="_blank" rel="noopener" class="map-link" style="color: #ffd081 !important; text-decoration: none; border-bottom: 1px dashed rgba(255, 208, 129, 0.45); font-weight: 700; transition: border-bottom-color 0.15s ease;" onmouseover="this.style.borderBottomColor='#ffd081'" onmouseout="this.style.borderBottomColor='rgba(255, 208, 129, 0.45)'">
+                              ${addressText}
+                            </a>
+                            ${phoneHtml}
+                          </span>
+                        </div>
+                      ` : ''}
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            `;
+            onepassHtml += `<div class="row" style="border-top: 1px solid rgba(255,255,255,0.06); padding-top: 12px; margin-top: 8px;"><div class="k" style="margin-bottom: 6px;">Included Gyms</div><div class="v" style="width: 100%;">${gymsGrid}</div></div>`;
+          }
+        } else {
+          onepassHtml = `<div class="row"><div class="v">One Pass Fitness info not found.</div></div>`;
+        }
+
+        document.getElementById('onepass-content').innerHTML = onepassHtml;
+
+        document.getElementById('support-benefits-content').innerHTML = `
+          <h4 style="margin: 0 0 12px; color: #8fcff5 !important; font-size: 14px; text-transform: uppercase; letter-spacing: 0.8px;">📞 SCAN Support Contacts</h4>
+          ${supportContentHtml}
+          <h4 style="margin: 24px 0 12px; color: #ffd081 !important; font-size: 14px; text-transform: uppercase; letter-spacing: 0.8px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 18px;">🎁 Benefits & Programs</h4>
+          ${benefitsContentHtml}
+        `;
+
+       const afterHours = (scan.support_contacts || []).filter((c) =>
+         /after[- ]?hours|telehealth|nurse advice/i.test(`${c.name || ""} ${c.notes || ""}`)
+       );
+       const afterHoursPanel = document.getElementById("after-hours-panel");
+       const afterHoursContent = document.getElementById("after-hours-content");
+       if (afterHours.length) {
+         afterHoursContent.innerHTML = afterHours.map((c) =>
+           `<div class="row"><div class="v">${c.name || "-"}</div><div>${phoneLink(c.phone)}</div>${c.hours ? `<div class="muted">${c.hours}</div>` : ""}</div>`
+         ).join("");
+         afterHoursPanel.classList.remove("hidden");
+       } else {
+         afterHoursPanel.classList.add("hidden");
+       }
 
       const rx = scan.pharmacy_prescriptions || {};
       const savingsCard = {

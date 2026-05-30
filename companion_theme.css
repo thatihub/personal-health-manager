@@ -23,6 +23,10 @@
   --sec-6: #14b8a6;
 }
 
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 body {
   font-family: "Avenir Next", "Trebuchet MS", "Segoe UI", sans-serif !important;
   font-size: 17px;
@@ -46,10 +50,16 @@ h3, .chart h3, .section-head h3 { font-size: clamp(22px, 2.2vw, 32px) !important
 
 .nav a, .top-nav a, .bottom-tab, .bottom-tab a {
   background: rgba(17, 28, 42, 0.82) !important;
-  border-color: var(--comp-line) !important;
+  border: 1px solid var(--comp-line) !important;
   color: #d6e4f2 !important;
   font-size: 15px !important;
   min-height: 48px !important;
+  padding: 10px 16px !important;
+  border-radius: 12px !important;
+  text-decoration: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  font-weight: 700 !important;
   transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
 }
 .nav a:hover, .top-nav a:hover, .bottom-tab a:hover {
@@ -124,10 +134,12 @@ body.page-home .actions .card .cta {
   font-size: 14px !important;
   min-height: 46px !important;
   padding: 10px 14px !important;
+  cursor: pointer !important;
 }
 .cta:hover, .btn:hover, .panel-btn:hover, .toolbar-btn:hover, .collapse-btn:hover, .view-btn:hover {
   transform: translateY(-1px);
   filter: brightness(1.05);
+  cursor: pointer !important;
 }
 
 .cta,

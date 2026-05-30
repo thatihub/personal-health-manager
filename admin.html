@@ -5,99 +5,140 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Health Admin</title>
   <style>
-    :root {
-      --ink: #102b3d;
-      --muted: #4f6a7b;
-      --line: rgba(16, 43, 61, 0.14);
-      --panel: rgba(255,255,255,0.86);
-      --shadow: 0 14px 30px rgba(16, 43, 61, 0.12);
-      --blue: #0b7ca5;
-      --teal: #0e9a78;
+    body.page-admin {
+      --page-accent: #14b8a6;
+      --page-accent-2: #0f8f82;
     }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: "Avenir Next", "Trebuchet MS", "Segoe UI", sans-serif;
-      color: var(--ink);
-      background:
-        radial-gradient(circle at 10% 8%, rgba(11,124,165,.2), transparent 35%),
-        radial-gradient(circle at 84% 12%, rgba(14,154,120,.15), transparent 32%),
-        linear-gradient(160deg, #f3faff 0%, #fffaf1 44%, #f2fff9 100%);
-      min-height: 100vh;
-      padding: 18px;
-    }
-    .wrap { max-width: 980px; margin: 0 auto; }
+    .wrap { max-width: 1080px; margin: 0 auto; }
     .nav { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
-    .nav a {
-      text-decoration: none;
-      padding: 9px 12px;
-      border-radius: 12px;
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,.9);
-      color: #264a5f;
-      font-weight: 700;
-      font-size: 13px;
-      min-height: 44px;
-      display: inline-flex;
+    
+    .hero {
+      margin-bottom: 18px;
+      padding: 20px;
+    }
+    
+    /* Segment headers */
+    .section-group-title {
+      font-family: "Avenir Next Condensed", "Trebuchet MS", sans-serif;
+      font-size: 15px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--comp-muted);
+      margin: 24px 0 12px;
+      display: flex;
       align-items: center;
-      transition: transform .18s ease, box-shadow .18s ease;
+      gap: 10px;
     }
-    .nav a:hover { transform: translateY(-1px); box-shadow: 0 8px 16px rgba(16,43,61,.12); }
-    .nav a.active { background: linear-gradient(120deg, #0b7ca5, #17a1c8); color: #fff; border-color: transparent; }
-    h1 { margin: 0 0 6px; font-family: "Avenir Next Condensed", "Trebuchet MS", sans-serif; letter-spacing: .2px; font-size: clamp(26px,4vw,40px); color: #163f57; }
-    .sub { color: var(--muted); margin-bottom: 14px; }
-    .card {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      padding: 14px;
-      margin-bottom: 10px;
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-    }
-    .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-    .row label { min-width: 180px; font-weight: 700; color: #2e5267; }
-    input[type="file"] {
+    .section-group-title::after {
+      content: "";
       flex: 1;
-      min-width: 280px;
-      background: rgba(255,255,255,.88);
-      border: 1px solid var(--line);
-      color: var(--ink);
-      border-radius: 8px;
-      padding: 7px 8px;
+      height: 1px;
+      background: var(--comp-line);
+      opacity: 0.5;
     }
-    .btn {
-      border: 1px solid rgba(255,255,255,.4);
-      background: linear-gradient(120deg, #0b7ca5, #17a1c8);
-      color: #fff;
-      padding: 9px 14px;
-      border-radius: 10px;
-      font-weight: 700;
-      font-size: 13px;
-      cursor: pointer;
-      min-height: 42px;
-      box-shadow: 0 10px 18px rgba(16,88,126,.2);
-      transition: transform .18s ease, filter .18s ease;
+    
+    .admin-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 16px;
+      margin-bottom: 10px;
     }
-    .btn:hover { transform: translateY(-1px); filter: brightness(1.05); }
-    .btn.secondary {
-      background: rgba(255,255,255,.9);
-      border-color: var(--line);
-      color: #33566c;
-      box-shadow: none;
+    @media (max-width: 768px) {
+      .admin-grid { grid-template-columns: 1fr; }
     }
+    
+    .card.admin-card {
+      padding: 20px !important;
+      transition: transform .2s ease, box-shadow .2s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 190px;
+      background: linear-gradient(165deg, rgba(58, 74, 96, 0.98), rgba(47, 63, 84, 0.98)) !important;
+    }
+    .card.admin-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 32px rgba(0, 0, 0, 0.4) !important;
+    }
+    
+    .card.admin-card h3 {
+      margin: 0 0 6px;
+      font-size: 21px;
+      font-family: "Avenir Next Condensed", "Trebuchet MS", sans-serif;
+      font-weight: 800;
+    }
+    
+    .card-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    
+    .card-desc {
+      font-size: 13.5px;
+      color: var(--comp-muted);
+      line-height: 1.45;
+      margin-bottom: 14px;
+    }
+    
+    .upload-control {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: auto;
+    }
+    
+    .file-input-wrapper {
+      flex: 1;
+      min-width: 180px;
+    }
+    
+    input[type="file"] {
+      width: 100%;
+      background: rgba(10, 20, 35, 0.6) !important;
+      border: 1px solid var(--comp-line) !important;
+      color: var(--comp-ink) !important;
+      border-radius: 10px !important;
+      padding: 5px 8px !important;
+      font-size: 13.5px;
+      transition: border-color 0.2s ease;
+      cursor: pointer !important;
+    }
+    input[type="file"]::file-selector-button {
+      background: linear-gradient(120deg, var(--page-accent-2), var(--page-accent)) !important;
+      border: none !important;
+      border-radius: 6px !important;
+      color: #fff !important;
+      padding: 5px 10px !important;
+      font-size: 12px !important;
+      font-weight: 700 !important;
+      cursor: pointer !important;
+      margin-right: 8px !important;
+      transition: filter 0.18s ease;
+    }
+    input[type="file"]::file-selector-button:hover {
+      filter: brightness(1.15) !important;
+    }
+    input[type="file"]:focus {
+      border-color: var(--page-accent) !important;
+    }
+    
     .status {
-      margin-top: 10px;
-      background: rgba(255,255,255,.86);
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      padding: 10px;
-      color: #35596f;
-      font-size: 13px;
+      margin-top: 14px;
+      background: rgba(8, 17, 30, 0.6) !important;
+      border: 1px solid var(--comp-line) !important;
+      border-radius: 12px !important;
+      padding: 14px !important;
+      color: #73ecb4 !important;
+      font-size: 14px !important;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       white-space: pre-wrap;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
     }
-    .hint { color: var(--muted); font-size: 12px; margin-top: 6px; }
+    .hint { color: var(--comp-muted); font-size: 12px; margin-top: 6px; }
   </style>
   <link rel="stylesheet" href="./companion_theme.css" />
 </head>
@@ -106,6 +147,7 @@
     <nav class="nav">
       <a href="./index.html">Home</a>
       <a href="./dashboard.html">Lab Results Dashboard</a>
+      <a href="./composition.html">Body Composition</a>
       <a href="./bio-age.html">Biological Age</a>
       <a href="./lab-import.html">Lab Import + Review</a>
       <a href="./kaiser-labs.html">Kaiser Labs</a>
@@ -117,52 +159,156 @@
     </nav>
 
     <h1>Health Admin</h1>
-    <div class="sub">Upload updated JSON files without editing Render environment variables.</div>
+    <div class="sub">Upload and process clinical reports or sync raw JSON dataset files.</div>
 
-    <section class="card" style="border-top: 4px solid #0f7ea6;">
-      <div class="row">
-        <label for="pdf-file">New Lab Result PDF</label>
-        <input id="pdf-file" type="file" accept=".pdf,application/pdf" />
-        <button class="btn" id="upload-pdf" type="button">Upload PDF + Rebuild</button>
-      </div>
-      <div class="hint">Use this for normal workflow: upload latest lab PDF and refresh dashboard data.</div>
-    </section>
+    <div class="section-group-title">Intelligent File Parsers & Ingestors</div>
+    <div class="admin-grid">
+      <article class="card admin-card" style="border-top: 3px solid #67d8ff !important;">
+        <h3>Lab Result PDF Parser</h3>
+        <div class="card-body">
+          <div class="card-desc">Upload a clinical PDF directly downloaded from Labcorp or Quest. The system will automatically parse and merge your blood panels into your timeline.</div>
+          <div class="upload-control">
+            <div class="file-input-wrapper">
+              <input id="pdf-file" type="file" accept=".pdf,application/pdf" />
+            </div>
+            <button class="btn" id="upload-pdf" type="button">Upload + Parse PDF</button>
+          </div>
+        </div>
+      </article>
 
-    <section class="card" style="border-top: 4px solid #3aa76d;">
-      <div class="row">
-        <label for="bp-file">Blood Pressure CSV</label>
-        <input id="bp-file" type="file" accept=".csv,text/csv" />
-        <button class="btn" id="upload-bp" type="button">Upload BP CSV (Append)</button>
-      </div>
-      <div class="hint">Appends new BP rows, skips duplicates, and BP page shows only last 90 days.</div>
-    </section>
+      <article class="card admin-card" style="border-top: 3px solid #73ecb4 !important;">
+        <h3>Blood Pressure CSV Ingestor</h3>
+        <div class="card-body">
+          <div class="card-desc">Ingest BP logs from your monitoring app (e.g., Apple Health CSV). Automatically matches duplicate timestamps and appends new systolic/diastolic rows.</div>
+          <div class="upload-control">
+            <div class="file-input-wrapper">
+              <input id="bp-file" type="file" accept=".csv,text/csv" />
+            </div>
+            <button class="btn" id="upload-bp" type="button">Upload BP CSV</button>
+          </div>
+        </div>
+      </article>
 
-    <section class="card">
-      <div class="row">
-        <label for="vault-file">Vault Data JSON</label>
-        <input id="vault-file" type="file" accept=".json,application/json" />
-        <button class="btn" id="upload-vault" type="button">Upload Vault</button>
-      </div>
-      <div class="hint">Expected: JSON object for `vault_data.json`.</div>
-    </section>
+      <article class="card admin-card" style="border-top: 3px solid #7268f2 !important;">
+        <h3>DEXA Scan Report (PDF / Image Photo)</h3>
+        <div class="card-body">
+          <div class="card-desc">Upload your clinical printout sheet (either a PDF scan or a camera photo in JPEG/PNG format). The system will archive it and open a log panel.</div>
+          <div class="upload-control">
+            <div class="file-input-wrapper">
+              <input id="dexa-pdf-file" type="file" accept=".pdf,application/pdf,.jpg,.jpeg,.png,image/jpeg,image/png" />
+            </div>
+            <button class="btn" id="upload-dexa-pdf" type="button" style="background: linear-gradient(120deg, #5b4fe8, #7268f2) !important;">Upload Report</button>
+          </div>
+        </div>
+      </article>
+    </div>
 
-    <section class="card">
-      <div class="row">
-        <label for="dashboard-file">Dashboard Data</label>
-        <input id="dashboard-file" type="file" accept=".json,.js,application/json,text/javascript" />
-        <button class="btn" id="upload-dashboard" type="button">Upload Dashboard</button>
-      </div>
-      <div class="hint">Use `dashboard_data.js` or raw JSON array.</div>
-    </section>
+    <div class="section-group-title">Raw Database Sync (JSON Datasets)</div>
+    <div class="admin-grid">
+      <article class="card admin-card" style="border-top: 3px solid #c9bbff !important;">
+        <h3>Body Composition JSON Database (Backup/Restore)</h3>
+        <div class="card-body">
+          <div class="card-desc">Sync or backup your compiled body composition history. Expects a JSON array format representing your scan records in `dexa_records.json`.</div>
+          <div class="upload-control">
+            <div class="file-input-wrapper">
+              <input id="dexa-file" type="file" accept=".json,application/json" />
+            </div>
+            <button class="btn" id="upload-dexa" type="button">Sync Database</button>
+          </div>
+        </div>
+      </article>
 
-    <section class="card">
-      <div class="row">
-        <label for="consolidated-file">Consolidated Labs JSON</label>
-        <input id="consolidated-file" type="file" accept=".json,application/json" />
-        <button class="btn" id="upload-consolidated" type="button">Upload Consolidated</button>
-      </div>
-      <div class="hint">Expected: JSON array for `consolidated_labs.json`.</div>
-    </section>
+      <article class="card admin-card" style="border-top: 3px solid #ffd081 !important;">
+        <h3>Health Vault Data JSON</h3>
+        <div class="card-body">
+          <div class="card-desc">Sync your Health Vault categories, lists, and records. Expects a structured JSON object representing `vault_data.json`.</div>
+          <div class="upload-control">
+            <div class="file-input-wrapper">
+              <input id="vault-file" type="file" accept=".json,application/json" />
+            </div>
+            <button class="btn" id="upload-vault" type="button">Upload Vault</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="card admin-card" style="border-top: 3px solid #8beee0 !important;">
+        <h3>Consolidated Labs Dataset</h3>
+        <div class="card-body">
+          <div class="card-desc">Upload a pre-compiled history of all lab entries. Expects a comprehensive JSON array representing `consolidated_labs.json`.</div>
+          <div class="upload-control">
+            <div class="file-input-wrapper">
+              <input id="consolidated-file" type="file" accept=".json,application/json" />
+            </div>
+            <button class="btn" id="upload-consolidated" type="button">Upload Labs</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="card admin-card" style="border-top: 3px solid #ffb0be !important;">
+        <h3>Dashboard Graph Data</h3>
+        <div class="card-body">
+          <div class="card-desc">Upload the static javascript database that feeds the glycemic and lipid trends. Expects a formatted `dashboard_data.js` file.</div>
+          <div class="upload-control">
+            <div class="file-input-wrapper">
+              <input id="dashboard-file" type="file" accept=".json,.js,application/json,text/javascript" />
+            </div>
+            <button class="btn" id="upload-dashboard" type="button">Upload Graphs</button>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <div id="dexa-review-panel" class="card" style="display: none; border-top: 3px solid #7268f2 !important; margin-top: 20px; padding: 20px !important; margin-bottom: 16px;">
+      <h3 style="margin-top: 0; color: #c9bbff !important; font-size: 22px;">Review & Log DEXA Scan</h3>
+      <div class="card-desc" style="margin-bottom: 15px; font-size: 13.5px; color: var(--comp-muted);">We archived the PDF in your local files. Confirm or adjust the parsed metrics below to log them into your body composition timeline:</div>
+      
+      <form id="dexa-review-form" style="display: flex; flex-direction: column; gap: 14px;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <label style="font-size: 13px; font-weight: 700; color: var(--comp-muted);">Scan Date</label>
+            <input id="rev-date" type="date" required style="min-height: 44px; border-radius: 10px; border: 1px solid var(--comp-line); background: rgba(10, 20, 35, 0.6); color: var(--comp-ink); padding: 8px 12px; font-size: 14px;" />
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <label style="font-size: 13px; font-weight: 700; color: var(--comp-muted);">Scan Weight (clothed, lb)</label>
+            <input id="rev-scan-weight" type="number" step="0.1" required style="min-height: 44px; border-radius: 10px; border: 1px solid var(--comp-line); background: rgba(10, 20, 35, 0.6); color: var(--comp-ink); padding: 8px 12px; font-size: 14px;" />
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <label style="font-size: 13px; font-weight: 700; color: var(--comp-muted);">Morning Home Weight (unclothed, lb)</label>
+            <input id="rev-home-weight" type="number" step="0.1" required style="min-height: 44px; border-radius: 10px; border: 1px solid var(--comp-line); background: rgba(10, 20, 35, 0.6); color: var(--comp-ink); padding: 8px 12px; font-size: 14px;" />
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <label style="font-size: 13px; font-weight: 700; color: var(--comp-muted);">Body Fat %</label>
+            <input id="rev-body-fat" type="number" step="0.1" required style="min-height: 44px; border-radius: 10px; border: 1px solid var(--comp-line); background: rgba(10, 20, 35, 0.6); color: var(--comp-ink); padding: 8px 12px; font-size: 14px;" />
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <label style="font-size: 13px; font-weight: 700; color: var(--comp-muted);">Skeletal Muscle Mass (lb)</label>
+            <input id="rev-muscle" type="number" step="0.1" required style="min-height: 44px; border-radius: 10px; border: 1px solid var(--comp-line); background: rgba(10, 20, 35, 0.6); color: var(--comp-ink); padding: 8px 12px; font-size: 14px;" />
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <label style="font-size: 13px; font-weight: 700; color: var(--comp-muted);">Basal Metabolic Rate (BMR, kcal)</label>
+            <input id="rev-bmr" type="number" step="10" required style="min-height: 44px; border-radius: 10px; border: 1px solid var(--comp-line); background: rgba(10, 20, 35, 0.6); color: var(--comp-ink); padding: 8px 12px; font-size: 14px;" />
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <label style="font-size: 13px; font-weight: 700; color: var(--comp-muted);">Total Body Water (lb, optional)</label>
+            <input id="rev-water" type="number" step="0.1" placeholder="e.g. 57.8" style="min-height: 44px; border-radius: 10px; border: 1px solid var(--comp-line); background: rgba(10, 20, 35, 0.6); color: var(--comp-ink); padding: 8px 12px; font-size: 14px;" />
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <label style="font-size: 13px; font-weight: 700; color: var(--comp-muted);">Waist Size (inches, optional)</label>
+            <input id="rev-waist" type="number" step="0.1" placeholder="e.g. 34.0" style="min-height: 44px; border-radius: 10px; border: 1px solid var(--comp-line); background: rgba(10, 20, 35, 0.6); color: var(--comp-ink); padding: 8px 12px; font-size: 14px;" />
+          </div>
+        </div>
+        
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <label style="font-size: 13px; font-weight: 700; color: var(--comp-muted);">Scan Notes</label>
+          <input id="rev-notes" type="text" placeholder="e.g. Scan weight showed clothing difference. Focused on protecting muscle." style="width: 100%; min-height: 44px; border-radius: 10px; border: 1px solid var(--comp-line); background: rgba(10, 20, 35, 0.6); color: var(--comp-ink); padding: 8px 12px; font-size: 14px;" />
+        </div>
+        
+        <div style="display: flex; gap: 10px; margin-top: 6px;">
+          <button class="btn" id="confirm-dexa-save" type="button" style="background: linear-gradient(120deg, #5b4fe8, #7268f2) !important;">Save Scan to Timeline</button>
+          <button class="btn secondary" id="cancel-dexa-save" type="button">Cancel</button>
+        </div>
+      </form>
+    </div>
 
     <div id="status" class="status">Ready.</div>
   </div>
@@ -225,6 +371,9 @@
     document.getElementById("upload-consolidated").addEventListener("click", () =>
       uploadFromInput("consolidated-file", "consolidated", JSON.parse)
     );
+    document.getElementById("upload-dexa").addEventListener("click", () =>
+      uploadFromInput("dexa-file", "dexa", JSON.parse)
+    );
 
     document.getElementById("upload-pdf").addEventListener("click", async () => {
       const input = document.getElementById("pdf-file");
@@ -284,6 +433,99 @@
         );
       } catch (err) {
         setStatus(`BP upload failed: ${err.message || err}`);
+      }
+    });
+
+    document.getElementById("upload-dexa-pdf").addEventListener("click", async () => {
+      const input = document.getElementById("dexa-pdf-file");
+      const file = input.files && input.files[0];
+      if (!file) {
+        setStatus("Select a DEXA scan file first (PDF or Image).");
+        return;
+      }
+      setStatus(`Uploading and archiving DEXA report: ${file.name}...`);
+      try {
+        const form = new FormData();
+        form.append("file", file);
+        const res = await fetch("/api/admin/upload-dexa-pdf", { method: "POST", body: form });
+        const out = await res.json();
+        if (!res.ok || !out.ok) {
+          setStatus(`DEXA report upload failed: ${out.error || "Unknown error"}`);
+          return;
+        }
+
+        // Fill form fields
+        document.getElementById("rev-date").value = out.date || "";
+        document.getElementById("rev-scan-weight").value = out.scan_weight || "";
+        document.getElementById("rev-home-weight").value = out.scan_weight ? (out.scan_weight - 5.3).toFixed(1) : ""; // prefill with standard 5.3lb clothed diff
+        document.getElementById("rev-body-fat").value = out.body_fat || "";
+        document.getElementById("rev-muscle").value = out.muscle || "";
+        document.getElementById("rev-bmr").value = out.basal_metabolic_rate_kcal || "";
+        document.getElementById("rev-water").value = out.total_body_water_lb || "";
+        document.getElementById("rev-waist").value = "";
+        document.getElementById("rev-notes").value = "Scanned DEXA report. Clothed scan weight compared to morning weight.";
+
+        // Reveal panel
+        document.getElementById("dexa-review-panel").style.display = "block";
+        document.getElementById("dexa-review-panel").scrollIntoView({ behavior: "smooth" });
+
+        setStatus(`DEXA report uploaded and archived in local records.\nPlease review the extracted values below, make any corrections, and click Save.`);
+      } catch (err) {
+        setStatus(`DEXA report upload failed: ${err.message || err}`);
+      }
+    });
+
+    document.getElementById("cancel-dexa-save").addEventListener("click", () => {
+      document.getElementById("dexa-review-panel").style.display = "none";
+      setStatus("DEXA scan logging cancelled.");
+    });
+
+    document.getElementById("confirm-dexa-save").addEventListener("click", async () => {
+      const date = document.getElementById("rev-date").value;
+      const scanWeight = document.getElementById("rev-scan-weight").value;
+      const homeWeight = document.getElementById("rev-home-weight").value;
+      const bodyFat = document.getElementById("rev-body-fat").value;
+      const muscle = document.getElementById("rev-muscle").value;
+      const bmr = document.getElementById("rev-bmr").value;
+      const water = document.getElementById("rev-water").value;
+      const waist = document.getElementById("rev-waist").value;
+      const notes = document.getElementById("rev-notes").value;
+
+      if (!date || !scanWeight || !homeWeight || !bodyFat || !muscle || !bmr) {
+        setStatus("Please fill in all required fields (Date, Scan Weight, Home Weight, Body Fat %, Muscle Mass, BMR).");
+        return;
+      }
+
+      setStatus("Saving DEXA record to local database...");
+      try {
+        const payload = {
+          date,
+          scan_weight: parseFloat(scanWeight),
+          home_weight: parseFloat(homeWeight),
+          body_fat_pct: parseFloat(bodyFat),
+          muscle_mass: parseFloat(muscle),
+          bmr: parseFloat(bmr),
+          water: water ? parseFloat(water) : null,
+          waist: waist ? parseFloat(waist) : null,
+          notes
+        };
+
+        const res = await fetch("/api/admin/save-dexa-record", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        const out = await res.json();
+        if (!res.ok || !out.ok) {
+          setStatus(`Failed to save record: ${out.error || "Unknown error"}`);
+          return;
+        }
+
+        document.getElementById("dexa-review-panel").style.display = "none";
+        document.getElementById("dexa-review-form").reset();
+        setStatus(`Success! DEXA scan for ${out.date} successfully logged and database consolidated.\nRefresh your Body Composition Dashboard now to view the new data points.`);
+      } catch (err) {
+        setStatus(`Failed to save record: ${err.message || err}`);
       }
     });
   </script>

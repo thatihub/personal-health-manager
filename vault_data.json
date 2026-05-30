@@ -10,11 +10,7 @@
         "phone": "800-559-3500",
         "hours": "Mon-Fri 8:00 AM-5:00 PM"
       },
-      {
-        "name": "Hector Diaz",
-        "phone": "562-554-3955",
-        "notes": "SCAN contact person"
-      },
+
       {
         "name": "Member Services Phone Support",
         "phone": "Call number on back of ID card",
@@ -87,7 +83,11 @@
           "Fitness Member Code: A882356736",
           "Login System: HealthSafe-ID",
           "Username: thatikunta",
-          "Email: pkt2005@gmail.com"
+          "Email: pkt2005@gmail.com",
+          "Gyms: 24 Hour Fitness - 762 Sunnyvale Saratoga Road, Sunnyvale, CA",
+          "Gyms: Crunch Fitness - 1651 Hollenbeck Ave, Sunnyvale, CA 94087 • (669) 263-9343",
+          "Gyms: Pure Barre - 793 E El Camino Real, Sunnyvale, CA 94087",
+          "Gyms: Vim + Vigor Fitness - 1730 W Campbell Ave, Campbell, CA 95008"
         ]
       }
     ],

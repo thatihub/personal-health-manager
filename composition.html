@@ -1,0 +1,616 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Body Composition Dashboard (DEXA / InBody)</title>
+  <style>
+    /* Styling overrides specifically for Body Composition page */
+    body.page-composition {
+      --page-accent: #7268f2;
+      --page-accent-2: #5b4fe8;
+    }
+    .wrap { max-width: 1280px; margin: 0 auto; }
+    .nav { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+    
+    .hero {
+      margin-bottom: 14px;
+      padding: 20px;
+    }
+    
+    .kpis {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .kpi { padding: 14px; }
+    .kpi .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .kpi .value { font-size: 28px; font-weight: 800; margin-top: 4px; }
+    
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+    @media (max-width: 1024px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+    
+    .card.chart { padding: 14px; }
+    .chart-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      gap: 8px;
+    }
+    .chart h3 { margin: 0; font-family: "Avenir Next Condensed", "Trebuchet MS", sans-serif; font-weight: 800; }
+    
+    /* Specific section headers */
+    .grid > .card:nth-child(1) .chart-head h3 { color: #8fcff5 !important; }
+    .grid > .card:nth-child(2) .chart-head h3 { color: #c9bbff !important; }
+    .grid > .card:nth-child(3) .chart-head h3 { color: #ffb0be !important; }
+    
+    .graph-shell {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      padding: 10px;
+    }
+    
+    svg {
+      width: 100%;
+      height: 240px;
+      display: block;
+      overflow: visible;
+    }
+    
+    .legend {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+      font-size: 12px;
+    }
+    .legend-item { display: inline-flex; align-items: center; gap: 6px; }
+    .legend-color { width: 10px; height: 10px; border-radius: 999px; display: inline-block; }
+    
+    /* Collapsible Section Styles */
+    details.section {
+      width: 100%;
+    }
+    summary.section-head {
+      list-style: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 14px 14px 12px;
+      cursor: pointer;
+      user-select: none;
+    }
+    summary.section-head::-webkit-details-marker {
+      display: none;
+    }
+    .section-head h3 {
+      margin: 0;
+      font-size: 18px;
+      font-family: "Avenir Next Condensed", "Trebuchet MS", sans-serif;
+      font-weight: 800;
+    }
+    .chev {
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      border: 1px solid var(--comp-line);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(17, 28, 42, 0.82);
+      font-size: 13px;
+      transition: transform .2s ease;
+      color: var(--comp-ink);
+    }
+    details[open] .chev {
+      transform: rotate(180deg);
+    }
+    .section-body {
+      padding: 14px;
+      border-top: 1px solid var(--comp-line);
+    }
+    
+    .tracker-card {
+      margin-bottom: 16px;
+      border-left: 5px solid var(--page-accent) !important;
+    }
+    .tracker-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 20px;
+    }
+    @media (max-width: 768px) {
+      .tracker-grid { grid-template-columns: 1fr; }
+    }
+    .tracker-col h4 { margin: 0 0 10px; font-size: 16px; text-transform: uppercase; letter-spacing: 0.5px; color: #f4f8fc; }
+    .tracker-col p { margin: 0 0 12px; font-size: 14.5px; line-height: 1.45; color: var(--comp-muted); }
+    
+    .goals-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .goals-list li {
+      position: relative;
+      padding-left: 20px;
+      margin-bottom: 8px;
+      font-size: 14.5px;
+      line-height: 1.4;
+    }
+    .goals-list li::before {
+      content: "✦";
+      position: absolute;
+      left: 0;
+      color: var(--page-accent);
+    }
+    
+    .table-wrap {
+      overflow: auto;
+      max-height: 480px;
+      border-radius: 12px;
+      margin-top: 10px;
+      border: 1px solid var(--comp-line);
+      background: rgba(8, 17, 30, 0.4) !important;
+    }
+    .table-wrap table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14.5px;
+      line-height: 1.4;
+      text-align: center;
+    }
+    .table-wrap th, .table-wrap td {
+      padding: 12px 16px !important;
+      vertical-align: middle;
+    }
+    .table-wrap th {
+      font-weight: 800;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--comp-muted) !important;
+      border-bottom: 2px solid var(--comp-line) !important;
+      background: rgba(13, 24, 38, 0.95) !important;
+    }
+    .table-wrap td {
+      font-weight: 700;
+      color: var(--comp-ink) !important;
+      border-bottom: 1px solid rgba(116, 144, 172, 0.18) !important;
+    }
+    .table-wrap tbody tr:nth-child(odd) td {
+      background: rgba(10, 20, 35, 0.4) !important;
+    }
+    .table-wrap tbody tr:nth-child(even) td {
+      background: rgba(15, 28, 48, 0.4) !important;
+    }
+    .table-wrap tbody tr:hover td {
+      background: rgba(114, 104, 242, 0.12) !important;
+    }
+    
+    /* Specific table column adjustments */
+    .table-wrap td:nth-child(1) {
+      color: #8fcff5 !important;
+      font-weight: 800 !important;
+      letter-spacing: 0.2px;
+      min-width: 100px;
+    }
+    .table-wrap td.cell-notes {
+      text-align: left;
+      font-weight: 400 !important;
+      font-size: 13.5px;
+      color: var(--comp-muted) !important;
+      line-height: 1.45;
+      white-space: normal;
+      min-width: 250px;
+    }
+    .hidden { display: none !important; }
+  </style>
+  <link rel="stylesheet" href="./companion_theme.css" />
+</head>
+<body class="page-composition">
+  <div class="wrap">
+    <nav class="nav">
+      <a href="./index.html">Home</a>
+      <a href="./dashboard.html">Lab Results Dashboard</a>
+      <a class="active" href="./composition.html">Body Composition</a>
+      <a href="./bio-age.html">Biological Age</a>
+      <a href="./lab-import.html">Lab Import + Review</a>
+      <a href="./kaiser-labs.html">Kaiser Labs</a>
+      <a href="./bp.html">Blood Pressure</a>
+      <a href="./vault.html">Health Vault</a>
+      <a href="./immunizations.html">Immunizations</a>
+      <a href="./admin.html">Admin</a>
+      <a href="./cabinet.html">Cabinet</a>
+    </nav>
+    
+    <header class="hero">
+      <h1>Body Composition</h1>
+      <div class="sub" id="summary-subtitle">DEXA & InBody Longitudinal scan metrics (2026)</div>
+      <div class="updated-banner" id="last-updated-banner">Last updated: loading...</div>
+    </header>
+    
+    <section class="kpis" id="kpi-root">
+      <div class="card kpi" style="border-top: 4px solid #67d8ff !important;">
+        <div class="label">Latest Home Weight</div>
+        <div class="value" id="kpi-home-weight">-</div>
+      </div>
+      <div class="card kpi" style="border-top: 4px solid #ffb0be !important;">
+        <div class="label">Body Fat %</div>
+        <div class="value" id="kpi-fat-pct">-</div>
+      </div>
+      <div class="card kpi" style="border-top: 4px solid #c9bbff !important;">
+        <div class="label">Lean Body Mass</div>
+        <div class="value" id="kpi-lean-mass">-</div>
+      </div>
+      <div class="card kpi" style="border-top: 4px solid #73ecb4 !important;">
+        <div class="label">Skeletal Muscle</div>
+        <div class="value" id="kpi-muscle-mass">-</div>
+      </div>
+      <div class="card kpi" style="border-top: 4px solid #ffd081 !important;">
+        <div class="label">Basal Met Rate</div>
+        <div class="value" id="kpi-bmr">-</div>
+      </div>
+    </section>
+    
+    <section class="card tracker-card" style="padding: 0;">
+      <details class="section">
+        <summary class="section-head">
+          <h3 style="color: #ffd081 !important;">Active Health Goals & Important Protocol Rules</h3>
+          <span class="chev">⌄</span>
+        </summary>
+        <div class="section-body">
+          <div class="tracker-grid">
+            <div class="tracker-col">
+              <h4>Active Health Goals & Protocol</h4>
+              <p><strong>Primary Goal:</strong> Lose body fat slowly while preserving vital muscle tissue, especially because you are taking Mounjaro and insulin.</p>
+              <ul class="goals-list">
+                <li><strong>Protein Target:</strong> 90–110 g/day spread across meals to support muscle preservation and recovery.</li>
+                <li><strong>Resistance Training:</strong> Perform compound exercises 2–3 times per week to trigger muscle protein synthesis.</li>
+                <li><strong>Weight Targets:</strong> Focus on steady progress. First target is 155–160 lb; Second target is 145–150 lb.</li>
+              </ul>
+            </div>
+            <div class="tracker-col" style="border-left: 1px solid var(--comp-line); padding-left: 20px;">
+              <h4>Important Protocol Rules</h4>
+              <p style="font-size: 13.5px;"><strong>Clothing Adjustment:</strong> Scans include clothes (jeans/t-shirts), accounting for ~5–5.5 lb difference compared to home morning weight. <em>Never directly compare clothed scan weight to morning home weight.</em></p>
+              <p style="font-size: 13.5px;"><strong>Future Scans:</strong> Retest every 8–12 weeks. Always wear the same light gym clothes (t-shirt and shorts) to standardise clothed scans.</p>
+            </div>
+          </div>
+        </div>
+      </details>
+    </section>
+    
+    <section class="grid" id="dashboard-grid">
+      <article class="card chart">
+        <div class="chart-head">
+          <h3>Weight Tracking (Clothed vs Home)</h3>
+          <button class="view-btn" id="btn-toggle-weight" type="button">Switch to Table</button>
+        </div>
+        <div class="graph-shell" id="shell-weight">
+          <svg id="chart-weight"></svg>
+          <div class="legend">
+            <div class="legend-item"><span class="legend-color" style="background:#58c8ff;"></span>Home Morning Weight (Official)</div>
+            <div class="legend-item"><span class="legend-color" style="background:#ffb073;"></span>Clothed Scan Weight</div>
+          </div>
+        </div>
+        <div class="table-wrap hidden" id="table-wrap-weight">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Home Weight</th>
+                <th>Scan Weight</th>
+                <th>Difference</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody id="table-body-weight"></tbody>
+          </table>
+        </div>
+      </article>
+      
+      <article class="card chart">
+        <div class="chart-head">
+          <h3>Body Composition (Muscle vs Fat)</h3>
+          <button class="view-btn" id="btn-toggle-composition" type="button">Switch to Table</button>
+        </div>
+        <div class="graph-shell" id="shell-composition">
+          <svg id="chart-composition"></svg>
+          <div class="legend">
+            <div class="legend-item"><span class="legend-color" style="background:#73ecb4;"></span>Skeletal Muscle Mass</div>
+            <div class="legend-item"><span class="legend-color" style="background:#b9a6ff;"></span>Adjusted Lean Mass (Morning Est)</div>
+            <div class="legend-item"><span class="legend-color" style="background:#ff8fa0;"></span>Adjusted Fat Mass (Morning Est)</div>
+          </div>
+        </div>
+        <div class="table-wrap hidden" id="table-wrap-composition">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Skeletal Muscle</th>
+                <th>Adjusted Lean Mass</th>
+                <th>Adjusted Fat Mass</th>
+                <th>Lean Mass (Scan)</th>
+                <th>Fat Mass (Scan)</th>
+              </tr>
+            </thead>
+            <tbody id="table-body-composition"></tbody>
+          </table>
+        </div>
+      </article>
+      
+      <article class="card chart" style="grid-column: span 2;">
+        <div class="chart-head">
+          <h3>Body Fat Percentage</h3>
+          <button class="view-btn" id="btn-toggle-fat-pct" type="button">Switch to Table</button>
+        </div>
+        <div class="graph-shell" id="shell-fat-pct">
+          <svg id="chart-fat-pct" style="height: 180px;"></svg>
+        </div>
+        <div class="table-wrap hidden" id="table-wrap-fat-pct">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Body Fat %</th>
+                <th>BMI</th>
+                <th>BMR (kcal)</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody id="table-body-fat-pct"></tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+  </div>
+  
+  <script>
+    let rawRecords = [];
+    
+    function fmtDate(iso) {
+      if (!iso) return "-";
+      const d = new Date(`${iso}T00:00:00`);
+      return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+    }
+    
+    function setupCardToggle(buttonId, graphId, tableWrapId, startWithTable = false) {
+      const btn = document.getElementById(buttonId);
+      const graph = document.getElementById(graphId);
+      const tableWrap = document.getElementById(tableWrapId);
+      let showingTable = startWithTable;
+      
+      if (btn && graph && tableWrap) {
+        // Set initial visibility states based on startWithTable parameter
+        graph.classList.toggle("hidden", showingTable);
+        tableWrap.classList.toggle("hidden", !showingTable);
+        btn.textContent = showingTable ? "Switch to Graph" : "Switch to Table";
+        
+        btn.addEventListener("click", () => {
+          showingTable = !showingTable;
+          graph.classList.toggle("hidden", showingTable);
+          tableWrap.classList.toggle("hidden", !showingTable);
+          btn.textContent = showingTable ? "Switch to Graph" : "Switch to Table";
+        });
+      }
+    }
+    
+    async function updateLastUpdatedBanner() {
+      try {
+        const res = await fetch("/api/last-updated");
+        if (res.ok) {
+          const payload = await res.json();
+          document.getElementById("last-updated-banner").textContent = `Last updated: ${payload.latest_display || "-"}`;
+        }
+      } catch (_err) {
+        document.getElementById("last-updated-banner").textContent = "Last updated: unavailable";
+      }
+    }
+    
+    function renderKPIs(latest) {
+      if (!latest) return;
+      document.getElementById("kpi-home-weight").textContent = `${latest.home_weight_lb} lb`;
+      document.getElementById("kpi-fat-pct").textContent = `${latest.body_fat_pct}%`;
+      document.getElementById("kpi-lean-mass").textContent = `${latest.adjusted_lean_body_mass_lb || latest.lean_body_mass_lb} lb`;
+      document.getElementById("kpi-muscle-mass").textContent = `${latest.skeletal_muscle_mass_lb} lb`;
+      document.getElementById("kpi-bmr").textContent = `${latest.basal_metabolic_rate_kcal} kcal`;
+    }
+    
+    function populateTables(records) {
+      const reversed = records.slice().reverse();
+      
+      // Card 1 Table: Weight
+      const tbodyWeight = document.getElementById("table-body-weight");
+      if (tbodyWeight) {
+        tbodyWeight.innerHTML = reversed.map(r => {
+          const diff = (r.scan_weight_lb - r.home_weight_lb).toFixed(1);
+          return `
+            <tr>
+              <td>${fmtDate(r.date)}</td>
+              <td style="color:#58c8ff;">${r.home_weight_lb} lb</td>
+              <td style="color:#ffb073;">${r.scan_weight_lb} lb</td>
+              <td style="color:#ff8fa0;">+${diff} lb</td>
+              <td class="cell-notes">${r.notes || ""}</td>
+            </tr>
+          `;
+        }).join("");
+      }
+      
+      // Card 2 Table: Composition
+      const tbodyComp = document.getElementById("table-body-composition");
+      if (tbodyComp) {
+        tbodyComp.innerHTML = reversed.map(r => `
+          <tr>
+            <td>${fmtDate(r.date)}</td>
+            <td style="color:#73ecb4;">${r.skeletal_muscle_mass_lb} lb</td>
+            <td style="color:#b9a6ff;">${r.adjusted_lean_body_mass_lb || "-"} lb</td>
+            <td style="color:#ff8fa0;">${r.adjusted_body_fat_mass_lb || "-"} lb</td>
+            <td style="color:var(--comp-muted); font-weight:500;">${r.lean_body_mass_lb} lb</td>
+            <td style="color:var(--comp-muted); font-weight:500;">${r.body_fat_mass_lb} lb</td>
+          </tr>
+        `).join("");
+      }
+      
+      // Card 3 Table: Body Fat
+      const tbodyFat = document.getElementById("table-body-fat-pct");
+      if (tbodyFat) {
+        tbodyFat.innerHTML = reversed.map(r => `
+          <tr>
+            <td>${fmtDate(r.date)}</td>
+            <td style="color:#ff8fa0;">${r.body_fat_pct}%</td>
+            <td style="color:#8beee0;">${r.bmi || "-"}</td>
+            <td style="color:#ffd081;">${r.basal_metabolic_rate_kcal} kcal</td>
+            <td class="cell-notes">${r.notes || ""}</td>
+          </tr>
+        `).join("");
+      }
+    }
+    
+    function drawCharts(records) {
+      if (!records.length) return;
+      
+      // 1. Draw Weight chart
+      drawMultiLine("chart-weight", records, [
+        { key: "home_weight_lb", color: "#58c8ff" },
+        { key: "scan_weight_lb", color: "#ffb073" }
+      ], 130, 180);
+      
+      // 2. Draw Lean vs Fat vs Muscle composition chart
+      drawMultiLine("chart-composition", records, [
+        { key: "skeletal_muscle_mass_lb", color: "#73ecb4" },
+        { key: "adjusted_lean_body_mass_lb", color: "#b9a6ff" },
+        { key: "adjusted_body_fat_mass_lb", color: "#ff8fa0" }
+      ], 30, 100);
+      
+      // 3. Draw Body Fat %
+      drawMultiLine("chart-fat-pct", records, [
+        { key: "body_fat_pct", color: "#ff8fa0" }
+      ], 40, 60);
+    }
+    
+    function drawMultiLine(svgId, records, series, forceMin = null, forceMax = null) {
+      const svg = document.getElementById(svgId);
+      if (!svg) return;
+      
+      const width = svg.clientWidth || 500;
+      const height = svg.clientHeight || 240;
+      const pad = { l: 42, r: 12, t: 15, b: 25 };
+      const w = width - pad.l - pad.r;
+      const h = height - pad.t - pad.b;
+      
+      // Find limits
+      let allVals = [];
+      records.forEach(r => {
+        series.forEach(s => {
+          const v = r[s.key];
+          if (v !== null && v !== undefined) allVals.push(Number(v));
+        });
+      });
+      
+      if (!allVals.length) return;
+      
+      let vMin = forceMin !== null ? forceMin : Math.min(...allVals);
+      let vMax = forceMax !== null ? forceMax : Math.max(...allVals);
+      const span = vMax - vMin || 1;
+      const padY = span * 0.15 || 1;
+      
+      if (forceMin === null) vMin = Math.max(0, vMin - padY);
+      if (forceMax === null) vMax = vMax + padY;
+      
+      const y = (val) => pad.t + (1 - (val - vMin) / (vMax - vMin)) * h;
+      const x = (idx) => pad.l + (idx / Math.max(1, records.length - 1)) * w;
+      
+      let html = "";
+      
+      // Draw gridlines
+      for (let i = 0; i <= 3; i++) {
+        const yy = pad.t + (i / 3) * h;
+        const tickVal = (vMax - (i / 3) * (vMax - vMin)).toFixed(1);
+        html += `<line x1="${pad.l}" y1="${yy}" x2="${pad.l + w}" y2="${yy}" stroke="rgba(74, 104, 136, 0.28)" stroke-width="0.8" stroke-dasharray="3 4"/>`;
+        html += `<text x="${pad.l - 6}" y="${yy + 4}" text-anchor="end" fill="#98adbf" font-size="10.5" font-weight="700">${tickVal}</text>`;
+      }
+      
+      // Draw time labels
+      records.forEach((r, i) => {
+        const isBoundary = i === 0 || i === records.length - 1;
+        if (isBoundary || records.length <= 5) {
+          const formatted = new Date(`${r.date}T00:00:00`).toLocaleDateString("en-US", { month: "short", day: "numeric" });
+          html += `<text x="${x(i)}" y="${height - 6}" text-anchor="middle" fill="#98adbf" font-size="10.5" font-weight="700">${formatted}</text>`;
+        }
+      });
+      
+      // Draw series lines
+      series.forEach(s => {
+        const points = records.map((r, i) => {
+          const v = r[s.key];
+          return (v !== null && v !== undefined) ? { x: x(i), y: y(Number(v)), val: v } : null;
+        }).filter(Boolean);
+        
+        if (points.length < 1) return;
+        
+        // Line path
+        const path = points.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x} ${p.y}`).join(" ");
+        html += `<path d="${path}" fill="none" stroke="${s.color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>`;
+        
+        // Point dots & values
+        points.forEach((p, idx) => {
+          html += `<circle cx="${p.x}" cy="${p.y}" r="${records.length > 10 ? 3 : 4}" fill="${s.color}" stroke="#070d14" stroke-width="1.2"/>`;
+          // Draw value text next to single point, or last point in timeline
+          if (records.length === 1 || idx === points.length - 1) {
+            html += `<text x="${p.x + 8}" y="${p.y - 6}" fill="${s.color}" font-size="11" font-weight="800">${p.val}</text>`;
+          }
+        });
+      });
+      
+      svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+      svg.innerHTML = html;
+    }
+    
+    async function init() {
+      updateLastUpdatedBanner();
+      
+      try {
+        const res = await fetch("/api/dexa-data");
+        const out = await res.json();
+        rawRecords = out.rows || [];
+        
+        if (rawRecords.length > 0) {
+          renderKPIs(rawRecords[rawRecords.length - 1]);
+          populateTables(rawRecords);
+          drawCharts(rawRecords);
+          
+          // Smart UX Choice: If there is only 1 scan record, default to the Table view so it is clean and spacious!
+          // If there are multiple scans, default to the Graph view to show trend lines automatically.
+          const defaultToTable = rawRecords.length <= 1;
+          setupCardToggle("btn-toggle-weight", "shell-weight", "table-wrap-weight", defaultToTable);
+          setupCardToggle("btn-toggle-composition", "shell-composition", "table-wrap-composition", defaultToTable);
+          setupCardToggle("btn-toggle-fat-pct", "shell-fat-pct", "table-wrap-fat-pct", defaultToTable);
+        } else {
+          setupCardToggle("btn-toggle-weight", "shell-weight", "table-wrap-weight", false);
+          setupCardToggle("btn-toggle-composition", "shell-composition", "table-wrap-composition", false);
+          setupCardToggle("btn-toggle-fat-pct", "shell-fat-pct", "table-wrap-fat-pct", false);
+          document.getElementById("summary-subtitle").innerHTML = `<span style="color:#ff8fa0;">No DEXA records found. Please upload dexa_records.json via the Admin page.</span>`;
+        }
+      } catch (err) {
+        console.error("Failed to load DEXA data", err);
+      }
+    }
+    
+    window.addEventListener("resize", () => {
+      if (rawRecords.length > 0) drawCharts(rawRecords);
+    });
+    
+    init();
+  </script>
+</body>
+</html>

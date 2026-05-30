@@ -154,7 +154,7 @@
     .val { font-size: 24px; font-weight: 800; margin-top: 3px; color: #153347; }
 
     .actions {
-      margin-top: 14px;
+      margin-top: 8px;
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 12px;
@@ -180,30 +180,55 @@
       background: linear-gradient(130deg, rgba(255,255,255,0.42), rgba(255,255,255,0));
       pointer-events: none;
     }
-    .actions .card:nth-child(1) {
-      border-top: 5px solid #0c86b3;
-      background: linear-gradient(160deg, rgba(200,240,255,0.66), rgba(255,255,255,0.58));
+    
+    /* Section Grouping & Category Headers */
+    .section-group {
+      margin-top: 24px;
+      margin-bottom: 12px;
     }
-    .actions .card:nth-child(2) {
-      border-top: 5px solid #00a47a;
-      background: linear-gradient(160deg, rgba(206,255,240,0.64), rgba(255,255,255,0.58));
+    .section-group-title {
+      font-family: "Avenir Next Condensed", "Trebuchet MS", sans-serif;
+      font-size: 16px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--comp-muted) !important;
+      margin: 18px 0 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
-    .actions .card:nth-child(3) {
-      border-top: 5px solid #dc8920;
-      background: linear-gradient(160deg, rgba(255,241,212,0.66), rgba(255,255,255,0.58));
+    .section-group-title::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--comp-line);
+      opacity: 0.4;
     }
-    .actions .card:nth-child(4) {
-      border-top: 5px solid #0f78b6;
-      background: linear-gradient(160deg, rgba(215,240,255,0.7), rgba(255,255,255,0.58));
+    .group-icon {
+      font-size: 18px;
+      line-height: 1;
     }
-    .actions .card:nth-child(5) {
-      border-top: 5px solid #d8576d;
-      background: linear-gradient(160deg, rgba(255,225,233,0.66), rgba(255,255,255,0.58));
-    }
-    .actions .card:nth-child(6) {
-      border-top: 5px solid #755ae4;
-      background: linear-gradient(160deg, rgba(234,226,255,0.68), rgba(255,255,255,0.58));
-    }
+
+    /* Explicit Color Classes for Home Page Cards & Buttons (Overriding companion_theme) */
+    body.page-home .card.card-blue { border-top: 5px solid #00a0e9 !important; }
+    body.page-home .card.card-blue .cta { background: linear-gradient(120deg, #0f5c80, #00a0e9) !important; }
+
+    body.page-home .card.card-teal { border-top: 5px solid #00c090 !important; }
+    body.page-home .card.card-teal .cta { background: linear-gradient(120deg, #0b8068, #00c090) !important; }
+
+    body.page-home .card.card-amber { border-top: 5px solid #e59520 !important; }
+    body.page-home .card.card-amber .cta { background: linear-gradient(120deg, #a56815, #e59520) !important; }
+
+    body.page-home .card.card-green { border-top: 5px solid #1bc471 !important; }
+    body.page-home .card.card-green .cta { background: linear-gradient(120deg, #0f9a57, #1bc471) !important; }
+
+    body.page-home .card.card-rose { border-top: 5px solid #f05a77 !important; }
+    body.page-home .card.card-rose .cta { background: linear-gradient(120deg, #a03548, #f05a77) !important; }
+
+    body.page-home .card.card-purple { border-top: 5px solid #9f7aea !important; }
+    body.page-home .card.card-purple .cta { background: linear-gradient(120deg, #6c4ca8, #9f7aea) !important; }
+
     .card h3 { margin: 0 0 8px; }
     .card p { margin: 0; color: #365464; line-height: 1.4; }
     .dexcom-badge {
@@ -246,15 +271,6 @@
       box-shadow: 0 8px 16px rgba(18, 63, 89, 0.18);
     }
     .cta:hover { filter: brightness(1.05); }
-    .actions .card:nth-child(1) .cta { background: linear-gradient(120deg, #0d5f80, #0c86b3); }
-    .actions .card:nth-child(2) .cta { background: linear-gradient(120deg, #0b6d58, #00a47a); }
-    .actions .card:nth-child(3) .cta { background: linear-gradient(120deg, #9b5f11, #dc8920); }
-    .actions .card:nth-child(4) .cta {
-      background: linear-gradient(120deg, #0a7a4e, #17b26a);
-      box-shadow: 0 10px 20px rgba(20, 131, 85, 0.28);
-    }
-    .actions .card:nth-child(5) .cta { background: linear-gradient(120deg, #9d2d40, #d8576d); }
-    .actions .card:nth-child(6) .cta { background: linear-gradient(120deg, #4b37ad, #755ae4); }
 
     .utility {
       margin-top: 14px;
@@ -318,6 +334,7 @@
     <nav class="nav">
       <a class="active" href="./index.html">Home</a>
       <a href="./dashboard.html">Lab Results Dashboard</a>
+      <a href="./composition.html">Body Composition</a>
       <a href="./bio-age.html">Biological Age</a>
       <a href="./lab-import.html">Lab Import + Review</a>
       <a href="./bp.html">Blood Pressure</a>
@@ -339,63 +356,110 @@
       <section class="stats" id="stats"></section>
     </section>
 
-    <section class="actions">
-      <article class="card">
-        <h3>Lab Results Dashboard</h3>
-        <p>Lab trends, normal ranges, abnormal highlights, and latest value cards.</p>
-        <a class="cta" href="./dashboard.html">Open Lab Dashboard</a>
-      </article>
-      <article class="card">
-        <h3>Biological Age Dashboard</h3>
-        <p>Section scores, confidence, age delta, and colored border cards for metabolic trend tracking.</p>
-        <a class="cta" href="./bio-age.html">Open Biological Age</a>
-      </article>
-      <article class="card">
-        <h3>Lab Import + Review</h3>
-        <p>Paste CSV/text, normalize test names and units, review duplicates, and save to longitudinal timeline.</p>
-        <a class="cta" href="./lab-import.html">Open Import Review</a>
-      </article>
-      <article class="card">
-        <h3>Kaiser Lab Results</h3>
-        <p>Historical Kaiser labs (2009–2022) in a dashboard-style view.</p>
-        <a class="cta" href="./kaiser-labs.html">Open Kaiser Labs</a>
-      </article>
-      <article class="card">
-        <h3>Kaiser Health Summary</h3>
-        <p>Full Kaiser record snapshot: demographics, meds, problems, vitals, labs, immunizations.</p>
-        <a class="cta" href="./kaiser-health-summary.html">Open Kaiser Health Summary</a>
-      </article>
-      <article class="card">
-        <h3>Health Vault</h3>
-        <p>Scanned insurance details, useful links, member IDs, and phone contacts.</p>
-        <a class="cta" href="./vault.html">Open Vault</a>
-      </article>
-      <article class="card">
-        <h3>Blood Pressure</h3>
-        <p>Uploads append historical BP data; view last 90 days of SYS, DIAS, and Pulse.</p>
-        <a class="cta" href="./bp.html">Open BP Dashboard</a>
-      </article>
-      <article class="card">
-        <div class="dexcom-badge"><span class="dexcom-dot"></span>Dexcom</div>
-        <h3>Diabetes Companion</h3>
-        <p>Open the Dex Diabetes Companion app for daily glucose-focused workflows and coaching tools.</p>
-        <a class="cta" href="https://diabetes-companion-web.onrender.com" target="_blank" rel="noopener">Open Diabetes Companion</a>
-      </article>
-      <article class="card">
-        <h3>Admin Upload</h3>
-        <p>Secure upload for updated JSON data files and rebuild trigger.</p>
-        <a class="cta" href="./admin.html">Open Admin</a>
-      </article>
-      <article class="card">
-        <h3>Project History</h3>
-        <p>Track commits, stage-lock tags, and feature milestones.</p>
-        <a class="cta" href="./history.html">Open History</a>
-      </article>
-      <article class="card" style="border-top: 5px solid #d8576d; background: linear-gradient(160deg, rgba(255,225,233,0.66), rgba(255,255,255,0.58));">
-        <h3>YouTube Comment Analyzer</h3>
-        <p>Extract and analyze real-world patient comments, dose patterns, and side effects.</p>
-        <a class="cta" style="background: linear-gradient(120deg, #9d2d40, #d8576d);" href="/health/youtube-comments">Open YT Analyzer</a>
-      </article>
+    <!-- Priority 1: Primary Health Vault & Lab Results -->
+    <section class="section-group">
+      <h2 class="section-group-title">
+        <span class="group-icon">🛡️</span> Primary Health Vault & Lab Results
+      </h2>
+      <div class="actions">
+        <article class="card card-blue">
+          <h3>Health Vault</h3>
+          <p>Scanned insurance details, useful links, member IDs, and phone contacts.</p>
+          <a class="cta" href="./vault.html">Open Vault</a>
+        </article>
+        <article class="card card-blue">
+          <h3>Lab Results Dashboard</h3>
+          <p>Lab trends, normal ranges, abnormal highlights, and latest value cards.</p>
+          <a class="cta" href="./dashboard.html">Open Lab Dashboard</a>
+        </article>
+      </div>
+    </section>
+
+    <!-- Priority 2: Diagnostic Dashboards & Summaries -->
+    <section class="section-group">
+      <h2 class="section-group-title">
+        <span class="group-icon">📊</span> Diagnostic Dashboards & Summaries
+      </h2>
+      <div class="actions">
+        <article class="card card-teal">
+          <h3>Kaiser Health Summary</h3>
+          <p>Full Kaiser record snapshot: demographics, meds, problems, vitals, labs, immunizations.</p>
+          <a class="cta" href="./kaiser-health-summary.html">Open Kaiser Health Summary</a>
+        </article>
+        <article class="card card-teal">
+          <h3>Body Composition Dashboard</h3>
+          <p>DEXA and InBody scans tracking fat loss, lean retention, muscle mass, BMR, and morning weight targets.</p>
+          <a class="cta" href="./composition.html">Open Body Composition</a>
+        </article>
+        <article class="card card-amber">
+          <h3>Biological Age Dashboard</h3>
+          <p>Section scores, confidence, age delta, and colored border cards for metabolic trend tracking.</p>
+          <a class="cta" href="./bio-age.html">Open Biological Age</a>
+        </article>
+        <article class="card card-green">
+          <h3>Blood Pressure</h3>
+          <p>Uploads append historical BP data; view last 90 days of SYS, DIAS, and Pulse.</p>
+          <a class="cta" href="./bp.html">Open BP Dashboard</a>
+        </article>
+        <article class="card card-rose">
+          <h3>Kaiser Lab Results</h3>
+          <p>Historical Kaiser labs (2009–2022) in a dashboard-style view.</p>
+          <a class="cta" href="./kaiser-labs.html">Open Kaiser Labs</a>
+        </article>
+      </div>
+    </section>
+
+    <!-- Priority 3: Daily Operations & Workbenches -->
+    <section class="section-group">
+      <h2 class="section-group-title">
+        <span class="group-icon">⚙️</span> Daily Operations & Workbenches
+      </h2>
+      <div class="actions">
+        <article class="card card-green">
+          <h3>Lab Import + Review</h3>
+          <p>Paste CSV/text, normalize test names and units, review duplicates, and save to longitudinal timeline.</p>
+          <a class="cta" href="./lab-import.html">Open Import Review</a>
+        </article>
+        <article class="card card-purple">
+          <h3>Admin Upload</h3>
+          <p>Secure upload for updated JSON data files and rebuild trigger.</p>
+          <a class="cta" href="./admin.html">Open Admin</a>
+        </article>
+      </div>
+    </section>
+
+    <!-- Priority 4: Diabetes & Patient Insights -->
+    <section class="section-group">
+      <h2 class="section-group-title">
+        <span class="group-icon">💬</span> Diabetes & Patient Insights
+      </h2>
+      <div class="actions">
+        <article class="card card-blue">
+          <div class="dexcom-badge"><span class="dexcom-dot"></span>Dexcom</div>
+          <h3>Diabetes Companion</h3>
+          <p>Open the Dex Diabetes Companion app for daily glucose-focused workflows and coaching tools.</p>
+          <a class="cta" href="https://diabetes-companion-web.onrender.com" target="_blank" rel="noopener">Open Diabetes Companion</a>
+        </article>
+        <article class="card card-rose">
+          <h3>YouTube Comment Analyzer</h3>
+          <p>Extract and analyze real-world patient comments, dose patterns, and side effects.</p>
+          <a class="cta" href="/health/youtube-comments">Open YT Analyzer</a>
+        </article>
+      </div>
+    </section>
+
+    <!-- Priority 5: System & Project Tools -->
+    <section class="section-group">
+      <h2 class="section-group-title">
+        <span class="group-icon">🔧</span> System & Project Tools
+      </h2>
+      <div class="actions">
+        <article class="card card-purple">
+          <h3>Project History</h3>
+          <p>Track commits, stage-lock tags, and feature milestones.</p>
+          <a class="cta" href="./history.html">Open History</a>
+        </article>
+      </div>
     </section>
 
     <section class="utility">
@@ -431,8 +495,25 @@
         vaultStatus.textContent = 'Vault: unknown';
         updatedStatus.textContent = 'Last updated: unavailable';
       }
+      let dexaWeight = '-';
+      let dexaFatPct = '-';
       try {
-        const res = await fetch('./dashboard_data.js');
+        const dexaRes = await fetch('/api/dexa-data');
+        if (dexaRes.ok) {
+          const dexaOut = await dexaRes.json();
+          const dexaRows = dexaOut.rows || [];
+          if (dexaRows.length > 0) {
+            const latestDexa = dexaRows[dexaRows.length - 1];
+            dexaWeight = `${latestDexa.home_weight_lb} lb`;
+            dexaFatPct = `${latestDexa.body_fat_pct}%`;
+          }
+        }
+      } catch (_err) {
+        console.error('Failed to load dexa stats', _err);
+      }
+
+      try {
+        const res = await fetch(`./dashboard_data.js?ts=${Date.now()}`, { cache: "no-store" });
         const txt = await res.text();
         const jsonTxt = txt.split('=', 2)[1].trim().replace(/;\s*$/, '');
         const rows = JSON.parse(jsonTxt);
@@ -449,9 +530,9 @@
         const cards = [
           ['Reports', rows.length],
           ['Latest HbA1c', lastVal('hba1c')],
-          ['Latest Glucose', lastVal('glucose')],
           ['Latest TSH', lastVal('tsh')],
-          ['Latest LDL', lastVal('ldl')]
+          ['Body Fat %', dexaFatPct],
+          ['Morning Weight', dexaWeight]
         ];
 
         statsRoot.innerHTML = cards.map(([l,v]) => `<div class="stat"><div class="label">${l}</div><div class="val">${v}</div></div>`).join('');

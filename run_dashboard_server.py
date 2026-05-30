@@ -31,6 +31,7 @@ ADMIN_AUTH_PASS = os.getenv("ADMIN_BASIC_AUTH_PASS", "").strip()
 BP_DATA_PATH = PROJECT_DIR / "bp_readings.csv"
 AG_IMPORTS_PATH = PROJECT_DIR / "ag_lab_imports.json"
 CONSOLIDATED_LABS_PATH = PROJECT_DIR / "consolidated_labs.json"
+DEXA_DATA_PATH = PROJECT_DIR / "dexa_records.json"
 
 
 def parse_args() -> argparse.Namespace:
@@ -84,7 +85,35 @@ def _decode_env_text(plain_var: str, b64_var: str) -> str | None:
 
 
 def _default_upload_dir() -> Path:
-    return Path(os.getenv("ADMIN_UPLOADS_DIR", str(PROJECT_DIR / "_uploaded_pdfs")))
+    # First, check if custom ADMIN_UPLOADS_DIR is set
+    env_uploads = os.getenv("ADMIN_UPLOADS_DIR")
+    if env_uploads:
+        p = Path(env_uploads).expanduser()
+        p.mkdir(parents=True, exist_ok=True)
+        return p
+
+    # Check if standard env var LAB_RESULTS_DIR is set
+    env_root = os.getenv("LAB_RESULTS_DIR")
+    if env_root:
+        p = Path(env_root).expanduser()
+        if p.exists():
+            return p
+
+    # Otherwise discover standard candidates exactly like rebuild_consolidation.py does
+    candidates = [
+        PROJECT_DIR.parent / "Health prakash/Lab tests/Lab Results",
+        Path.home() / "Documents/Health/Health prakash/Lab tests/Lab Results",
+        PROJECT_DIR.parent,
+    ]
+
+    for c in candidates:
+        if c.exists() and any(c.rglob("*.pdf")):
+            return c
+
+    # Fallback to _uploaded_pdfs if nothing else exists
+    fallback = PROJECT_DIR / "_uploaded_pdfs"
+    fallback.mkdir(parents=True, exist_ok=True)
+    return fallback
 
 
 def _rebuild_env(upload_dir_override: Path | None = None) -> dict[str, str]:
@@ -94,9 +123,6 @@ def _rebuild_env(upload_dir_override: Path | None = None) -> dict[str, str]:
     if upload_dir_override is not None:
         env["LAB_RESULTS_DIR"] = str(upload_dir_override)
         return env
-    default_upload = _default_upload_dir()
-    if default_upload.exists():
-        env["LAB_RESULTS_DIR"] = str(default_upload)
     return env
 
 
@@ -899,6 +925,14 @@ class DashboardHandler(SimpleHTTPRequestHandler):
                 return True
         return False
 
+    def _load_dexa_data(self) -> list[dict[str, object]]:
+        if not DEXA_DATA_PATH.exists():
+            return []
+        try:
+            return json.loads(DEXA_DATA_PATH.read_text(encoding="utf-8"))
+        except Exception:
+            return []
+
     def _handle_ag_import_preview(self) -> None:
         length = int(self.headers.get("Content-Length", "0"))
         raw = self.rfile.read(length) if length else b"{}"
@@ -1015,7 +1049,7 @@ class DashboardHandler(SimpleHTTPRequestHandler):
 
     def _find_duplicate_pdf(self, upload_dir: Path, file_bytes: bytes) -> Path | None:
         incoming_hash = hashlib.sha256(file_bytes).hexdigest()
-        for candidate in upload_dir.glob("*.pdf"):
+        for candidate in upload_dir.rglob("*.pdf"):
             try:
                 existing_hash = hashlib.sha256(candidate.read_bytes()).hexdigest()
             except OSError:
@@ -1146,6 +1180,7 @@ class DashboardHandler(SimpleHTTPRequestHandler):
             ("Consolidated Labs", PROJECT_DIR / "consolidated_labs.json"),
             ("Dashboard Data", PROJECT_DIR / "dashboard_data.js"),
             ("Vault Data", PROJECT_DIR / "vault_data.json"),
+            ("DEXA Records", PROJECT_DIR / "dexa_records.json"),
         ]
         known_files: list[dict[str, object]] = []
         latest_epoch = 0.0
@@ -1269,8 +1304,8 @@ class DashboardHandler(SimpleHTTPRequestHandler):
 
         target = str(payload.get("target", "")).strip()
         content = payload.get("content")
-        if target not in {"vault", "dashboard", "consolidated"}:
-            self._json(400, {"ok": False, "error": "target must be one of: vault, dashboard, consolidated"})
+        if target not in {"vault", "dashboard", "consolidated", "dexa"}:
+            self._json(400, {"ok": False, "error": "target must be one of: vault, dashboard, consolidated, dexa"})
             return
         if content is None:
             self._json(400, {"ok": False, "error": "content is required"})
@@ -1302,6 +1337,13 @@ class DashboardHandler(SimpleHTTPRequestHandler):
                     raise ValueError("Consolidated content must be a JSON array")
                 self._write_json_file(PROJECT_DIR / "consolidated_labs.json", content)
                 self._json(200, {"ok": True, "target": "consolidated_labs.json"})
+                return
+
+            if target == "dexa":
+                if not isinstance(content, list):
+                    raise ValueError("DEXA content must be a JSON array")
+                self._write_json_file(PROJECT_DIR / "dexa_records.json", content)
+                self._json(200, {"ok": True, "target": "dexa_records.json"})
                 return
         except ValueError as exc:
             self._json(400, {"ok": False, "error": str(exc)})
@@ -1483,6 +1525,199 @@ class DashboardHandler(SimpleHTTPRequestHandler):
             },
         )
 
+    def _handle_admin_dexa_pdf_upload(self) -> None:
+        import datetime
+        import sys
+        try:
+            _fields, files = self._parse_multipart_form()
+        except ValueError as exc:
+            self._json(400, {"ok": False, "error": str(exc)})
+            return
+        if "file" not in files:
+            self._json(400, {"ok": False, "error": "Missing file field."})
+            return
+
+        raw_name, file_bytes = files["file"]
+        filename = Path(raw_name or "").name
+        if not filename:
+            self._json(400, {"ok": False, "error": "No file selected."})
+            return
+        is_pdf = filename.lower().endswith(".pdf")
+        is_image = filename.lower().endswith((".jpg", ".jpeg", ".png"))
+        if not (is_pdf or is_image):
+            self._json(400, {"ok": False, "error": "Only PDF and JPEG/PNG image files are supported."})
+            return
+
+        # Archive inside local records folder
+        dexa_scans_dir = Path("/Users/prakashthatikunta/Documents/Health/Health prakash/Lab tests/Dexa scans")
+        dexa_scans_dir.mkdir(parents=True, exist_ok=True)
+        target = dexa_scans_dir / filename
+        if target.exists():
+            stem = target.stem
+            suffix = target.suffix
+            i = 1
+            while target.exists():
+                target = dexa_scans_dir / f"{stem}_{i}{suffix}"
+                i += 1
+
+        with target.open("wb") as f:
+            f.write(file_bytes)
+
+        # Parse date from filename if matches format like Dexa-YYYY-MM-DD.pdf or similar
+        parsed_date = ""
+        # Look for YYYY-MM-DD
+        m = re.search(r"(\d{4})-(\d{2})-(\d{2})", filename)
+        if m:
+            parsed_date = m.group(0)
+        else:
+            # Look for MM-DD-YYYY
+            m2 = re.search(r"(\d{2})-(\d{2})-(\d{4})", filename)
+            if m2:
+                parsed_date = f"{m2.group(3)}-{m2.group(1)}-{m2.group(2)}"
+
+        if not parsed_date:
+            parsed_date = datetime.date.today().isoformat()
+
+        # Fallback quiet OCR text parsing to extract possible numbers
+        parsed_weight = None
+        parsed_fat = None
+        parsed_muscle = None
+        parsed_bmr = None
+        parsed_water = None
+
+        try:
+            sys.path.append(str(PROJECT_DIR))
+            text = ""
+            if is_pdf:
+                from rebuild_consolidation import normalize_pdf_text
+                text = normalize_pdf_text(target)
+            elif is_image:
+                from rebuild_consolidation import ocr_image_bytes
+                text = ocr_image_bytes(file_bytes)
+
+            if text:
+                # 1. Look for body fat %
+                fat_m = re.search(r"fat\s*(?:pct|percent)?\s*(?:is|:|value)?\s*(\d+\.?\d*)\s*%", text, re.IGNORECASE)
+                if fat_m:
+                    parsed_fat = float(fat_m.group(1))
+
+                # 2. Look for weight
+                weight_m = re.search(r"weight\s*(?:is|:|value)?\s*(\d+\.?\d*)\s*(?:lbs|lb|kg)", text, re.IGNORECASE)
+                if weight_m:
+                    parsed_weight = float(weight_m.group(1))
+
+                # 3. Look for BMR
+                bmr_m = re.search(r"(?:basal|bmr|metabolic)\s*(\d{3,4})\s*(?:kcal|calories)?", text, re.IGNORECASE)
+                if bmr_m:
+                    parsed_bmr = float(bmr_m.group(1))
+
+                # 4. Look for Muscle
+                muscle_m = re.search(r"(?:skeletal|muscle|smm)\s*(?:mass)?\s*(?:is|:|value)?\s*(\d+\.?\d*)\s*(?:lbs|lb)", text, re.IGNORECASE)
+                if muscle_m:
+                    parsed_muscle = float(muscle_m.group(1))
+        except Exception:
+            pass
+
+        self._json(
+            200,
+            {
+                "ok": True,
+                "uploaded": target.name,
+                "date": parsed_date,
+                "scan_weight": parsed_weight,
+                "body_fat": parsed_fat,
+                "muscle": parsed_muscle,
+                "basal_metabolic_rate_kcal": parsed_bmr,
+                "total_body_water_lb": parsed_water,
+                "upload_dir": str(dexa_scans_dir)
+            }
+        )
+
+    def _handle_admin_save_dexa_record(self) -> None:
+        length = int(self.headers.get("Content-Length", "0"))
+        raw = self.rfile.read(length) if length else b"{}"
+        try:
+            payload = json.loads(raw.decode("utf-8"))
+        except (UnicodeDecodeError, json.JSONDecodeError):
+            self._json(400, {"ok": False, "error": "Invalid JSON body"})
+            return
+
+        date = payload.get("date")
+        scan_weight = payload.get("scan_weight")
+        home_weight = payload.get("home_weight")
+        body_fat_pct = payload.get("body_fat_pct")
+        muscle_mass = payload.get("muscle_mass")
+        bmr = payload.get("bmr")
+        water = payload.get("water")
+        waist = payload.get("waist")
+        notes = payload.get("notes", "")
+
+        if not (date and scan_weight and home_weight and body_fat_pct and muscle_mass and bmr):
+            self._json(400, {"ok": False, "error": "Missing required fields."})
+            return
+
+        # Load existing dexa records
+        dexa_path = PROJECT_DIR / "dexa_records.json"
+        records = []
+        if dexa_path.exists():
+            try:
+                records = json.loads(dexa_path.read_text(encoding="utf-8"))
+            except Exception:
+                pass
+
+        # Discover height from previous scans
+        height = 62.0 # default 5'2"
+        for r in records:
+            if r.get("height_in"):
+                height = float(r.get("height_in"))
+                break
+
+        # Calculate values
+        scan_weight = float(scan_weight)
+        home_weight = float(home_weight)
+        body_fat_pct = float(body_fat_pct)
+        muscle_mass = float(muscle_mass)
+        bmr = float(bmr)
+
+        clothing_diff = round(scan_weight - home_weight, 2)
+        adjusted_fat = round(home_weight * (body_fat_pct / 100.0), 1)
+        adjusted_lean = round(home_weight * (1.0 - body_fat_pct / 100.0), 1)
+        body_fat_mass = round(scan_weight * (body_fat_pct / 100.0), 1)
+        lean_mass = round(scan_weight * (1.0 - body_fat_pct / 100.0), 1)
+        bmi = round((home_weight / (height * height)) * 703, 1)
+
+        new_record = {
+            "date": str(date),
+            "height_in": height,
+            "scan_weight_lb": scan_weight,
+            "home_weight_lb": home_weight,
+            "clothing_diff_lb": clothing_diff,
+            "bmi": bmi,
+            "body_fat_pct": body_fat_pct,
+            "body_fat_mass_lb": body_fat_mass,
+            "lean_body_mass_lb": lean_mass,
+            "skeletal_muscle_mass_lb": muscle_mass,
+            "total_body_water_lb": float(water) if water else None,
+            "basal_metabolic_rate_kcal": bmr,
+            "adjusted_body_fat_mass_lb": adjusted_fat,
+            "adjusted_lean_body_mass_lb": adjusted_lean,
+            "waist_size_in": float(waist) if waist else None,
+            "notes": str(notes)
+        }
+
+        # Remove duplicate date if already exists to overwrite it
+        records = [r for r in records if r.get("date") != date]
+        records.append(new_record)
+        # Sort by date
+        records.sort(key=lambda x: x.get("date", ""))
+
+        self._write_json_file(dexa_path, records)
+
+        # Quietly trigger rebuild
+        self._guarded_rebuild()
+
+        self._json(200, {"ok": True, "date": date})
+
     def _json(self, status: int, payload: dict[str, object]) -> None:
         body = json.dumps(payload).encode("utf-8")
         self.send_response(status)
@@ -1504,6 +1739,9 @@ class DashboardHandler(SimpleHTTPRequestHandler):
             return
         if path == "/api/bp-data":
             self._json(200, {"ok": True, "days": 90, "rows": self._bp_last_days(90)})
+            return
+        if path == "/api/dexa-data":
+            self._json(200, {"ok": True, "rows": self._load_dexa_data()})
             return
         if self._require_admin_auth():
             return
@@ -1556,6 +1794,18 @@ class DashboardHandler(SimpleHTTPRequestHandler):
             if self._require_admin_auth():
                 return
             self._handle_admin_upload()
+            return
+
+        if self.path == "/api/admin/upload-dexa-pdf":
+            if self._require_admin_auth():
+                return
+            self._handle_admin_dexa_pdf_upload()
+            return
+
+        if self.path == "/api/admin/save-dexa-record":
+            if self._require_admin_auth():
+                return
+            self._handle_admin_save_dexa_record()
             return
 
         if self.path == "/api/youtube-comments/analyze":

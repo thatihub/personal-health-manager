@@ -5,100 +5,106 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Lab Import + Review</title>
   <style>
-    :root {
-      --ink: #123449;
-      --muted: #4d697a;
-      --line: rgba(18, 52, 73, .16);
-      --panel: rgba(255, 255, 255, .92);
-      --shadow: 0 14px 30px rgba(18, 52, 73, .12);
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: "Avenir Next", "Trebuchet MS", "Segoe UI", sans-serif;
-      color: var(--ink);
-      background:
-        radial-gradient(circle at 12% 8%, rgba(11,126,166,.18), transparent 34%),
-        radial-gradient(circle at 86% 16%, rgba(227,143,31,.14), transparent 32%),
-        linear-gradient(160deg, #f2faff 0%, #fffaf2 48%, #f3fff9 100%);
-      min-height: 100vh;
-      padding: 18px;
+    body.page-import {
+      --page-accent: #e38f1f;
+      --page-accent-2: #be7415;
     }
     .wrap { max-width: 1120px; margin: 0 auto; }
     .nav { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
-    .nav a {
-      text-decoration: none;
-      padding: 9px 12px;
-      border-radius: 12px;
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,.9);
-      color: #264a5f;
-      font-weight: 700;
-      font-size: 13px;
-      min-height: 44px;
-      display: inline-flex;
-      align-items: center;
-    }
-    .nav a.active { background: linear-gradient(120deg, #0b7ea8, #e38f1f); color: #fff; border-color: transparent; }
-    h1 { margin: 0 0 6px; font-family: "Avenir Next Condensed", "Trebuchet MS", sans-serif; font-size: clamp(26px, 4vw, 42px); }
-    .sub { color: var(--muted); margin-bottom: 12px; }
+    
     .panel {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      box-shadow: var(--shadow);
-      padding: 14px;
-      margin-bottom: 12px;
+      background: linear-gradient(165deg, rgba(58, 74, 96, 0.98), rgba(47, 63, 84, 0.98)) !important;
+      border: 1px solid var(--comp-line) !important;
+      border-radius: 20px !important;
+      box-shadow: var(--comp-shadow) !important;
+      padding: 20px;
+      margin-bottom: 16px;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
     }
-    .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 10px; }
-    .row label { font-weight: 700; color: #2c5065; }
+    
+    .row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; }
+    .row label { font-weight: 700; color: var(--comp-ink); font-size: 14.5px; }
+    
     input, select, textarea {
-      min-height: 40px;
+      min-height: 44px;
       border-radius: 10px;
-      border: 1px solid var(--line);
-      background: #fff;
-      color: var(--ink);
-      padding: 8px 10px;
-      font-size: 14px;
-    }
-    textarea { width: 100%; min-height: 190px; resize: vertical; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
-    .btn {
-      min-height: 40px;
-      border-radius: 10px;
-      border: 1px solid rgba(255,255,255,.25);
-      background: linear-gradient(120deg, #0b7ea8, #16a584);
-      color: #fff;
+      border: 1px solid var(--comp-line);
+      background: rgba(10, 20, 35, 0.6);
+      color: var(--comp-ink);
       padding: 8px 12px;
-      font-weight: 700;
-      cursor: pointer;
+      font-size: 14px;
+      transition: border-color 0.2s ease;
     }
-    .btn.secondary {
-      background: #fff;
-      color: #285066;
-      border: 1px solid var(--line);
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--page-accent);
+      outline: none;
     }
+    textarea { 
+      width: 100%; 
+      min-height: 180px; 
+      resize: vertical; 
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; 
+      line-height: 1.5;
+    }
+    
     .status {
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      padding: 10px;
-      background: rgba(255,255,255,.86);
-      color: #32586e;
+      border: 1px solid var(--comp-line) !important;
+      border-radius: 12px !important;
+      padding: 14px !important;
+      background: rgba(8, 17, 30, 0.6) !important;
+      color: #73ecb4 !important;
+      font-size: 14px !important;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       white-space: pre-wrap;
-      font-size: 13px;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
     }
-    .hint { font-size: 12px; color: var(--muted); margin-top: 6px; }
-    .table-wrap { overflow: auto; border: 1px solid var(--line); border-radius: 12px; }
-    table { width: 100%; border-collapse: collapse; min-width: 980px; background: #fff; }
-    th, td { border-bottom: 1px solid var(--line); text-align: left; padding: 8px; font-size: 13px; }
-    th { background: #f2f8fc; font-size: 11px; text-transform: uppercase; letter-spacing: .4px; color: #2f5367; }
+    .hint { font-size: 12.5px; color: var(--comp-muted); margin-top: 6px; }
+    
+    .table-wrap { 
+      overflow: auto; 
+      border: 1px solid var(--comp-line); 
+      border-radius: 12px; 
+      background: rgba(8, 17, 30, 0.4) !important;
+    }
+    table { 
+      width: 100%; 
+      border-collapse: collapse; 
+      min-width: 980px; 
+      background: #0d1826 !important;
+      color: #f2f7fc !important;
+    }
+    th, td { 
+      border-bottom: 1px solid rgba(127, 161, 194, 0.26) !important; 
+      text-align: left; 
+      padding: 12px 14px !important; 
+      font-size: 14px; 
+    }
+    th { 
+      background: linear-gradient(120deg, #1a3047, #203a54) !important;
+      color: #f5fbff !important;
+      font-size: 11px; 
+      text-transform: uppercase; 
+      letter-spacing: .8px; 
+      font-weight: 800;
+      border-bottom: 2px solid rgba(150, 182, 212, 0.42) !important;
+    }
+    tbody td {
+      font-weight: 700 !important;
+    }
+    tbody tr:nth-child(odd) td { background: #0f1c2b !important; }
+    tbody tr:nth-child(even) td { background: #132335 !important; }
+    tbody tr:hover td { background: #1c324a !important; }
+    
     .pill {
       display: inline-block;
       border-radius: 999px;
-      padding: 3px 8px;
-      background: #eef4f8;
-      color: #34596e;
-      font-size: 11px;
+      padding: 3px 10px;
+      background: rgba(114, 104, 242, 0.2);
+      color: #c9bbff;
+      font-size: 11.5px;
       font-weight: 700;
+      border: 1px solid rgba(114, 104, 242, 0.4);
     }
   </style>
   <link rel="stylesheet" href="./companion_theme.css" />
@@ -108,6 +114,7 @@
     <nav class="nav">
       <a href="./index.html">Home</a>
       <a href="./dashboard.html">Lab Results Dashboard</a>
+      <a href="./composition.html">Body Composition</a>
       <a href="./bio-age.html">Biological Age</a>
       <a class="active" href="./lab-import.html">Lab Import + Review</a>
       <a href="./admin.html">Admin</a>

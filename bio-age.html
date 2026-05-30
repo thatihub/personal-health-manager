@@ -5,119 +5,202 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Biological Age Dashboard</title>
   <style>
-    :root {
-      --ink: #103145;
-      --muted: #4f6d7f;
-      --line: rgba(16, 49, 69, 0.16);
-      --panel: rgba(255, 255, 255, 0.9);
-      --shadow: 0 14px 30px rgba(16, 49, 69, 0.12);
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: "Avenir Next", "Trebuchet MS", "Segoe UI", sans-serif;
-      color: var(--ink);
-      background:
-        radial-gradient(circle at 10% 8%, rgba(20, 166, 128, .18), transparent 34%),
-        radial-gradient(circle at 90% 18%, rgba(11, 126, 166, .16), transparent 32%),
-        linear-gradient(160deg, #f2fbff 0%, #fffaf2 45%, #f3fff8 100%);
-      min-height: 100vh;
-      padding: 18px;
+    body.page-bioage {
+      --page-accent: #1aa672;
+      --page-accent-2: #0f8368;
     }
     .wrap { max-width: 1180px; margin: 0 auto; }
-    .nav {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-bottom: 14px;
+    .nav { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+    
+    /* Ultra-Premium Glassmorphic Override for Biological Age Dashboard */
+    body.page-bioage .hero {
+      background: linear-gradient(135deg, rgba(8, 20, 38, 0.9), rgba(4, 10, 24, 0.95)) !important;
+      border: 1px solid rgba(114, 164, 212, 0.15) !important;
+      border-top: 4px solid var(--page-accent) !important;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+      border-radius: 24px !important;
+      padding: 24px !important;
+      margin-bottom: 20px !important;
     }
-    .nav a {
-      text-decoration: none;
-      padding: 9px 12px;
-      border-radius: 12px;
-      border: 1px solid var(--line);
-      background: rgba(255, 255, 255, .9);
-      color: #26495f;
-      font-weight: 700;
-      font-size: 13px;
-      min-height: 44px;
-      display: inline-flex;
-      align-items: center;
+    
+    body.page-bioage .hero h1 {
+      color: #ffffff !important;
+      margin: 0 0 6px;
+      font-size: clamp(28px, 4vw, 44px);
+      font-family: "Avenir Next Condensed", "Trebuchet MS", sans-serif;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
     }
-    .nav a.active { background: linear-gradient(120deg, #0b7ea8, #16a989); color: #fff; border-color: transparent; }
-    .hero {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 20px;
-      box-shadow: var(--shadow);
-      padding: 16px;
-      margin-bottom: 14px;
+    
+    body.page-bioage .hero .sub {
+      color: #a5b7c9 !important;
+      font-size: 14.5px !important;
+      margin-bottom: 16px !important;
+      line-height: 1.5;
     }
-    h1 { margin: 0 0 6px; font-size: clamp(26px, 4vw, 42px); font-family: "Avenir Next Condensed", "Trebuchet MS", sans-serif; }
-    .sub { color: var(--muted); margin-bottom: 12px; }
-    .stats {
+    
+    body.page-bioage .stats {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 10px;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 12px;
     }
-    .stat {
-      background: #fff;
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      padding: 10px;
+    
+    body.page-bioage .stat {
+      background: rgba(10, 20, 35, 0.75) !important;
+      border: 1px solid rgba(114, 164, 212, 0.18) !important;
+      border-radius: 16px !important;
+      padding: 16px !important;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), inset 0 0 12px rgba(0, 0, 0, 0.5) !important;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
     }
-    .label { font-size: 11px; text-transform: uppercase; color: var(--muted); letter-spacing: .4px; }
-    .val { font-size: 24px; font-weight: 800; margin-top: 3px; }
-    .panel {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      box-shadow: var(--shadow);
-      padding: 14px;
-      margin-bottom: 12px;
+    
+    body.page-bioage .stat:hover {
+      transform: translateY(-2px);
+      border-color: rgba(114, 164, 212, 0.45) !important;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4) !important;
     }
+    
+    /* Stats top color coding */
+    body.page-bioage .stats .stat:nth-child(1) { border-top: 3px solid #60a5fa !important; } /* Blue */
+    body.page-bioage .stats .stat:nth-child(2) { border-top: 3px solid #1aa672 !important; } /* Green */
+    body.page-bioage .stats .stat:nth-child(3) { border-top: 3px solid #9f7aea !important; } /* Purple */
+    body.page-bioage .stats .stat:nth-child(4) { border-top: 3px solid #ef6f59 !important; } /* Rose */
+    body.page-bioage .stats .stat:nth-child(5) { border-top: 3px solid #f0a43a !important; } /* Amber */
+    body.page-bioage .stats .stat:nth-child(6) { border-top: 3px solid #14b8a6 !important; } /* Teal */
+    
+    body.page-bioage .stat .label {
+      color: #8fa0b5 !important;
+      font-weight: 700 !important;
+      letter-spacing: 0.8px !important;
+      text-transform: uppercase !important;
+      font-size: 11px !important;
+    }
+    
+    body.page-bioage .stat .val {
+      color: #ffffff !important;
+      font-weight: 900 !important;
+      font-size: 28px !important;
+      margin-top: 6px !important;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    }
+    
+    body.page-bioage .panel {
+      background: linear-gradient(135deg, rgba(8, 20, 38, 0.75), rgba(4, 10, 24, 0.85)) !important;
+      border: 1px solid rgba(114, 164, 212, 0.15) !important;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35) !important;
+      border-radius: 20px !important;
+      padding: 20px !important;
+      margin-bottom: 20px !important;
+    }
+    
     .row {
       display: flex;
-      gap: 8px;
+      gap: 10px;
       flex-wrap: wrap;
       align-items: center;
-      margin-bottom: 10px;
+      margin-bottom: 16px;
     }
-    .row select, .row input {
-      min-height: 40px;
+    
+    body.page-bioage .row select {
+      min-height: 44px;
       border-radius: 10px;
-      border: 1px solid var(--line);
-      padding: 8px 10px;
-      background: #fff;
-      color: var(--ink);
+      border: 1px solid rgba(114, 164, 212, 0.25) !important;
+      padding: 8px 12px;
+      background: rgba(10, 20, 35, 0.8) !important;
+      color: #ffffff !important;
+      font-weight: 700 !important;
+      cursor: pointer !important;
+      outline: none !important;
+      transition: border-color 0.2s ease;
     }
+    
+    body.page-bioage .row select:focus {
+      border-color: var(--page-accent) !important;
+    }
+    
+    body.page-bioage .row select option {
+      background: #0b1523 !important;
+      color: #ffffff !important;
+    }
+    
+    body.page-bioage .row label {
+      color: #8fa0b5 !important;
+      font-weight: 800 !important;
+      font-size: 13px !important;
+      text-transform: uppercase !important;
+      letter-spacing: 0.5px !important;
+    }
+    
     .section-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-      gap: 10px;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 12px;
     }
-    .section-card {
-      background: #fff;
-      border: 1px solid var(--line);
-      border-left: 7px solid #9ca3af;
-      border-radius: 12px;
-      padding: 10px;
+    
+    body.page-bioage .section-card {
+      background: linear-gradient(165deg, rgba(20, 32, 48, 0.95), rgba(12, 20, 32, 0.98)) !important;
+      border: 1px solid rgba(114, 164, 212, 0.18) !important;
+      border-left: 6px solid #9ca3af !important;
+      border-radius: 16px !important;
+      padding: 18px !important;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
     }
-    .section-name { font-weight: 800; font-size: 14px; }
-    .section-score { font-size: 26px; font-weight: 900; margin-top: 3px; }
-    .meta { color: var(--muted); font-size: 12px; margin-top: 2px; }
-    .table-wrap { overflow: auto; border-radius: 12px; border: 1px solid var(--line); }
-    table { width: 100%; border-collapse: collapse; background: #fff; min-width: 860px; }
-    th, td { padding: 8px; border-bottom: 1px solid var(--line); text-align: left; font-size: 13px; }
-    th { text-transform: uppercase; letter-spacing: .4px; font-size: 11px; color: #2e5367; background: #f3f8fc; }
+    
+    body.page-bioage .section-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(114, 164, 212, 0.4) !important;
+      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.45) !important;
+    }
+    
+    .section-name { font-weight: 800; font-size: 15px; color: #fff !important; }
+    .section-score { font-size: 32px; font-weight: 900; margin-top: 4px; color: #fff !important; }
+    .meta { color: var(--comp-muted) !important; font-size: 12.5px; margin-top: 3px; }
+    
+    body.page-bioage .table-wrap {
+      overflow: auto;
+      border-radius: 14px !important;
+      border: 1px solid rgba(114, 164, 212, 0.2) !important;
+      background: rgba(6, 12, 22, 0.95) !important;
+      box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.5) !important;
+    }
+    
+    body.page-bioage table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 860px;
+      background: transparent !important;
+      border: none !important;
+    }
+    
+    body.page-bioage th, body.page-bioage td {
+      padding: 12px 14px !important;
+      border-bottom: 1px solid rgba(114, 164, 212, 0.12) !important;
+      font-size: 13.5px;
+    }
+    
+    body.page-bioage th {
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      font-size: 11px;
+      font-weight: 800;
+      background: linear-gradient(120deg, #101e2d, #16273b) !important;
+      color: #8fcff5 !important;
+      border-bottom: 2px solid rgba(114, 164, 212, 0.25) !important;
+    }
+    
+    body.page-bioage tbody tr:nth-child(odd) td { background: rgba(10, 20, 32, 0.5) !important; }
+    body.page-bioage tbody tr:nth-child(even) td { background: rgba(14, 26, 42, 0.5) !important; }
+    body.page-bioage tbody tr:hover td { background: rgba(26, 166, 114, 0.15) !important; }
+    
     .pill {
       display: inline-block;
       border-radius: 999px;
       font-weight: 700;
       font-size: 11px;
       padding: 3px 9px;
-      background: #eef4f8;
-      color: #32566b;
+      background: rgba(114, 104, 242, 0.2);
+      color: #c9bbff;
+      border: 1px solid rgba(114, 104, 242, 0.4);
     }
   </style>
   <link rel="stylesheet" href="./companion_theme.css" />
@@ -127,6 +210,7 @@
     <nav class="nav">
       <a href="./index.html">Home</a>
       <a href="./dashboard.html">Lab Results Dashboard</a>
+      <a href="./composition.html">Body Composition</a>
       <a class="active" href="./bio-age.html">Biological Age</a>
       <a href="./lab-import.html">Lab Import + Review</a>
       <a href="./vault.html">Health Vault</a>

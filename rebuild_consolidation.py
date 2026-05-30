@@ -403,9 +403,22 @@ def build_rows() -> list[dict[str, Any]]:
             continue
         row: dict[str, Any]
         content_l = text.lower()
-        is_labcorp = ("labcorp" in low_name or "lab corp" in low_name)
-        is_quest = ("quest" in low_name or "quest diagnostics" in content_l)
-        is_lgc = ("let get checked" in low_name or "letsgetchecked" in low_name or "letsgetchecked" in content_l)
+        is_labcorp = (
+            "labcorp" in low_name
+            or "lab corp" in low_name
+            or "labcorp" in content_l
+            or "laboratory corporation of america" in content_l
+        )
+        is_quest = (
+            "quest" in low_name
+            or "quest diagnostics" in content_l
+            or "questdiagnostics" in content_l
+        )
+        is_lgc = (
+            "let get checked" in low_name
+            or "letsgetchecked" in low_name
+            or "letsgetchecked" in content_l
+        )
 
         if is_labcorp:
             row = extract_labcorp(text, pdf.name)

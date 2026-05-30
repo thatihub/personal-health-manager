@@ -475,6 +475,7 @@
     <nav class="top-nav">
       <a href="./index.html">Home</a>
       <a class="active" href="./dashboard.html">Lab Results Dashboard</a>
+      <a href="./composition.html">Body Composition</a>
       <a href="./kaiser-labs.html">Kaiser Labs</a>
       <a href="./bp.html">Blood Pressure</a>
       <a href="./vault.html">Health Vault</a>
@@ -728,7 +729,9 @@
     </section>
   </div>
 
-  <script src="./dashboard_data.js"></script>
+  <script>
+    document.write('<script src="./dashboard_data.js?ts=' + Date.now() + '"><\/script>');
+  </script>
   <script>
     const data = Array.isArray(window.LAB_DASH_DATA) ? window.LAB_DASH_DATA : [];
     if (!data.length) {
