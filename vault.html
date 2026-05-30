@@ -325,40 +325,44 @@
       box-shadow: 0 10px 22px rgba(16, 163, 127, .12);
     }
 
-    .after-hours h2 {
-      margin: 0 0 12px;
+    .after-hours-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 6px;
+    }
+
+    .after-hours-member-title {
       font-size: 20px;
-      color: #0e5f5f;
-      font-family: "Avenir Next Condensed", "Trebuchet MS", sans-serif;
       font-weight: 800;
+      color: #0c5050;
+      font-family: "Avenir Next Condensed", "Trebuchet MS", sans-serif;
       letter-spacing: 0.5px;
       display: flex;
       align-items: center;
       gap: 6px;
     }
 
-    .after-hours-member-id {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 16px;
-      font-weight: 800;
-      color: #0c5050;
-      margin-bottom: 12px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid rgba(16, 163, 127, 0.16);
-    }
-
-    .after-hours-member-id .label {
-      color: #0e5f5f;
-      opacity: 0.9;
-    }
-
-    .after-hours-member-id .val {
-      background: rgba(16, 163, 127, 0.1);
+    .after-hours-member-title .member-id-val {
+      background: rgba(16, 163, 127, 0.15);
       padding: 3px 8px;
       border-radius: 6px;
       letter-spacing: 0.5px;
+    }
+
+    .after-hours-sub-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #0e5f5f;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(16, 163, 127, 0.16);
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
     .after-hours .row {
@@ -791,7 +795,11 @@
       <div class="status" id="json-editor-status">Edit mode is off.</div>
     </section>
     <section class="after-hours hidden" id="after-hours-panel">
-      <h2>24/7 After-Hours Care</h2>
+      <div class="after-hours-header-row">
+        <div class="after-hours-member-title">💳 Member ID: <span class="member-id-val" id="after-hours-member-id-val">40083848601</span></div>
+        <div id="after-hours-copy-container"></div>
+      </div>
+      <div class="after-hours-sub-title">🚨 24/7 After-Hours Care</div>
       <div id="after-hours-content"></div>
     </section>
 
@@ -1422,18 +1430,15 @@
        const afterHoursContent = document.getElementById("after-hours-content");
        if (afterHours.length) {
          const memberIdVal = scan.member?.member_id || "40083848601";
-         const memberIdRow = `
-           <div class="after-hours-member-id">
-             <span class="label">💳 Member ID:</span>
-             <span class="val">${memberIdVal}</span>
-             ${copyButton(memberIdVal)}
-           </div>
-         `;
-         const rowsHtml = afterHours.map((c) =>
+         const idValSpan = document.getElementById("after-hours-member-id-val");
+         if (idValSpan) idValSpan.textContent = memberIdVal;
+         const copyContainer = document.getElementById("after-hours-copy-container");
+         if (copyContainer) {
+           copyContainer.innerHTML = copyButton(memberIdVal);
+         }
+         afterHoursContent.innerHTML = afterHours.map((c) =>
            `<div class="row"><div class="v">${c.name || "-"}</div><div>${phoneLink(c.phone)}</div>${c.hours ? `<div class="muted">${c.hours}</div>` : ""}</div>`
          ).join("");
-         
-         afterHoursContent.innerHTML = memberIdRow + rowsHtml;
          afterHoursPanel.classList.remove("hidden");
        } else {
          afterHoursPanel.classList.add("hidden");
