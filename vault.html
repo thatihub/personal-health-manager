@@ -1370,14 +1370,32 @@
                     addrParts.slice(1).forEach(part => {
                       if (/wifi:/i.test(part)) {
                         const wifiVal = part.replace(/wifi:\s*/i, "").trim();
-                        wifiHtml = `
-                          <div style="font-size: 11px; font-weight: 500; color: #ffd081; opacity: 0.85; margin-left: 22px; display: flex; align-items: center; gap: 4.5px; flex-wrap: wrap; margin-top: 3px;">
-                            📶 <span style="background: rgba(255, 255, 255, 0.08); padding: 2px 6px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.06); font-family: ui-monospace, monospace;">
-                              WiFi: <strong style="color: #fff;">${wifiVal}</strong>
-                            </span>
-                            ${copyButton(wifiVal, "Copy WiFi")}
-                          </div>
-                        `;
+                        if (wifiVal.includes("/")) {
+                          const wParts = wifiVal.split("/").map(x => x.trim());
+                          const netName = wParts[0];
+                          const pwd = wParts[1];
+                          wifiHtml = `
+                            <div style="font-size: 11px; font-weight: 500; color: #ffd081; opacity: 0.85; margin-left: 22px; display: flex; flex-direction: column; gap: 4.5px; margin-top: 4px;">
+                              <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                                📶 Network: <span style="background: rgba(255, 255, 255, 0.08); padding: 2px 6px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.06); font-family: ui-monospace, monospace; color: #fff;">${netName}</span>
+                                ${copyButton(netName, "Copy")}
+                              </div>
+                              <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                                🔑 Password: <span style="background: rgba(255, 255, 255, 0.08); padding: 2px 6px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.06); font-family: ui-monospace, monospace; color: #fff;">${pwd}</span>
+                                ${copyButton(pwd, "Copy")}
+                              </div>
+                            </div>
+                          `;
+                        } else {
+                          wifiHtml = `
+                            <div style="font-size: 11px; font-weight: 500; color: #ffd081; opacity: 0.85; margin-left: 22px; display: flex; align-items: center; gap: 4.5px; flex-wrap: wrap; margin-top: 3px;">
+                              📶 <span style="background: rgba(255, 255, 255, 0.08); padding: 2px 6px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.06); font-family: ui-monospace, monospace;">
+                                WiFi: <strong style="color: #fff;">${wifiVal}</strong>
+                              </span>
+                              ${copyButton(wifiVal, "Copy WiFi")}
+                            </div>
+                          `;
+                        }
                       } else {
                         phoneHtml += ` • ${phoneInline(part)}`;
                       }
