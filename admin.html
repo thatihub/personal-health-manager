@@ -296,6 +296,30 @@
             <label style="font-size: 13px; font-weight: 700; color: var(--comp-muted);">Waist Size (inches, optional)</label>
             <input id="rev-waist" type="number" step="0.1" placeholder="e.g. 34.0" style="min-height: 44px; border-radius: 10px; border: 1px solid var(--comp-line); background: rgba(10, 20, 35, 0.6); color: var(--comp-ink); padding: 8px 12px; font-size: 14px;" />
           </div>
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <label style="font-size: 13px; font-weight: 700; color: var(--comp-muted);">Visceral Fat (VAT) Area (cm², optional)</label>
+            <input id="rev-vat-area" type="number" step="0.1" placeholder="e.g. 218.1" style="min-height: 44px; border-radius: 10px; border: 1px solid var(--comp-line); background: rgba(10, 20, 35, 0.6); color: var(--comp-ink); padding: 8px 12px; font-size: 14px;" />
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <label style="font-size: 13px; font-weight: 700; color: var(--comp-muted);">Visceral Fat (VAT) Mass (g, optional)</label>
+            <input id="rev-vat-mass" type="number" step="1" placeholder="e.g. 1051" style="min-height: 44px; border-radius: 10px; border: 1px solid var(--comp-line); background: rgba(10, 20, 35, 0.6); color: var(--comp-ink); padding: 8px 12px; font-size: 14px;" />
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <label style="font-size: 13px; font-weight: 700; color: var(--comp-muted);">Visceral Fat (VAT) Volume (cm³, optional)</label>
+            <input id="rev-vat-volume" type="number" step="1" placeholder="e.g. 1137" style="min-height: 44px; border-radius: 10px; border: 1px solid var(--comp-line); background: rgba(10, 20, 35, 0.6); color: var(--comp-ink); padding: 8px 12px; font-size: 14px;" />
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <label style="font-size: 13px; font-weight: 700; color: var(--comp-muted);">ALM Index (kg/m², optional)</label>
+            <input id="rev-alm-index" type="number" step="0.1" placeholder="e.g. 7.8" style="min-height: 44px; border-radius: 10px; border: 1px solid var(--comp-line); background: rgba(10, 20, 35, 0.6); color: var(--comp-ink); padding: 8px 12px; font-size: 14px;" />
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <label style="font-size: 13px; font-weight: 700; color: var(--comp-muted);">Lean/Height² Index (kg/m², optional)</label>
+            <input id="rev-lean-height2" type="number" step="0.1" placeholder="e.g. 19.4" style="min-height: 44px; border-radius: 10px; border: 1px solid var(--comp-line); background: rgba(10, 20, 35, 0.6); color: var(--comp-ink); padding: 8px 12px; font-size: 14px;" />
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <label style="font-size: 13px; font-weight: 700; color: var(--comp-muted);">Lean Index Age Percentile (optional)</label>
+            <input id="rev-lean-percentile" type="number" step="1" placeholder="e.g. 43" style="min-height: 44px; border-radius: 10px; border: 1px solid var(--comp-line); background: rgba(10, 20, 35, 0.6); color: var(--comp-ink); padding: 8px 12px; font-size: 14px;" />
+          </div>
         </div>
         
         <div style="display: flex; flex-direction: column; gap: 6px;">
@@ -463,6 +487,12 @@
         document.getElementById("rev-bmr").value = out.basal_metabolic_rate_kcal || "";
         document.getElementById("rev-water").value = out.total_body_water_lb || "";
         document.getElementById("rev-waist").value = "";
+        document.getElementById("rev-vat-area").value = out.visceral_fat_area_cm2 || "";
+        document.getElementById("rev-vat-mass").value = out.visceral_fat_mass_g || "";
+        document.getElementById("rev-vat-volume").value = out.visceral_fat_volume_cm3 || "";
+        document.getElementById("rev-alm-index").value = out.appendicular_lean_mass_index || "";
+        document.getElementById("rev-lean-height2").value = out.lean_height2_index || "";
+        document.getElementById("rev-lean-percentile").value = out.lean_index_percentile || "";
         document.getElementById("rev-notes").value = "Scanned DEXA report. Clothed scan weight compared to morning weight.";
 
         // Reveal panel
@@ -489,10 +519,16 @@
       const bmr = document.getElementById("rev-bmr").value;
       const water = document.getElementById("rev-water").value;
       const waist = document.getElementById("rev-waist").value;
+      const vatArea = document.getElementById("rev-vat-area").value;
+      const vatMass = document.getElementById("rev-vat-mass").value;
+      const vatVolume = document.getElementById("rev-vat-volume").value;
+      const almIndex = document.getElementById("rev-alm-index").value;
+      const leanHeight2 = document.getElementById("rev-lean-height2").value;
+      const leanPercentile = document.getElementById("rev-lean-percentile").value;
       const notes = document.getElementById("rev-notes").value;
 
-      if (!date || !scanWeight || !homeWeight || !bodyFat || !muscle || !bmr) {
-        setStatus("Please fill in all required fields (Date, Scan Weight, Home Weight, Body Fat %, Muscle Mass, BMR).");
+      if (!date || !scanWeight || !homeWeight || !bodyFat) {
+        setStatus("Please fill in all required fields (Date, Scan Weight, Home Weight, Body Fat %).");
         return;
       }
 
@@ -503,10 +539,16 @@
           scan_weight: parseFloat(scanWeight),
           home_weight: parseFloat(homeWeight),
           body_fat_pct: parseFloat(bodyFat),
-          muscle_mass: parseFloat(muscle),
-          bmr: parseFloat(bmr),
+          muscle_mass: muscle ? parseFloat(muscle) : null,
+          bmr: bmr ? parseFloat(bmr) : null,
           water: water ? parseFloat(water) : null,
           waist: waist ? parseFloat(waist) : null,
+          visceral_fat_area_cm2: vatArea ? parseFloat(vatArea) : null,
+          visceral_fat_mass_g: vatMass ? parseFloat(vatMass) : null,
+          visceral_fat_volume_cm3: vatVolume ? parseFloat(vatVolume) : null,
+          appendicular_lean_mass_index: almIndex ? parseFloat(almIndex) : null,
+          lean_height2_index: leanHeight2 ? parseFloat(leanHeight2) : null,
+          lean_index_percentile: leanPercentile ? parseInt(leanPercentile) : null,
           notes
         };
 

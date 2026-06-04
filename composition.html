@@ -372,6 +372,63 @@
           </table>
         </div>
       </article>
+
+      <!-- Card 4: Visceral Fat (VAT) Tracker -->
+      <article class="card chart">
+        <div class="chart-head">
+          <h3>Visceral Fat (VAT) Area</h3>
+          <button class="view-btn" id="btn-toggle-vat" type="button">Switch to Table</button>
+        </div>
+        <div class="graph-shell" id="shell-vat">
+          <svg id="chart-vat" style="height: 180px;"></svg>
+          <div class="legend">
+            <div class="legend-item"><span class="legend-color" style="background:#ff8fa0;"></span>Estimated VAT Area (cm²) [Ideal: < 100, High: > 200]</div>
+          </div>
+        </div>
+        <div class="table-wrap hidden" id="table-wrap-vat">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>VAT Area (cm²)</th>
+                <th>VAT Mass (g)</th>
+                <th>VAT Volume (cm³)</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody id="table-body-vat"></tbody>
+          </table>
+        </div>
+      </article>
+
+      <!-- Card 5: Sarcopenia & Muscle Indices -->
+      <article class="card chart">
+        <div class="chart-head">
+          <h3>Sarcopenia & Muscle Indices</h3>
+          <button class="view-btn" id="btn-toggle-indices" type="button">Switch to Table</button>
+        </div>
+        <div class="graph-shell" id="shell-indices">
+          <svg id="chart-indices" style="height: 180px;"></svg>
+          <div class="legend">
+            <div class="legend-item"><span class="legend-color" style="background:#73ecb4;"></span>ALM Index (kg/m²) [Goal: > 7.0]</div>
+            <div class="legend-item"><span class="legend-color" style="background:#58c8ff;"></span>Lean/Height² Index (kg/m²)</div>
+          </div>
+        </div>
+        <div class="table-wrap hidden" id="table-wrap-indices">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>ALM Index (kg/m²)</th>
+                <th>Lean/Height² (kg/m²)</th>
+                <th>Age Percentile</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody id="table-body-indices"></tbody>
+          </table>
+        </div>
+      </article>
     </section>
   </div>
   
@@ -469,7 +526,35 @@
             <td>${fmtDate(r.date)}</td>
             <td style="color:#ff8fa0;">${r.body_fat_pct}%</td>
             <td style="color:#8beee0;">${r.bmi || "-"}</td>
-            <td style="color:#ffd081;">${r.basal_metabolic_rate_kcal} kcal</td>
+            <td style="color:#ffd081;">${r.basal_metabolic_rate_kcal ? r.basal_metabolic_rate_kcal + ' kcal' : '-'}</td>
+            <td class="cell-notes">${r.notes || ""}</td>
+          </tr>
+        `).join("");
+      }
+
+      // Card 4 Table: Visceral Fat
+      const tbodyVat = document.getElementById("table-body-vat");
+      if (tbodyVat) {
+        tbodyVat.innerHTML = reversed.map(r => `
+          <tr>
+            <td>${fmtDate(r.date)}</td>
+            <td style="color:#ff8fa0; font-weight: 800;">${r.visceral_fat_area_cm2 !== null && r.visceral_fat_area_cm2 !== undefined ? r.visceral_fat_area_cm2 + ' cm²' : '-'}</td>
+            <td style="color:#ffb073;">${r.visceral_fat_mass_g !== null && r.visceral_fat_mass_g !== undefined ? r.visceral_fat_mass_g + ' g' : '-'}</td>
+            <td style="color:#ffd081;">${r.visceral_fat_volume_cm3 !== null && r.visceral_fat_volume_cm3 !== undefined ? r.visceral_fat_volume_cm3 + ' cm³' : '-'}</td>
+            <td class="cell-notes">${r.notes || ""}</td>
+          </tr>
+        `).join("");
+      }
+
+      // Card 5 Table: Sarcopenia Indices
+      const tbodyIndices = document.getElementById("table-body-indices");
+      if (tbodyIndices) {
+        tbodyIndices.innerHTML = reversed.map(r => `
+          <tr>
+            <td>${fmtDate(r.date)}</td>
+            <td style="color:#73ecb4; font-weight: 800;">${r.appendicular_lean_mass_index !== null && r.appendicular_lean_mass_index !== undefined ? r.appendicular_lean_mass_index + ' kg/m²' : '-'}</td>
+            <td style="color:#58c8ff;">${r.lean_height2_index !== null && r.lean_height2_index !== undefined ? r.lean_height2_index + ' kg/m²' : '-'}</td>
+            <td style="color:#b9a6ff;">${r.lean_index_percentile !== null && r.lean_index_percentile !== undefined ? r.lean_index_percentile + 'th' : '-'}</td>
             <td class="cell-notes">${r.notes || ""}</td>
           </tr>
         `).join("");
@@ -495,7 +580,18 @@
       // 3. Draw Body Fat %
       drawMultiLine("chart-fat-pct", records, [
         { key: "body_fat_pct", color: "#ff8fa0" }
-      ], 40, 60);
+      ], 15, 60);
+
+      // 4. Draw Visceral Fat chart
+      drawMultiLine("chart-vat", records, [
+        { key: "visceral_fat_area_cm2", color: "#ff8fa0" }
+      ], 50, 250);
+
+      // 5. Draw Sarcopenia/Muscle Indices chart
+      drawMultiLine("chart-indices", records, [
+        { key: "appendicular_lean_mass_index", color: "#73ecb4" },
+        { key: "lean_height2_index", color: "#58c8ff" }
+      ], 5, 25);
     }
     
     function drawMultiLine(svgId, records, series, forceMin = null, forceMax = null) {
@@ -517,7 +613,10 @@
         });
       });
       
-      if (!allVals.length) return;
+      if (!allVals.length) {
+        svg.innerHTML = `<text x="50%" y="50%" text-anchor="middle" fill="#98adbf" font-size="12" font-weight="700" dy="4">No data available for this chart type</text>`;
+        return;
+      }
       
       let vMin = forceMin !== null ? forceMin : Math.min(...allVals);
       let vMax = forceMax !== null ? forceMax : Math.max(...allVals);
@@ -595,10 +694,14 @@
           setupCardToggle("btn-toggle-weight", "shell-weight", "table-wrap-weight", defaultToTable);
           setupCardToggle("btn-toggle-composition", "shell-composition", "table-wrap-composition", defaultToTable);
           setupCardToggle("btn-toggle-fat-pct", "shell-fat-pct", "table-wrap-fat-pct", defaultToTable);
+          setupCardToggle("btn-toggle-vat", "shell-vat", "table-wrap-vat", defaultToTable);
+          setupCardToggle("btn-toggle-indices", "shell-indices", "table-wrap-indices", defaultToTable);
         } else {
           setupCardToggle("btn-toggle-weight", "shell-weight", "table-wrap-weight", false);
           setupCardToggle("btn-toggle-composition", "shell-composition", "table-wrap-composition", false);
           setupCardToggle("btn-toggle-fat-pct", "shell-fat-pct", "table-wrap-fat-pct", false);
+          setupCardToggle("btn-toggle-vat", "shell-vat", "table-wrap-vat", false);
+          setupCardToggle("btn-toggle-indices", "shell-indices", "table-wrap-indices", false);
           document.getElementById("summary-subtitle").innerHTML = `<span style="color:#ff8fa0;">No DEXA records found. Please upload dexa_records.json via the Admin page.</span>`;
         }
       } catch (err) {

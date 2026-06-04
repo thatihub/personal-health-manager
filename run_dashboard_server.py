@@ -1602,6 +1602,14 @@ class DashboardHandler(SimpleHTTPRequestHandler):
             parsed_muscle = None
             parsed_bmr = None
             parsed_water = None
+            
+            # DEXA specific fields
+            parsed_vat_area = None
+            parsed_vat_mass = None
+            parsed_vat_volume = None
+            parsed_alm_index = None
+            parsed_lean_height2_index = None
+            parsed_lean_index_percentile = None
 
             try:
                 sys.path.append(str(PROJECT_DIR))
@@ -1614,25 +1622,108 @@ class DashboardHandler(SimpleHTTPRequestHandler):
                     text = ocr_image_bytes(file_bytes)
 
                 if text:
-                    # 1. Look for body fat %
-                    fat_m = re.search(r"fat\s*(?:pct|percent)?\s*(?:is|:|value)?\s*(\d+\.?\d*)\s*%", text, re.IGNORECASE)
-                    if fat_m:
-                        parsed_fat = float(fat_m.group(1))
+                    # Clean up the text: normalize spaces inside decimal numbers, e.g., "167. 3" -> "167.3"
+                    text = re.sub(r'(\d+)\.\s+(\d+)', r'\1.\2', text)
+                    # Replace things like "78. Tits" or "78. tits" -> "78.7"
+                    text = re.sub(r'(\d+)\.\s*(?:tits|tlt|tit|ts|t)\b', r'\1.7', text, flags=re.I)
+                    # Replace multiple spaces with a single space
+                    text = " ".join(text.split())
 
-                    # 2. Look for weight
-                    weight_m = re.search(r"weight\s*(?:is|:|value)?\s*(\d+\.?\d*)\s*(?:lbs|lb|kg)", text, re.IGNORECASE)
-                    if weight_m:
-                        parsed_weight = float(weight_m.group(1))
+                    # 1. Date extraction from text
+                    date_m = re.search(r"Scan Date:\s*([A-Za-z]+)\s*(\d{1,2})[,\s]+(\d{4})", text, re.IGNORECASE)
+                    if date_m:
+                        months = {"jan": "01", "feb": "02", "mar": "03", "apr": "04", "may": "05", "jun": "06", "jul": "07", "aug": "08", "sep": "09", "oct": "10", "nov": "11", "dec": "12"}
+                        m_str = date_m.group(1)[:3].lower()
+                        m_num = months.get(m_str, "01")
+                        d_num = f"{int(date_m.group(2)):02d}"
+                        y_num = date_m.group(3)
+                        parsed_date = f"{y_num}-{m_num}-{d_num}"
 
-                    # 3. Look for BMR
+                    # 2. Total Composition row (Fat, Lean, Total, Fat %)
+                    comp_m = re.search(r"\bTotal\b\s+([\d\.]+)\s+(\d+\.\d{2})\s*(\d+\.\d{2})\s+([\d\.]+)", text, re.IGNORECASE)
+                    if comp_m:
+                        parsed_fat_mass = float(comp_m.group(1))
+                        # Total Lean Mass is Lean + BMC
+                        parsed_lean_mass = float(comp_m.group(2))
+                        parsed_total_mass = float(comp_m.group(3))
+                        parsed_fat = float(comp_m.group(4))
+                    else:
+                        # Fallback for standard fat % or InBody "Percent Bodyfat ... (53.0)"
+                        fat_m = re.search(r"Percent\s*Bodyfat.{0,100}?\((\d+\.?\d*)\)", text, re.IGNORECASE)
+                        if fat_m:
+                            parsed_fat = float(fat_m.group(1))
+                        else:
+                            fat_m2 = re.search(r"(?:total body % fat|body fat %|fat %|percent body fat|percent bodyfat|fat)\s*(?:pct|percent)?\s*(?:is|:|value)?\s*(\d+\.?\d*)\s*%", text, re.IGNORECASE)
+                            if fat_m2:
+                                parsed_fat = float(fat_m2.group(1))
+                            else:
+                                fat_m3 = re.search(r"(?:total body % fat|body fat %|fat %|percent body fat|percent bodyfat)\s*(?:is|:|value)?\s*(\d+\.?\d*)", text, re.IGNORECASE)
+                                if fat_m3:
+                                    parsed_fat = float(fat_m3.group(1))
+
+                    # 3. Look for weight
+                    weight_inbody_m = re.search(r"wen\s*ib\s*\d+\s*een\s*(\d+\.?\d*)", text, re.IGNORECASE)
+                    if weight_inbody_m:
+                        parsed_weight = float(weight_inbody_m.group(1))
+                    else:
+                        weight_m = re.search(r"weight\s*(?:is|:|value)?\s*(\d+\.?\d*)\s*(?:lbs|lb|kg)", text, re.IGNORECASE)
+                        if weight_m:
+                            parsed_weight = float(weight_m.group(1))
+                        elif comp_m:
+                            parsed_weight = parsed_total_mass
+
+                    # 4. Look for BMR
                     bmr_m = re.search(r"(?:basal|bmr|metabolic)\s*(\d{3,4})\s*(?:kcal|calories)?", text, re.IGNORECASE)
                     if bmr_m:
                         parsed_bmr = float(bmr_m.group(1))
+                    else:
+                        bmr_inbody_m = re.search(r"Basal\s*Metabolic\s*Rate.{0,50}?(\d+)", text, re.IGNORECASE)
+                        if bmr_inbody_m:
+                            parsed_bmr = float(bmr_inbody_m.group(1))
 
-                    # 4. Look for Muscle
-                    muscle_m = re.search(r"(?:skeletal|muscle|smm)\s*(?:mass)?\s*(?:is|:|value)?\s*(\d+\.?\d*)\s*(?:lbs|lb)", text, re.IGNORECASE)
+                    # 5. Look for Muscle (Skeletal Muscle Mass)
+                    muscle_m = re.search(r"Shela\s*Muse\s*Mas.{0,50}?(\d+\.\d+)", text, re.IGNORECASE)
                     if muscle_m:
                         parsed_muscle = float(muscle_m.group(1))
+                    else:
+                        muscle_m2 = re.search(r"(?:skeletal|muscle|smm)\s*(?:mass)?\s*(?:is|:|value)?\s*(\d+\.?\d*)\s*(?:lbs|lb|kg)", text, re.IGNORECASE)
+                        if muscle_m2:
+                            parsed_muscle = float(muscle_m2.group(1))
+
+                    # 6. Look for Water
+                    water_m = re.search(r"(?:Total|‘otal|otal)\s*Body\s*Water.{0,50}?(\d+\.\d+)", text, re.IGNORECASE)
+                    if water_m:
+                        parsed_water = float(water_m.group(1))
+                    else:
+                        water_m2 = re.search(r"(?:total body water|tbw|water)\s*(?:is|:|value)?\s*(\d+\.?\d*)\s*(?:lbs|lb|kg|l)?", text, re.IGNORECASE)
+                        if water_m2:
+                            parsed_water = float(water_m2.group(1))
+
+                    # 7. Visceral Fat (VAT) metrics
+                    vat_area_m = re.search(r"(?:est\.\s*)?vat\s*area\s*(?:\(cm²\))?\s*(\d+\.?\d*)", text, re.IGNORECASE)
+                    if vat_area_m:
+                        parsed_vat_area = float(vat_area_m.group(1))
+
+                    vat_mass_m = re.search(r"(?:est\.\s*)?vat\s*mass\s*(?:\(g\))?\s*(\d+\.?\d*)", text, re.IGNORECASE)
+                    if vat_mass_m:
+                        parsed_vat_mass = float(vat_mass_m.group(1))
+
+                    vat_vol_m = re.search(r"(?:est\.\s*)?vat\s*volume\s*(?:\(cm³\))?\s*(\d+\.?\d*)", text, re.IGNORECASE)
+                    if vat_vol_m:
+                        parsed_vat_volume = float(vat_vol_m.group(1))
+
+                    # 8. Lean Indices
+                    lean_idx_m = re.search(r"Lean/Height²\s*\(kg/m²\)\s*(\d+\.?\d*)", text, re.IGNORECASE)
+                    if lean_idx_m:
+                        parsed_lean_height2_index = float(lean_idx_m.group(1))
+
+                    lean_idx_all_m = re.search(r"Lean/Height²\s*\(kg/m²\)\s*(\d+\.?\d*)\s*(\d+)\s*(\d+)", text, re.IGNORECASE)
+                    if lean_idx_all_m:
+                        parsed_lean_index_percentile = int(lean_idx_all_m.group(3))
+
+                    alm_idx_m = re.search(r"Appen\.\s*Lean/Height²\s*\(kg/m²\)\s*(\d+\.?\d*)", text, re.IGNORECASE)
+                    if alm_idx_m:
+                        parsed_alm_index = float(alm_idx_m.group(1))
             except Exception:
                 pass
 
@@ -1647,6 +1738,12 @@ class DashboardHandler(SimpleHTTPRequestHandler):
                     "muscle": parsed_muscle,
                     "basal_metabolic_rate_kcal": parsed_bmr,
                     "total_body_water_lb": parsed_water,
+                    "visceral_fat_area_cm2": parsed_vat_area,
+                    "visceral_fat_mass_g": parsed_vat_mass,
+                    "visceral_fat_volume_cm3": parsed_vat_volume,
+                    "appendicular_lean_mass_index": parsed_alm_index,
+                    "lean_height2_index": parsed_lean_height2_index,
+                    "lean_index_percentile": parsed_lean_index_percentile,
                     "upload_dir": str(dexa_scans_dir)
                 }
             )
@@ -1672,8 +1769,16 @@ class DashboardHandler(SimpleHTTPRequestHandler):
         waist = payload.get("waist")
         notes = payload.get("notes", "")
 
-        if not (date and scan_weight and home_weight and body_fat_pct and muscle_mass and bmr):
-            self._json(400, {"ok": False, "error": "Missing required fields."})
+        # DEXA extra metrics
+        vat_area = payload.get("visceral_fat_area_cm2")
+        vat_mass = payload.get("visceral_fat_mass_g")
+        vat_volume = payload.get("visceral_fat_volume_cm3")
+        alm_index = payload.get("appendicular_lean_mass_index")
+        lean_height2 = payload.get("lean_height2_index")
+        lean_percentile = payload.get("lean_index_percentile")
+
+        if not (date and scan_weight and home_weight and body_fat_pct):
+            self._json(400, {"ok": False, "error": "Missing required fields (Date, Scan Weight, Home Weight, Body Fat % are required)."})
             return
 
         # Load existing dexa records
@@ -1696,8 +1801,6 @@ class DashboardHandler(SimpleHTTPRequestHandler):
         scan_weight = float(scan_weight)
         home_weight = float(home_weight)
         body_fat_pct = float(body_fat_pct)
-        muscle_mass = float(muscle_mass)
-        bmr = float(bmr)
 
         clothing_diff = round(scan_weight - home_weight, 2)
         adjusted_fat = round(home_weight * (body_fat_pct / 100.0), 1)
@@ -1716,13 +1819,21 @@ class DashboardHandler(SimpleHTTPRequestHandler):
             "body_fat_pct": body_fat_pct,
             "body_fat_mass_lb": body_fat_mass,
             "lean_body_mass_lb": lean_mass,
-            "skeletal_muscle_mass_lb": muscle_mass,
+            "skeletal_muscle_mass_lb": float(muscle_mass) if muscle_mass is not None else None,
             "total_body_water_lb": float(water) if water else None,
-            "basal_metabolic_rate_kcal": bmr,
+            "basal_metabolic_rate_kcal": float(bmr) if bmr is not None else None,
             "adjusted_body_fat_mass_lb": adjusted_fat,
             "adjusted_lean_body_mass_lb": adjusted_lean,
             "waist_size_in": float(waist) if waist else None,
-            "notes": str(notes)
+            "notes": str(notes),
+            
+            # DEXA extra metrics
+            "visceral_fat_area_cm2": float(vat_area) if vat_area is not None else None,
+            "visceral_fat_mass_g": float(vat_mass) if vat_mass is not None else None,
+            "visceral_fat_volume_cm3": float(vat_volume) if vat_volume is not None else None,
+            "appendicular_lean_mass_index": float(alm_index) if alm_index is not None else None,
+            "lean_height2_index": float(lean_height2) if lean_height2 is not None else None,
+            "lean_index_percentile": int(lean_percentile) if lean_percentile is not None else None,
         }
 
         # Remove duplicate date if already exists to overwrite it

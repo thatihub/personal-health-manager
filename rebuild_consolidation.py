@@ -108,15 +108,60 @@ def normalize_pdf_text(pdf_path: Path) -> str:
 
 def ocr_image_bytes(image_bytes: bytes) -> str:
     from io import BytesIO
+    from PIL import ImageOps
 
     input_path: Path | None = None
     output_base: Path | None = None
     output_txt: Path | None = None
     try:
         img = Image.open(BytesIO(image_bytes))
+        img = ImageOps.exif_transpose(img)
         if img.mode != "L":
             img = img.convert("L")
-        # Improve OCR quality for scanned/downloaded image PDFs.
+
+        # Fast orientation/rotation detection using resized image
+        keywords = ["body", "composition", "fat", "lean", "mass", "visceral", "vat", "metabolic", "bmr", "weight", "skeletal", "muscle", "smm", "young", "matched", "percentile"]
+        w, h = img.size
+        new_w = 800
+        new_h = int(h * (new_w / w))
+        small_img = img.resize((new_w, new_h), Image.Resampling.LANCZOS)
+        
+        best_angle = 0
+        max_kw_count = -1
+        
+        for angle in [0, 90, 180, 270]:
+            rotated = small_img.rotate(angle, expand=True) if angle != 0 else small_img
+            proc = ImageEnhance.Contrast(rotated).enhance(1.8)
+            proc = proc.filter(ImageFilter.SHARPEN)
+            proc = proc.point(lambda p: 255 if p > 165 else 0)
+            
+            with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as f_out:
+                temp_path = f_out.name
+            proc.save(temp_path, format="PNG")
+            
+            out_base = temp_path + ".ocr"
+            try:
+                subprocess.run(
+                    ["tesseract", temp_path, out_base, "--dpi", "150", "--psm", "6"],
+                    capture_output=True, text=True, check=False
+                )
+                out_txt = Path(f"{out_base}.txt")
+                if out_txt.exists():
+                    text = out_txt.read_text(encoding="utf-8", errors="ignore").lower()
+                    kw_count = sum(text.count(kw) for kw in keywords)
+                    if kw_count > max_kw_count:
+                        max_kw_count = kw_count
+                        best_angle = angle
+                    out_txt.unlink(missing_ok=True)
+            except Exception:
+                pass
+            finally:
+                Path(temp_path).unlink(missing_ok=True)
+
+        if best_angle != 0:
+            img = img.rotate(best_angle, expand=True)
+
+        # Final high quality OCR
         img = ImageEnhance.Contrast(img).enhance(1.8)
         img = img.filter(ImageFilter.SHARPEN)
         img = img.point(lambda p: 255 if p > 165 else 0)
