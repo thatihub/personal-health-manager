@@ -1529,109 +1529,129 @@ class DashboardHandler(SimpleHTTPRequestHandler):
         import datetime
         import sys
         try:
-            _fields, files = self._parse_multipart_form()
-        except ValueError as exc:
-            self._json(400, {"ok": False, "error": str(exc)})
-            return
-        if "file" not in files:
-            self._json(400, {"ok": False, "error": "Missing file field."})
-            return
+            try:
+                _fields, files = self._parse_multipart_form()
+            except ValueError as exc:
+                self._json(400, {"ok": False, "error": str(exc)})
+                return
+            if "file" not in files:
+                self._json(400, {"ok": False, "error": "Missing file field."})
+                return
 
-        raw_name, file_bytes = files["file"]
-        filename = Path(raw_name or "").name
-        if not filename:
-            self._json(400, {"ok": False, "error": "No file selected."})
-            return
-        is_pdf = filename.lower().endswith(".pdf")
-        is_image = filename.lower().endswith((".jpg", ".jpeg", ".png"))
-        if not (is_pdf or is_image):
-            self._json(400, {"ok": False, "error": "Only PDF and JPEG/PNG image files are supported."})
-            return
+            raw_name, file_bytes = files["file"]
+            filename = Path(raw_name or "").name
+            if not filename:
+                self._json(400, {"ok": False, "error": "No file selected."})
+                return
+            is_pdf = filename.lower().endswith(".pdf")
+            is_image = filename.lower().endswith((".jpg", ".jpeg", ".png"))
+            if not (is_pdf or is_image):
+                self._json(400, {"ok": False, "error": "Only PDF and JPEG/PNG image files are supported."})
+                return
 
-        # Archive inside local records folder
-        dexa_scans_dir = Path("/Users/prakashthatikunta/Documents/Health/Health prakash/Lab tests/Dexa scans")
-        dexa_scans_dir.mkdir(parents=True, exist_ok=True)
-        target = dexa_scans_dir / filename
-        if target.exists():
-            stem = target.stem
-            suffix = target.suffix
-            i = 1
-            while target.exists():
-                target = dexa_scans_dir / f"{stem}_{i}{suffix}"
-                i += 1
+            # Archive inside local records folder
+            env_dexa = os.getenv("DEXA_SCANS_DIR")
+            if env_dexa:
+                dexa_scans_dir = Path(env_dexa).expanduser()
+            else:
+                candidates = [
+                    PROJECT_DIR.parent / "Health prakash/Lab tests/Dexa scans",
+                    Path.home() / "Documents/Health/Health prakash/Lab tests/Dexa scans",
+                    PROJECT_DIR / "dexa_scans",
+                ]
+                dexa_scans_dir = PROJECT_DIR / "dexa_scans"
+                for c in candidates:
+                    try:
+                        if c.exists() or (c.parent.exists() and "Health prakash" in str(c)):
+                            dexa_scans_dir = c
+                            break
+                    except Exception:
+                        pass
 
-        with target.open("wb") as f:
-            f.write(file_bytes)
+            dexa_scans_dir.mkdir(parents=True, exist_ok=True)
+            target = dexa_scans_dir / filename
+            if target.exists():
+                stem = target.stem
+                suffix = target.suffix
+                i = 1
+                while target.exists():
+                    target = dexa_scans_dir / f"{stem}_{i}{suffix}"
+                    i += 1
 
-        # Parse date from filename if matches format like Dexa-YYYY-MM-DD.pdf or similar
-        parsed_date = ""
-        # Look for YYYY-MM-DD
-        m = re.search(r"(\d{4})-(\d{2})-(\d{2})", filename)
-        if m:
-            parsed_date = m.group(0)
-        else:
-            # Look for MM-DD-YYYY
-            m2 = re.search(r"(\d{2})-(\d{2})-(\d{4})", filename)
-            if m2:
-                parsed_date = f"{m2.group(3)}-{m2.group(1)}-{m2.group(2)}"
+            with target.open("wb") as f:
+                f.write(file_bytes)
 
-        if not parsed_date:
-            parsed_date = datetime.date.today().isoformat()
+            # Parse date from filename if matches format like Dexa-YYYY-MM-DD.pdf or similar
+            parsed_date = ""
+            # Look for YYYY-MM-DD
+            m = re.search(r"(\d{4})-(\d{2})-(\d{2})", filename)
+            if m:
+                parsed_date = m.group(0)
+            else:
+                # Look for MM-DD-YYYY
+                m2 = re.search(r"(\d{2})-(\d{2})-(\d{4})", filename)
+                if m2:
+                    parsed_date = f"{m2.group(3)}-{m2.group(1)}-{m2.group(2)}"
 
-        # Fallback quiet OCR text parsing to extract possible numbers
-        parsed_weight = None
-        parsed_fat = None
-        parsed_muscle = None
-        parsed_bmr = None
-        parsed_water = None
+            if not parsed_date:
+                parsed_date = datetime.date.today().isoformat()
 
-        try:
-            sys.path.append(str(PROJECT_DIR))
-            text = ""
-            if is_pdf:
-                from rebuild_consolidation import normalize_pdf_text
-                text = normalize_pdf_text(target)
-            elif is_image:
-                from rebuild_consolidation import ocr_image_bytes
-                text = ocr_image_bytes(file_bytes)
+            # Fallback quiet OCR text parsing to extract possible numbers
+            parsed_weight = None
+            parsed_fat = None
+            parsed_muscle = None
+            parsed_bmr = None
+            parsed_water = None
 
-            if text:
-                # 1. Look for body fat %
-                fat_m = re.search(r"fat\s*(?:pct|percent)?\s*(?:is|:|value)?\s*(\d+\.?\d*)\s*%", text, re.IGNORECASE)
-                if fat_m:
-                    parsed_fat = float(fat_m.group(1))
+            try:
+                sys.path.append(str(PROJECT_DIR))
+                text = ""
+                if is_pdf:
+                    from rebuild_consolidation import normalize_pdf_text
+                    text = normalize_pdf_text(target)
+                elif is_image:
+                    from rebuild_consolidation import ocr_image_bytes
+                    text = ocr_image_bytes(file_bytes)
 
-                # 2. Look for weight
-                weight_m = re.search(r"weight\s*(?:is|:|value)?\s*(\d+\.?\d*)\s*(?:lbs|lb|kg)", text, re.IGNORECASE)
-                if weight_m:
-                    parsed_weight = float(weight_m.group(1))
+                if text:
+                    # 1. Look for body fat %
+                    fat_m = re.search(r"fat\s*(?:pct|percent)?\s*(?:is|:|value)?\s*(\d+\.?\d*)\s*%", text, re.IGNORECASE)
+                    if fat_m:
+                        parsed_fat = float(fat_m.group(1))
 
-                # 3. Look for BMR
-                bmr_m = re.search(r"(?:basal|bmr|metabolic)\s*(\d{3,4})\s*(?:kcal|calories)?", text, re.IGNORECASE)
-                if bmr_m:
-                    parsed_bmr = float(bmr_m.group(1))
+                    # 2. Look for weight
+                    weight_m = re.search(r"weight\s*(?:is|:|value)?\s*(\d+\.?\d*)\s*(?:lbs|lb|kg)", text, re.IGNORECASE)
+                    if weight_m:
+                        parsed_weight = float(weight_m.group(1))
 
-                # 4. Look for Muscle
-                muscle_m = re.search(r"(?:skeletal|muscle|smm)\s*(?:mass)?\s*(?:is|:|value)?\s*(\d+\.?\d*)\s*(?:lbs|lb)", text, re.IGNORECASE)
-                if muscle_m:
-                    parsed_muscle = float(muscle_m.group(1))
-        except Exception:
-            pass
+                    # 3. Look for BMR
+                    bmr_m = re.search(r"(?:basal|bmr|metabolic)\s*(\d{3,4})\s*(?:kcal|calories)?", text, re.IGNORECASE)
+                    if bmr_m:
+                        parsed_bmr = float(bmr_m.group(1))
 
-        self._json(
-            200,
-            {
-                "ok": True,
-                "uploaded": target.name,
-                "date": parsed_date,
-                "scan_weight": parsed_weight,
-                "body_fat": parsed_fat,
-                "muscle": parsed_muscle,
-                "basal_metabolic_rate_kcal": parsed_bmr,
-                "total_body_water_lb": parsed_water,
-                "upload_dir": str(dexa_scans_dir)
-            }
-        )
+                    # 4. Look for Muscle
+                    muscle_m = re.search(r"(?:skeletal|muscle|smm)\s*(?:mass)?\s*(?:is|:|value)?\s*(\d+\.?\d*)\s*(?:lbs|lb)", text, re.IGNORECASE)
+                    if muscle_m:
+                        parsed_muscle = float(muscle_m.group(1))
+            except Exception:
+                pass
+
+            self._json(
+                200,
+                {
+                    "ok": True,
+                    "uploaded": target.name,
+                    "date": parsed_date,
+                    "scan_weight": parsed_weight,
+                    "body_fat": parsed_fat,
+                    "muscle": parsed_muscle,
+                    "basal_metabolic_rate_kcal": parsed_bmr,
+                    "total_body_water_lb": parsed_water,
+                    "upload_dir": str(dexa_scans_dir)
+                }
+            )
+        except Exception as e:
+            self._json(500, {"ok": False, "error": f"Unhandled error during file write/OCR: {str(e)}"})
 
     def _handle_admin_save_dexa_record(self) -> None:
         length = int(self.headers.get("Content-Length", "0"))
