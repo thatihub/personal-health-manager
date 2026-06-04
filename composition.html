@@ -688,9 +688,8 @@
           populateTables(rawRecords);
           drawCharts(rawRecords);
           
-          // Smart UX Choice: If there is only 1 scan record, default to the Table view so it is clean and spacious!
-          // If there are multiple scans, default to the Graph view to show trend lines automatically.
-          const defaultToTable = rawRecords.length <= 1;
+          // Default to the Table view on page load
+          const defaultToTable = true;
           setupCardToggle("btn-toggle-weight", "shell-weight", "table-wrap-weight", defaultToTable);
           setupCardToggle("btn-toggle-composition", "shell-composition", "table-wrap-composition", defaultToTable);
           setupCardToggle("btn-toggle-fat-pct", "shell-fat-pct", "table-wrap-fat-pct", defaultToTable);
