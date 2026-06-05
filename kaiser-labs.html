@@ -54,7 +54,7 @@
         <h3>Glycemic & Lipids</h3>
         <table id="trend-table">
           <thead>
-            <tr><th>Date</th><th>Source</th><th>A1c %</th><th>Glucose (fast)</th><th>Chol</th><th>LDL</th><th>HDL</th><th>TG</th></tr>
+            <tr><th>Date</th><th>Source</th><th>A1c %</th><th>Glucose (fast)</th><th>Chol</th><th>LDL</th><th>HDL</th><th>TG</th><th>TG/HDL</th></tr>
           </thead>
           <tbody></tbody>
         </table>
@@ -142,7 +142,12 @@
       const data = activeYear === 'all' ? rows : rows.filter(r => yearOf(r.date) === activeYear);
 
       const trendTbody = document.querySelector('#trend-table tbody');
-      trendTbody.innerHTML = data.map(r => `
+      trendTbody.innerHTML = data.map(r => {
+        let tgHdl = '';
+        if (r.triglycerides !== null && r.triglycerides !== undefined && r.hdl !== null && r.hdl !== undefined && r.hdl !== 0) {
+          tgHdl = (r.triglycerides / r.hdl).toFixed(2);
+        }
+        return `
         <tr>
           <td>${r.date}</td>
           <td>${r.source}</td>
@@ -152,7 +157,9 @@
           <td>${fmt(r.ldl,0)}</td>
           <td>${fmt(r.hdl,0)}</td>
           <td>${fmt(r.triglycerides,0)}</td>
-        </tr>`).join('');
+          <td>${tgHdl}</td>
+        </tr>`;
+      }).join('');
 
       const kidneyTbody = document.querySelector('#kidney-table tbody');
       kidneyTbody.innerHTML = data.map(r => `

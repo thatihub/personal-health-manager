@@ -498,9 +498,9 @@
       <article class="card chart">
         <div class="chart-head">
           <h3>Glycemic Control</h3>
-          <button class="view-btn" id="btn-glycemic" type="button">Switch to Table</button>
+          <button class="view-btn" id="btn-glycemic" type="button">Switch to Graph</button>
         </div>
-        <div id="graph-glycemic" class="graph-shell blue">
+        <div id="graph-glycemic" class="graph-shell blue hidden">
           <div class="mini-grid">
             <div class="mini blue" data-metric="hba1c">
               <h4>HbA1c %</h4>
@@ -519,7 +519,7 @@
             </div>
           </div>
         </div>
-        <div class="table-wrap hidden" id="table-wrap-glycemic">
+        <div class="table-wrap" id="table-wrap-glycemic">
           <table id="table-glycemic">
             <thead><tr><th>Date</th><th>HbA1c</th><th>Glucose</th><th>C-Peptide</th></tr></thead>
             <tbody></tbody>
@@ -530,9 +530,9 @@
       <article class="card chart">
         <div class="chart-head">
           <h3>Lipid Panel</h3>
-          <button class="view-btn" id="btn-lipids" type="button">Switch to Table</button>
+          <button class="view-btn" id="btn-lipids" type="button">Switch to Graph</button>
         </div>
-        <div id="graph-lipids" class="graph-shell orange">
+        <div id="graph-lipids" class="graph-shell orange hidden">
           <div class="mini-grid">
             <div class="mini blue" data-metric="ldl">
               <h4>LDL</h4>
@@ -551,9 +551,9 @@
             </div>
           </div>
         </div>
-        <div class="table-wrap hidden" id="table-wrap-lipids">
+        <div class="table-wrap" id="table-wrap-lipids">
           <table id="table-lipids">
-            <thead><tr><th>Date</th><th>LDL</th><th>HDL</th><th>Triglycerides</th></tr></thead>
+            <thead><tr><th>Date</th><th>LDL</th><th>HDL</th><th>Triglycerides</th><th>TG/HDL</th></tr></thead>
             <tbody></tbody>
           </table>
         </div>
@@ -562,9 +562,9 @@
       <article class="card chart">
         <div class="chart-head">
           <h3>Kidney Markers</h3>
-          <button class="view-btn" id="btn-kidney" type="button">Switch to Table</button>
+          <button class="view-btn" id="btn-kidney" type="button">Switch to Graph</button>
         </div>
-        <div id="graph-kidney" class="graph-shell green">
+        <div id="graph-kidney" class="graph-shell green hidden">
           <div class="mini-grid">
             <div class="mini blue" data-metric="creatinine">
               <h4>Creatinine</h4>
@@ -583,7 +583,7 @@
             </div>
           </div>
         </div>
-        <div class="table-wrap hidden" id="table-wrap-kidney">
+        <div class="table-wrap" id="table-wrap-kidney">
           <table id="table-kidney">
             <thead><tr><th>Date</th><th>Creatinine</th><th>eGFR</th><th>Urine ACR</th></tr></thead>
             <tbody></tbody>
@@ -594,9 +594,9 @@
       <article class="card chart">
         <div class="chart-head">
           <h3>Metabolic Panel</h3>
-          <button class="view-btn" id="btn-metabolic" type="button">Switch to Table</button>
+          <button class="view-btn" id="btn-metabolic" type="button">Switch to Graph</button>
         </div>
-        <div id="graph-metabolic" class="graph-shell green">
+        <div id="graph-metabolic" class="graph-shell green hidden">
           <div class="mini-grid">
             <div class="mini blue" data-metric="bun">
               <h4>BUN</h4>
@@ -625,7 +625,7 @@
             </div>
           </div>
         </div>
-        <div class="table-wrap hidden" id="table-wrap-metabolic">
+        <div class="table-wrap" id="table-wrap-metabolic">
           <table id="table-metabolic">
             <thead><tr><th>Date</th><th>BUN</th><th>Sodium</th><th>Chloride</th><th>Potassium</th><th>CO2</th></tr></thead>
             <tbody></tbody>
@@ -636,9 +636,9 @@
       <article class="card chart">
         <div class="chart-head">
           <h3>Thyroid Panel</h3>
-          <button class="view-btn" id="btn-thyroid" type="button">Switch to Table</button>
+          <button class="view-btn" id="btn-thyroid" type="button">Switch to Graph</button>
         </div>
-        <div id="graph-thyroid" class="graph-shell blue">
+        <div id="graph-thyroid" class="graph-shell blue hidden">
           <div class="mini-grid">
             <div class="mini blue" data-metric="tsh">
               <h4>TSH</h4>
@@ -667,7 +667,7 @@
             </div>
           </div>
         </div>
-        <div class="table-wrap hidden" id="table-wrap-thyroid">
+        <div class="table-wrap" id="table-wrap-thyroid">
           <table id="table-thyroid">
             <thead><tr><th>Date</th><th>TSH</th><th>Free T4</th><th>Thyroxine (T4)</th><th>T3 Uptake</th><th>Free Thyroxine Index</th></tr></thead>
             <tbody></tbody>
@@ -678,9 +678,9 @@
       <article class="card chart">
         <div class="chart-head">
           <h3>Liver/Chemistry</h3>
-          <button class="view-btn" id="btn-chemistry" type="button">Switch to Table</button>
+          <button class="view-btn" id="btn-chemistry" type="button">Switch to Graph</button>
         </div>
-        <div id="graph-chemistry" class="graph-shell orange">
+        <div id="graph-chemistry" class="graph-shell orange hidden">
           <div class="mini-grid">
             <div class="mini blue" data-metric="calcium">
               <h4>Calcium</h4>
@@ -709,7 +709,7 @@
             </div>
           </div>
         </div>
-        <div class="table-wrap hidden" id="table-wrap-chemistry">
+        <div class="table-wrap" id="table-wrap-chemistry">
           <table id="table-chemistry">
             <thead><tr><th>Date</th><th>Calcium</th><th>Albumin</th><th>Bilirubin</th><th>AST</th><th>ALT</th></tr></thead>
             <tbody></tbody>
@@ -845,6 +845,7 @@
       ldl: { type: "max_only", max: 99 },
       hdl: { type: "min_only", min: 40 },
       triglycerides: { type: "max_only", max: 149 },
+      tgHdl: { type: "max_only", max: 3.0 },
       creatinine: { type: "between", min: 0.7, max: 1.35 },
       egfr: { type: "min_only", min: 59 },
       acr: { type: "max_only", max: 29 },
@@ -950,7 +951,14 @@
       const tbody = document.querySelector(`#${tableId} tbody`);
       tbody.innerHTML = data.map(d => {
         const cells = columns.map(col => {
-          const raw = d[col];
+          let raw = d[col];
+          if (col === "tgHdl") {
+            if (d.triglycerides !== null && d.triglycerides !== undefined && d.hdl !== null && d.hdl !== undefined && d.hdl !== 0) {
+              raw = Number((d.triglycerides / d.hdl).toFixed(2));
+            } else {
+              raw = null;
+            }
+          }
           const verdict = classifyMetric(col, raw);
           const val = fmt(raw);
           const flag = verdict.flag ? `<span class="range-flag">${verdict.flag}</span>` : "";
@@ -961,7 +969,7 @@
     }
 
     fillTable("table-glycemic", ["hba1c", "glucose", "cPeptide"]);
-    fillTable("table-lipids", ["ldl", "hdl", "triglycerides"]);
+    fillTable("table-lipids", ["ldl", "hdl", "triglycerides", "tgHdl"]);
     fillTable("table-kidney", ["creatinine", "egfr", "acr"]);
     fillTable("table-metabolic", ["bun", "sodium", "chloride", "potassium", "co2"]);
     fillTable("table-thyroid", ["tsh", "freeT4", "thyroxineT4", "t3Uptake", "freeThyroxineIndex"]);
@@ -972,7 +980,7 @@
       const graph = document.getElementById(graphId);
       const tableWrap = document.getElementById(tableWrapId);
       const card = btn ? btn.closest(".card.chart") : null;
-      let showingTable = false;
+      let showingTable = true;
       btn.addEventListener("click", () => {
         showingTable = !showingTable;
         if (showingTable && card && typeof card.__setCollapsed === "function") {
