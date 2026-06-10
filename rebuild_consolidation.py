@@ -77,6 +77,8 @@ FIELDS = [
     "thyroxine_t4_ug_dl",
     "t3_uptake_pct",
     "free_thyroxine_index",
+    "thyroglobulin_ab_iu_ml",
+    "tpo_ab_iu_ml",
     "vitamin_d_ng_ml",
     "vitamin_b12_pg_ml",
     "wbc_x10e3_ul",
@@ -272,9 +274,15 @@ def extract_date(text: str) -> str | None:
 
 def extract_labcorp(text: str, report_name: str) -> dict[str, Any]:
     b12, b12_note = match_number_or_bound(text, r"Vitamin B12\s*\d+\s*([<>]?\d+(?:\.\d+)?)")
+    tg_ab, tg_ab_note = match_number_or_bound(text, r"Thyroglobulin Antibody\s*\d*\s*([<>]{0,2}\d+(?:\.\d+)?)")
+    tpo_ab, tpo_ab_note = match_number_or_bound(text, r"(?:Thyroid Peroxidase \(TPO\) Ab|Thyroid Peroxidase Ab|TPO Antibody|Thyroid Peroxidase Autoantibodies)[^0-9<>]{0,20}([<>]{0,2}\d+(?:\.\d+)?)")
     notes = []
     if b12_note:
         notes.append(b12_note)
+    if tg_ab_note:
+        notes.append(tg_ab_note)
+    if tpo_ab_note:
+        notes.append(tpo_ab_note)
 
     row = {
         "source": "Labcorp",
@@ -308,6 +316,8 @@ def extract_labcorp(text: str, report_name: str) -> dict[str, Any]:
         "thyroxine_t4_ug_dl": match_float(text, r"Thyroxine\s*\(T4\)[^0-9<>]{0,20}([<>]?\d+(?:[.,]\d+)?)"),
         "t3_uptake_pct": match_float(text, r"T3 Uptake[^0-9<>]{0,20}([<>]?\d+(?:[.,]\d+)?)"),
         "free_thyroxine_index": match_float(text, r"Free Thyroxine Index[^0-9<>]{0,20}([<>]?\d+(?:[.,]\d+)?)"),
+        "thyroglobulin_ab_iu_ml": tg_ab,
+        "tpo_ab_iu_ml": tpo_ab,
         "vitamin_d_ng_ml": match_float(text, r"Vitamin D, 25-Hydroxy\s*\d+\s*([<>]?\d+(?:\.\d+)?)"),
         "vitamin_b12_pg_ml": b12,
         "estimated_avg_glucose_mg_dl": None,
@@ -359,6 +369,8 @@ def extract_quest(text: str, report_name: str) -> dict[str, Any]:
         "thyroxine_t4_ug_dl": None,
         "t3_uptake_pct": None,
         "free_thyroxine_index": None,
+        "thyroglobulin_ab_iu_ml": None,
+        "tpo_ab_iu_ml": None,
         "vitamin_d_ng_ml": None,
         "vitamin_b12_pg_ml": None,
         "estimated_avg_glucose_mg_dl": None,
@@ -407,6 +419,8 @@ def extract_letsgetchecked(text: str, report_name: str) -> dict[str, Any]:
         "thyroxine_t4_ug_dl": None,
         "t3_uptake_pct": None,
         "free_thyroxine_index": None,
+        "thyroglobulin_ab_iu_ml": None,
+        "tpo_ab_iu_ml": None,
         "vitamin_d_ng_ml": None,
         "vitamin_b12_pg_ml": None,
         "estimated_avg_glucose_mg_dl": match_float(text, r"Estimated Avg Glucose \(Calc\)\s*N/A mg/dL\s*([<>]?\d+(?:\.\d+)?)"),
@@ -417,9 +431,15 @@ def extract_letsgetchecked(text: str, report_name: str) -> dict[str, Any]:
 
 def extract_generic(text: str, report_name: str, source_name: str = "Unknown") -> dict[str, Any]:
     b12, b12_note = match_number_or_bound(text, r"Vitamin B12[^0-9<>]*([<>]?\d+(?:\.\d+)?)")
+    tg_ab, tg_ab_note = match_number_or_bound(text, r"Thyroglobulin Antibody[^0-9<>]{0,20}([<>]{0,2}\d+(?:\.\d+)?)")
+    tpo_ab, tpo_ab_note = match_number_or_bound(text, r"(?:Thyroid Peroxidase \(TPO\) Ab|Thyroid Peroxidase Ab|TPO Antibody|Thyroid Peroxidase Autoantibodies)[^0-9<>]{0,20}([<>]{0,2}\d+(?:\.\d+)?)")
     notes = []
     if b12_note:
         notes.append(b12_note)
+    if tg_ab_note:
+        notes.append(tg_ab_note)
+    if tpo_ab_note:
+        notes.append(tpo_ab_note)
     return {
         "source": source_name,
         "report_file": report_name,
@@ -451,6 +471,8 @@ def extract_generic(text: str, report_name: str, source_name: str = "Unknown") -
         "thyroxine_t4_ug_dl": match_float(text, r"Thyroxine\s*\(T4\)[^0-9<>]{0,20}([<>]?\d+(?:[.,]\d+)?)"),
         "t3_uptake_pct": match_float(text, r"T3 Uptake[^0-9<>]{0,20}([<>]?\d+(?:[.,]\d+)?)"),
         "free_thyroxine_index": match_float(text, r"Free Thyroxine Index[^0-9<>]{0,20}([<>]?\d+(?:[.,]\d+)?)"),
+        "thyroglobulin_ab_iu_ml": tg_ab,
+        "tpo_ab_iu_ml": tpo_ab,
         "vitamin_d_ng_ml": match_float(text, r"Vitamin D[^0-9<>]{0,30}([<>]?\d+(?:\.\d+)?)"),
         "vitamin_b12_pg_ml": b12,
         "estimated_avg_glucose_mg_dl": match_float(text, r"Estimated Avg Glucose[^0-9<>]{0,20}([<>]?\d+(?:\.\d+)?)"),
@@ -558,6 +580,8 @@ def build_dashboard_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
                 "thyroxineT4": row["thyroxine_t4_ug_dl"],
                 "t3Uptake": row["t3_uptake_pct"],
                 "freeThyroxineIndex": row["free_thyroxine_index"],
+                "tgAb": row["thyroglobulin_ab_iu_ml"],
+                "tpoAb": row["tpo_ab_iu_ml"],
                 "vitaminD": row["vitamin_d_ng_ml"],
                 "vitaminB12": row["vitamin_b12_pg_ml"],
                 "wbc": row["wbc_x10e3_ul"],

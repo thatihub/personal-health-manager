@@ -672,7 +672,7 @@
         </div>
         <div class="table-wrap" id="table-wrap-thyroid">
           <table id="table-thyroid">
-            <thead><tr><th>Date</th><th>TSH</th><th>Free T4</th><th>Thyroxine (T4)</th><th>T3 Uptake</th><th>Free Thyroxine Index</th></tr></thead>
+            <thead><tr><th>Date</th><th>TSH</th><th>Free T4</th><th>Thyroxine (T4)</th><th>T3 Uptake</th><th>Free Thyroxine Index</th><th>Thyroglobulin Ab</th><th>TPO Ab</th></tr></thead>
             <tbody></tbody>
           </table>
         </div>
@@ -968,6 +968,8 @@
       thyroxineT4: { type: "between", min: 4.5, max: 12.0 },
       t3Uptake: { type: "between", min: 24, max: 39 },
       freeThyroxineIndex: { type: "between", min: 1.2, max: 4.9 },
+      tgAb: { type: "max_only", max: 0.9 },
+      tpoAb: { type: "max_only", max: 9.0 },
       calcium: { type: "between", min: 8.6, max: 10.3 },
       albumin: { type: "between", min: 3.8, max: 4.8 },
       bilirubin: { type: "between", min: 0.0, max: 1.2 },
@@ -1004,6 +1006,8 @@
       thyroxineT4: "4.5-12.0 ug/dL",
       t3Uptake: "24-39 %",
       freeThyroxineIndex: "1.2-4.9",
+      tgAb: "0.0-0.9 IU/mL",
+      tpoAb: "0.0-9.0 IU/mL",
       calcium: "8.6-10.3 mg/dL",
       albumin: "3.8-4.8 g/dL",
       bilirubin: "0.0-1.2 mg/dL",
@@ -1020,7 +1024,7 @@
       });
     }
 
-    function classifyMetric(metric, rawVal) {
+    function classifyMetric(metric, rawVal, notes = null) {
       if (rawVal === null || rawVal === undefined) return { state: "na", flag: "" };
       const rr = REFERENCE_RANGES[metric];
       if (rr && rr.type === "exact") {
@@ -1029,7 +1033,18 @@
       const v = Number(rawVal);
       if (Number.isNaN(v)) return { state: "na", flag: "" };
       if (!rr) return { state: "normal", flag: "" };
-      if (!rr) return { state: "normal", flag: "" };
+
+      // Handle '<' bound checks: if a value was reported as '< X', and it is a max_only or between,
+      // then the value is actually less than X, so it shouldn't be flagged as high/abnormal.
+      if (notes) {
+        const m = notes.match(/Value reported as <\s*(\d+(?:\.\d+)?)/);
+        if (m && Number(m[1]) === v) {
+          if (rr.type === "max_only" || rr.type === "between") {
+            return { state: "normal", flag: "" };
+          }
+        }
+      }
+
       if (rr.type === "between") {
         if (rr.min !== undefined && v < rr.min) return { state: "low", flag: "L" };
         if (rr.max !== undefined && v > rr.max) return { state: "high", flag: "H" };
@@ -1092,10 +1107,10 @@
               raw = null;
             }
           }
-          const verdict = classifyMetric(col, raw);
+          const verdict = classifyMetric(col, raw, d.notes);
           let val = fmt(raw);
           if (val !== "-" && d.notes) {
-            const m = d.notes.match(/Value reported as (<|>)\s*(\d+)/);
+            const m = d.notes.match(/Value reported as (<|>)\s*(\d+(?:\.\d+)?)/);
             if (m && Number(m[2]) === Number(raw)) {
               val = m[1] + val;
             }
@@ -1111,7 +1126,7 @@
     fillTable("table-lipids", ["ldl", "hdl", "triglycerides", "tgHdl"]);
     fillTable("table-kidney", ["creatinine", "egfr", "acr"]);
     fillTable("table-metabolic", ["bun", "sodium", "chloride", "potassium", "co2"]);
-    fillTable("table-thyroid", ["tsh", "freeT4", "thyroxineT4", "t3Uptake", "freeThyroxineIndex"]);
+    fillTable("table-thyroid", ["tsh", "freeT4", "thyroxineT4", "t3Uptake", "freeThyroxineIndex", "tgAb", "tpoAb"]);
     fillTable("table-chemistry", ["calcium", "albumin", "bilirubin", "ast", "alt"]);
     fillTable("table-specialty", ["lipoproteinA", "psa", "hcv"]);
     fillTable("table-vitamins", ["vitaminD", "vitaminB12"]);
@@ -1211,7 +1226,8 @@
 
       values.forEach((v, i) => {
         if (v === null) return;
-        const verdict = classifyMetric(metric, v);
+        const row = data[i];
+        const verdict = classifyMetric(metric, v, row ? row.notes : null);
         const pointColor = (verdict.state === "high" || verdict.state === "low") ? "#b23a48" : color;
         html += `<circle cx="${x(i)}" cy="${y(v)}" r="4.2" fill="${pointColor}" stroke="#f5fbff" stroke-width="1.2"/>`;
       });
