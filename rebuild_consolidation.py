@@ -578,11 +578,91 @@ def write_dashboard_data(rows: list[dict[str, Any]], path: Path) -> None:
     path.write_text(js, encoding="utf-8")
 
 
+def merge_rows(existing_rows: list[dict[str, Any]], new_rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    merged_map = {}
+    for row in existing_rows:
+        date = row.get("date")
+        source = row.get("source")
+        if date and source:
+            key = (date, source)
+            merged_map[key] = row
+        else:
+            rf = row.get("report_file")
+            if rf:
+                merged_map[rf] = row
+
+    for row in new_rows:
+        date = row.get("date")
+        source = row.get("source")
+        if date and source:
+            key = (date, source)
+            merged_map[key] = row
+        else:
+            rf = row.get("report_file")
+            if rf:
+                merged_map[rf] = row
+
+    merged_list = list(merged_map.values())
+    merged_list.sort(key=lambda r: r.get("date") or "")
+    return merged_list
+
+
 def main() -> None:
-    rows = build_rows()
+    import argparse
+    import sys
+
+    parser = argparse.ArgumentParser(description="Rebuild consolidated lab dataset.")
+    parser.add_argument(
+        "--clean",
+        action="store_true",
+        help="Force a clean rebuild from PDFs only (ignore existing JSON)."
+    )
+    args = parser.parse_args()
+
+    # Find all PDF files in the source root to check for parsing failures later
+    pdf_files = list(ROOT_DIR.rglob("*.pdf"))
+    filtered_pdfs = []
+    for pdf in pdf_files:
+        if "lab_trends_project" in pdf.parts or "_extracted_text" in pdf.parts:
+            continue
+        low_name = pdf.name.lower()
+        if "chatgpt-prakash_lab_summary" in low_name:
+            continue
+        if "hba1c graph" in low_name:
+            continue
+        filtered_pdfs.append(pdf)
+
+    new_rows = build_rows()
+
+    # If PDFs were found in ROOT_DIR but none parsed successfully, exit with code 3.
+    # This signals a parsing failure (e.g. invalid PDF format) to the calling server.
+    if len(filtered_pdfs) > 0 and len(new_rows) == 0:
+        print(f"Error: Found {len(filtered_pdfs)} PDF files in source directory, but failed to parse any valid lab records.", file=sys.stderr)
+        sys.exit(3)
+
     csv_path = PROJECT_DIR / "consolidated_labs.csv"
     json_path = PROJECT_DIR / "consolidated_labs.json"
     dash_js_path = PROJECT_DIR / "dashboard_data.js"
+
+    if args.clean:
+        rows = new_rows
+        print("Running clean rebuild from PDFs only...")
+    else:
+        existing_rows = []
+        if json_path.exists():
+            try:
+                with json_path.open("r", encoding="utf-8") as f:
+                    existing_rows = json.load(f)
+                print(f"Loaded {len(existing_rows)} existing records from {json_path}")
+            except Exception as e:
+                print(f"Warning: could not load existing consolidated_labs.json: {e}", file=sys.stderr)
+
+        if existing_rows:
+            rows = merge_rows(existing_rows, new_rows)
+            print(f"Merged {len(new_rows)} new/updated records with existing database (total: {len(rows)} records)")
+        else:
+            rows = new_rows
+            print(f"No existing records found. Created database with {len(rows)} records.")
 
     write_csv(rows, csv_path)
     write_json(rows, json_path)
