@@ -54,6 +54,7 @@ FIELDS = [
     "hdl_mg_dl",
     "ldl_mg_dl",
     "triglycerides_mg_dl",
+    "lipoprotein_a_mg_dl",
     "bun_mg_dl",
     "bun_creatinine_ratio",
     "sodium_mmol_l",
@@ -211,7 +212,7 @@ def ocr_image_bytes(image_bytes: bytes) -> str:
 
 
 def parse_numeric_token(token: str) -> float:
-    token = token.strip()
+    token = token.strip().lstrip("<>").strip()
     if "," in token and "." not in token:
         left, right = token.split(",", 1)
         # OCR often reads decimal points as commas for lab values (e.g., 11,400 -> 11.400).
@@ -235,9 +236,9 @@ def match_number_or_bound(text: str, pattern: str, flags: int = re.I) -> tuple[f
         return None, ""
     token = m.group(1)
     note = ""
-    if token.startswith(">"):
+    if token.startswith(">") or token.startswith("<"):
         note = f"Value reported as {token}"
-        token = token[1:]
+        token = token.lstrip("<>")
     return parse_numeric_token(token), note
 
 
@@ -348,6 +349,10 @@ def extract_quest(text: str, report_name: str) -> dict[str, Any]:
 
 
 def extract_letsgetchecked(text: str, report_name: str) -> dict[str, Any]:
+    lpa, lpa_note = match_number_or_bound(text, r"Lipoprotein \(a\)\s+Normal\s+mg/dL\s+NORMAL\s+([<>]?\d+(?:\.\d+)?)")
+    notes = []
+    if lpa_note:
+        notes.append(lpa_note)
     row = {
         "source": "LetsGetChecked",
         "report_file": report_name,
@@ -357,6 +362,7 @@ def extract_letsgetchecked(text: str, report_name: str) -> dict[str, Any]:
         "hdl_mg_dl": match_float(text, r"HDL Cholesterol Normal mg/dL NORMAL\s*([<>]?\d+(?:\.\d+)?)"),
         "ldl_mg_dl": match_float(text, r"LDL Cholesterol \(Calc\)\s*Normal mg/dL NORMAL\s*([<>]?\d+(?:\.\d+)?)"),
         "triglycerides_mg_dl": match_float(text, r"Triglycerides Normal mg/dL NORMAL\s*([<>]?\d+(?:\.\d+)?)"),
+        "lipoprotein_a_mg_dl": lpa,
         "bun_mg_dl": None,
         "bun_creatinine_ratio": None,
         "sodium_mmol_l": None,
@@ -382,7 +388,7 @@ def extract_letsgetchecked(text: str, report_name: str) -> dict[str, Any]:
         "vitamin_d_ng_ml": None,
         "vitamin_b12_pg_ml": None,
         "estimated_avg_glucose_mg_dl": match_float(text, r"Estimated Avg Glucose \(Calc\)\s*N/A mg/dL\s*([<>]?\d+(?:\.\d+)?)"),
-        "notes": "",
+        "notes": "; ".join(notes),
     }
     return row
 
@@ -510,6 +516,7 @@ def build_dashboard_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
                 "hdl": row["hdl_mg_dl"],
                 "ldl": row["ldl_mg_dl"],
                 "triglycerides": row["triglycerides_mg_dl"],
+                "lipoproteinA": row["lipoprotein_a_mg_dl"],
                 "bun": row["bun_mg_dl"],
                 "sodium": row["sodium_mmol_l"],
                 "chloride": row["chloride_mmol_l"],

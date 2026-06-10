@@ -245,6 +245,7 @@
     .grid .card:nth-child(4) .chart-head h3 { color: #5b64b8; }
     .grid .card:nth-child(5) .chart-head h3 { color: #a43e7f; }
     .grid .card:nth-child(6) .chart-head h3 { color: #9a4b18; }
+    .grid .card:nth-child(7) .chart-head h3 { color: #7b4ea3; }
     .mini-grid {
       display: grid;
       grid-template-columns: 1fr;
@@ -716,6 +717,28 @@
           </table>
         </div>
       </article>
+
+      <article class="card chart">
+        <div class="chart-head">
+          <h3>Specialty & Lifetime Markers</h3>
+          <button class="view-btn" id="btn-specialty" type="button">Switch to Graph</button>
+        </div>
+        <div id="graph-specialty" class="graph-shell orange hidden">
+          <div class="mini-grid">
+            <div class="mini blue" data-metric="lipoproteinA">
+              <h4>Lipoprotein (a)</h4>
+              <div class="mini-range"></div>
+              <svg id="chart-specialty-lpa"></svg>
+            </div>
+          </div>
+        </div>
+        <div class="table-wrap" id="table-wrap-specialty">
+          <table id="table-specialty">
+            <thead><tr><th>Date</th><th>Lipoprotein (a)</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </article>
     </section>
 
     <section class="card notes">
@@ -846,6 +869,7 @@
       hdl: { type: "min_only", min: 40 },
       triglycerides: { type: "max_only", max: 149 },
       tgHdl: { type: "max_only", max: 3.0 },
+      lipoproteinA: { type: "max_only", max: 29.9 },
       creatinine: { type: "between", min: 0.7, max: 1.35 },
       egfr: { type: "min_only", min: 59 },
       acr: { type: "max_only", max: 29 },
@@ -872,6 +896,7 @@
       ldl: "<= 99 mg/dL",
       hdl: ">= 40 mg/dL",
       triglycerides: "<= 149 mg/dL",
+      lipoproteinA: "< 30 mg/dL",
       creatinine: "0.70-1.35 mg/dL",
       egfr: ">= 59",
       acr: "<= 29 mg/g",
@@ -960,7 +985,13 @@
             }
           }
           const verdict = classifyMetric(col, raw);
-          const val = fmt(raw);
+          let val = fmt(raw);
+          if (val !== "-" && d.notes) {
+            const m = d.notes.match(/Value reported as (<|>)\s*(\d+)/);
+            if (m && Number(m[2]) === Number(raw)) {
+              val = m[1] + val;
+            }
+          }
           const flag = verdict.flag ? `<span class="range-flag">${verdict.flag}</span>` : "";
           return `<td class="num"><span class="value-pill ${verdict.state}">${val}${flag}</span></td>`;
         }).join("");
@@ -974,6 +1005,7 @@
     fillTable("table-metabolic", ["bun", "sodium", "chloride", "potassium", "co2"]);
     fillTable("table-thyroid", ["tsh", "freeT4", "thyroxineT4", "t3Uptake", "freeThyroxineIndex"]);
     fillTable("table-chemistry", ["calcium", "albumin", "bilirubin", "ast", "alt"]);
+    fillTable("table-specialty", ["lipoproteinA"]);
 
     function setupCardToggle(buttonId, graphId, tableWrapId) {
       const btn = document.getElementById(buttonId);
@@ -998,6 +1030,7 @@
     setupCardToggle("btn-metabolic", "graph-metabolic", "table-wrap-metabolic");
     setupCardToggle("btn-thyroid", "graph-thyroid", "table-wrap-thyroid");
     setupCardToggle("btn-chemistry", "graph-chemistry", "table-wrap-chemistry");
+    setupCardToggle("btn-specialty", "graph-specialty", "table-wrap-specialty");
     applyRangeLabels();
     initCategoryCollapse();
 
@@ -1104,6 +1137,7 @@
     drawSingleLine("chart-chemistry-bilirubin", data.map(d => d.bilirubin), "#ee6c4d", "bilirubin");
     drawSingleLine("chart-chemistry-ast", data.map(d => d.ast), "#1f6f8b", "ast");
     drawSingleLine("chart-chemistry-alt", data.map(d => d.alt), "#2a9d8f", "alt");
+    drawSingleLine("chart-specialty-lpa", data.map(d => d.lipoproteinA), "#1f6f8b", "lipoproteinA");
   </script>
 
   <nav class="bottom-tab" aria-label="Primary">

@@ -34,7 +34,8 @@
     "vitamin_b12_pg_ml": null,
     "estimated_avg_glucose_mg_dl": null,
     "notes": "",
-    "date": "2023-05-30"
+    "date": "2023-05-30",
+    "lipoprotein_a_mg_dl": null
   },
   {
     "source": "Quest",
@@ -71,7 +72,8 @@
     "vitamin_b12_pg_ml": null,
     "estimated_avg_glucose_mg_dl": null,
     "notes": "C-peptide only report",
-    "date": "2023-08-28"
+    "date": "2023-08-28",
+    "lipoprotein_a_mg_dl": null
   },
   {
     "source": "Quest",
@@ -108,7 +110,8 @@
     "vitamin_b12_pg_ml": null,
     "estimated_avg_glucose_mg_dl": null,
     "notes": "",
-    "date": "2024-01-15"
+    "date": "2024-01-15",
+    "lipoprotein_a_mg_dl": null
   },
   {
     "source": "Quest",
@@ -145,7 +148,8 @@
     "vitamin_b12_pg_ml": null,
     "estimated_avg_glucose_mg_dl": null,
     "notes": "",
-    "date": "2024-06-11"
+    "date": "2024-06-11",
+    "lipoprotein_a_mg_dl": null
   },
   {
     "source": "Quest",
@@ -182,7 +186,8 @@
     "vitamin_b12_pg_ml": null,
     "estimated_avg_glucose_mg_dl": null,
     "notes": "C-peptide only report",
-    "date": "2024-10-02"
+    "date": "2024-10-02",
+    "lipoprotein_a_mg_dl": null
   },
   {
     "source": "LetsGetChecked",
@@ -193,6 +198,7 @@
     "hdl_mg_dl": 45.0,
     "ldl_mg_dl": 56.0,
     "triglycerides_mg_dl": 112.0,
+    "lipoprotein_a_mg_dl": 12.0,
     "bun_mg_dl": null,
     "bun_creatinine_ratio": null,
     "sodium_mmol_l": null,
@@ -218,7 +224,7 @@
     "vitamin_d_ng_ml": null,
     "vitamin_b12_pg_ml": null,
     "estimated_avg_glucose_mg_dl": 175.0,
-    "notes": "",
+    "notes": "Value reported as <12",
     "date": "2025-01-28"
   },
   {
@@ -256,7 +262,8 @@
     "vitamin_b12_pg_ml": null,
     "estimated_avg_glucose_mg_dl": null,
     "notes": "",
-    "date": "2025-06-02"
+    "date": "2025-06-02",
+    "lipoprotein_a_mg_dl": null
   },
   {
     "source": "Labcorp",
@@ -293,7 +300,8 @@
     "vitamin_b12_pg_ml": null,
     "estimated_avg_glucose_mg_dl": null,
     "notes": "",
-    "date": "2025-09-12"
+    "date": "2025-09-12",
+    "lipoprotein_a_mg_dl": null
   },
   {
     "source": "Labcorp",
@@ -330,7 +338,8 @@
     "vitamin_b12_pg_ml": 2000.0,
     "estimated_avg_glucose_mg_dl": null,
     "notes": "Value reported as >2000",
-    "date": "2026-02-12"
+    "date": "2026-02-12",
+    "lipoprotein_a_mg_dl": null
   },
   {
     "source": "Labcorp",
@@ -367,7 +376,8 @@
     "vitamin_b12_pg_ml": null,
     "estimated_avg_glucose_mg_dl": null,
     "notes": "",
-    "date": "2026-02-17"
+    "date": "2026-02-17",
+    "lipoprotein_a_mg_dl": null
   },
   {
     "source": "Labcorp",
@@ -404,6 +414,7 @@
     "vitamin_b12_pg_ml": null,
     "estimated_avg_glucose_mg_dl": null,
     "notes": "",
-    "date": "2026-04-27"
+    "date": "2026-04-27",
+    "lipoprotein_a_mg_dl": null
   }
 ]
