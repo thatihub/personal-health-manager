@@ -246,6 +246,8 @@
     .grid .card:nth-child(5) .chart-head h3 { color: #a43e7f; }
     .grid .card:nth-child(6) .chart-head h3 { color: #9a4b18; }
     .grid .card:nth-child(7) .chart-head h3 { color: #7b4ea3; }
+    .grid .card:nth-child(8) .chart-head h3 { color: #a87932; }
+    .grid .card:nth-child(9) .chart-head h3 { color: #368f5c; }
     .mini-grid {
       display: grid;
       grid-template-columns: 1fr;
@@ -730,11 +732,85 @@
               <div class="mini-range"></div>
               <svg id="chart-specialty-lpa"></svg>
             </div>
+            <div class="mini orange" data-metric="psa">
+              <h4>PSA</h4>
+              <div class="mini-range"></div>
+              <svg id="chart-specialty-psa"></svg>
+            </div>
           </div>
         </div>
         <div class="table-wrap" id="table-wrap-specialty">
           <table id="table-specialty">
-            <thead><tr><th>Date</th><th>Lipoprotein (a)</th></tr></thead>
+            <thead><tr><th>Date</th><th>Lipoprotein (a)</th><th>PSA</th><th>Hep C Antibody</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </article>
+
+      <article class="card chart">
+        <div class="chart-head">
+          <h3>Vitamins & Nutrition</h3>
+          <button class="view-btn" id="btn-vitamins" type="button">Switch to Graph</button>
+        </div>
+        <div id="graph-vitamins" class="graph-shell blue hidden">
+          <div class="mini-grid">
+            <div class="mini blue" data-metric="vitaminD">
+              <h4>Vitamin D</h4>
+              <div class="mini-range"></div>
+              <svg id="chart-vitamins-vitd"></svg>
+            </div>
+            <div class="mini orange" data-metric="vitaminB12">
+              <h4>Vitamin B12</h4>
+              <div class="mini-range"></div>
+              <svg id="chart-vitamins-vitb12"></svg>
+            </div>
+          </div>
+        </div>
+        <div class="table-wrap" id="table-wrap-vitamins">
+          <table id="table-vitamins">
+            <thead><tr><th>Date</th><th>Vitamin D</th><th>Vitamin B12</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </article>
+
+      <article class="card chart">
+        <div class="chart-head">
+          <h3>Complete Blood Count (CBC)</h3>
+          <button class="view-btn" id="btn-cbc" type="button">Switch to Graph</button>
+        </div>
+        <div id="graph-cbc" class="graph-shell green hidden">
+          <div class="mini-grid">
+            <div class="mini blue" data-metric="wbc">
+              <h4>WBC</h4>
+              <div class="mini-range"></div>
+              <svg id="chart-cbc-wbc"></svg>
+            </div>
+            <div class="mini orange" data-metric="rbc">
+              <h4>RBC</h4>
+              <div class="mini-range"></div>
+              <svg id="chart-cbc-rbc"></svg>
+            </div>
+            <div class="mini green" data-metric="hemoglobin">
+              <h4>Hemoglobin</h4>
+              <div class="mini-range"></div>
+              <svg id="chart-cbc-hgb"></svg>
+            </div>
+            <div class="mini blue" data-metric="hematocrit">
+              <h4>Hematocrit</h4>
+              <div class="mini-range"></div>
+              <svg id="chart-cbc-hct"></svg>
+            </div>
+            <div class="mini orange" data-metric="platelets">
+              <h4>Platelets</h4>
+              <div class="mini-range"></div>
+              <svg id="chart-cbc-plt"></svg>
+            </div>
+          </div>
+        </div>
+        <div class="table-wrap" id="table-wrap-cbc">
+          <table id="table-cbc">
+            <thead><tr><th>Date</th><th>WBC</th><th>RBC</th><th>Hemoglobin</th><th>Hematocrit</th><th>Platelets</th></tr></thead>
             <tbody></tbody>
           </table>
         </div>
@@ -870,6 +946,15 @@
       triglycerides: { type: "max_only", max: 149 },
       tgHdl: { type: "max_only", max: 3.0 },
       lipoproteinA: { type: "max_only", max: 29.9 },
+      vitaminD: { type: "between", min: 30.0, max: 100.0 },
+      vitaminB12: { type: "between", min: 232, max: 1245 },
+      wbc: { type: "between", min: 3.4, max: 10.8 },
+      rbc: { type: "between", min: 4.14, max: 5.80 },
+      hemoglobin: { type: "between", min: 13.0, max: 17.7 },
+      hematocrit: { type: "between", min: 37.5, max: 51.0 },
+      platelets: { type: "between", min: 150, max: 450 },
+      psa: { type: "between", min: 0.0, max: 4.0 },
+      hcv: { type: "exact", expected: "Non Reactive" },
       creatinine: { type: "between", min: 0.7, max: 1.35 },
       egfr: { type: "min_only", min: 59 },
       acr: { type: "max_only", max: 29 },
@@ -897,6 +982,15 @@
       hdl: ">= 40 mg/dL",
       triglycerides: "<= 149 mg/dL",
       lipoproteinA: "< 30 mg/dL",
+      vitaminD: "30.0-100.0 ng/mL",
+      vitaminB12: "232-1245 pg/mL",
+      wbc: "3.4-10.8 x10E3/uL",
+      rbc: "4.14-5.80 x10E6/uL",
+      hemoglobin: "13.0-17.7 g/dL",
+      hematocrit: "37.5-51.0 %",
+      platelets: "150-450 x10E3/uL",
+      psa: "0.000-4.000 ng/mL",
+      hcv: "Non Reactive",
       creatinine: "0.70-1.35 mg/dL",
       egfr: ">= 59",
       acr: "<= 29 mg/g",
@@ -928,9 +1022,13 @@
 
     function classifyMetric(metric, rawVal) {
       if (rawVal === null || rawVal === undefined) return { state: "na", flag: "" };
+      const rr = REFERENCE_RANGES[metric];
+      if (rr && rr.type === "exact") {
+        return rawVal === rr.expected ? { state: "normal", flag: "" } : { state: "high", flag: "H" };
+      }
       const v = Number(rawVal);
       if (Number.isNaN(v)) return { state: "na", flag: "" };
-      const rr = REFERENCE_RANGES[metric];
+      if (!rr) return { state: "normal", flag: "" };
       if (!rr) return { state: "normal", flag: "" };
       if (rr.type === "between") {
         if (rr.min !== undefined && v < rr.min) return { state: "low", flag: "L" };
@@ -1015,7 +1113,9 @@
     fillTable("table-metabolic", ["bun", "sodium", "chloride", "potassium", "co2"]);
     fillTable("table-thyroid", ["tsh", "freeT4", "thyroxineT4", "t3Uptake", "freeThyroxineIndex"]);
     fillTable("table-chemistry", ["calcium", "albumin", "bilirubin", "ast", "alt"]);
-    fillTable("table-specialty", ["lipoproteinA"]);
+    fillTable("table-specialty", ["lipoproteinA", "psa", "hcv"]);
+    fillTable("table-vitamins", ["vitaminD", "vitaminB12"]);
+    fillTable("table-cbc", ["wbc", "rbc", "hemoglobin", "hematocrit", "platelets"]);
 
     function setupCardToggle(buttonId, graphId, tableWrapId) {
       const btn = document.getElementById(buttonId);
@@ -1041,6 +1141,8 @@
     setupCardToggle("btn-thyroid", "graph-thyroid", "table-wrap-thyroid");
     setupCardToggle("btn-chemistry", "graph-chemistry", "table-wrap-chemistry");
     setupCardToggle("btn-specialty", "graph-specialty", "table-wrap-specialty");
+    setupCardToggle("btn-vitamins", "graph-vitamins", "table-wrap-vitamins");
+    setupCardToggle("btn-cbc", "graph-cbc", "table-wrap-cbc");
     applyRangeLabels();
     initCategoryCollapse();
 
@@ -1148,6 +1250,14 @@
     drawSingleLine("chart-chemistry-ast", data.map(d => d.ast), "#1f6f8b", "ast");
     drawSingleLine("chart-chemistry-alt", data.map(d => d.alt), "#2a9d8f", "alt");
     drawSingleLine("chart-specialty-lpa", data.map(d => d.lipoproteinA), "#1f6f8b", "lipoproteinA");
+    drawSingleLine("chart-specialty-psa", data.map(d => d.psa), "#ee6c4d", "psa");
+    drawSingleLine("chart-vitamins-vitd", data.map(d => d.vitaminD), "#1f6f8b", "vitaminD");
+    drawSingleLine("chart-vitamins-vitb12", data.map(d => d.vitaminB12), "#ee6c4d", "vitaminB12");
+    drawSingleLine("chart-cbc-wbc", data.map(d => d.wbc), "#1f6f8b", "wbc");
+    drawSingleLine("chart-cbc-rbc", data.map(d => d.rbc), "#ee6c4d", "rbc");
+    drawSingleLine("chart-cbc-hgb", data.map(d => d.hemoglobin), "#2a9d8f", "hemoglobin");
+    drawSingleLine("chart-cbc-hct", data.map(d => d.hematocrit), "#1f6f8b", "hematocrit");
+    drawSingleLine("chart-cbc-plt", data.map(d => d.platelets), "#ee6c4d", "platelets");
   </script>
 
   <nav class="bottom-tab" aria-label="Primary">

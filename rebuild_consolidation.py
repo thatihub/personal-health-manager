@@ -79,6 +79,13 @@ FIELDS = [
     "free_thyroxine_index",
     "vitamin_d_ng_ml",
     "vitamin_b12_pg_ml",
+    "wbc_x10e3_ul",
+    "rbc_x10e6_ul",
+    "hemoglobin_g_dl",
+    "hematocrit_pct",
+    "platelets_x10e3_ul",
+    "psa_ng_ml",
+    "hcv_antibody",
     "estimated_avg_glucose_mg_dl",
     "notes",
 ]
@@ -230,6 +237,13 @@ def match_float(text: str, pattern: str, flags: int = re.I) -> float | None:
     return parse_numeric_token(m.group(1))
 
 
+def match_string(text: str, pattern: str, flags: int = re.I) -> str | None:
+    m = re.search(pattern, text, flags)
+    if not m:
+        return None
+    return m.group(1).strip()
+
+
 def match_number_or_bound(text: str, pattern: str, flags: int = re.I) -> tuple[float | None, str]:
     m = re.search(pattern, text, flags)
     if not m:
@@ -271,6 +285,7 @@ def extract_labcorp(text: str, report_name: str) -> dict[str, Any]:
         "hdl_mg_dl": match_float(text, r"HDL Cholesterol\s*\d+\s*([<>]?\d+(?:\.\d+)?)"),
         "ldl_mg_dl": match_float(text, r"LDL Chol Calc \(NIH\)\s*([<>]?\d+(?:\.\d+)?)"),
         "triglycerides_mg_dl": match_float(text, r"Triglycerides\s*\d+\s*([<>]?\d+(?:\.\d+)?)"),
+        "lipoprotein_a_mg_dl": None,
         "bun_mg_dl": match_float(text, r"BUN\s*\d+\s*([<>]?\d+(?:[.,]\d+)?)"),
         "bun_creatinine_ratio": match_float(text, r"BUN/Creatinine Ratio\s*([<>]?\d+(?:[.,]\d+)?)"),
         "sodium_mmol_l": match_float(text, r"Sodium\s*\d+\s*([<>]?\d+(?:[.,]\d+)?)"),
@@ -296,6 +311,13 @@ def extract_labcorp(text: str, report_name: str) -> dict[str, Any]:
         "vitamin_d_ng_ml": match_float(text, r"Vitamin D, 25-Hydroxy\s*\d+\s*([<>]?\d+(?:\.\d+)?)"),
         "vitamin_b12_pg_ml": b12,
         "estimated_avg_glucose_mg_dl": None,
+        "wbc_x10e3_ul": match_float(text, r"\bWBC\s*\d*\s*([<>]?\d+(?:\.\d+)?)"),
+        "rbc_x10e6_ul": match_float(text, r"\bRBC\s*\d*\s*([<>]?\d+(?:\.\d+)?)"),
+        "hemoglobin_g_dl": match_float(text, r"\bHemoglobin\s*\d*\s*([<>]?\d+(?:\.\d+)?)"),
+        "hematocrit_pct": match_float(text, r"\bHematocrit\s*\d*\s*([<>]?\d+(?:\.\d+)?)"),
+        "platelets_x10e3_ul": match_float(text, r"\bPlatelets\s*\d*\s*([<>]?\d+(?:\.\d+)?)"),
+        "psa_ng_ml": match_float(text, r"\bPSA,\s*Ultrasensitive\s*\d*\s*([<>]?\d+(?:\.\d+)?)"),
+        "hcv_antibody": match_string(text, r"\bHep\s*C\s*Virus\s*Ab\s*\d*\s*(Non Reactive|Reactive|Equivocal)"),
         "notes": "; ".join(notes),
     }
     return row
@@ -536,6 +558,15 @@ def build_dashboard_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
                 "thyroxineT4": row["thyroxine_t4_ug_dl"],
                 "t3Uptake": row["t3_uptake_pct"],
                 "freeThyroxineIndex": row["free_thyroxine_index"],
+                "vitaminD": row["vitamin_d_ng_ml"],
+                "vitaminB12": row["vitamin_b12_pg_ml"],
+                "wbc": row["wbc_x10e3_ul"],
+                "rbc": row["rbc_x10e6_ul"],
+                "hemoglobin": row["hemoglobin_g_dl"],
+                "hematocrit": row["hematocrit_pct"],
+                "platelets": row["platelets_x10e3_ul"],
+                "psa": row["psa_ng_ml"],
+                "hcv": row["hcv_antibody"],
             }
         )
     return dash

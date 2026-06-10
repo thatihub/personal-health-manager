@@ -27,7 +27,16 @@ window.LAB_DASH_DATA = [
     "freeT4": null,
     "thyroxineT4": null,
     "t3Uptake": null,
-    "freeThyroxineIndex": null
+    "freeThyroxineIndex": null,
+    "vitaminD": null,
+    "vitaminB12": null,
+    "wbc": null,
+    "rbc": null,
+    "hemoglobin": null,
+    "hematocrit": null,
+    "platelets": null,
+    "psa": null,
+    "hcv": null
   },
   {
     "date": "2023-08-28",
@@ -57,7 +66,16 @@ window.LAB_DASH_DATA = [
     "freeT4": null,
     "thyroxineT4": null,
     "t3Uptake": null,
-    "freeThyroxineIndex": null
+    "freeThyroxineIndex": null,
+    "vitaminD": null,
+    "vitaminB12": null,
+    "wbc": null,
+    "rbc": null,
+    "hemoglobin": null,
+    "hematocrit": null,
+    "platelets": null,
+    "psa": null,
+    "hcv": null
   },
   {
     "date": "2024-01-15",
@@ -87,7 +105,16 @@ window.LAB_DASH_DATA = [
     "freeT4": null,
     "thyroxineT4": null,
     "t3Uptake": null,
-    "freeThyroxineIndex": null
+    "freeThyroxineIndex": null,
+    "vitaminD": null,
+    "vitaminB12": null,
+    "wbc": null,
+    "rbc": null,
+    "hemoglobin": null,
+    "hematocrit": null,
+    "platelets": null,
+    "psa": null,
+    "hcv": null
   },
   {
     "date": "2024-06-11",
@@ -117,7 +144,16 @@ window.LAB_DASH_DATA = [
     "freeT4": null,
     "thyroxineT4": null,
     "t3Uptake": null,
-    "freeThyroxineIndex": null
+    "freeThyroxineIndex": null,
+    "vitaminD": null,
+    "vitaminB12": null,
+    "wbc": null,
+    "rbc": null,
+    "hemoglobin": null,
+    "hematocrit": null,
+    "platelets": null,
+    "psa": null,
+    "hcv": null
   },
   {
     "date": "2024-10-02",
@@ -147,7 +183,16 @@ window.LAB_DASH_DATA = [
     "freeT4": null,
     "thyroxineT4": null,
     "t3Uptake": null,
-    "freeThyroxineIndex": null
+    "freeThyroxineIndex": null,
+    "vitaminD": null,
+    "vitaminB12": null,
+    "wbc": null,
+    "rbc": null,
+    "hemoglobin": null,
+    "hematocrit": null,
+    "platelets": null,
+    "psa": null,
+    "hcv": null
   },
   {
     "date": "2025-01-28",
@@ -177,7 +222,16 @@ window.LAB_DASH_DATA = [
     "freeT4": null,
     "thyroxineT4": null,
     "t3Uptake": null,
-    "freeThyroxineIndex": null
+    "freeThyroxineIndex": null,
+    "vitaminD": null,
+    "vitaminB12": null,
+    "wbc": null,
+    "rbc": null,
+    "hemoglobin": null,
+    "hematocrit": null,
+    "platelets": null,
+    "psa": null,
+    "hcv": null
   },
   {
     "date": "2025-06-02",
@@ -207,7 +261,16 @@ window.LAB_DASH_DATA = [
     "freeT4": null,
     "thyroxineT4": null,
     "t3Uptake": null,
-    "freeThyroxineIndex": null
+    "freeThyroxineIndex": null,
+    "vitaminD": null,
+    "vitaminB12": null,
+    "wbc": 11.2,
+    "rbc": 4.82,
+    "hemoglobin": 14.0,
+    "hematocrit": 42.2,
+    "platelets": 312.0,
+    "psa": null,
+    "hcv": null
   },
   {
     "date": "2025-09-12",
@@ -237,7 +300,16 @@ window.LAB_DASH_DATA = [
     "freeT4": null,
     "thyroxineT4": null,
     "t3Uptake": null,
-    "freeThyroxineIndex": null
+    "freeThyroxineIndex": null,
+    "vitaminD": null,
+    "vitaminB12": null,
+    "wbc": 9.6,
+    "rbc": 4.91,
+    "hemoglobin": 14.1,
+    "hematocrit": 43.8,
+    "platelets": 293.0,
+    "psa": null,
+    "hcv": null
   },
   {
     "date": "2026-02-12",
@@ -267,7 +339,16 @@ window.LAB_DASH_DATA = [
     "freeT4": 1.05,
     "thyroxineT4": null,
     "t3Uptake": null,
-    "freeThyroxineIndex": null
+    "freeThyroxineIndex": null,
+    "vitaminD": 72.0,
+    "vitaminB12": 2000.0,
+    "wbc": 12.2,
+    "rbc": 4.46,
+    "hemoglobin": 12.9,
+    "hematocrit": 39.5,
+    "platelets": 328.0,
+    "psa": 1.02,
+    "hcv": "Non Reactive"
   },
   {
     "date": "2026-02-17",
@@ -297,7 +378,16 @@ window.LAB_DASH_DATA = [
     "freeT4": null,
     "thyroxineT4": 5.2,
     "t3Uptake": 28.0,
-    "freeThyroxineIndex": 15.0
+    "freeThyroxineIndex": 15.0,
+    "vitaminD": null,
+    "vitaminB12": null,
+    "wbc": null,
+    "rbc": null,
+    "hemoglobin": null,
+    "hematocrit": null,
+    "platelets": null,
+    "psa": null,
+    "hcv": null
   },
   {
     "date": "2026-04-27",
@@ -327,6 +417,54 @@ window.LAB_DASH_DATA = [
     "freeT4": 1.58,
     "thyroxineT4": null,
     "t3Uptake": null,
-    "freeThyroxineIndex": null
+    "freeThyroxineIndex": null,
+    "vitaminD": null,
+    "vitaminB12": null,
+    "wbc": null,
+    "rbc": null,
+    "hemoglobin": null,
+    "hematocrit": null,
+    "platelets": null,
+    "psa": null,
+    "hcv": null
+  },
+  {
+    "date": "2026-06-08",
+    "source": "Labcorp",
+    "glucose": 162.0,
+    "hba1c": 7.1,
+    "totalChol": 90.0,
+    "hdl": 37.0,
+    "ldl": 41.0,
+    "triglycerides": 92.0,
+    "lipoproteinA": null,
+    "bun": 18.0,
+    "sodium": 125.0,
+    "chloride": 89.0,
+    "potassium": 4.6,
+    "co2": 23.0,
+    "calcium": 9.2,
+    "albumin": 4.4,
+    "bilirubin": 0.3,
+    "ast": 20.0,
+    "alt": 11.0,
+    "creatinine": 0.98,
+    "egfr": 85.0,
+    "acr": null,
+    "cPeptide": null,
+    "tsh": 6.37,
+    "freeT4": 1.44,
+    "thyroxineT4": null,
+    "t3Uptake": null,
+    "freeThyroxineIndex": null,
+    "vitaminD": null,
+    "vitaminB12": null,
+    "wbc": null,
+    "rbc": null,
+    "hemoglobin": null,
+    "hematocrit": null,
+    "platelets": null,
+    "psa": null,
+    "hcv": null
   }
 ];
