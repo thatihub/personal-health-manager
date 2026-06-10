@@ -974,7 +974,17 @@
 
     function fillTable(tableId, columns) {
       const tbody = document.querySelector(`#${tableId} tbody`);
-      tbody.innerHTML = data.map(d => {
+      const rowsWithData = data.filter(d => {
+        return columns.some(col => {
+          let raw = d[col];
+          if (col === "tgHdl") {
+            return d.triglycerides !== null && d.triglycerides !== undefined && d.hdl !== null && d.hdl !== undefined;
+          }
+          return raw !== null && raw !== undefined;
+        });
+      });
+
+      tbody.innerHTML = rowsWithData.map(d => {
         const cells = columns.map(col => {
           let raw = d[col];
           if (col === "tgHdl") {
