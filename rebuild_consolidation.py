@@ -591,6 +591,7 @@ def build_dashboard_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
                 "platelets": row["platelets_x10e3_ul"],
                 "psa": row["psa_ng_ml"],
                 "hcv": row["hcv_antibody"],
+                "notes": row["notes"],
             }
         )
     return dash

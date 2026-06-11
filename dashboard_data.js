@@ -38,7 +38,8 @@ window.LAB_DASH_DATA = [
     "hematocrit": null,
     "platelets": null,
     "psa": null,
-    "hcv": null
+    "hcv": null,
+    "notes": ""
   },
   {
     "date": "2023-08-28",
@@ -79,7 +80,8 @@ window.LAB_DASH_DATA = [
     "hematocrit": null,
     "platelets": null,
     "psa": null,
-    "hcv": null
+    "hcv": null,
+    "notes": "C-peptide only report"
   },
   {
     "date": "2024-01-15",
@@ -120,7 +122,8 @@ window.LAB_DASH_DATA = [
     "hematocrit": null,
     "platelets": null,
     "psa": null,
-    "hcv": null
+    "hcv": null,
+    "notes": ""
   },
   {
     "date": "2024-06-11",
@@ -161,7 +164,8 @@ window.LAB_DASH_DATA = [
     "hematocrit": null,
     "platelets": null,
     "psa": null,
-    "hcv": null
+    "hcv": null,
+    "notes": ""
   },
   {
     "date": "2024-10-02",
@@ -202,7 +206,8 @@ window.LAB_DASH_DATA = [
     "hematocrit": null,
     "platelets": null,
     "psa": null,
-    "hcv": null
+    "hcv": null,
+    "notes": "C-peptide only report"
   },
   {
     "date": "2025-01-28",
@@ -243,7 +248,8 @@ window.LAB_DASH_DATA = [
     "hematocrit": null,
     "platelets": null,
     "psa": null,
-    "hcv": null
+    "hcv": null,
+    "notes": "Value reported as <12"
   },
   {
     "date": "2025-06-02",
@@ -284,7 +290,8 @@ window.LAB_DASH_DATA = [
     "hematocrit": 42.2,
     "platelets": 312.0,
     "psa": null,
-    "hcv": null
+    "hcv": null,
+    "notes": ""
   },
   {
     "date": "2025-09-12",
@@ -325,7 +332,8 @@ window.LAB_DASH_DATA = [
     "hematocrit": 43.8,
     "platelets": 293.0,
     "psa": null,
-    "hcv": null
+    "hcv": null,
+    "notes": ""
   },
   {
     "date": "2026-02-12",
@@ -366,7 +374,8 @@ window.LAB_DASH_DATA = [
     "hematocrit": 39.5,
     "platelets": 328.0,
     "psa": 1.02,
-    "hcv": "Non Reactive"
+    "hcv": "Non Reactive",
+    "notes": "Value reported as >2000"
   },
   {
     "date": "2026-02-17",
@@ -407,7 +416,8 @@ window.LAB_DASH_DATA = [
     "hematocrit": null,
     "platelets": null,
     "psa": null,
-    "hcv": null
+    "hcv": null,
+    "notes": ""
   },
   {
     "date": "2026-04-27",
@@ -448,7 +458,8 @@ window.LAB_DASH_DATA = [
     "hematocrit": null,
     "platelets": null,
     "psa": null,
-    "hcv": null
+    "hcv": null,
+    "notes": ""
   },
   {
     "date": "2026-06-08",
@@ -489,6 +500,7 @@ window.LAB_DASH_DATA = [
     "hematocrit": null,
     "platelets": null,
     "psa": null,
-    "hcv": null
+    "hcv": null,
+    "notes": "Value reported as <1.5"
   }
 ];
