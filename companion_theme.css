@@ -357,7 +357,7 @@ body.page-history .wrap > section.card h3 { color: #8beee0 !important; }
   }
   
   @page {
-    margin: 10mm 12mm 12mm 12mm;
+    margin: 8mm 10mm 10mm 10mm;
     size: auto;
   }
 
@@ -367,6 +367,16 @@ body.page-history .wrap > section.card h3 { color: #8beee0 !important; }
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
     font-size: 13px;
+    zoom: 70% !important; /* Scale entire document to 70% of actual size */
+  }
+
+  /* Scale down KPI numbers and labels */
+  .val, .kpi-val, .stats .val {
+    font-size: 20px !important;
+  }
+  
+  .label, .kpi-label, .stats .label {
+    font-size: 11px !important;
   }
 
   /* Force background colors to print */
@@ -430,7 +440,24 @@ body.page-history .wrap > section.card h3 { color: #8beee0 !important; }
     padding: 0 !important;
   }
 
-  .card, .stat, .mini-panel, .table-wrap, .graph-shell {
+  .grid {
+    display: block !important; /* Force block layout for sequential page breaks */
+  }
+
+  /* Force each major chart/dashboard panel to start on a new page */
+  .card.chart {
+    page-break-before: always !important;
+    break-before: page !important;
+    page-break-inside: auto !important; /* Allow long panels to span multiple pages if needed */
+    break-inside: auto !important;
+  }
+
+  .card.chart:first-of-type {
+    page-break-before: avoid !important;
+    break-before: avoid !important;
+  }
+
+  .card:not(.chart), .stat, .mini-panel, .table-wrap, .graph-shell {
     page-break-inside: avoid !important;
     break-inside: avoid !important;
   }
@@ -440,5 +467,3 @@ body.page-history .wrap > section.card h3 { color: #8beee0 !important; }
     break-after: avoid !important;
   }
 }
-
-
