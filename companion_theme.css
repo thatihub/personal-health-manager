@@ -323,44 +323,26 @@ body.page-history .grid .card:nth-child(1) h3 { color: #67d8ff !important; }
 body.page-history .grid .card:nth-child(2) h3 { color: #ffd081 !important; }
 body.page-history .wrap > section.card h3 { color: #8beee0 !important; }
 
-/* Floating Print Button */
-.print-btn {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  background: linear-gradient(135deg, var(--page-accent, #12a4d4), var(--page-accent-2, #0d8bb8)) !important;
+/* Inline Print Navigation Link */
+.nav a.print-nav-link, .top-nav a.print-nav-link {
+  background: linear-gradient(120deg, var(--page-accent-2, #0d8bb8), var(--page-accent, #12a4d4)) !important;
   color: #ffffff !important;
-  border: 1px solid rgba(255, 255, 255, 0.3) !important;
-  border-radius: 50px !important;
-  padding: 12px 24px !important;
-  font-family: "Plus Jakarta Sans", "Inter", sans-serif !important;
-  font-size: 14px !important;
-  font-weight: 700 !important;
+  border-color: transparent !important;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5) !important;
-  z-index: 9999;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  gap: 6px;
+  font-weight: 700;
+  border-radius: 12px;
+  min-height: 48px;
+  padding: 10px 16px;
+  text-decoration: none;
+  font-size: 15px;
 }
-.print-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.6) !important;
-}
-.print-btn:active {
-  transform: translateY(0);
-}
-
-@media (max-width: 640px) {
-  .print-btn {
-    bottom: max(96px, calc(96px + env(safe-area-inset-bottom))) !important;
-    right: 16px !important;
-    padding: 10px 18px !important;
-    font-size: 13px !important;
-  }
+.nav a.print-nav-link:hover, .top-nav a.print-nav-link:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 16px rgba(18, 164, 212, 0.28) !important;
 }
 
 /* Print Styling Override for a Dark-Theme Screen Match */
@@ -375,7 +357,7 @@ body.page-history .wrap > section.card h3 { color: #8beee0 !important; }
   }
   
   @page {
-    margin: 12mm 15mm 15mm 15mm;
+    margin: 10mm 12mm 12mm 12mm;
     size: auto;
   }
 
@@ -384,7 +366,7 @@ body.page-history .wrap > section.card h3 { color: #8beee0 !important; }
     color: #ebf3fb !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
-    font-size: 14px;
+    font-size: 13px;
   }
 
   /* Force background colors to print */
@@ -409,8 +391,34 @@ body.page-history .wrap > section.card h3 { color: #8beee0 !important; }
     print-color-adjust: exact !important;
   }
 
+  /* Scale down charts, graphs, and canvases to save vertical page space */
+  svg, canvas, .graph-shell, .mini, .chart, .chart-wrap {
+    max-height: 150px !important;
+    width: 100% !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  /* Scale down regular image scans and body composition diagrams */
+  img {
+    max-height: 160px !important;
+    width: auto !important;
+    max-width: 100% !important;
+    display: block !important;
+    margin: 0 auto !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  /* Compact spacing for printed panels */
+  .hero, .card, .mini-panel, .stat, .kpi, .table-wrap {
+    padding: 10px 14px !important;
+    margin-bottom: 8px !important;
+    border-radius: 12px !important;
+  }
+
   /* Hide print buttons, navigation bars, and inputs */
-  .nav, .top-nav, .bottom-tab, .print-btn, .admin-upload-zone, .view-btn, .offline-banner, .file-warning, .toast, .modal, button:not(.cta), input, select, textarea {
+  .nav, .top-nav, .bottom-tab, .print-btn, .print-nav-link, .admin-upload-zone, .view-btn, .offline-banner, .file-warning, .toast, .modal, button:not(.cta), input, select, textarea {
     display: none !important;
   }
 
@@ -422,7 +430,7 @@ body.page-history .wrap > section.card h3 { color: #8beee0 !important; }
     padding: 0 !important;
   }
 
-  .card, .stat, .mini-panel, .table-wrap, .graph-shell, svg, canvas {
+  .card, .stat, .mini-panel, .table-wrap, .graph-shell {
     page-break-inside: avoid !important;
     break-inside: avoid !important;
   }
@@ -432,4 +440,5 @@ body.page-history .wrap > section.card h3 { color: #8beee0 !important; }
     break-after: avoid !important;
   }
 }
+
 
