@@ -187,14 +187,14 @@ thead th {
   text-shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
   font-family: "Plus Jakarta Sans", sans-serif !important;
   font-weight: 700 !important;
-  font-size: 13.5px !important;
+  font-size: 20px !important;
   letter-spacing: -0.015em !important;
 }
 tbody td {
   color: #eef5fc !important;
   border-bottom: 1px solid rgba(127, 161, 194, 0.26) !important;
   font-weight: 500 !important;
-  font-size: 14.5px !important;
+  font-size: 22px !important;
 }
 tbody td.num {
   font-variant-numeric: tabular-nums;
