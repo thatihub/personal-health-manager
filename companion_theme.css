@@ -323,26 +323,42 @@ body.page-history .grid .card:nth-child(1) h3 { color: #67d8ff !important; }
 body.page-history .grid .card:nth-child(2) h3 { color: #ffd081 !important; }
 body.page-history .wrap > section.card h3 { color: #8beee0 !important; }
 
-/* Inline Print Navigation Link */
-.nav a.print-nav-link, .top-nav a.print-nav-link {
-  background: linear-gradient(120deg, var(--page-accent-2, #0d8bb8), var(--page-accent, #12a4d4)) !important;
+/* Compact Floating Print Button */
+.print-btn {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: linear-gradient(135deg, var(--page-accent, #12a4d4), var(--page-accent-2, #0d8bb8)) !important;
   color: #ffffff !important;
-  border-color: transparent !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  border-radius: 50px !important;
+  padding: 8px 16px !important;
+  font-family: "Plus Jakarta Sans", "Inter", sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  font-weight: 700;
-  border-radius: 12px;
-  min-height: 48px;
-  padding: 10px 16px;
-  text-decoration: none;
-  font-size: 15px;
+  justify-content: center;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4) !important;
+  z-index: 9999;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
-.nav a.print-nav-link:hover, .top-nav a.print-nav-link:hover {
-  filter: brightness(1.1);
-  transform: translateY(-1px);
-  box-shadow: 0 8px 16px rgba(18, 164, 212, 0.28) !important;
+.print-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.5) !important;
+}
+.print-btn:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 640px) {
+  .print-btn {
+    bottom: max(96px, calc(96px + env(safe-area-inset-bottom))) !important;
+    right: 16px !important;
+  }
 }
 
 /* Print Styling Override for a Dark-Theme Screen Match */
