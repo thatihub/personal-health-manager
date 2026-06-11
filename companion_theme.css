@@ -361,6 +361,13 @@ body.page-history .wrap > section.card h3 { color: #8beee0 !important; }
     size: auto;
   }
 
+  /* Prevent clipping and hidden overflow in print completely */
+  html, body, .wrap, .grid, .card, .table-wrap, .graph-shell, .mini, .mini-grid, table, tbody, tr, td, th {
+    overflow: visible !important;
+    height: auto !important;
+    max-height: none !important;
+  }
+
   body {
     background: #040a1a !important;
     color: #ebf3fb !important;
@@ -380,7 +387,7 @@ body.page-history .wrap > section.card h3 { color: #8beee0 !important; }
   }
 
   /* Force background colors to print */
-  .hero, .card, .mini-panel, .stat, .kpi, .after-hours, .table-wrap, .status, .search, .graph-shell, .mini, .section-group-title, .status-badge {
+  .hero, .card, .mini-panel, .stat, .kpi, .table-wrap, .status, .search, .graph-shell, .mini, .section-group-title, .status-badge {
     background: rgba(44, 58, 76, 0.96) !important;
     border-color: rgba(116, 144, 172, 0.34) !important;
     color: #ebf3fb !important;
@@ -457,7 +464,12 @@ body.page-history .wrap > section.card h3 { color: #8beee0 !important; }
     break-before: avoid !important;
   }
 
-  .card:not(.chart), .stat, .mini-panel, .table-wrap, .graph-shell {
+  .card:not(.chart), .stat, .mini-panel {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  tr {
     page-break-inside: avoid !important;
     break-inside: avoid !important;
   }
