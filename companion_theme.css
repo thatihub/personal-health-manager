@@ -322,3 +322,114 @@ body.page-admin .wrap > section.card:nth-of-type(5) .row label { color: #d1c6ff 
 body.page-history .grid .card:nth-child(1) h3 { color: #67d8ff !important; }
 body.page-history .grid .card:nth-child(2) h3 { color: #ffd081 !important; }
 body.page-history .wrap > section.card h3 { color: #8beee0 !important; }
+
+/* Floating Print Button */
+.print-btn {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: linear-gradient(135deg, var(--page-accent, #12a4d4), var(--page-accent-2, #0d8bb8)) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  border-radius: 50px !important;
+  padding: 12px 24px !important;
+  font-family: "Plus Jakarta Sans", "Inter", sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5) !important;
+  z-index: 9999;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.print-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.6) !important;
+}
+.print-btn:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 640px) {
+  .print-btn {
+    bottom: max(96px, calc(96px + env(safe-area-inset-bottom))) !important;
+    right: 16px !important;
+    padding: 10px 18px !important;
+    font-size: 13px !important;
+  }
+}
+
+/* Print Styling Override for a Dark-Theme Screen Match */
+@media print {
+  :root {
+    color-scheme: dark !important;
+    --comp-bg-1: #040a1a !important;
+    --comp-bg-2: #061126 !important;
+    --comp-bg-3: #040d20 !important;
+    --comp-ink: #ebf3fb !important;
+    --comp-panel: rgba(44, 58, 76, 0.96) !important;
+  }
+  
+  @page {
+    margin: 12mm 15mm 15mm 15mm;
+    size: auto;
+  }
+
+  body {
+    background: #040a1a !important;
+    color: #ebf3fb !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    font-size: 14px;
+  }
+
+  /* Force background colors to print */
+  .hero, .card, .mini-panel, .stat, .kpi, .after-hours, .table-wrap, .status, .search, .graph-shell, .mini, .section-group-title, .status-badge {
+    background: rgba(44, 58, 76, 0.96) !important;
+    border-color: rgba(116, 144, 172, 0.34) !important;
+    color: #ebf3fb !important;
+    box-shadow: none !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .card, .mini, .graph-shell {
+    background: linear-gradient(165deg, rgba(58, 74, 96, 0.98), rgba(47, 63, 84, 0.98)) !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Keep all chart lines, shapes, and markers exact */
+  svg, canvas, path, line, circle, rect, text, span, div, h1, h2, h3, h4, td, th {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Hide print buttons, navigation bars, and inputs */
+  .nav, .top-nav, .bottom-tab, .print-btn, .admin-upload-zone, .view-btn, .offline-banner, .file-warning, .toast, .modal, button:not(.cta), input, select, textarea {
+    display: none !important;
+  }
+
+  /* Layout and print page breaks */
+  .wrap {
+    max-width: 100% !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .card, .stat, .mini-panel, .table-wrap, .graph-shell, svg, canvas {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+  
+  h1, h2, h3, h4 {
+    page-break-after: avoid !important;
+    break-after: avoid !important;
+  }
+}
+
