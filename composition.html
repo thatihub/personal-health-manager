@@ -441,6 +441,36 @@
           </table>
         </div>
       </article>
+
+      <!-- Card 6: Bone Mineral Density (BMD) Tracker -->
+      <article class="card chart" style="grid-column: span 2;">
+        <div class="chart-head">
+          <h3 style="color: #ffd081 !important;">Bone Mineral Density (BMD) & Scores</h3>
+          <button class="view-btn" id="btn-toggle-bmd" type="button">Switch to Table</button>
+        </div>
+        <div class="graph-shell" id="shell-bmd">
+          <svg id="chart-bmd" style="height: 180px;"></svg>
+          <div class="legend">
+            <div class="legend-item"><span class="legend-color" style="background:#ffd081;"></span>Total BMD (g/cm²)</div>
+            <div class="legend-item"><span class="legend-color" style="background:#ff8fa0;"></span>T-Score [Normal: >= -1.0, Osteopenia: -1.0 to -2.5, Osteoporosis: <= -2.5]</div>
+            <div class="legend-item"><span class="legend-color" style="background:#58c8ff;"></span>Z-Score</div>
+          </div>
+        </div>
+        <div class="table-wrap hidden" id="table-wrap-bmd">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Total BMD (g/cm²)</th>
+                <th>T-Score</th>
+                <th>Z-Score</th>
+                <th>Bone Health Status</th>
+              </tr>
+            </thead>
+            <tbody id="table-body-bmd"></tbody>
+          </table>
+        </div>
+      </article>
     </section>
   </div>
   
@@ -571,6 +601,29 @@
           </tr>
         `).join("");
       }
+
+      // Card 6 Table: BMD
+      const tbodyBmd = document.getElementById("table-body-bmd");
+      if (tbodyBmd) {
+        tbodyBmd.innerHTML = reversed.map(r => {
+          let status = "-";
+          if (r.bmd_t_score !== null && r.bmd_t_score !== undefined) {
+            const t = r.bmd_t_score;
+            if (t >= -1.0) status = "<span class='value-pill normal'>Normal</span>";
+            else if (t > -2.5) status = "<span class='value-pill low' style='color:#ffd081 !important;'>Osteopenia</span>";
+            else status = "<span class='value-pill high'>Osteoporosis</span>";
+          }
+          return `
+            <tr>
+              <td>${fmtDate(r.date)}</td>
+              <td style="color:#ffd081; font-weight: 800;">${r.bmd_g_cm2 !== null && r.bmd_g_cm2 !== undefined ? r.bmd_g_cm2.toFixed(3) + ' g/cm²' : '-'}</td>
+              <td style="color:#ff8fa0;">${r.bmd_t_score !== null && r.bmd_t_score !== undefined ? r.bmd_t_score.toFixed(1) : '-'}</td>
+              <td style="color:#58c8ff;">${r.bmd_z_score !== null && r.bmd_z_score !== undefined ? r.bmd_z_score.toFixed(1) : '-'}</td>
+              <td>${status}</td>
+            </tr>
+          `;
+        }).join("");
+      }
     }
     
     function drawCharts(records) {
@@ -604,6 +657,14 @@
         { key: "appendicular_lean_mass_index", color: "#73ecb4" },
         { key: "lean_height2_index", color: "#58c8ff" }
       ], 5, 25);
+
+      // 6. Draw BMD/T-Score chart
+      const bmdRecords = records.filter(r => r.bmd_g_cm2 !== null && r.bmd_g_cm2 !== undefined);
+      drawMultiLine("chart-bmd", bmdRecords, [
+        { key: "bmd_g_cm2", color: "#ffd081" },
+        { key: "bmd_t_score", color: "#ff8fa0" },
+        { key: "bmd_z_score", color: "#58c8ff" }
+      ], -3.0, 2.0);
     }
     
     function drawMultiLine(svgId, records, series, forceMin = null, forceMax = null) {
@@ -719,12 +780,14 @@
           setupCardToggle("btn-toggle-fat-pct", "shell-fat-pct", "table-wrap-fat-pct", defaultToTable);
           setupCardToggle("btn-toggle-vat", "shell-vat", "table-wrap-vat", defaultToTable);
           setupCardToggle("btn-toggle-indices", "shell-indices", "table-wrap-indices", defaultToTable);
+          setupCardToggle("btn-toggle-bmd", "shell-bmd", "table-wrap-bmd", defaultToTable);
         } else {
           setupCardToggle("btn-toggle-weight", "shell-weight", "table-wrap-weight", false);
           setupCardToggle("btn-toggle-composition", "shell-composition", "table-wrap-composition", false);
           setupCardToggle("btn-toggle-fat-pct", "shell-fat-pct", "table-wrap-fat-pct", false);
           setupCardToggle("btn-toggle-vat", "shell-vat", "table-wrap-vat", false);
           setupCardToggle("btn-toggle-indices", "shell-indices", "table-wrap-indices", false);
+          setupCardToggle("btn-toggle-bmd", "shell-bmd", "table-wrap-bmd", false);
           document.getElementById("summary-subtitle").innerHTML = `<span style="color:#ff8fa0;">No DEXA records found. Please upload dexa_records.json via the Admin page.</span>`;
         }
       } catch (err) {

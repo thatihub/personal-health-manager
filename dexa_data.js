@@ -17,7 +17,10 @@ window.DEXA_DATA = {
       "adjusted_body_fat_mass_lb": 86.0,
       "adjusted_lean_body_mass_lb": 76.0,
       "waist_size_in": null,
-      "notes": "Baseline scan. Scan weight (167.3 lb) showed clothing difference of ~5.3 lb compared to morning home weight (162 lb). Focused on protecting muscle during Mounjaro weight loss."
+      "notes": "Baseline scan. Scan weight (167.3 lb) showed clothing difference of ~5.3 lb compared to morning home weight (162 lb). Focused on protecting muscle during Mounjaro weight loss.",
+      "bmd_g_cm2": null,
+      "bmd_t_score": null,
+      "bmd_z_score": null
     },
     {
       "date": "2026-06-02",
@@ -41,7 +44,10 @@ window.DEXA_DATA = {
       "visceral_fat_volume_cm3": 1137.0,
       "appendicular_lean_mass_index": 7.8,
       "lean_height2_index": 19.4,
-      "lean_index_percentile": 43
+      "lean_index_percentile": 43,
+      "bmd_g_cm2": 1.014,
+      "bmd_t_score": -2.0,
+      "bmd_z_score": -1.3
     }
   ]
 };

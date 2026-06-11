@@ -320,6 +320,18 @@
             <label style="font-size: 13px; font-weight: 700; color: var(--comp-muted);">Lean Index Age Percentile (optional)</label>
             <input id="rev-lean-percentile" type="number" step="1" placeholder="e.g. 43" style="min-height: 44px; border-radius: 10px; border: 1px solid var(--comp-line); background: rgba(10, 20, 35, 0.6); color: var(--comp-ink); padding: 8px 12px; font-size: 14px;" />
           </div>
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <label style="font-size: 13px; font-weight: 700; color: var(--comp-muted);">Total BMD (g/cm², optional)</label>
+            <input id="rev-bmd" type="number" step="0.001" placeholder="e.g. 1.014" style="min-height: 44px; border-radius: 10px; border: 1px solid var(--comp-line); background: rgba(10, 20, 35, 0.6); color: var(--comp-ink); padding: 8px 12px; font-size: 14px;" />
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <label style="font-size: 13px; font-weight: 700; color: var(--comp-muted);">BMD T-score (optional)</label>
+            <input id="rev-bmd-t" type="number" step="0.1" placeholder="e.g. -2.0" style="min-height: 44px; border-radius: 10px; border: 1px solid var(--comp-line); background: rgba(10, 20, 35, 0.6); color: var(--comp-ink); padding: 8px 12px; font-size: 14px;" />
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <label style="font-size: 13px; font-weight: 700; color: var(--comp-muted);">BMD Z-score (optional)</label>
+            <input id="rev-bmd-z" type="number" step="0.1" placeholder="e.g. -1.3" style="min-height: 44px; border-radius: 10px; border: 1px solid var(--comp-line); background: rgba(10, 20, 35, 0.6); color: var(--comp-ink); padding: 8px 12px; font-size: 14px;" />
+          </div>
         </div>
         
         <div style="display: flex; flex-direction: column; gap: 6px;">
@@ -493,6 +505,9 @@
         document.getElementById("rev-alm-index").value = out.appendicular_lean_mass_index || "";
         document.getElementById("rev-lean-height2").value = out.lean_height2_index || "";
         document.getElementById("rev-lean-percentile").value = out.lean_index_percentile || "";
+        document.getElementById("rev-bmd").value = out.bmd_g_cm2 || "";
+        document.getElementById("rev-bmd-t").value = out.bmd_t_score || "";
+        document.getElementById("rev-bmd-z").value = out.bmd_z_score || "";
         document.getElementById("rev-notes").value = "Scanned DEXA report. Clothed scan weight compared to morning weight.";
 
         // Reveal panel
@@ -525,6 +540,9 @@
       const almIndex = document.getElementById("rev-alm-index").value;
       const leanHeight2 = document.getElementById("rev-lean-height2").value;
       const leanPercentile = document.getElementById("rev-lean-percentile").value;
+      const bmd = document.getElementById("rev-bmd").value;
+      const bmdT = document.getElementById("rev-bmd-t").value;
+      const bmdZ = document.getElementById("rev-bmd-z").value;
       const notes = document.getElementById("rev-notes").value;
 
       if (!date || !scanWeight || !homeWeight || !bodyFat) {
@@ -549,6 +567,9 @@
           appendicular_lean_mass_index: almIndex ? parseFloat(almIndex) : null,
           lean_height2_index: leanHeight2 ? parseFloat(leanHeight2) : null,
           lean_index_percentile: leanPercentile ? parseInt(leanPercentile) : null,
+          bmd_g_cm2: bmd ? parseFloat(bmd) : null,
+          bmd_t_score: bmdT ? parseFloat(bmdT) : null,
+          bmd_z_score: bmdZ ? parseFloat(bmdZ) : null,
           notes
         };
 

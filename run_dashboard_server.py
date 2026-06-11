@@ -1754,6 +1754,16 @@ class DashboardHandler(SimpleHTTPRequestHandler):
                     alm_idx_m = re.search(r"Appen\.\s*Lean/Height²\s*\(kg/m²\)\s*(\d+\.?\d*)", text, re.IGNORECASE)
                     if alm_idx_m:
                         parsed_alm_index = float(alm_idx_m.group(1))
+
+                    # 9. Bone Mineral Density (BMD) & Scores
+                    parsed_bmd = None
+                    parsed_bmd_t = None
+                    parsed_bmd_z = None
+                    bmd_m = re.search(r"Total\s+[\d\.]+\s+[\d\.]+\s+(\d+\.\d+)\s+([-\d\.]+)\s+([-\d\.]+)", text, re.IGNORECASE)
+                    if bmd_m:
+                        parsed_bmd = float(bmd_m.group(1))
+                        parsed_bmd_t = float(bmd_m.group(2))
+                        parsed_bmd_z = float(bmd_m.group(3))
             except Exception:
                 pass
 
@@ -1774,6 +1784,9 @@ class DashboardHandler(SimpleHTTPRequestHandler):
                     "appendicular_lean_mass_index": parsed_alm_index,
                     "lean_height2_index": parsed_lean_height2_index,
                     "lean_index_percentile": parsed_lean_index_percentile,
+                    "bmd_g_cm2": parsed_bmd,
+                    "bmd_t_score": parsed_bmd_t,
+                    "bmd_z_score": parsed_bmd_z,
                     "upload_dir": str(dexa_scans_dir)
                 }
             )
@@ -1806,6 +1819,9 @@ class DashboardHandler(SimpleHTTPRequestHandler):
         alm_index = payload.get("appendicular_lean_mass_index")
         lean_height2 = payload.get("lean_height2_index")
         lean_percentile = payload.get("lean_index_percentile")
+        bmd = payload.get("bmd_g_cm2")
+        bmd_t = payload.get("bmd_t_score")
+        bmd_z = payload.get("bmd_z_score")
 
         if not (date and scan_weight and home_weight and body_fat_pct):
             self._json(400, {"ok": False, "error": "Missing required fields (Date, Scan Weight, Home Weight, Body Fat % are required)."})
@@ -1864,6 +1880,9 @@ class DashboardHandler(SimpleHTTPRequestHandler):
             "appendicular_lean_mass_index": float(alm_index) if alm_index is not None else None,
             "lean_height2_index": float(lean_height2) if lean_height2 is not None else None,
             "lean_index_percentile": int(lean_percentile) if lean_percentile is not None else None,
+            "bmd_g_cm2": float(bmd) if bmd is not None else None,
+            "bmd_t_score": float(bmd_t) if bmd_t is not None else None,
+            "bmd_z_score": float(bmd_z) if bmd_z is not None else None,
         }
 
         # Remove duplicate date if already exists to overwrite it
