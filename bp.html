@@ -124,9 +124,20 @@
     }
   </style>
   <link rel="stylesheet" href="./companion_theme.css" />
+  <script>
+    document.write('<script src="./bp_data.js?ts=' + Date.now() + '"><\/script>');
+  </script>
 </head>
 <body class="page-bp">
   <div class="wrap">
+    <div id="file-protocol-warning" style="display:none; background:rgba(220,137,32,0.14); color:#6d430c; padding:12px; border-radius:12px; margin-bottom:14px; font-weight:700; border:1px solid rgba(220,137,32,0.3); font-size:14px;">
+      ℹ️ Note: You are viewing this page directly from the filesystem (file://). Dashboard panels are loaded from local cache files and are fully interactive. However, performing new uploads or raw data changes requires starting the server and visiting <a href="http://localhost:3002/bp.html" style="color:#4d2e05; text-decoration:underline;">http://localhost:3002/bp.html</a> instead.
+    </div>
+    <script>
+      if (window.location.protocol === 'file:') {
+        document.getElementById('file-protocol-warning').style.display = 'block';
+      }
+    </script>
     <nav class="nav">
       <a href="./index.html">Home</a>
       <a href="./dashboard.html">Lab Results Dashboard</a>
@@ -273,38 +284,70 @@
     async function load() {
       const body = document.getElementById("bp-body");
       const kpis = document.getElementById("kpis");
+      let rows = [];
       try {
         const res = await fetch("/api/bp-data");
-        const out = await res.json();
-        const rows = (out.rows || []).slice();
-        if (!rows.length) {
-          kpis.innerHTML = `
-            <div><div class="kpi-label">Status</div><div class="kpi-val empty" style="font-size:20px;">No BP data in last 90 days</div></div>
-            <div><div class="kpi-label">Next step</div><div class="kpi-val" style="font-size:18px;">Upload BP CSV from Admin page</div></div>
-          `;
-          body.innerHTML = `<tr><td colspan="5" class="empty">No BP data for last 90 days.</td></tr>`;
-          showNoDataInChart("bp-chart-sys");
-          showNoDataInChart("bp-chart-dias");
-          showNoDataInChart("bp-chart-pulse");
-          return;
+        if (res.ok) {
+          const out = await res.json();
+          rows = (out.rows || []).slice();
         }
-        const latest = rows[rows.length - 1];
-        const avg = (k) => Math.round(rows.reduce((s, r) => s + Number(r[k] || 0), 0) / rows.length);
-        kpis.innerHTML = `
-          <div class="card"><div class="kpi-label">Latest SYS</div><div class="kpi-val">${latest.systolic}</div></div>
-          <div class="card"><div class="kpi-label">Latest DIAS</div><div class="kpi-val">${latest.diastolic}</div></div>
-          <div class="card"><div class="kpi-label">Latest Pulse</div><div class="kpi-val">${latest.pulse}</div></div>
-          <div class="card"><div class="kpi-label">90d Avg SYS/DIAS</div><div class="kpi-val">${avg("systolic")}/${avg("diastolic")}</div></div>
-        `;
-        body.innerHTML = rows.slice().reverse().map(r =>
-          `<tr><td>${fmtDate(r.date)}</td><td>${fmtTime(r.time)}</td><td>${r.systolic}</td><td>${r.diastolic}</td><td>${r.pulse}</td></tr>`
-        ).join("");
-        drawSingle(rows, "bp-chart-sys", "systolic", "#58c8ff", "meta-sys");
-        drawSingle(rows, "bp-chart-dias", "diastolic", "#7ee08f", "meta-dias");
-        drawSingle(rows, "bp-chart-pulse", "pulse", "#ffb073", "meta-pulse");
       } catch (_e) {
-        body.innerHTML = `<tr><td colspan="5" class="empty">Failed to load BP data.</td></tr>`;
+        console.warn("Fetch BP API failed, trying local fallback", _e);
       }
+
+      if (!rows.length && window.BP_DASH_DATA && window.BP_DASH_DATA.length) {
+        // Fallback to static JS data
+        // Filter to last 90 days matching server behavior
+        const dated = [];
+        for (const r of window.BP_DASH_DATA) {
+          const parts = (r.date || "").split("-");
+          if (parts.length === 3) {
+            const dt = new Date(`${r.date}T${r.time || '00:00'}:00`);
+            if (!isNaN(dt.getTime())) {
+              dated.push({ dt, r });
+            }
+          }
+        }
+        if (dated.length > 0) {
+          // Find max date in the dataset
+          let maxDt = dated[0].dt;
+          for (const item of dated) {
+            if (item.dt > maxDt) maxDt = item.dt;
+          }
+          // Threshold is max date minus 90 days
+          const threshold = new Date(maxDt.getTime() - 90 * 24 * 60 * 60 * 1000);
+          rows = dated
+            .filter(item => item.dt >= threshold)
+            .map(item => item.r);
+          rows.sort((a, b) => a.date.localeCompare(b.date) || a.time.localeCompare(b.time));
+        }
+      }
+
+      if (!rows.length) {
+        kpis.innerHTML = `
+          <div><div class="kpi-label">Status</div><div class="kpi-val empty" style="font-size:20px;">No BP data in last 90 days</div></div>
+          <div><div class="kpi-label">Next step</div><div class="kpi-val" style="font-size:18px;">Upload BP CSV from Admin page</div></div>
+        `;
+        body.innerHTML = `<tr><td colspan="5" class="empty">No BP data for last 90 days.</td></tr>`;
+        showNoDataInChart("bp-chart-sys");
+        showNoDataInChart("bp-chart-dias");
+        showNoDataInChart("bp-chart-pulse");
+        return;
+      }
+      const latest = rows[rows.length - 1];
+      const avg = (k) => Math.round(rows.reduce((s, r) => s + Number(r[k] || 0), 0) / rows.length);
+      kpis.innerHTML = `
+        <div class="card"><div class="kpi-label">Latest SYS</div><div class="kpi-val">${latest.systolic}</div></div>
+        <div class="card"><div class="kpi-label">Latest DIAS</div><div class="kpi-val">${latest.diastolic}</div></div>
+        <div class="card"><div class="kpi-label">Latest Pulse</div><div class="kpi-val">${latest.pulse}</div></div>
+        <div class="card"><div class="kpi-label">90d Avg SYS/DIAS</div><div class="kpi-val">${avg("systolic")}/${avg("diastolic")}</div></div>
+      `;
+      body.innerHTML = rows.slice().reverse().map(r =>
+        `<tr><td>${fmtDate(r.date)}</td><td>${fmtTime(r.time)}</td><td>${r.systolic}</td><td>${r.diastolic}</td><td>${r.pulse}</td></tr>`
+      ).join("");
+      drawSingle(rows, "bp-chart-sys", "systolic", "#58c8ff", "meta-sys");
+      drawSingle(rows, "bp-chart-dias", "diastolic", "#7ee08f", "meta-dias");
+      drawSingle(rows, "bp-chart-pulse", "pulse", "#ffb073", "meta-pulse");
     }
     load();
   </script>

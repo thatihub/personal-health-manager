@@ -204,9 +204,20 @@
     }
   </style>
   <link rel="stylesheet" href="./companion_theme.css" />
+  <script>
+    document.write('<script src="./bio_age_data.js?ts=' + Date.now() + '"><\/script>');
+  </script>
 </head>
 <body class="page-bioage">
   <div class="wrap">
+    <div id="file-protocol-warning" style="display:none; background:rgba(220,137,32,0.14); color:#b3c3d4; padding:12px; border-radius:12px; margin-bottom:14px; font-weight:700; border:1px solid rgba(220,137,32,0.3); font-size:14px;">
+      ℹ️ Note: You are viewing this page directly from the filesystem (file://). Dashboard panels are loaded from local cache files and are fully interactive. However, performing new uploads or raw data changes requires starting the server and visiting <a href="http://localhost:3002/bio-age.html" style="color:#ffffff; text-decoration:underline;">http://localhost:3002/bio-age.html</a> instead.
+    </div>
+    <script>
+      if (window.location.protocol === 'file:') {
+        document.getElementById('file-protocol-warning').style.display = 'block';
+      }
+    </script>
     <nav class="nav">
       <a href="./index.html">Home</a>
       <a href="./dashboard.html">Lab Results Dashboard</a>
@@ -283,9 +294,21 @@
     }
 
     async function loadDashboard() {
-      const res = await fetch("/api/ag-dashboard-data");
-      const data = await res.json();
-      if (!res.ok || !data.ok) {
+      let data = null;
+      try {
+        const res = await fetch("/api/ag-dashboard-data");
+        if (res.ok) {
+          data = await res.json();
+        }
+      } catch (_e) {
+        console.warn("Fetch AG API failed, trying local fallback", _e);
+      }
+
+      if ((!data || !data.ok) && window.BIO_AGE_DATA && window.BIO_AGE_DATA.ok) {
+        data = window.BIO_AGE_DATA;
+      }
+
+      if (!data || !data.ok) {
         document.getElementById("timeline-body").innerHTML = "<tr><td colspan='7'>Failed to load AG data.</td></tr>";
         return;
       }

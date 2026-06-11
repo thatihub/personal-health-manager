@@ -218,9 +218,20 @@
     .hidden { display: none !important; }
   </style>
   <link rel="stylesheet" href="./companion_theme.css" />
+  <script>
+    document.write('<script src="./dexa_data.js?ts=' + Date.now() + '"><\/script>');
+  </script>
 </head>
 <body class="page-composition">
   <div class="wrap">
+    <div id="file-protocol-warning" style="display:none; background:rgba(220,137,32,0.14); color:#b3c3d4; padding:12px; border-radius:12px; margin-bottom:14px; font-weight:700; border:1px solid rgba(220,137,32,0.3); font-size:14px;">
+      ℹ️ Note: You are viewing this page directly from the filesystem (file://). Dashboard panels are loaded from local cache files and are fully interactive. However, performing new uploads or raw data changes requires starting the server and visiting <a href="http://localhost:3002/composition.html" style="color:#ffffff; text-decoration:underline;">http://localhost:3002/composition.html</a> instead.
+    </div>
+    <script>
+      if (window.location.protocol === 'file:') {
+        document.getElementById('file-protocol-warning').style.display = 'block';
+      }
+    </script>
     <nav class="nav">
       <a href="./index.html">Home</a>
       <a href="./dashboard.html">Lab Results Dashboard</a>
@@ -680,9 +691,21 @@
       updateLastUpdatedBanner();
       
       try {
-        const res = await fetch("/api/dexa-data");
-        const out = await res.json();
-        rawRecords = out.rows || [];
+        let out = null;
+        try {
+          const res = await fetch("/api/dexa-data");
+          if (res.ok) {
+            out = await res.json();
+          }
+        } catch (_e) {
+          console.warn("Fetch DEXA API failed, trying local fallback", _e);
+        }
+
+        if ((!out || !out.rows) && window.DEXA_DATA && window.DEXA_DATA.rows) {
+          out = window.DEXA_DATA;
+        }
+
+        rawRecords = (out && out.rows) || [];
         
         if (rawRecords.length > 0) {
           renderKPIs(rawRecords[rawRecords.length - 1]);

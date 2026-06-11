@@ -1426,6 +1426,9 @@ class DashboardHandler(SimpleHTTPRequestHandler):
         if row_count < 1:
             self._restore_outputs(before)
             return result, "Rebuild produced no valid report rows; previous dashboard restored"
+        
+        # Successful rebuild - export latest static JS files
+        self._export_static_files()
         return result, None
 
     def _handle_admin_pdf_upload(self) -> None:
@@ -1540,6 +1543,7 @@ class DashboardHandler(SimpleHTTPRequestHandler):
         existing = self._read_existing_bp()
         merged, added = self._merge_bp_rows(existing, incoming)
         self._write_bp_rows(merged)
+        self._export_static_files()
         self._json(
             200,
             {
@@ -1875,6 +1879,34 @@ class DashboardHandler(SimpleHTTPRequestHandler):
 
         self._json(200, {"ok": True, "date": date})
 
+    def _export_static_files(self) -> None:
+        try:
+            # 1. Export Biological Age snapshot to bio_age_data.js
+            snapshot = self._compute_ag_snapshot()
+            bio_age_js = PROJECT_DIR / "bio_age_data.js"
+            js_content = "window.BIO_AGE_DATA = " + json.dumps(snapshot, indent=2) + ";\n"
+            bio_age_js.write_text(js_content, encoding="utf-8")
+        except Exception as e:
+            print(f"Error exporting bio_age_data.js: {e}")
+
+        try:
+            # 2. Export BP readings to bp_data.js
+            rows = self._read_existing_bp()
+            bp_js = PROJECT_DIR / "bp_data.js"
+            js_content = "window.BP_DASH_DATA = " + json.dumps(rows, indent=2) + ";\n"
+            bp_js.write_text(js_content, encoding="utf-8")
+        except Exception as e:
+            print(f"Error exporting bp_data.js: {e}")
+
+        try:
+            # 3. Export DEXA data to dexa_data.js
+            rows = self._load_dexa_data()
+            dexa_js = PROJECT_DIR / "dexa_data.js"
+            js_content = "window.DEXA_DATA = " + json.dumps({"ok": True, "rows": rows}, indent=2) + ";\n"
+            dexa_js.write_text(js_content, encoding="utf-8")
+        except Exception as e:
+            print(f"Error exporting dexa_data.js: {e}")
+
     def _json(self, status: int, payload: dict[str, object]) -> None:
         body = json.dumps(payload).encode("utf-8")
         self.send_response(status)
@@ -1890,15 +1922,18 @@ class DashboardHandler(SimpleHTTPRequestHandler):
             return
         if path == "/api/ag-dashboard-data":
             self._json(200, self._compute_ag_snapshot())
+            self._export_static_files()
             return
         if path == "/api/history":
             self._json(200, self._history_payload())
             return
         if path == "/api/bp-data":
             self._json(200, {"ok": True, "days": 90, "rows": self._bp_last_days(90)})
+            self._export_static_files()
             return
         if path == "/api/dexa-data":
             self._json(200, {"ok": True, "rows": self._load_dexa_data()})
+            self._export_static_files()
             return
         if self._require_admin_auth():
             return
@@ -2051,9 +2086,23 @@ class DashboardHandler(SimpleHTTPRequestHandler):
             REBUILD_LOCK.release()
 
 
+class StaticExporter:
+    def __getattr__(self, name: str) -> Any:
+        val = getattr(DashboardHandler, name)
+        if callable(val):
+            return val.__get__(self, StaticExporter)
+        return val
+
+
 def main() -> None:
     args = parse_args()
     rebuild_if_needed(args.no_rebuild)
+
+    # Export all initial static files to support file:// protocol fallback
+    try:
+        StaticExporter()._export_static_files()
+    except Exception as e:
+        print(f"Warning: could not generate initial static JS files: {e}")
 
     os.chdir(PROJECT_DIR)
     server = ThreadingHTTPServer((args.host, args.port), DashboardHandler)

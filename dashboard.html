@@ -475,6 +475,14 @@
 </head>
 <body class="page-dashboard">
   <div class="wrap">
+    <div id="file-protocol-warning" style="display:none; background:rgba(220,137,32,0.14); color:#6d430c; padding:12px; border-radius:12px; margin-bottom:14px; font-weight:700; border:1px solid rgba(220,137,32,0.3); font-size:14px;">
+      ℹ️ Note: You are viewing this page directly from the filesystem (file://). Dashboard panels are loaded from local cache files and are fully interactive. However, performing new uploads or raw data changes requires starting the server and visiting <a href="http://localhost:3002/dashboard.html" style="color:#4d2e05; text-decoration:underline;">http://localhost:3002/dashboard.html</a> instead.
+    </div>
+    <script>
+      if (window.location.protocol === 'file:') {
+        document.getElementById('file-protocol-warning').style.display = 'block';
+      }
+    </script>
     <nav class="top-nav">
       <a href="./index.html">Home</a>
       <a class="active" href="./dashboard.html">Lab Results Dashboard</a>
