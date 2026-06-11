@@ -510,6 +510,12 @@ class DashboardHandler(SimpleHTTPRequestHandler):
             "potassium": "mmol/L",
             "calcium": "mg/dL",
             "magnesium": "mg/dL",
+            "rbc": "10^6/uL",
+            "vitamin_d": "ng/mL",
+            "vitamin_b12": "pg/mL",
+            "psa": "ng/mL",
+            "thyroglobulin_ab": "IU/mL",
+            "tpo_ab": "IU/mL",
         }
         return unit_map.get(standard_name, "")
 
@@ -653,6 +659,16 @@ class DashboardHandler(SimpleHTTPRequestHandler):
             "sodium_mmol_l": ("sodium", "mmol/L"),
             "potassium_mmol_l": ("potassium", "mmol/L"),
             "calcium_mg_dl": ("calcium", "mg/dL"),
+            "wbc_x10e3_ul": ("wbc", "10^3/uL"),
+            "rbc_x10e6_ul": ("rbc", "10^6/uL"),
+            "hemoglobin_g_dl": ("hemoglobin", "g/dL"),
+            "hematocrit_pct": ("hematocrit", "%"),
+            "platelets_x10e3_ul": ("platelets", "10^3/uL"),
+            "vitamin_d_ng_ml": ("vitamin_d", "ng/mL"),
+            "vitamin_b12_pg_ml": ("vitamin_b12", "pg/mL"),
+            "psa_ng_ml": ("psa", "ng/mL"),
+            "thyroglobulin_ab_iu_ml": ("thyroglobulin_ab", "IU/mL"),
+            "tpo_ab_iu_ml": ("tpo_ab", "IU/mL"),
         }
         rows: list[dict[str, object]] = []
         for report in self._read_consolidated_reports():
@@ -718,6 +734,16 @@ class DashboardHandler(SimpleHTTPRequestHandler):
             return self._score_by_bands(value, [(0.0, 40.0, 92), (40.1, 80.0, 70), (80.1, 600.0, 35)])
         if marker == "tsh":
             return self._score_by_bands(value, [(0.0, 0.39, 55), (0.4, 2.5, 95), (2.51, 4.5, 75), (4.51, 9.0, 45), (9.01, 100.0, 20)])
+        if marker == "free_t4":
+            return self._score_by_bands(value, [(0.0, 0.81, 55), (0.82, 1.77, 95), (1.78, 2.5, 65), (2.51, 10.0, 35)])
+        if marker == "wbc":
+            return self._score_by_bands(value, [(0.0, 3.39, 60), (3.4, 10.8, 95), (10.81, 15.0, 70), (15.01, 100.0, 40)])
+        if marker == "hemoglobin":
+            return self._score_by_bands(value, [(0.0, 11.9, 45), (12.0, 12.9, 75), (13.0, 17.7, 95), (17.71, 20.0, 75), (20.01, 50.0, 40)])
+        if marker == "hematocrit":
+            return self._score_by_bands(value, [(0.0, 34.9, 45), (35.0, 37.4, 75), (37.5, 51.0, 95), (51.01, 55.0, 75), (55.01, 100.0, 40)])
+        if marker == "platelets":
+            return self._score_by_bands(value, [(0.0, 149.0, 60), (150.0, 450.0, 95), (450.1, 600.0, 70), (600.1, 2000.0, 40)])
         if marker in {"sodium", "potassium", "calcium"}:
             return 90
         if marker in {"crp", "hs_crp"}:
