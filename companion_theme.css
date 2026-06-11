@@ -187,18 +187,38 @@ thead th {
   text-shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
   font-family: "Plus Jakarta Sans", sans-serif !important;
   font-weight: 700 !important;
-  font-size: 20px !important;
+  font-size: 14px !important; /* Reduced to 1x */
   letter-spacing: -0.015em !important;
 }
 tbody td {
   color: #eef5fc !important;
   border-bottom: 1px solid rgba(127, 161, 194, 0.26) !important;
   font-weight: 500 !important;
-  font-size: 22px !important;
+  font-size: 14px !important; /* Dates, units, notes, etc. reduced to 1x */
 }
-tbody td.num {
+tbody td.num,
+tbody td .value-pill {
+  font-size: 24px !important; /* Test data values kept at 1.5x */
   font-variant-numeric: tabular-nums;
-  font-weight: 600 !important;
+  font-weight: 700 !important;
+}
+/* BP page values (SYS, DIAS, Pulse start at 3rd column) */
+body.page-bp tbody td:nth-child(n+3) {
+  font-size: 24px !important;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700 !important;
+}
+/* Bio-age page values (5th column: value_numeric) */
+body.page-bioage tbody td:nth-child(5) {
+  font-size: 24px !important;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700 !important;
+}
+/* Body Composition page values (all columns except Date and Notes) */
+body.page-composition tbody td:not(:first-child):not(.cell-notes) {
+  font-size: 24px !important;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700 !important;
 }
 tbody tr:nth-child(odd) td { background: #0f1c2b !important; }
 tbody tr:nth-child(even) td { background: #132335 !important; }
