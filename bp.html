@@ -122,6 +122,41 @@
       .chart-grid { grid-template-columns: 1fr 1fr 1fr; }
       svg { height: 260px; }
     }
+    .view-toggle-container {
+      display: flex;
+      justify-content: flex-start;
+      margin-bottom: 14px;
+    }
+    .view-toggle {
+      display: inline-flex;
+      background: rgba(17, 28, 42, 0.6);
+      border: 1px solid var(--comp-line);
+      border-radius: 14px;
+      padding: 4px;
+      gap: 4px;
+      box-shadow: var(--comp-shadow);
+    }
+    .toggle-btn {
+      background: transparent;
+      border: none;
+      padding: 8px 18px;
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--comp-muted);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      outline: none;
+    }
+    .toggle-btn:hover {
+      color: var(--comp-ink);
+      background: rgba(255, 255, 255, 0.04);
+    }
+    .toggle-btn.active {
+      background: linear-gradient(120deg, var(--page-accent-2), var(--page-accent)) !important;
+      color: #fff !important;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    }
   </style>
   <link rel="stylesheet" href="./companion_theme.css" />
   <script>
@@ -154,6 +189,13 @@
       <div class="hero-title">Blood Pressure Monitor</div>
       <div class="hero-sub">Professional view with separate SYS, DIAS, and Pulse trend panels.</div>
     </section>
+
+    <div class="view-toggle-container">
+      <div class="view-toggle">
+        <button id="btn-raw" class="toggle-btn active" onclick="setViewMode('raw')">All Readings</button>
+        <button id="btn-avg" class="toggle-btn" onclick="setViewMode('avg')">Averaged Trend</button>
+      </div>
+    </div>
 
     <section class="card kpis" id="kpis"></section>
     <section class="card">
@@ -281,9 +323,102 @@
       svg.innerHTML = html;
     }
 
-    async function load() {
+    let allRawRows = [];
+    let currentViewMode = "raw";
+
+    function getAveragedRows(rawRows) {
+      const groups = {};
+      for (const r of rawRows) {
+        const d = r.date;
+        const t = r.time || "00:00";
+        const h = parseInt(t.split(":")[0], 10) || 0;
+        const key = `${d}_${h}`;
+        if (!groups[key]) {
+          groups[key] = [];
+        }
+        groups[key].push(r);
+      }
+
+      const averaged = [];
+      for (const key in groups) {
+        const groupRows = groups[key];
+        if (groupRows.length < 2) {
+          averaged.push(...groupRows);
+          continue;
+        }
+        // Sort chronologically by time
+        groupRows.sort((a, b) => (a.time || "").localeCompare(b.time || ""));
+        
+        // Discard the first reading
+        const remaining = groupRows.slice(1);
+        
+        // Average the remaining readings
+        const sumSys = remaining.reduce((sum, r) => sum + Number(r.systolic || 0), 0);
+        const sumDia = remaining.reduce((sum, r) => sum + Number(r.diastolic || 0), 0);
+        const sumPulse = remaining.reduce((sum, r) => sum + Number(r.pulse || 0), 0);
+        const count = remaining.length;
+        
+        averaged.push({
+          date: groupRows[0].date,
+          time: remaining[0].time,
+          systolic: Math.round(sumSys / count),
+          diastolic: Math.round(sumDia / count),
+          pulse: Math.round(sumPulse / count),
+          source_file: remaining[0].source_file || ""
+        });
+      }
+      
+      // Sort chronologically by date and time
+      averaged.sort((a, b) => a.date.localeCompare(b.date) || (a.time || "").localeCompare(b.time || ""));
+      return averaged;
+    }
+
+    function setViewMode(mode) {
+      currentViewMode = mode;
+      document.getElementById("btn-raw").classList.toggle("active", mode === "raw");
+      document.getElementById("btn-avg").classList.toggle("active", mode === "avg");
+      renderDashboard();
+    }
+
+    function renderDashboard() {
       const body = document.getElementById("bp-body");
       const kpis = document.getElementById("kpis");
+      
+      let rows = allRawRows;
+      if (currentViewMode === "avg") {
+        rows = getAveragedRows(allRawRows);
+      }
+
+      if (!rows.length) {
+        kpis.innerHTML = `
+          <div><div class="kpi-label">Status</div><div class="kpi-val empty" style="font-size:20px;">No BP data in last 90 days</div></div>
+          <div><div class="kpi-label">Next step</div><div class="kpi-val" style="font-size:18px;">Upload BP CSV from Admin page</div></div>
+        `;
+        body.innerHTML = `<tr><td colspan="5" class="empty">No BP data for last 90 days.</td></tr>`;
+        showNoDataInChart("bp-chart-sys");
+        showNoDataInChart("bp-chart-dias");
+        showNoDataInChart("bp-chart-pulse");
+        return;
+      }
+      
+      const latest = rows[rows.length - 1];
+      const avg = (k) => Math.round(rows.reduce((s, r) => s + Number(r[k] || 0), 0) / rows.length);
+      kpis.innerHTML = `
+        <div class="card"><div class="kpi-label">Latest SYS</div><div class="kpi-val">${latest.systolic}</div></div>
+        <div class="card"><div class="kpi-label">Latest DIAS</div><div class="kpi-val">${latest.diastolic}</div></div>
+        <div class="card"><div class="kpi-label">Latest Pulse</div><div class="kpi-val">${latest.pulse}</div></div>
+        <div class="card"><div class="kpi-label">90d Avg SYS/DIAS</div><div class="kpi-val">${avg("systolic")}/${avg("diastolic")}</div></div>
+      `;
+      body.innerHTML = rows.slice().reverse().map(r =>
+        `<tr><td>${fmtDate(r.date)}</td><td>${fmtTime(r.time)}</td><td>${r.systolic}</td><td>${r.diastolic}</td><td>${r.pulse}</td></tr>`
+      ).join("");
+      
+      drawSingle(rows, "bp-chart-sys", "systolic", "#58c8ff", "meta-sys");
+      drawSingle(rows, "bp-chart-dias", "diastolic", "#7ee08f", "meta-dias");
+      drawSingle(rows, "bp-chart-pulse", "pulse", "#ffb073", "meta-pulse");
+    }
+
+    async function load() {
       let rows = [];
       try {
         const res = await fetch("/api/bp-data");
@@ -322,32 +457,8 @@
           rows.sort((a, b) => a.date.localeCompare(b.date) || a.time.localeCompare(b.time));
         }
       }
-
-      if (!rows.length) {
-        kpis.innerHTML = `
-          <div><div class="kpi-label">Status</div><div class="kpi-val empty" style="font-size:20px;">No BP data in last 90 days</div></div>
-          <div><div class="kpi-label">Next step</div><div class="kpi-val" style="font-size:18px;">Upload BP CSV from Admin page</div></div>
-        `;
-        body.innerHTML = `<tr><td colspan="5" class="empty">No BP data for last 90 days.</td></tr>`;
-        showNoDataInChart("bp-chart-sys");
-        showNoDataInChart("bp-chart-dias");
-        showNoDataInChart("bp-chart-pulse");
-        return;
-      }
-      const latest = rows[rows.length - 1];
-      const avg = (k) => Math.round(rows.reduce((s, r) => s + Number(r[k] || 0), 0) / rows.length);
-      kpis.innerHTML = `
-        <div class="card"><div class="kpi-label">Latest SYS</div><div class="kpi-val">${latest.systolic}</div></div>
-        <div class="card"><div class="kpi-label">Latest DIAS</div><div class="kpi-val">${latest.diastolic}</div></div>
-        <div class="card"><div class="kpi-label">Latest Pulse</div><div class="kpi-val">${latest.pulse}</div></div>
-        <div class="card"><div class="kpi-label">90d Avg SYS/DIAS</div><div class="kpi-val">${avg("systolic")}/${avg("diastolic")}</div></div>
-      `;
-      body.innerHTML = rows.slice().reverse().map(r =>
-        `<tr><td>${fmtDate(r.date)}</td><td>${fmtTime(r.time)}</td><td>${r.systolic}</td><td>${r.diastolic}</td><td>${r.pulse}</td></tr>`
-      ).join("");
-      drawSingle(rows, "bp-chart-sys", "systolic", "#58c8ff", "meta-sys");
-      drawSingle(rows, "bp-chart-dias", "diastolic", "#7ee08f", "meta-dias");
-      drawSingle(rows, "bp-chart-pulse", "pulse", "#ffb073", "meta-pulse");
+      allRawRows = rows;
+      renderDashboard();
     }
     load();
   </script>
