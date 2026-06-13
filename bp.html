@@ -225,7 +225,7 @@
     </section>
     <section class="card" style="overflow:auto; max-height:520px;">
       <table>
-        <thead><tr><th>Date</th><th>Time</th><th>SYS</th><th>DIAS</th><th>Pulse</th></tr></thead>
+        <thead><tr><th>Date</th><th>Time</th><th>SYS</th><th>DIAS</th><th title="Pulse Pressure (Systolic - Diastolic). Normal range: 40-60 mmHg.">PP <span style="font-size: 11.5px; cursor: help; opacity: 0.8;">ⓘ</span></th><th>Pulse</th></tr></thead>
         <tbody id="bp-body"></tbody>
       </table>
     </section>
@@ -394,7 +394,7 @@
           <div><div class="kpi-label">Status</div><div class="kpi-val empty" style="font-size:20px;">No BP data in last 90 days</div></div>
           <div><div class="kpi-label">Next step</div><div class="kpi-val" style="font-size:18px;">Upload BP CSV from Admin page</div></div>
         `;
-        body.innerHTML = `<tr><td colspan="5" class="empty">No BP data for last 90 days.</td></tr>`;
+        body.innerHTML = `<tr><td colspan="6" class="empty">No BP data for last 90 days.</td></tr>`;
         showNoDataInChart("bp-chart-sys");
         showNoDataInChart("bp-chart-dias");
         showNoDataInChart("bp-chart-pulse");
@@ -403,15 +403,63 @@
       
       const latest = rows[rows.length - 1];
       const avg = (k) => Math.round(rows.reduce((s, r) => s + Number(r[k] || 0), 0) / rows.length);
+      
+      const latestPP = latest.systolic - latest.diastolic;
+      const avgSys = avg("systolic");
+      const avgDias = avg("diastolic");
+      const avgPP = avgSys - avgDias;
+      
+      // Color-coding for Latest PP
+      let ppColor = '#85f2b8'; // Normal green
+      let ppLabel = 'Normal';
+      if (latestPP > 60) {
+        ppColor = '#ff8fa0'; // Widened (high) red/pink
+        ppLabel = 'Widened';
+      } else if (latestPP < 40) {
+        ppColor = '#ffd081'; // Narrow (low) yellow/amber
+        ppLabel = 'Narrow';
+      }
+      
+      // Color-coding for Average PP
+      let avgPPColor = '#85f2b8';
+      let avgPPLabel = 'Normal';
+      if (avgPP > 60) {
+        avgPPColor = '#ff8fa0';
+        avgPPLabel = 'Widened';
+      } else if (avgPP < 40) {
+        avgPPColor = '#ffd081';
+        avgPPLabel = 'Narrow';
+      }
+
       kpis.innerHTML = `
         <div class="card"><div class="kpi-label">Latest SYS</div><div class="kpi-val">${latest.systolic}</div></div>
         <div class="card"><div class="kpi-label">Latest DIAS</div><div class="kpi-val">${latest.diastolic}</div></div>
+        <div class="card" title="Pulse Pressure (SYS - DIAS). Normal range: 40-60 mmHg. High (>60) indicates arterial stiffness. Low (<40) indicates low cardiac output."><div class="kpi-label">Latest PP <span style="cursor:help; opacity:0.8;">ⓘ</span></div><div class="kpi-val" style="color: ${ppColor} !important;">${latestPP}</div></div>
         <div class="card"><div class="kpi-label">Latest Pulse</div><div class="kpi-val">${latest.pulse}</div></div>
-        <div class="card"><div class="kpi-label">90d Avg SYS/DIAS</div><div class="kpi-val">${avg("systolic")}/${avg("diastolic")}</div></div>
+        <div class="card"><div class="kpi-label">90d Avg SYS/DIAS</div><div class="kpi-val">${avgSys}/${avgDias}</div></div>
+        <div class="card" title="Average Pulse Pressure over the last 90 days. Normal range: 40-60 mmHg."><div class="kpi-label">90d Avg PP <span style="cursor:help; opacity:0.8;">ⓘ</span></div><div class="kpi-val" style="color: ${avgPPColor} !important;">${avgPP}</div></div>
       `;
-      body.innerHTML = rows.slice().reverse().map(r =>
-        `<tr><td>${fmtDate(r.date)}</td><td>${fmtTime(r.time)}</td><td>${r.systolic}</td><td>${r.diastolic}</td><td>${r.pulse}</td></tr>`
-      ).join("");
+      
+      body.innerHTML = rows.slice().reverse().map(r => {
+        const pp = r.systolic - r.diastolic;
+        let rowPPColor = '#85f2b8';
+        let rowPPLabel = 'Normal';
+        if (pp > 60) {
+          rowPPColor = '#ff8fa0';
+          rowPPLabel = 'Widened';
+        } else if (pp < 40) {
+          rowPPColor = '#ffd081';
+          rowPPLabel = 'Narrow';
+        }
+        return `<tr>
+          <td>${fmtDate(r.date)}</td>
+          <td>${fmtTime(r.time)}</td>
+          <td>${r.systolic}</td>
+          <td>${r.diastolic}</td>
+          <td style="color: ${rowPPColor} !important;" title="Pulse Pressure: ${pp} mmHg (${rowPPLabel})">${pp}</td>
+          <td>${r.pulse}</td>
+        </tr>`;
+      }).join("");
       
       drawSingle(rows, "bp-chart-sys", "systolic", "#58c8ff", "meta-sys");
       drawSingle(rows, "bp-chart-dias", "diastolic", "#7ee08f", "meta-dias");
