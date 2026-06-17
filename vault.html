@@ -316,88 +316,6 @@
       display: none !important;
     }
 
-    .after-hours {
-      margin: 0 0 14px;
-      padding: 16px;
-      border-radius: 16px;
-      background: rgba(10, 25, 41, 0.8) !important;
-      border: 1px solid rgba(27, 196, 113, 0.35) !important;
-      box-shadow: 0 8px 24px rgba(27, 196, 113, 0.15) !important;
-    }
-
-    .after-hours-header-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 6px;
-    }
-
-    .after-hours-member-title {
-      font-size: 20px;
-      font-weight: 800;
-      color: #f4f8fc !important;
-      font-family: "Avenir Next Condensed", "Trebuchet MS", sans-serif;
-      letter-spacing: 0.5px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .after-hours-member-title .member-id-val {
-      background: rgba(27, 196, 113, 0.2);
-      color: #73ecb4 !important;
-      padding: 3px 8px;
-      border-radius: 6px;
-      letter-spacing: 0.5px;
-      font-weight: 800;
-    }
-
-    .after-hours-sub-title {
-      font-size: 12px;
-      font-weight: 700;
-      color: #ff9d8c !important;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      margin-bottom: 12px;
-      padding-bottom: 8px;
-      border-bottom: 1px solid rgba(27, 196, 113, 0.2);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .after-hours .row {
-      font-size: 12.5px !important;
-      padding: 8px 0;
-      border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
-    }
-
-    .after-hours .row:first-child {
-      border-top: 0;
-      padding-top: 0;
-    }
-
-    .after-hours .v {
-      font-size: 12.5px !important;
-      font-weight: 700;
-      color: #d6e5f3 !important;
-    }
-
-    .after-hours .phone-link {
-      font-size: 12.5px !important;
-      color: #73ecb4 !important;
-    }
-
-    .after-hours .muted {
-      font-size: 11px !important;
-      color: #98adbf !important;
-    }
-
-    .after-hours.hidden {
-      display: none;
-    }
-
     .grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -751,6 +669,160 @@
       border-bottom-style: solid;
       filter: brightness(1.1);
     }
+
+    /* Quick Reference Card Styles */
+    .quick-reference-card {
+      margin: 0 0 16px;
+      padding: 20px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, rgba(10, 25, 41, 0.9) 0%, rgba(16, 43, 61, 0.95) 100%) !important;
+      border: 1px solid rgba(27, 196, 113, 0.35) !important;
+      box-shadow: 0 12px 32px rgba(10, 25, 41, 0.25) !important;
+      color: #fff;
+    }
+
+    .qr-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1.2fr 1.6fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .qr-col {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .qr-col:not(:last-child) {
+      border-right: 1px solid rgba(255, 255, 255, 0.1);
+      padding-right: 20px;
+    }
+
+    .qr-label {
+      font-size: 11px;
+      font-weight: 800;
+      color: #ff9d8c;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+    }
+
+    .qr-value-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .qr-value {
+      font-size: 24px;
+      font-weight: 900;
+      color: #fff;
+      font-family: "Avenir Next Condensed", "Trebuchet MS", sans-serif;
+      letter-spacing: 0.5px;
+    }
+
+    #qr-member-id {
+      color: #73ecb4;
+    }
+
+    #qr-network-name {
+      color: #8fcff5;
+    }
+
+    .qr-sub-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: #b5cde0;
+    }
+
+    .qr-network-details {
+      font-size: 12.5px;
+      color: #d6e5f3;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      margin-top: 4px;
+    }
+
+    .qr-network-details a {
+      color: #8fcff5 !important;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .qr-network-details a:hover {
+      text-decoration: underline;
+    }
+
+    .qr-care-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 2px;
+    }
+
+    .qr-care-item {
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .qr-care-name {
+      font-weight: 700;
+      color: #ffd081;
+    }
+
+    .qr-care-phone {
+      color: #73ecb4 !important;
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .qr-care-phone:hover {
+      text-decoration: underline;
+    }
+
+    .qr-care-meta {
+      font-size: 11px;
+      color: #98adbf;
+      margin-left: 20px;
+    }
+
+    @media (max-width: 1024px) {
+      .qr-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      .qr-col:nth-child(2) {
+        border-right: none;
+        padding-right: 0;
+      }
+      .qr-col:nth-child(3) {
+        grid-column: span 2;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding-top: 16px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .qr-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+      .qr-col {
+        border-right: none !important;
+        padding-right: 0 !important;
+      }
+      .qr-col:not(:first-child) {
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding-top: 16px;
+      }
+      .qr-col:nth-child(3) {
+        grid-column: span 1;
+      }
+      .qr-value {
+        font-size: 20px;
+      }
+    }
   </style>
   <link rel="stylesheet" href="./companion_theme.css" />
 </head>
@@ -798,43 +870,46 @@
       </div>
       <div class="status" id="json-editor-status">Edit mode is off.</div>
     </section>
-    <section class="after-hours hidden" id="after-hours-panel">
-      <div class="after-hours-header-row">
-        <div class="after-hours-member-title">💳 Member ID: <span class="member-id-val" id="after-hours-member-id-val">40083848601</span></div>
-        <div id="after-hours-copy-container"></div>
+    <section class="quick-reference-card hidden" id="quick-reference-panel">
+      <div class="qr-grid">
+        <div class="qr-col qr-identity">
+          <div class="qr-label">💳 Member ID & Plan</div>
+          <div class="qr-value-row">
+            <span class="qr-value" id="qr-member-id">loading...</span>
+            <span id="qr-copy-container"></span>
+          </div>
+          <div class="qr-sub-label" id="qr-plan-name">SCAN Medicare 2026</div>
+        </div>
+        
+        <div class="qr-col qr-network">
+          <div class="qr-label">🌐 Primary Network</div>
+          <div class="qr-value-row">
+            <span class="qr-value" id="qr-network-name">loading...</span>
+          </div>
+          <div class="qr-network-details" id="qr-network-details"></div>
+        </div>
+        
+        <div class="qr-col qr-care">
+          <div class="qr-label">🚨 24/7 Urgent Care</div>
+          <div class="qr-care-list" id="qr-care-list"></div>
+        </div>
       </div>
-      <div class="after-hours-sub-title">🚨 24/7 After-Hours Care</div>
-      <div id="after-hours-content"></div>
     </section>
 
     <section class="grid">
-      <article class="card accent-teal" id="support-benefits-card">
+      <article class="card accent-blue" id="providers-card">
         <details class="section">
           <summary class="section-head">
-            <h3>SCAN Member Support & Benefits</h3><span class="chev">⌄</span>
+            <h3>Doctors & Networks</h3><span class="chev">⌄</span>
           </summary>
           <div class="section-body">
             <div class="sub-pills">
-              <span class="sub-pill">Member Plan</span>
-              <span class="sub-pill">Support Contacts</span>
-              <span class="sub-pill">Benefits Programs</span>
+              <span class="sub-pill">Primary Care</span>
+              <span class="sub-pill">Endocrinology</span>
+              <span class="sub-pill">Doctor Lookup & Telehealth</span>
+              <span class="sub-pill">Network</span>
             </div>
-            <div id="support-benefits-content"></div>
-          </div>
-        </details>
-      </article>
-      <article class="card accent-amber" id="onepass-card">
-        <details class="section">
-          <summary class="section-head">
-            <h3>One Pass Fitness</h3><span class="chev">⌄</span>
-          </summary>
-          <div class="section-body">
-            <div class="sub-pills">
-              <span class="sub-pill">Member Code</span>
-              <span class="sub-pill">Credentials</span>
-              <span class="sub-pill">Gyms</span>
-            </div>
-            <div id="onepass-content"></div>
+            <div id="providers"></div>
           </div>
         </details>
       </article>
@@ -854,19 +929,18 @@
           </div>
         </details>
       </article>
-      <article class="card accent-blue" id="providers-card">
+      <article class="card accent-teal" id="support-benefits-card">
         <details class="section">
           <summary class="section-head">
-            <h3>Doctors & Networks</h3><span class="chev">⌄</span>
+            <h3>SCAN Member Support & Benefits</h3><span class="chev">⌄</span>
           </summary>
           <div class="section-body">
             <div class="sub-pills">
-              <span class="sub-pill">Primary Care</span>
-              <span class="sub-pill">Endocrinology</span>
-              <span class="sub-pill">Doctor Lookup & Telehealth</span>
-              <span class="sub-pill">Network</span>
+              <span class="sub-pill">Member Plan</span>
+              <span class="sub-pill">Support Contacts</span>
+              <span class="sub-pill">Benefits Programs</span>
             </div>
-            <div id="providers"></div>
+            <div id="support-benefits-content"></div>
           </div>
         </details>
       </article>
@@ -893,6 +967,21 @@
               <span class="sub-pill">Vaccines</span>
             </div>
             <div id="vaccines"></div>
+          </div>
+        </details>
+      </article>
+      <article class="card accent-amber" id="onepass-card">
+        <details class="section">
+          <summary class="section-head">
+            <h3>One Pass Fitness</h3><span class="chev">⌄</span>
+          </summary>
+          <div class="section-body">
+            <div class="sub-pills">
+              <span class="sub-pill">Member Code</span>
+              <span class="sub-pill">Credentials</span>
+              <span class="sub-pill">Gyms</span>
+            </div>
+            <div id="onepass-content"></div>
           </div>
         </details>
       </article>
@@ -1460,25 +1549,65 @@
           ${benefitsContentHtml}
         `;
 
+       // Populate member info in Quick Reference
+       const planVal = scan.member?.plan || "SCAN Medicare 2026";
+       const memberIdVal = scan.member?.member_id || "40083848601";
+       const qrPanel = document.getElementById("quick-reference-panel");
+       
+       document.getElementById('qr-member-id').textContent = memberIdVal;
+       document.getElementById('qr-plan-name').textContent = planVal;
+       const qrCopyContainer = document.getElementById('qr-copy-container');
+       if (qrCopyContainer) {
+         qrCopyContainer.innerHTML = copyButton(memberIdVal, "Copy");
+       }
+ 
+       // Populate network in Quick Reference
+       const prov = scan.providers || {};
+       const networks = prov.network || [];
+       if (networks.length) {
+         const primaryNet = networks[0];
+         document.getElementById('qr-network-name').textContent = primaryNet.name || "-";
+         
+         let netDetailsHtml = "";
+         if (primaryNet.phone) {
+           netDetailsHtml += `<div>📞 Phone: ${phoneLink(primaryNet.phone)}</div>`;
+         }
+         if (primaryNet.support) {
+           netDetailsHtml += `<div>☎️ Support: ${phoneLink(primaryNet.support)}</div>`;
+         }
+         if (primaryNet.website) {
+           netDetailsHtml += `<div>🌐 Portal: ${link(primaryNet.website)}</div>`;
+         }
+         document.getElementById('qr-network-details').innerHTML = netDetailsHtml;
+       } else {
+         document.getElementById('qr-network-name').textContent = "No network configured";
+         document.getElementById('qr-network-details').innerHTML = "";
+       }
+ 
+       // Populate 24/7 care in Quick Reference
        const afterHours = (scan.support_contacts || []).filter((c) =>
          /after[- ]?hours|telehealth|nurse advice/i.test(`${c.name || ""} ${c.notes || ""}`)
        );
-       const afterHoursPanel = document.getElementById("after-hours-panel");
-       const afterHoursContent = document.getElementById("after-hours-content");
        if (afterHours.length) {
-         const memberIdVal = scan.member?.member_id || "40083848601";
-         const idValSpan = document.getElementById("after-hours-member-id-val");
-         if (idValSpan) idValSpan.textContent = memberIdVal;
-         const copyContainer = document.getElementById("after-hours-copy-container");
-         if (copyContainer) {
-           copyContainer.innerHTML = copyButton(memberIdVal);
-         }
-         afterHoursContent.innerHTML = afterHours.map((c) =>
-           `<div class="row"><div class="v">${c.name || "-"}</div><div>${phoneLink(c.phone)}</div>${c.hours ? `<div class="muted">${c.hours}</div>` : ""}</div>`
-         ).join("");
-         afterHoursPanel.classList.remove("hidden");
+         document.getElementById('qr-care-list').innerHTML = afterHours.map((c) => {
+           let cleanedName = c.name.replace(/\s*\(No need to leave home\)\s*/i, "").replace(/\s*-\s*Telehealth/i, "");
+           return `
+             <div class="qr-care-item">
+               <div>
+                 <span class="qr-care-name">🚑 ${cleanedName}:</span> 
+                 ${c.phone ? `<a class="qr-care-phone" href="tel:${normalizePhone(c.phone)}">${c.phone}</a>` : '-'}
+               </div>
+               ${c.hours ? `<div class="qr-care-meta">⏱️ ${c.hours}</div>` : ''}
+               ${c.notes ? `<div class="qr-care-meta">ℹ️ ${linkifyPhones(c.notes)}</div>` : ''}
+             </div>
+           `;
+         }).join("");
        } else {
-         afterHoursPanel.classList.add("hidden");
+         document.getElementById('qr-care-list').innerHTML = `<div class="muted">No urgent care contacts found.</div>`;
+       }
+       
+       if (qrPanel) {
+         qrPanel.classList.remove("hidden");
        }
 
       const rx = scan.pharmacy_prescriptions || {};
