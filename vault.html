@@ -823,6 +823,31 @@
         font-size: 20px;
       }
     }
+
+    /* Drag and Drop Card Styles */
+    .drag-handle {
+      cursor: grab;
+      color: var(--muted);
+      font-size: 16px;
+      font-weight: normal;
+      padding: 0 4px;
+      user-select: none;
+      transition: color 0.15s ease;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .drag-handle:hover {
+      color: var(--blue);
+    }
+    .drag-handle:active {
+      cursor: grabbing;
+    }
+    .card.dragging {
+      opacity: 0.45;
+      border: 2px dashed var(--blue) !important;
+      transform: scale(0.99);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
   </style>
   <link rel="stylesheet" href="./companion_theme.css" />
 </head>
@@ -900,7 +925,11 @@
       <article class="card accent-blue" id="providers-card">
         <details class="section">
           <summary class="section-head">
-            <h3>Doctors & Networks</h3><span class="chev">⌄</span>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span class="drag-handle" title="Drag to reorder">⋮⋮</span>
+              <h3>Doctors & Networks</h3>
+            </div>
+            <span class="chev">⌄</span>
           </summary>
           <div class="section-body">
             <div class="sub-pills">
@@ -916,7 +945,11 @@
       <article class="card accent-rose" id="pharmacy-card">
         <details class="section">
           <summary class="section-head">
-            <h3>Pharmacy & Rx</h3><span class="chev">⌄</span>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span class="drag-handle" title="Drag to reorder">⋮⋮</span>
+              <h3>Pharmacy & Rx</h3>
+            </div>
+            <span class="chev">⌄</span>
           </summary>
           <div class="section-body">
             <div class="sub-pills">
@@ -932,7 +965,11 @@
       <article class="card accent-teal" id="support-benefits-card">
         <details class="section">
           <summary class="section-head">
-            <h3>SCAN Member Support & Benefits</h3><span class="chev">⌄</span>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span class="drag-handle" title="Drag to reorder">⋮⋮</span>
+              <h3>SCAN Member Support & Benefits</h3>
+            </div>
+            <span class="chev">⌄</span>
           </summary>
           <div class="section-body">
             <div class="sub-pills">
@@ -947,7 +984,11 @@
       <article class="card accent-teal" id="labtests-card">
         <details class="section">
           <summary class="section-head">
-            <h3>Lab Test Plan</h3><span class="chev">⌄</span>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span class="drag-handle" title="Drag to reorder">⋮⋮</span>
+              <h3>Lab Test Plan</h3>
+            </div>
+            <span class="chev">⌄</span>
           </summary>
           <div class="section-body">
             <div class="sub-pills">
@@ -960,7 +1001,11 @@
       <article class="card accent-amber" id="vaccines-card">
         <details class="section">
           <summary class="section-head">
-            <h3>Vaccines & Immunizations</h3><span class="chev">⌄</span>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span class="drag-handle" title="Drag to reorder">⋮⋮</span>
+              <h3>Vaccines & Immunizations</h3>
+            </div>
+            <span class="chev">⌄</span>
           </summary>
           <div class="section-body">
             <div class="sub-pills">
@@ -973,7 +1018,11 @@
       <article class="card accent-amber" id="onepass-card">
         <details class="section">
           <summary class="section-head">
-            <h3>One Pass Fitness</h3><span class="chev">⌄</span>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span class="drag-handle" title="Drag to reorder">⋮⋮</span>
+              <h3>One Pass Fitness</h3>
+            </div>
+            <span class="chev">⌄</span>
           </summary>
           <div class="section-body">
             <div class="sub-pills">
@@ -988,7 +1037,11 @@
       <article class="card accent-rose" id="notes-card">
         <details class="section">
           <summary class="section-head">
-            <h3>Notes</h3><span class="chev">⌄</span>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span class="drag-handle" title="Drag to reorder">⋮⋮</span>
+              <h3>Notes</h3>
+            </div>
+            <span class="chev">⌄</span>
           </summary>
           <div class="section-body">
             <div class="sub-pills">
@@ -1002,7 +1055,11 @@
       <article class="card accent-teal" id="kaiser-card">
         <details class="section">
           <summary class="section-head">
-            <h3>Kaiser Data</h3><span class="chev">⌄</span>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span class="drag-handle" title="Drag to reorder">⋮⋮</span>
+              <h3>Kaiser Data</h3>
+            </div>
+            <span class="chev">⌄</span>
           </summary>
           <div class="section-body">
             <div class="sub-pills">
@@ -1018,7 +1075,11 @@
       <article class="card accent-blue hidden" id="custom-sections-card">
         <details class="section">
           <summary class="section-head">
-            <h3>Custom Sections</h3><span class="chev">⌄</span>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span class="drag-handle" title="Drag to reorder">⋮⋮</span>
+              <h3>Custom Sections</h3>
+            </div>
+            <span class="chev">⌄</span>
           </summary>
           <div class="section-body">
             <div class="sub-pills" id="custom-subpills"></div>
@@ -1304,6 +1365,7 @@
     }
 
     async function load() {
+      applyCardOrder();
       bindSearch();
       bindSectionControls();
       bindJsonEditor();
@@ -1706,6 +1768,7 @@
       }
 
       bindCopyButtons();
+      initDragAndDrop();
     }
 
     async function updateLastUpdatedBanner() {
@@ -1719,6 +1782,83 @@
       } catch (_err) {
         node.textContent = "Last updated: unavailable";
       }
+    }
+
+    function saveCardOrder() {
+      const cards = [...document.querySelectorAll(".grid .card")];
+      const order = cards.map(card => card.id);
+      localStorage.setItem("vault-card-order", JSON.stringify(order));
+    }
+
+    function applyCardOrder() {
+      const saved = localStorage.getItem("vault-card-order");
+      if (!saved) return;
+      try {
+        const order = JSON.parse(saved);
+        const grid = document.querySelector(".grid");
+        order.forEach(id => {
+          const card = document.getElementById(id);
+          if (card) {
+            grid.appendChild(card);
+          }
+        });
+      } catch (e) {
+        console.error("Failed to restore card order:", e);
+      }
+    }
+
+    function initDragAndDrop() {
+      const grid = document.querySelector(".grid");
+      const cards = grid.querySelectorAll(".card");
+      
+      cards.forEach(card => {
+        const handle = card.querySelector(".drag-handle");
+        if (!handle) return;
+        
+        handle.addEventListener("mousedown", () => {
+          card.setAttribute("draggable", "true");
+        });
+        
+        handle.addEventListener("mouseup", () => {
+          card.removeAttribute("draggable");
+        });
+        
+        card.addEventListener("dragstart", (e) => {
+          card.classList.add("dragging");
+          e.dataTransfer.effectAllowed = "move";
+        });
+        
+        card.addEventListener("dragend", () => {
+          card.classList.remove("dragging");
+          card.removeAttribute("draggable");
+          saveCardOrder();
+        });
+      });
+      
+      grid.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        const draggingCard = grid.querySelector(".dragging");
+        if (!draggingCard) return;
+        
+        const siblings = [...grid.querySelectorAll(".card:not(.dragging)")];
+        let closest = null;
+        let closestOffset = Number.NEGATIVE_INFINITY;
+        
+        siblings.forEach(sibling => {
+          const rect = sibling.getBoundingClientRect();
+          const offset = e.clientY - (rect.top + rect.height / 2);
+          if (offset < 0 && offset > closestOffset) {
+            closestOffset = offset;
+            closest = sibling;
+          }
+        });
+        
+        if (closest) {
+          grid.insertBefore(draggingCard, closest);
+        } else {
+          grid.appendChild(draggingCard);
+        }
+      });
     }
 
     load();
