@@ -1611,66 +1611,74 @@
           ${benefitsContentHtml}
         `;
 
-       // Populate member info in Quick Reference
-       const planVal = scan.member?.plan || "SCAN Medicare 2026";
-       const memberIdVal = scan.member?.member_id || "40083848601";
-       const qrPanel = document.getElementById("quick-reference-panel");
-       
-       document.getElementById('qr-member-id').textContent = memberIdVal;
-       document.getElementById('qr-plan-name').textContent = planVal;
-       const qrCopyContainer = document.getElementById('qr-copy-container');
-       if (qrCopyContainer) {
-         qrCopyContainer.innerHTML = copyButton(memberIdVal, "Copy");
-       }
+        // Populate member info in Quick Reference defensively
+        const qPlanVal = scan.member?.plan || "SCAN Medicare 2026";
+        const qMemberIdVal = scan.member?.member_id || "40083848601";
+        const qrPanel = document.getElementById("quick-reference-panel");
+        
+        const elMemberId = document.getElementById('qr-member-id');
+        if (elMemberId) elMemberId.textContent = qMemberIdVal;
+        const elPlanName = document.getElementById('qr-plan-name');
+        if (elPlanName) elPlanName.textContent = qPlanVal;
+        const qrCopyContainer = document.getElementById('qr-copy-container');
+        if (qrCopyContainer) {
+          qrCopyContainer.innerHTML = copyButton(qMemberIdVal, "Copy");
+        }
  
-       // Populate network in Quick Reference
-       const prov = scan.providers || {};
-       const networks = prov.network || [];
-       if (networks.length) {
-         const primaryNet = networks[0];
-         document.getElementById('qr-network-name').textContent = primaryNet.name || "-";
-         
-         let netDetailsHtml = "";
-         if (primaryNet.phone) {
-           netDetailsHtml += `<div>📞 Phone: ${phoneLink(primaryNet.phone)}</div>`;
-         }
-         if (primaryNet.support) {
-           netDetailsHtml += `<div>☎️ Support: ${phoneLink(primaryNet.support)}</div>`;
-         }
-         if (primaryNet.website) {
-           netDetailsHtml += `<div>🌐 Portal: ${link(primaryNet.website)}</div>`;
-         }
-         document.getElementById('qr-network-details').innerHTML = netDetailsHtml;
-       } else {
-         document.getElementById('qr-network-name').textContent = "No network configured";
-         document.getElementById('qr-network-details').innerHTML = "";
-       }
+        // Populate network in Quick Reference defensively
+        const prov = scan.providers || {};
+        const networks = prov.network || [];
+        const elNetworkName = document.getElementById('qr-network-name');
+        const elNetworkDetails = document.getElementById('qr-network-details');
+        
+        if (networks.length) {
+          const primaryNet = networks[0];
+          if (elNetworkName) elNetworkName.textContent = primaryNet.name || "-";
+          
+          let netDetailsHtml = "";
+          if (primaryNet.phone) {
+            netDetailsHtml += `<div>📞 Phone: ${phoneLink(primaryNet.phone)}</div>`;
+          }
+          if (primaryNet.support) {
+            netDetailsHtml += `<div>☎️ Support: ${phoneLink(primaryNet.support)}</div>`;
+          }
+          if (primaryNet.website) {
+            netDetailsHtml += `<div>🌐 Portal: ${link(primaryNet.website)}</div>`;
+          }
+          if (elNetworkDetails) elNetworkDetails.innerHTML = netDetailsHtml;
+        } else {
+          if (elNetworkName) elNetworkName.textContent = "No network configured";
+          if (elNetworkDetails) elNetworkDetails.innerHTML = "";
+        }
  
-       // Populate 24/7 care in Quick Reference
-       const afterHours = (scan.support_contacts || []).filter((c) =>
-         /after[- ]?hours|telehealth|nurse advice/i.test(`${c.name || ""} ${c.notes || ""}`)
-       );
-       if (afterHours.length) {
-         document.getElementById('qr-care-list').innerHTML = afterHours.map((c) => {
-           let cleanedName = c.name.replace(/\s*\(No need to leave home\)\s*/i, "").replace(/\s*-\s*Telehealth/i, "");
-           return `
-             <div class="qr-care-item">
-               <div>
-                 <span class="qr-care-name">🚑 ${cleanedName}:</span> 
-                 ${c.phone ? `<a class="qr-care-phone" href="tel:${normalizePhone(c.phone)}">${c.phone}</a>` : '-'}
-               </div>
-               ${c.hours ? `<div class="qr-care-meta">⏱️ ${c.hours}</div>` : ''}
-               ${c.notes ? `<div class="qr-care-meta">ℹ️ ${linkifyPhones(c.notes)}</div>` : ''}
-             </div>
-           `;
-         }).join("");
-       } else {
-         document.getElementById('qr-care-list').innerHTML = `<div class="muted">No urgent care contacts found.</div>`;
-       }
-       
-       if (qrPanel) {
-         qrPanel.classList.remove("hidden");
-       }
+        // Populate 24/7 care in Quick Reference defensively
+        const afterHours = (scan.support_contacts || []).filter((c) =>
+          /after[- ]?hours|telehealth|nurse advice/i.test(`${c.name || ""} ${c.notes || ""}`)
+        );
+        const elCareList = document.getElementById('qr-care-list');
+        if (elCareList) {
+          if (afterHours.length) {
+            elCareList.innerHTML = afterHours.map((c) => {
+              let cleanedName = c.name.replace(/\s*\(No need to leave home\)\s*/i, "").replace(/\s*-\s*Telehealth/i, "");
+              return `
+                <div class="qr-care-item">
+                  <div>
+                    <span class="qr-care-name">🚑 ${cleanedName}:</span> 
+                    ${c.phone ? `<a class="qr-care-phone" href="tel:${normalizePhone(c.phone)}">${c.phone}</a>` : '-'}
+                  </div>
+                  ${c.hours ? `<div class="qr-care-meta">⏱️ ${c.hours}</div>` : ''}
+                  ${c.notes ? `<div class="qr-care-meta">ℹ️ ${linkifyPhones(c.notes)}</div>` : ''}
+                </div>
+              `;
+            }).join("");
+          } else {
+            elCareList.innerHTML = `<div class="muted">No urgent care contacts found.</div>`;
+          }
+        }
+        
+        if (qrPanel) {
+          qrPanel.classList.remove("hidden");
+        }
 
       const rx = scan.pharmacy_prescriptions || {};
       const savingsCard = {
@@ -1785,17 +1793,23 @@
     }
 
     function saveCardOrder() {
-      const cards = [...document.querySelectorAll(".grid .card")];
-      const order = cards.map(card => card.id);
-      localStorage.setItem("vault-card-order", JSON.stringify(order));
+      try {
+        const cards = [...document.querySelectorAll(".grid .card")];
+        const order = cards.map(card => card.id);
+        localStorage.setItem("vault-card-order", JSON.stringify(order));
+      } catch (e) {
+        console.error("Failed to save card order:", e);
+      }
     }
 
     function applyCardOrder() {
-      const saved = localStorage.getItem("vault-card-order");
-      if (!saved) return;
       try {
+        const saved = localStorage.getItem("vault-card-order");
+        if (!saved) return;
         const order = JSON.parse(saved);
+        if (!Array.isArray(order)) return;
         const grid = document.querySelector(".grid");
+        if (!grid) return;
         order.forEach(id => {
           const card = document.getElementById(id);
           if (card) {
@@ -1808,57 +1822,62 @@
     }
 
     function initDragAndDrop() {
-      const grid = document.querySelector(".grid");
-      const cards = grid.querySelectorAll(".card");
-      
-      cards.forEach(card => {
-        const handle = card.querySelector(".drag-handle");
-        if (!handle) return;
+      try {
+        const grid = document.querySelector(".grid");
+        if (!grid) return;
+        const cards = grid.querySelectorAll(".card");
         
-        handle.addEventListener("mousedown", () => {
-          card.setAttribute("draggable", "true");
+        cards.forEach(card => {
+          const handle = card.querySelector(".drag-handle");
+          if (!handle) return;
+          
+          handle.addEventListener("mousedown", () => {
+            card.setAttribute("draggable", "true");
+          });
+          
+          handle.addEventListener("mouseup", () => {
+            card.removeAttribute("draggable");
+          });
+          
+          card.addEventListener("dragstart", (e) => {
+            card.classList.add("dragging");
+            e.dataTransfer.effectAllowed = "move";
+          });
+          
+          card.addEventListener("dragend", () => {
+            card.classList.remove("dragging");
+            card.removeAttribute("draggable");
+            saveCardOrder();
+          });
         });
         
-        handle.addEventListener("mouseup", () => {
-          card.removeAttribute("draggable");
-        });
-        
-        card.addEventListener("dragstart", (e) => {
-          card.classList.add("dragging");
-          e.dataTransfer.effectAllowed = "move";
-        });
-        
-        card.addEventListener("dragend", () => {
-          card.classList.remove("dragging");
-          card.removeAttribute("draggable");
-          saveCardOrder();
-        });
-      });
-      
-      grid.addEventListener("dragover", (e) => {
-        e.preventDefault();
-        const draggingCard = grid.querySelector(".dragging");
-        if (!draggingCard) return;
-        
-        const siblings = [...grid.querySelectorAll(".card:not(.dragging)")];
-        let closest = null;
-        let closestOffset = Number.NEGATIVE_INFINITY;
-        
-        siblings.forEach(sibling => {
-          const rect = sibling.getBoundingClientRect();
-          const offset = e.clientY - (rect.top + rect.height / 2);
-          if (offset < 0 && offset > closestOffset) {
-            closestOffset = offset;
-            closest = sibling;
+        grid.addEventListener("dragover", (e) => {
+          e.preventDefault();
+          const draggingCard = grid.querySelector(".dragging");
+          if (!draggingCard) return;
+          
+          const siblings = [...grid.querySelectorAll(".card:not(.dragging)")];
+          let closest = null;
+          let closestOffset = Number.NEGATIVE_INFINITY;
+          
+          siblings.forEach(sibling => {
+            const rect = sibling.getBoundingClientRect();
+            const offset = e.clientY - (rect.top + rect.height / 2);
+            if (offset < 0 && offset > closestOffset) {
+              closestOffset = offset;
+              closest = sibling;
+            }
+          });
+          
+          if (closest) {
+            grid.insertBefore(draggingCard, closest);
+          } else {
+            grid.appendChild(draggingCard);
           }
         });
-        
-        if (closest) {
-          grid.insertBefore(draggingCard, closest);
-        } else {
-          grid.appendChild(draggingCard);
-        }
-      });
+      } catch (e) {
+        console.error("Failed to initialize drag and drop:", e);
+      }
     }
 
     load();
