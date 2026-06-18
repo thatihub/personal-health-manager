@@ -850,6 +850,7 @@
     }
   </style>
   <link rel="stylesheet" href="./companion_theme.css" />
+  <script src="./vault_data.js"></script>
 </head>
 
 <body class="page-vault">
@@ -1372,10 +1373,14 @@
       await updateLastUpdatedBanner();
       let scan = {};
       try {
-        const res = await fetch(`./vault_data.json?ts=${Date.now()}`, { cache: "no-store" });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = await res.json();
-        scan = data.scan_2026 || {};
+        if (window.location.protocol === 'file:') {
+          scan = (window.VAULT_DATA && window.VAULT_DATA.scan_2026) || {};
+        } else {
+          const res = await fetch(`./vault_data.json?ts=${Date.now()}`, { cache: "no-store" });
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          const data = await res.json();
+          scan = data.scan_2026 || {};
+        }
         // Ensure ExtraCare number is always shown in full, even if an older source has a masked value.
         if (Array.isArray(scan.benefits_programs)) {
           scan.benefits_programs = scan.benefits_programs.map((item) => {
@@ -1390,7 +1395,7 @@
           });
         }
       } catch (_err) {
-        scan = {};
+        scan = (window.VAULT_DATA && window.VAULT_DATA.scan_2026) || {};
       }
 
 
@@ -1708,11 +1713,9 @@
         `<div class="row"><div class="v">Medications</div>${list(rx.active_medications || [])}</div>` +
         `<div class="row"><div class="v">Device Notes</div>${list(rx.device_notes || [])}</div>`;
 
-      const prov = scan.providers || {};
       const primaryCare = prov.primary_care || [];
       const endo = prov.endocrinology || [];
       const lookup = prov.doctor_lookup || [];
-      const networks = prov.network || [];
       document.getElementById('providers').innerHTML =
         `<div class="row"><div class="v">Primary Care</div>${list(primaryCare.map((d) => `${d.name || '-'}${d.phone ? ` • ${phoneInline(d.phone)}` : ''}${d.address ? ` • ${d.address}` : ''}${d.appointment ? ` • ${d.appointment}` : ''}`))}</div>` +
         `<div class="row"><div class="v">Endocrinology</div>${list(endo.map((d) => `${d.name || '-'}${d.phone ? ` • ${phoneInline(d.phone)}` : ''}${d.address ? ` • ${d.address}` : ''}`))}</div>` +

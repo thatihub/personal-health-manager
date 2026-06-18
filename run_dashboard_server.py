@@ -1310,13 +1310,19 @@ class DashboardHandler(SimpleHTTPRequestHandler):
 
     def _write_json_file(self, path: Path, payload: object) -> None:
         tmp = path.with_suffix(path.suffix + ".tmp")
-        tmp.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+        tmp.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
         tmp.replace(path)
 
     def _write_dashboard_js(self, payload: object) -> None:
         path = PROJECT_DIR / "dashboard_data.js"
         tmp = path.with_suffix(path.suffix + ".tmp")
-        tmp.write_text(f"window.LAB_DASH_DATA = {json.dumps(payload)};\n", encoding="utf-8")
+        tmp.write_text(f"window.LAB_DASH_DATA = {json.dumps(payload, ensure_ascii=False)};\n", encoding="utf-8")
+        tmp.replace(path)
+
+    def _write_vault_js(self, payload: object) -> None:
+        path = PROJECT_DIR / "vault_data.js"
+        tmp = path.with_suffix(path.suffix + ".tmp")
+        tmp.write_text(f"window.VAULT_DATA = {json.dumps(payload, indent=2, ensure_ascii=False)};\n", encoding="utf-8")
         tmp.replace(path)
 
     def _handle_admin_upload(self) -> None:
@@ -1348,6 +1354,7 @@ class DashboardHandler(SimpleHTTPRequestHandler):
                 if not isinstance(content, dict):
                     raise ValueError("Vault content must be a JSON object")
                 self._write_json_file(PROJECT_DIR / "vault_data.json", content)
+                self._write_vault_js(content)
                 self._json(200, {"ok": True, "target": "vault_data.json"})
                 return
 

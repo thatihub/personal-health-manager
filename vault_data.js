@@ -1,0 +1,222 @@
+window.VAULT_DATA = {
+  "scan_2026": {
+    "member": {
+      "plan": "SCAN Medicare 2026",
+      "member_id": "40083848601"
+    },
+    "support_contacts": [
+      {
+        "name": "SCAN Main Customer Service",
+        "phone": "800-559-3500",
+        "hours": "Mon-Fri 8:00 AM-5:00 PM"
+      },
+      {
+        "name": "Member Services Phone Support",
+        "phone": "Call number on back of ID card",
+        "hours": "Available 8am-8pm",
+        "notes": "7 days/week until March 31 • Weekdays only April 1-Sept 30 • Shorter wait times: Before 10am, After 3pm, Later in week, Weekends"
+      },
+      {
+        "name": "24/7 After-Hours Care (No need to leave home) - Telehealth",
+        "phone": "1-888-993-4087",
+        "hours": "24/7"
+      },
+      {
+        "name": "Nurse Advice Line (24/7)",
+        "phone": "1-855-431-5537",
+        "hours": "24/7",
+        "website": "https://www.scanhealthplan.com",
+        "notes": "TTY: 711 • Have a quick healthcare question? The Nurse Advice Line connects you to a nurse."
+      },
+      {
+        "name": "SCAN Transportation",
+        "phone": "844-714-2218"
+      },
+      {
+        "name": "Emergency Response America",
+        "phone": "866-435-2617",
+        "website": "https://www.connectamerica.com/personal-emergency-response-systems/"
+      }
+    ],
+    "benefits_programs": [
+      {
+        "title": "CVS OTC Health Solutions",
+        "phone": "844-428-8135",
+        "website": "https://www.cvs.com/benefits/v2/dashboard",
+        "details": [
+          "OTC Card: **** **** **** 1035",
+          "Expiration: 09/29",
+          "Code: 749",
+          "Login email: thatikunta@gmail.com"
+        ]
+      },
+      {
+        "title": "CVS ExtraCare",
+        "website": "https://www.cvs.com/extracare",
+        "email": "thatikunta#gmail.com",
+        "details": [
+          "ExtraCare member since 2009",
+          "ExtraCare number: 4879312548878"
+        ]
+      },
+      {
+        "title": "Walmart Food & OTC Benefits",
+        "website": "https://www.walmart.com/food-otc-benefit",
+        "details": [
+          "Also accepted at Walgreens, Safeway, Dollar Tree, Costco"
+        ]
+      },
+      {
+        "title": "SCAN Skechers Discount",
+        "phone": "1-855-759-7463",
+        "email": "info@skechersdirect.com",
+        "details": [
+          "Retail Code: K2Z",
+          "Show SCAN Member ID in-store"
+        ]
+      },
+      {
+        "title": "One Pass Fitness",
+        "website": "https://youronepass.com",
+        "details": [
+          "Fitness Member Code: A882356736",
+          "Login System: HealthSafe-ID",
+          "Username: thatikunta",
+          "Email: pkt2005@gmail.com",
+          "Gyms: 24 Hour Fitness - 762 Sunnyvale Saratoga Road, Sunnyvale, CA",
+          "Gyms: Crunch Fitness - 1651 Hollenbeck Ave, Sunnyvale, CA 94087 • (669) 263-9343",
+          "Gyms: Pure Barre - 793 E El Camino Real, Sunnyvale, CA 94087",
+          "Gyms: Vim + Vigor Fitness - 1730 W Campbell Ave, Campbell, CA 95008 • WiFi: VNV CAMPBELL MEMBERS / 408 866 8855"
+        ]
+      }
+    ],
+    "pharmacy_prescriptions": {
+      "prescription_savings_card": {
+        "title": "Prescription Savings Card",
+        "description": "Show this card to your pharmacist and save up to 80% on prescriptions.",
+        "member_id": "40083848601",
+        "member_id_note": "Your 11-digit SCAN Health Member ID",
+        "bin": "025219",
+        "pcn": "WDBRX",
+        "group": "SCAN"
+      },
+      "pharmacy_contacts": [
+        {
+          "name": "Express Scripts",
+          "phone": "866-553-4125",
+          "website": "https://www.express-scripts.com",
+          "notes": "Prescription Transfer: 800-922-1557"
+        },
+        {
+          "name": "OptumRx Transfer Service",
+          "phone": "800-791-7658"
+        }
+      ],
+      "active_medications": [
+        "Metformin Hydrochloride 500 mg - 4 tablets/day",
+        "Amlodipine Besylate 2.5 mg - 1 tablet/day",
+        "Losartan Potassium 50 mg - 1 tablet/day",
+        "Atorvastatin Calcium 10 mg - 1 tablet/day",
+        "Tresiba FlexTouch 100 units/mL - 32 units/day",
+        "Humalog Mix 50:50 100 units/mL - 25u breakfast, 50u lunch, 25u dinner",
+        "Dexcom G7 CGM (15-day sensor) - replace every 15 days",
+        "Test strips"
+      ],
+      "device_notes": [
+        "Dexcom G7 Rx#: 1802943",
+        "G7 replacement cycle: every 15 days"
+      ]
+    },
+    "providers": {
+      "primary_care": [
+        {
+          "name": "Richard Ornelas, MD",
+          "phone": "408-871-3400",
+          "address": "828 S Winchester Blvd N, San Jose, CA 95128"
+        },
+        {
+          "name": "Munir Javed, MD",
+          "phone": "408-871-3400",
+          "address": "2204 Grant Rd, Ste 203, Mountain View, CA 94040",
+          "appointment": "Jan 28, 2026 at 1:30 PM"
+        }
+      ],
+      "endocrinology": [
+        {
+          "name": "Archana Bindra, MD",
+          "phone": "408-871-3400"
+        },
+        {
+          "name": "Nicole Borau, MD",
+          "address": "2577 Samaritan Dr, San Jose, CA 95124"
+        }
+      ],
+      "doctor_lookup": [
+        {
+          "title": "SCAN Doctor Lookup",
+          "url": "https://www.scanhealthplan.com/lut/doctor"
+        },
+        {
+          "title": "SCAN Telehealth",
+          "url": "https://doctorondemand.includedhealth.com/",
+          "notes": "Login email: thatikunta@gmail.com"
+        }
+      ],
+      "network": [
+        {
+          "name": "El Camino Health Group",
+          "phone": "408-871-3400",
+          "support": "650-988-8366",
+          "website": "https://mycare.elcaminohospital.org/MyChart/Home/"
+        }
+      ]
+    },
+    "lab_test_plan": [
+      "HbA1c",
+      "Fasting Blood Glucose",
+      "Fasting Serum C-Peptide",
+      "Lipid Panel",
+      "Kidney Labs (Creatinine, eGFR, Urine ACR)",
+      "Liver Function Panel (AST, ALT, ALP, Bilirubin)",
+      "TSH",
+      "Vitamin B12",
+      "CRP / hsCRP",
+      "ESR",
+      "Homocysteine",
+      "PSA",
+      "Apolipoprotein B (Apo-B)",
+      "Lipoprotein(a)",
+      "NT-proBNP",
+      "CT Coronary Calcium Score",
+      "Serum Bile Acids (Fasting, Morning Draw)"
+    ],
+    "kaiser_permanent_summary": "Date printed: 1/18/2023\nKaiser Permanente\nMember name: Prakash R Thatikunta\nDate of birth: 3/12/1960\nMRN: 110000588598",
+    "vaccines": [
+      "Shingrix dose 1 - Mar 07, 2025",
+      "Shingrix dose 2 - Aug 28, 2024",
+      "PCV (status to confirm)",
+      "RSV (status to confirm)",
+      "Tetanus every 10 years",
+      "COVID-19 (Moderna): 10/31/2021, 04/24/2021, 03/29/2021",
+      "Pneumococcal PPSV23: 08/08/2019, 05/23/2000",
+      "Td (Tenivac): 11/27/2018",
+      "Tdap (Adacel): 08/26/2008",
+      "<a href=\"./immunizations.html\">See full immunization record</a>"
+    ],
+    "symptom_note": "Intermittent itching mainly evening/night, a few hours after dinner, no rash, often resolves after urination.",
+    "night_tips": [
+      "Drink water around 8-9 PM",
+      "10-15 min gentle walk after dinner",
+      "Avoid salty/protein-heavy meals at night",
+      "Elevate legs slightly",
+      "Magnesium glycinate 200-300 mg at night",
+      "Vitamin C 500 mg after dinner"
+    ],
+    "Testing": [
+      "testing222"
+    ],
+    "testing8": [
+      ";dlkaja;sdlk"
+    ]
+  }
+};
