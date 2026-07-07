@@ -465,11 +465,105 @@
       .kpis { grid-template-columns: 1fr 1fr; gap: 8px; }
       .kpi { padding: 10px; }
       .kpi .value { font-size: 22px; }
-      .chart { padding: 10px; }
-      .chart-head h3 { font-size: 20px; }
-      svg { height: 120px; }
-    }
+    .chart { padding: 10px; }
+    .chart-head h3 { font-size: 20px; }
+    svg { height: 120px; }
+  }
 
+  /* Custom dialog styles */
+  .modern-dialog {
+    border: 1px solid var(--comp-line);
+    background: var(--comp-panel-strong);
+    color: var(--comp-ink);
+    border-radius: 12px;
+    padding: 24px;
+    max-width: 480px;
+    width: calc(100% - 32px);
+    box-shadow: var(--comp-shadow);
+    margin: auto;
+  }
+  .modern-dialog::backdrop {
+    background-color: rgba(4, 10, 26, 0.7);
+    backdrop-filter: blur(4px);
+  }
+  .dialog-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    border-bottom: 1px solid var(--comp-line);
+    padding-bottom: 12px;
+  }
+  .dialog-header h3 {
+    margin: 0;
+    color: var(--page-accent, #12a4d4);
+    font-size: 18px;
+  }
+  .dialog-close-btn {
+    background: none;
+    border: none;
+    color: var(--comp-muted);
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+  }
+  .dialog-close-btn:hover {
+    color: var(--comp-ink);
+  }
+  .dialog-body p {
+    margin-top: 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--comp-ink);
+  }
+  .ratio-breakdown {
+    margin: 20px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .ratio-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 13.5px;
+  }
+  .ratio-val {
+    font-weight: bold;
+    background: var(--comp-line);
+    padding: 2px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+    color: var(--page-accent, #12a4d4);
+  }
+  .ratio-desc {
+    color: var(--comp-ink);
+  }
+  .dialog-footer-note {
+    background: rgba(240, 164, 58, 0.1);
+    border-left: 3px solid #f0a43a;
+    padding: 10px 14px;
+    border-radius: 4px;
+    font-size: 12.5px;
+    color: var(--comp-muted);
+  }
+  .dialog-footer-note p {
+    margin: 0;
+    color: var(--comp-muted);
+  }
+  .info-btn {
+    font-size: 11.5px;
+    cursor: pointer;
+    opacity: 0.8;
+    margin-left: 4px;
+    display: inline-block;
+    vertical-align: middle;
+  }
+  .info-btn:hover {
+    opacity: 1;
+    color: var(--page-accent, #12a4d4);
+  }
   </style>
   <link rel="stylesheet" href="./companion_theme.css" />
 </head>
@@ -722,7 +816,7 @@
         </div>
         <div class="table-wrap" id="table-wrap-chemistry">
           <table id="table-chemistry">
-            <thead><tr><th>Date</th><th>Calcium</th><th>Albumin</th><th>Bilirubin</th><th>AST</th><th>ALT</th><th>AST/ALT Ratio <span style="font-size: 11.5px; cursor: help; opacity: 0.8;" title="De Ritis Ratio: AST / ALT. Typically &lt; 1.0 in early nonalcoholic fatty liver disease (NAFLD), but can exceed 1.0 (especially &gt; 2.0) in alcoholic liver disease or with advanced liver fibrosis. Interpret alongside absolute values.">ⓘ</span></th></tr></thead>
+            <thead><tr><th>Date</th><th>Calcium</th><th>Albumin</th><th>Bilirubin</th><th>AST</th><th>ALT</th><th>AST/ALT Ratio <span class="info-btn" onclick="document.getElementById('ast-alt-dialog').showModal()" title="Click for ratio details">ⓘ</span></th></tr></thead>
             <tbody></tbody>
           </table>
         </div>
@@ -1301,5 +1395,56 @@
     <a href="./vault.html">Vault</a>
     <a href="./cabinet.html">Cabinet</a>
   </nav>
+
+  <dialog id="ast-alt-dialog" closedby="any" class="modern-dialog">
+    <div class="dialog-header">
+      <h3>Understanding the AST/ALT Ratio</h3>
+      <button class="dialog-close-btn" onclick="document.getElementById('ast-alt-dialog').close()" aria-label="Close">×</button>
+    </div>
+    <div class="dialog-body">
+      <p>The <strong>AST/ALT ratio</strong> (also known as the <em>De Ritis ratio</em>) helps clinical providers evaluate liver health.</p>
+      
+      <div class="ratio-breakdown">
+        <div class="ratio-item">
+          <span class="ratio-val">&lt; 1.0</span>
+          <span class="ratio-desc"><strong>Typical in Nonalcoholic Fatty Liver Disease (NAFLD/MASLD):</strong> ALT levels are usually higher than AST in early-stage metabolic liver disease.</span>
+        </div>
+        <div class="ratio-item">
+          <span class="ratio-val">&gt; 1.0</span>
+          <span class="ratio-desc"><strong>Sign of Disease Progression:</strong> A ratio above 1.0 in someone with fatty liver may suggest progression to advanced scarring (fibrosis or cirrhosis).</span>
+        </div>
+        <div class="ratio-item">
+          <span class="ratio-val">≈ 2.0 or higher</span>
+          <span class="ratio-desc"><strong>Indicative of Alcoholic Liver Injury:</strong> Ratios close to or exceeding 2.0 strongly point to alcohol-related liver injury or hepatitis.</span>
+        </div>
+      </div>
+      
+      <div class="dialog-footer-note">
+        <p><strong>Note:</strong> A slightly elevated ratio is common and benign if your absolute AST and ALT levels are completely within their normal reference ranges. Ratios should always be interpreted by a healthcare professional alongside your complete metabolic profile.</p>
+      </div>
+    </div>
+  </dialog>
+
+  <script>
+    // Light-dismiss polyfill/fallback for dialogs
+    (function() {
+      const astAltDialog = document.getElementById('ast-alt-dialog');
+      if (astAltDialog && !('closedBy' in HTMLDialogElement.prototype)) {
+        astAltDialog.addEventListener('click', (event) => {
+          if (event.target !== astAltDialog) return;
+          const rect = astAltDialog.getBoundingClientRect();
+          const isDialogContent = (
+            rect.top <= event.clientY &&
+            event.clientY <= rect.top + rect.height &&
+            rect.left <= event.clientX &&
+            event.clientX <= rect.left + rect.width
+          );
+          if (!isDialogContent) {
+            astAltDialog.close();
+          }
+        });
+      }
+    })();
+  </script>
 </body>
 </html>
