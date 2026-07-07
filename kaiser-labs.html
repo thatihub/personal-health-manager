@@ -74,7 +74,7 @@
         <h3>Electrolytes & Liver</h3>
         <table id="chem-table">
           <thead>
-            <tr><th>Date</th><th>Na</th><th>K</th><th>Cl</th><th>CO₂</th><th>ALT</th><th>AST</th><th>PSA</th></tr>
+            <tr><th>Date</th><th>Na</th><th>K</th><th>Cl</th><th>CO₂</th><th>ALT</th><th>AST</th><th>AST/ALT <span style="font-size: 11px; cursor: help; opacity: 0.8;" title="De Ritis Ratio: AST / ALT. Typically &lt; 1.0 in early nonalcoholic fatty liver disease (NAFLD), but can exceed 1.0 (especially &gt; 2.0) in alcoholic liver disease or with advanced liver fibrosis. Interpret alongside absolute values.">ⓘ</span></th><th>PSA</th></tr>
           </thead>
           <tbody></tbody>
         </table>
@@ -172,7 +172,12 @@
         </tr>`).join('');
 
       const chemTbody = document.querySelector('#chem-table tbody');
-      chemTbody.innerHTML = data.map(r => `
+      chemTbody.innerHTML = data.map(r => {
+        let astAlt = '';
+        if (r.ast !== null && r.ast !== undefined && r.alt !== null && r.alt !== undefined && r.alt !== 0) {
+          astAlt = (r.ast / r.alt).toFixed(2);
+        }
+        return `
         <tr>
           <td>${r.date}</td>
           <td>${fmt(r.sodium,0)}</td>
@@ -181,8 +186,10 @@
           <td>${fmt(r.co2,0)}</td>
           <td>${fmt(r.alt,0)}</td>
           <td>${fmt(r.ast,0)}</td>
+          <td>${astAlt}</td>
           <td>${r.psa ? fmt(r.psa,1) : ''}</td>
-        </tr>`).join('');
+        </tr>`;
+      }).join('');
 
       const thyroidTbody = document.querySelector('#thyroid-table tbody');
       thyroidTbody.innerHTML = data.map(r => `
