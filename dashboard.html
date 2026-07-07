@@ -658,7 +658,7 @@
         </div>
         <div class="table-wrap" id="table-wrap-lipids">
           <table id="table-lipids">
-            <thead><tr><th>Date</th><th>LDL</th><th>HDL</th><th>Triglycerides</th><th>TG/HDL</th></tr></thead>
+            <thead><tr><th>Date</th><th>LDL</th><th>HDL</th><th>Triglycerides</th><th>TG/HDL <span class="info-btn" onclick="document.getElementById('tg-hdl-dialog').showModal()" title="Click for ratio details">ⓘ</span></th></tr></thead>
             <tbody></tbody>
           </table>
         </div>
@@ -1425,23 +1425,53 @@
     </div>
   </dialog>
 
+  <dialog id="tg-hdl-dialog" closedby="any" class="modern-dialog">
+    <div class="dialog-header">
+      <h3>Understanding the TG/HDL Ratio</h3>
+      <button class="dialog-close-btn" onclick="document.getElementById('tg-hdl-dialog').close()" aria-label="Close">×</button>
+    </div>
+    <div class="dialog-body">
+      <p>The <strong>Triglyceride-to-HDL ratio (TG/HDL)</strong> is an excellent marker of metabolic health, insulin sensitivity, and cardiovascular risk.</p>
+      
+      <div class="ratio-breakdown">
+        <div class="ratio-item">
+          <span class="ratio-val">&lt; 2.0</span>
+          <span class="ratio-desc"><strong>Ideal / Normal:</strong> Indicates good insulin sensitivity and a lower risk of cardiovascular disease.</span>
+        </div>
+        <div class="ratio-item">
+          <span class="ratio-val">2.0 - 3.0</span>
+          <span class="ratio-desc"><strong>Borderline / Moderate:</strong> Suggests mild metabolic dysfunction or suboptimal lipid balance.</span>
+        </div>
+        <div class="ratio-item">
+          <span class="ratio-val">&gt; 3.0</span>
+          <span class="ratio-desc"><strong>High Risk / Insulin Resistance:</strong> Strongly correlated with insulin resistance, metabolic syndrome, and elevated risk of heart disease.</span>
+        </div>
+      </div>
+      
+      <div class="dialog-footer-note">
+        <p><strong>Note:</strong> A lower TG/HDL ratio is generally better. Optimal cardiovascular and metabolic targets may vary depending on demographic factors. Always consult your physician to interpret this ratio in the context of your overall health profile.</p>
+      </div>
+    </div>
+  </dialog>
+
   <script>
     // Light-dismiss polyfill/fallback for dialogs
     (function() {
-      const astAltDialog = document.getElementById('ast-alt-dialog');
-      if (astAltDialog && !('closedBy' in HTMLDialogElement.prototype)) {
-        astAltDialog.addEventListener('click', (event) => {
-          if (event.target !== astAltDialog) return;
-          const rect = astAltDialog.getBoundingClientRect();
-          const isDialogContent = (
-            rect.top <= event.clientY &&
-            event.clientY <= rect.top + rect.height &&
-            rect.left <= event.clientX &&
-            event.clientX <= rect.left + rect.width
-          );
-          if (!isDialogContent) {
-            astAltDialog.close();
-          }
+      if (!('closedBy' in HTMLDialogElement.prototype)) {
+        document.querySelectorAll('dialog').forEach(dialog => {
+          dialog.addEventListener('click', (event) => {
+            if (event.target !== dialog) return;
+            const rect = dialog.getBoundingClientRect();
+            const isDialogContent = (
+              rect.top <= event.clientY &&
+              event.clientY <= rect.top + rect.height &&
+              rect.left <= event.clientX &&
+              event.clientX <= rect.left + rect.width
+            );
+            if (!isDialogContent) {
+              dialog.close();
+            }
+          });
         });
       }
     })();
