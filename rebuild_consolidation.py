@@ -567,8 +567,15 @@ def build_dashboard_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
                 "potassium": row["potassium_mmol_l"],
                 "co2": row["co2_mmol_l"],
                 "calcium": row["calcium_mg_dl"],
+                "totalProtein": row["total_protein_g_dl"],
                 "albumin": row["albumin_g_dl"],
+                "globulin": (
+                    round(row["total_protein_g_dl"] - row["albumin_g_dl"], 2)
+                    if row["total_protein_g_dl"] is not None and row["albumin_g_dl"] is not None
+                    else None
+                ),
                 "bilirubin": row["bilirubin_mg_dl"],
+                "alkPhos": row["alk_phos_u_l"],
                 "ast": row["ast_u_l"],
                 "alt": row["alt_u_l"],
                 "creatinine": row["creatinine_mg_dl"],

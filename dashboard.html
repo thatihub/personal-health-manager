@@ -797,10 +797,25 @@
               <div class="mini-range"></div>
               <svg id="chart-chemistry-albumin"></svg>
             </div>
+            <div class="mini orange" data-metric="totalProtein">
+              <h4>Total Protein</h4>
+              <div class="mini-range"></div>
+              <svg id="chart-chemistry-total-protein"></svg>
+            </div>
+            <div class="mini blue" data-metric="globulin">
+              <h4>Globulin</h4>
+              <div class="mini-range"></div>
+              <svg id="chart-chemistry-globulin"></svg>
+            </div>
             <div class="mini orange" data-metric="bilirubin">
               <h4>Bilirubin</h4>
               <div class="mini-range"></div>
               <svg id="chart-chemistry-bilirubin"></svg>
+            </div>
+            <div class="mini green" data-metric="alkPhos">
+              <h4>Alkaline Phosphatase</h4>
+              <div class="mini-range"></div>
+              <svg id="chart-chemistry-alk-phos"></svg>
             </div>
             <div class="mini blue" data-metric="ast">
               <h4>AST</h4>
@@ -816,7 +831,7 @@
         </div>
         <div class="table-wrap" id="table-wrap-chemistry">
           <table id="table-chemistry">
-            <thead><tr><th>Date</th><th>Calcium</th><th>Albumin</th><th>Bilirubin</th><th>AST</th><th>ALT</th><th>AST/ALT Ratio <span class="info-btn" onclick="document.getElementById('ast-alt-dialog').showModal()" title="Click for ratio details">ⓘ</span></th></tr></thead>
+            <thead><tr><th>Date</th><th>Calcium</th><th>Total Protein</th><th>Albumin</th><th>Globulin</th><th>Bilirubin</th><th>Alk Phos</th><th>AST</th><th>ALT</th><th>AST/ALT Ratio <span class="info-btn" onclick="document.getElementById('ast-alt-dialog').showModal()" title="Click for ratio details">ⓘ</span></th></tr></thead>
             <tbody></tbody>
           </table>
         </div>
@@ -922,8 +937,10 @@
     <section class="card notes">
       <strong>Important:</strong> This is an organizational and trend-visualization project, not medical advice.
       <ul>
-        <li>Most recent HbA1c (February 12, 2026): <strong>6.5%</strong> (improved from 7.4%).</li>
-        <li>Most recent TSH (February 12, 2026): <strong>12.7</strong> (high).</li>
+        <li>Most recent HbA1c (July 23, 2026): <strong>7.2%</strong> (high; up from 7.1% in June).</li>
+        <li>Most recent glucose (July 23, 2026): <strong>157 mg/dL</strong> (high).</li>
+        <li>Most recent TSH (July 23, 2026): <strong>3.17 uIU/mL</strong> (within the dashboard reference range).</li>
+        <li>Sodium (<strong>126 mmol/L</strong>) and chloride (<strong>90 mmol/L</strong>) remain low on the July 23 panel.</li>
         <li>HDL is persistently low in recent reports (36-38).</li>
         <li>Urine ACR improved from 51 (June 2, 2025) to 19 (September 12, 2025), then 29 (February 12, 2026).</li>
       </ul>
@@ -1073,8 +1090,11 @@
       tgAb: { type: "max_only", max: 0.9 },
       tpoAb: { type: "max_only", max: 9.0 },
       calcium: { type: "between", min: 8.6, max: 10.3 },
+      totalProtein: { type: "between", min: 6.0, max: 8.5 },
       albumin: { type: "between", min: 3.8, max: 4.8 },
+      globulin: { type: "between", min: 1.5, max: 4.5 },
       bilirubin: { type: "between", min: 0.0, max: 1.2 },
+      alkPhos: { type: "between", min: 44, max: 121 },
       ast: { type: "between", min: 10, max: 40 },
       alt: { type: "between", min: 9, max: 46 }
     };
@@ -1111,8 +1131,11 @@
       tgAb: "0.0-0.9 IU/mL",
       tpoAb: "0.0-9.0 IU/mL",
       calcium: "8.6-10.3 mg/dL",
+      totalProtein: "6.0-8.5 g/dL",
       albumin: "3.8-4.8 g/dL",
+      globulin: "1.5-4.5 g/dL",
       bilirubin: "0.0-1.2 mg/dL",
+      alkPhos: "44-121 U/L",
       ast: "10-40 U/L",
       alt: "9-46 U/L"
     };
@@ -1239,7 +1262,7 @@
     fillTable("table-kidney", ["creatinine", "egfr", "acr"]);
     fillTable("table-metabolic", ["bun", "sodium", "chloride", "potassium", "co2"]);
     fillTable("table-thyroid", ["tsh", "freeT4", "thyroxineT4", "t3Uptake", "freeThyroxineIndex", "tgAb", "tpoAb"]);
-    fillTable("table-chemistry", ["calcium", "albumin", "bilirubin", "ast", "alt", "astAlt"]);
+    fillTable("table-chemistry", ["calcium", "totalProtein", "albumin", "globulin", "bilirubin", "alkPhos", "ast", "alt", "astAlt"]);
     fillTable("table-specialty", ["lipoproteinA", "psa", "hcv"]);
     fillTable("table-vitamins", ["vitaminD", "vitaminB12"]);
     fillTable("table-cbc", ["wbc", "rbc", "hemoglobin", "hematocrit", "platelets"]);
@@ -1373,8 +1396,11 @@
     drawSingleLine("chart-thyroid-fti", data.map(d => d.freeThyroxineIndex), "#ee6c4d", "freeThyroxineIndex");
 
     drawSingleLine("chart-chemistry-calcium", data.map(d => d.calcium), "#1f6f8b", "calcium");
+    drawSingleLine("chart-chemistry-total-protein", data.map(d => d.totalProtein), "#ee6c4d", "totalProtein");
     drawSingleLine("chart-chemistry-albumin", data.map(d => d.albumin), "#2a9d8f", "albumin");
+    drawSingleLine("chart-chemistry-globulin", data.map(d => d.globulin), "#1f6f8b", "globulin");
     drawSingleLine("chart-chemistry-bilirubin", data.map(d => d.bilirubin), "#ee6c4d", "bilirubin");
+    drawSingleLine("chart-chemistry-alk-phos", data.map(d => d.alkPhos), "#2a9d8f", "alkPhos");
     drawSingleLine("chart-chemistry-ast", data.map(d => d.ast), "#1f6f8b", "ast");
     drawSingleLine("chart-chemistry-alt", data.map(d => d.alt), "#2a9d8f", "alt");
     drawSingleLine("chart-specialty-lpa", data.map(d => d.lipoproteinA), "#1f6f8b", "lipoproteinA");
