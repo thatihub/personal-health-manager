@@ -531,7 +531,7 @@ window.LAB_DASH_DATA = [
     "acr": null,
     "cPeptide": null,
     "tsh": 3.17,
-    "freeT4": null,
+    "freeT4": 1.56,
     "thyroxineT4": null,
     "t3Uptake": null,
     "freeThyroxineIndex": null,
