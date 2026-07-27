@@ -216,6 +216,163 @@
       min-width: 250px;
     }
     .hidden { display: none !important; }
+
+    .inbody-card {
+      margin-bottom: 16px;
+      padding: 18px;
+      border-top: 4px solid #73ecb4 !important;
+    }
+    .inbody-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 14px;
+    }
+    .inbody-head h2 {
+      margin: 0 0 4px;
+      font: 800 22px/1.15 "Avenir Next Condensed", "Trebuchet MS", sans-serif;
+      color: #73ecb4;
+    }
+    .inbody-head p, .med-note p, .scan-caution {
+      margin: 0;
+      color: var(--comp-muted);
+      font-size: 13.5px;
+      line-height: 1.5;
+    }
+    .trend-badge {
+      flex: 0 0 auto;
+      border: 1px solid rgba(115, 236, 180, 0.35);
+      border-radius: 999px;
+      padding: 7px 11px;
+      color: #73ecb4;
+      background: rgba(115, 236, 180, 0.08);
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .inbody-trends {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(135px, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .inbody-chart-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .inbody-chart {
+      padding: 12px;
+      border: 1px solid var(--comp-line);
+      border-radius: 12px;
+      background: rgba(8, 17, 30, 0.4);
+    }
+    .inbody-chart h3 {
+      margin: 0 0 4px;
+      color: var(--comp-ink);
+      font-size: 14px;
+    }
+    .inbody-chart svg { height: 190px; }
+    .trend-tile {
+      padding: 12px;
+      border: 1px solid var(--comp-line);
+      border-radius: 12px;
+      background: rgba(8, 17, 30, 0.48);
+    }
+    .trend-tile .label {
+      color: var(--comp-muted);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .7px;
+      text-transform: uppercase;
+    }
+    .trend-tile .value {
+      margin-top: 5px;
+      color: var(--comp-ink);
+      font-size: 21px;
+      font-weight: 800;
+    }
+    .trend-tile .detail {
+      margin-top: 3px;
+      color: #73ecb4;
+      font-size: 11.5px;
+      font-weight: 700;
+    }
+    .med-note {
+      margin-top: 14px;
+      padding: 13px 14px;
+      border-left: 4px solid #ffd081;
+      border-radius: 10px;
+      background: rgba(255, 208, 129, 0.07);
+    }
+    .med-note strong { color: #ffd081; }
+    .scan-caution {
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: rgba(255, 143, 160, 0.07);
+      border: 1px solid rgba(255, 143, 160, 0.2);
+    }
+    .dashboard-section-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin: 22px 0 12px;
+      padding: 0 2px;
+    }
+    .dashboard-section-head h2 {
+      margin: 0 0 4px;
+      color: #c9bbff;
+      font: 800 22px/1.15 "Avenir Next Condensed", "Trebuchet MS", sans-serif;
+    }
+    .dashboard-section-head p {
+      margin: 0;
+      color: var(--comp-muted);
+      font-size: 13.5px;
+      line-height: 1.45;
+    }
+    .dashboard-collapse {
+      margin-bottom: 16px;
+      padding: 0 !important;
+      overflow: hidden;
+    }
+    .dashboard-summary h2 {
+      margin: 0 0 4px;
+      font: 800 22px/1.15 "Avenir Next Condensed", "Trebuchet MS", sans-serif;
+    }
+    .dashboard-summary p {
+      margin: 0;
+      color: var(--comp-muted);
+      font-size: 13.5px;
+      line-height: 1.45;
+    }
+    .summary-actions {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      flex: 0 0 auto;
+    }
+    .scan-method-badge {
+      flex: 0 0 auto;
+      border: 1px solid rgba(201, 187, 255, 0.35);
+      border-radius: 999px;
+      padding: 7px 11px;
+      color: #c9bbff;
+      background: rgba(201, 187, 255, 0.08);
+      font-size: 12px;
+      font-weight: 800;
+    }
+    @media (max-width: 800px) {
+      .inbody-trends { grid-template-columns: 1fr 1fr; }
+      .inbody-chart-grid { grid-template-columns: 1fr; }
+      .inbody-head { flex-direction: column; }
+      .dashboard-section-head { flex-direction: column; }
+    }
+    @media (max-width: 480px) {
+      .inbody-trends { grid-template-columns: 1fr; }
+    }
   </style>
   <link rel="stylesheet" href="./companion_theme.css" />
   <script>
@@ -287,7 +444,7 @@
               <h4>Active Health Goals & Protocol</h4>
               <p><strong>Primary Goal:</strong> Lose body fat slowly while preserving vital muscle tissue, especially because you are taking Mounjaro and insulin.</p>
               <ul class="goals-list">
-                <li><strong>Protein Target:</strong> 90–110 g/day spread across meals to support muscle preservation and recovery.</li>
+                <li><strong>Current Protein Intake:</strong> 50–60 g/day, the maximum currently tolerated. Keep it spread across meals and confirm the individualized target with the clinician.</li>
                 <li><strong>Resistance Training:</strong> Perform compound exercises 2–3 times per week to trigger muscle protein synthesis.</li>
                 <li><strong>Weight Targets:</strong> Focus on steady progress. First target is 155–160 lb; Second target is 145–150 lb.</li>
               </ul>
@@ -301,8 +458,80 @@
         </div>
       </details>
     </section>
-    
-    <section class="grid" id="dashboard-grid">
+
+    <section class="card inbody-card dashboard-collapse" aria-labelledby="inbody-title">
+      <details class="section" open>
+        <summary class="section-head dashboard-summary">
+          <div>
+            <h2 id="inbody-title" style="color:#73ecb4;">InBody Scan Dashboard</h2>
+            <p>Monthly Fitness 19 scans. June 28 is the most useful baseline for evaluating the first month on Mounjaro 5 mg.</p>
+          </div>
+          <div class="summary-actions">
+            <span class="trend-badge">3 monthly scans</span>
+            <span class="chev" aria-hidden="true">⌄</span>
+          </div>
+        </summary>
+        <div class="section-body">
+          <div class="inbody-trends" id="inbody-trends"></div>
+          <div class="inbody-chart-grid">
+            <div class="inbody-chart">
+              <h3>InBody Weight and Fat Mass</h3>
+              <svg id="chart-inbody-weight-fat" aria-label="InBody weight and fat-mass trend"></svg>
+              <div class="legend">
+                <div class="legend-item"><span class="legend-color" style="background:#58c8ff;"></span>Scan Weight</div>
+                <div class="legend-item"><span class="legend-color" style="background:#ff8fa0;"></span>Fat Mass</div>
+              </div>
+            </div>
+            <div class="inbody-chart">
+              <h3>InBody Lean and Skeletal Muscle Mass</h3>
+              <svg id="chart-inbody-muscle" aria-label="InBody lean and skeletal-muscle trend"></svg>
+              <div class="legend">
+                <div class="legend-item"><span class="legend-color" style="background:#b9a6ff;"></span>Lean Mass</div>
+                <div class="legend-item"><span class="legend-color" style="background:#73ecb4;"></span>Skeletal Muscle</div>
+              </div>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Weight</th>
+                  <th>BMI</th>
+                  <th>Body Fat</th>
+                  <th>Fat Mass</th>
+                  <th>Lean Mass</th>
+                  <th>Skeletal Muscle</th>
+                  <th>Body Water</th>
+                  <th>SMI</th>
+                  <th>BMR</th>
+                </tr>
+              </thead>
+              <tbody id="table-body-inbody"></tbody>
+            </table>
+          </div>
+          <div class="med-note">
+            <p><strong>Mounjaro timeline:</strong> Started 2.5 mg on April 24, 2026; continued 2.5 mg through May; increased to 5 mg on June 24; continued 5 mg through July. The May 29 scan was about five weeks after starting 2.5 mg, the June 28 scan was four days after the increase, and the July 26 scan reflects about one month at 5 mg.</p>
+          </div>
+          <p class="scan-caution"><strong>Interpretation note:</strong> May composition values are retained as the first baseline but flagged because the large right-to-left leg difference suggests a measurement artifact. The more reliable June-to-July trend was −3.0 lb total weight, −2.4 lb fat mass, and −0.6 lb lean mass—about 80% of the measured loss came from fat.</p>
+        </div>
+      </details>
+    </section>
+
+    <section class="card dashboard-collapse" aria-labelledby="dexa-title">
+      <details class="section" open>
+        <summary class="section-head dashboard-summary">
+          <div>
+            <h2 id="dexa-title" style="color:#c9bbff;">Kalos DEXA Dashboard</h2>
+            <p>DEXA-only measurements for body composition, visceral fat, muscle indices, and bone density. Future DEXA scans will be compared only with DEXA.</p>
+          </div>
+          <div class="summary-actions">
+            <span class="scan-method-badge">DEXA measurements only</span>
+            <span class="chev" aria-hidden="true">⌄</span>
+          </div>
+        </summary>
+        <div class="section-body">
+          <section class="grid" id="dashboard-grid">
       <article class="card chart">
         <div class="chart-head">
           <h3>Weight Tracking (Clothed vs Home)</h3>
@@ -471,11 +700,16 @@
           </table>
         </div>
       </article>
+          </section>
+        </div>
+      </details>
     </section>
   </div>
   
   <script>
     let rawRecords = [];
+    let rawInBodyRecords = [];
+    let rawDexaRecords = [];
     
     function fmtDate(iso) {
       if (!iso) return "-";
@@ -523,6 +757,74 @@
       document.getElementById("kpi-lean-mass").textContent = `${latest.adjusted_lean_body_mass_lb || latest.lean_body_mass_lb} lb`;
       document.getElementById("kpi-muscle-mass").textContent = `${latest.skeletal_muscle_mass_lb} lb`;
       document.getElementById("kpi-bmr").textContent = `${latest.basal_metabolic_rate_kcal} kcal`;
+    }
+
+    function renderInBodyCard(records) {
+      const scans = records.filter(r => r.scan_type === "InBody");
+      const tbody = document.getElementById("table-body-inbody");
+      const trends = document.getElementById("inbody-trends");
+      if (!tbody || !trends || !scans.length) return;
+
+      tbody.innerHTML = scans.map(r => `
+        <tr>
+          <td>${fmtDate(r.date)}</td>
+          <td style="color:#58c8ff;">${r.scan_weight_lb.toFixed(1)} lb</td>
+          <td style="color:#8beee0;">${r.bmi.toFixed(1)}</td>
+          <td style="color:#ff8fa0;">${r.body_fat_pct.toFixed(1)}%</td>
+          <td style="color:#ffb0be;">${r.body_fat_mass_lb.toFixed(1)} lb</td>
+          <td style="color:#b9a6ff;">${r.lean_body_mass_lb.toFixed(1)} lb</td>
+          <td style="color:#73ecb4;">${r.skeletal_muscle_mass_lb.toFixed(1)} lb</td>
+          <td>${r.total_body_water_lb.toFixed(1)} lb</td>
+          <td>${r.appendicular_lean_mass_index.toFixed(1)}</td>
+          <td style="color:#ffd081;">${Math.round(r.basal_metabolic_rate_kcal)} kcal</td>
+        </tr>
+      `).join("");
+
+      const baseline = scans.find(r => r.date === "2026-06-28") || scans[0];
+      const latest = scans[scans.length - 1];
+      const change = (key) => latest[key] - baseline[key];
+      const signed = (value, suffix) => `${value > 0 ? "+" : ""}${value.toFixed(1)}${suffix}`;
+      const tiles = [
+        {
+          label: "Weight",
+          value: `${latest.scan_weight_lb.toFixed(1)} lb`,
+          detail: `${signed(change("scan_weight_lb"), " lb")} since Jun 28`
+        },
+        {
+          label: "Fat Mass",
+          value: `${latest.body_fat_mass_lb.toFixed(1)} lb`,
+          detail: `${signed(change("body_fat_mass_lb"), " lb")} since Jun 28`
+        },
+        {
+          label: "Lean Mass",
+          value: `${latest.lean_body_mass_lb.toFixed(1)} lb`,
+          detail: `${signed(change("lean_body_mass_lb"), " lb")} since Jun 28`
+        },
+        {
+          label: "Skeletal Muscle",
+          value: `${latest.skeletal_muscle_mass_lb.toFixed(1)} lb`,
+          detail: `${signed(change("skeletal_muscle_mass_lb"), " lb")} since Jun 28`
+        }
+      ];
+      trends.innerHTML = tiles.map(tile => `
+        <div class="trend-tile">
+          <div class="label">${tile.label}</div>
+          <div class="value">${tile.value}</div>
+          <div class="detail">${tile.detail}</div>
+        </div>
+      `).join("");
+    }
+
+    function drawInBodyCharts(records) {
+      if (!records.length) return;
+      drawMultiLine("chart-inbody-weight-fat", records, [
+        { key: "scan_weight_lb", color: "#58c8ff" },
+        { key: "body_fat_mass_lb", color: "#ff8fa0" }
+      ]);
+      drawMultiLine("chart-inbody-muscle", records, [
+        { key: "lean_body_mass_lb", color: "#b9a6ff" },
+        { key: "skeletal_muscle_mass_lb", color: "#73ecb4" }
+      ]);
     }
     
     function populateTables(records) {
@@ -767,11 +1069,15 @@
         }
 
         rawRecords = (out && out.rows) || [];
+        rawInBodyRecords = rawRecords.filter(r => r.scan_type === "InBody");
+        rawDexaRecords = rawRecords.filter(r => r.scan_type === "DEXA");
         
         if (rawRecords.length > 0) {
           renderKPIs(rawRecords[rawRecords.length - 1]);
-          populateTables(rawRecords);
-          drawCharts(rawRecords);
+          renderInBodyCard(rawRecords);
+          drawInBodyCharts(rawInBodyRecords);
+          populateTables(rawDexaRecords);
+          drawCharts(rawDexaRecords);
           
           // Default to the Table view on page load
           const defaultToTable = true;
@@ -796,7 +1102,8 @@
     }
     
     window.addEventListener("resize", () => {
-      if (rawRecords.length > 0) drawCharts(rawRecords);
+      if (rawInBodyRecords.length > 0) drawInBodyCharts(rawInBodyRecords);
+      if (rawDexaRecords.length > 0) drawCharts(rawDexaRecords);
     });
     
     init();
