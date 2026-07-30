@@ -57,10 +57,16 @@
     .clean-note h1 { font-size:clamp(30px,4vw,44px); line-height:1.12; margin:0 0 9px; }
     .clean-meta { color:var(--muted); font-size:15px; font-weight:650; }
     .clean-content { font-size:17px; line-height:1.62; color:#edf5fd; padding:26px 2px 10px; }
-    .clean-outline { list-style:none; display:grid; gap:14px; padding:0; margin:0; }
-    .clean-outline li { position:relative; padding:17px 18px 17px 48px; border:1px solid rgba(143,174,204,.24); border-radius:15px; background:linear-gradient(145deg,rgba(39,58,80,.86),rgba(24,41,60,.88)); }
-    .clean-outline li::before { content:""; position:absolute; left:20px; top:25px; width:12px; height:12px; border-radius:50%; background:var(--blue); box-shadow:0 0 0 5px rgba(19,165,212,.14); }
-    .clean-outline strong { color:#fff; font-weight:850; }
+    .clean-outline { display:grid; gap:10px; padding-left:24px; margin:0; }
+    .clean-outline li { padding-left:4px; color:var(--blue); }
+    .clean-topic { border:1px solid rgba(143,174,204,.24); border-radius:13px; background:linear-gradient(145deg,rgba(39,58,80,.86),rgba(24,41,60,.88)); overflow:hidden; }
+    .clean-topic summary { position:relative; list-style:none; cursor:pointer; padding:14px 48px 14px 17px; color:#fff; font-weight:850; }
+    .clean-topic summary::-webkit-details-marker { display:none; }
+    .clean-topic summary::after { content:"+"; position:absolute; right:17px; top:50%; translate:0 -50%; color:#8fdcf3; font-size:23px; line-height:1; font-weight:500; }
+    .clean-topic[open] summary::after { content:"−"; }
+    .clean-topic summary:hover, .clean-topic summary:focus-visible { background:rgba(19,165,212,.09); }
+    .clean-topic summary:focus-visible { outline:2px solid var(--blue); outline-offset:-2px; }
+    .topic-description { margin:0; padding:0 17px 15px; border-top:1px solid rgba(143,174,204,.18); color:#d7e6f4; line-height:1.55; padding-top:13px; }
     .clean-closing { margin:20px 0 0; padding:17px 19px; border-left:4px solid var(--green); border-radius:4px 14px 14px 4px; background:rgba(22,137,87,.13); color:#dff8eb; font-weight:700; }
     .clean-edit { flex:0 0 auto; background:linear-gradient(120deg,#0c8ebd,var(--blue)); }
     .clean-home { min-height:44px; border:1px solid var(--line); border-radius:11px; padding:10px 14px; color:#dceafa; background:#17283c; font-weight:800; text-decoration:none; display:inline-flex; align-items:center; }
@@ -215,16 +221,18 @@
       if (bullets.length) {
         const list = document.createElement("ul");
         list.className = "clean-outline";
-        bullets.forEach(text => {
+        bullets.forEach((text, index) => {
+          const topic = topicParts(text, index);
           const item = document.createElement("li");
-          const colon = text.indexOf(":");
-          if (colon > 0 && colon < 55) {
-            const label = document.createElement("strong");
-            label.textContent = text.slice(0, colon + 1);
-            item.append(label, document.createTextNode(text.slice(colon + 1)));
-          } else {
-            item.textContent = text;
-          }
+          const details = document.createElement("details");
+          details.className = "clean-topic";
+          const summary = document.createElement("summary");
+          summary.textContent = topic.keyword;
+          const description = document.createElement("p");
+          description.className = "topic-description";
+          description.textContent = topic.description;
+          details.append(summary, description);
+          item.appendChild(details);
           list.appendChild(item);
         });
         container.appendChild(list);
@@ -236,6 +244,25 @@
         container.appendChild(paragraph);
       });
       if (!bullets.length && !notes.length) container.textContent = "No note text.";
+    }
+    function topicParts(text, index) {
+      const clean = text.replace(/\*\*/g, "").trim();
+      const labeled = clean.match(/^([^:]{2,55}):\s*(.+)$/);
+      if (labeled) return { keyword: labeled[1].trim(), description: labeled[2].trim() };
+      const lower = clean.toLowerCase();
+      const knownTopics = [
+        ["mounjaro", "Mounjaro & kidney impact"],
+        ["levothyroxine", "Thyroid medication"],
+        ["lp(a)", "Cardiovascular labs"],
+        ["fell from a ladder", "Previous fall"],
+        ["please consider", "Requested tests"]
+      ];
+      const match = knownTopics.find(([phrase]) => lower.includes(phrase));
+      if (match) return { keyword: match[1], description: clean };
+      const firstSentence = clean.split(/[.?!]/, 1)[0].trim();
+      const words = firstSentence.split(/\s+/);
+      const keyword = words.slice(0, 6).join(" ") + (words.length > 6 ? "…" : "");
+      return { keyword: keyword || `Topic ${index + 1}`, description: clean };
     }
     function showEdit() {
       document.body.classList.remove("view-mode");
