@@ -12,6 +12,11 @@
     .nav { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:25px; }
     .nav a { color:#dceafa; text-decoration:none; font-weight:700; padding:10px 15px; min-height:46px; display:inline-flex; align-items:center; border:1px solid var(--line); border-radius:12px; background:rgba(17,28,42,.84); }
     .nav a.active { color:white; border-color:transparent; background:linear-gradient(120deg,#0d89b6,var(--blue)); }
+    .nav a:nth-child(-n+5) { background:linear-gradient(145deg,rgba(20,54,78,.96),rgba(17,35,54,.96)); border-color:rgba(57,180,219,.48); box-shadow:0 8px 18px rgba(0,0,0,.2); }
+    .nav a:nth-child(2) { background:linear-gradient(145deg,rgba(76,55,120,.78),rgba(37,34,70,.96)); border-color:rgba(159,122,234,.62); }
+    .nav a:nth-child(4) { background:linear-gradient(145deg,rgba(104,48,47,.74),rgba(54,31,39,.96)); border-color:rgba(239,111,89,.58); }
+    .nav a:nth-child(5) { background:linear-gradient(145deg,rgba(27,101,72,.7),rgba(24,53,49,.96)); border-color:rgba(27,196,113,.58); }
+    .nav a.active { color:white; border-color:transparent; background:linear-gradient(120deg,#0d89b6,var(--blue)); }
     .hero { display:flex; justify-content:space-between; gap:18px; align-items:end; margin:0 0 22px; }
     h1 { font-size:clamp(34px,5vw,54px); letter-spacing:-.04em; line-height:1; margin:0 0 10px; }
     h2,h3 { margin:0; letter-spacing:-.025em; }
@@ -48,7 +53,7 @@
     @media (max-width:820px) { .layout{grid-template-columns:1fr}.hero{align-items:start;flex-direction:column}.status{text-align:left}.form-grid{grid-template-columns:1fr}textarea{min-height:390px} }
     .print-view { display:none; }
     .clean-note { display:none; max-width:860px; margin:34px auto; }
-    .clean-note-head { display:flex; justify-content:space-between; align-items:start; gap:20px; padding-bottom:20px; border-bottom:1px solid var(--line); }
+    .clean-note-head { display:grid; grid-template-columns:auto 1fr auto; align-items:start; gap:20px; padding-bottom:20px; border-bottom:1px solid var(--line); }
     .clean-note h1 { font-size:clamp(30px,4vw,44px); line-height:1.12; margin:0 0 9px; }
     .clean-meta { color:var(--muted); font-size:15px; font-weight:650; }
     .clean-content { font-size:17px; line-height:1.62; color:#edf5fd; padding:26px 2px 10px; }
@@ -58,10 +63,12 @@
     .clean-outline strong { color:#fff; font-weight:850; }
     .clean-closing { margin:20px 0 0; padding:17px 19px; border-left:4px solid var(--green); border-radius:4px 14px 14px 4px; background:rgba(22,137,87,.13); color:#dff8eb; font-weight:700; }
     .clean-edit { flex:0 0 auto; background:linear-gradient(120deg,#0c8ebd,var(--blue)); }
+    .clean-home { min-height:44px; border:1px solid var(--line); border-radius:11px; padding:10px 14px; color:#dceafa; background:#17283c; font-weight:800; text-decoration:none; display:inline-flex; align-items:center; }
+    .clean-home:hover { filter:brightness(1.08); transform:translateY(-1px); }
     body.view-mode .nav, body.view-mode .hero, body.view-mode .layout { display:none; }
     body.view-mode .clean-note { display:block; }
     body.edit-mode .clean-note { display:none; }
-    @media (max-width:620px) { .clean-note{margin:12px auto}.clean-note-head{flex-direction:column}.clean-edit{align-self:flex-start}.clean-content{font-size:16px} }
+    @media (max-width:620px) { .clean-note{margin:12px auto}.clean-note-head{grid-template-columns:auto 1fr auto;gap:10px}.clean-note-head h1{font-size:24px}.clean-content{font-size:16px} }
     @media print { body{background:white;color:#111}.nav,.hero,.layout,.clean-note{display:none!important}.wrap{padding:0;max-width:none}.print-view{display:block}.print-view h1{font-size:26px;margin-bottom:8px}.print-meta{color:#444;margin-bottom:24px}.print-content{white-space:pre-wrap;font:15px/1.55 Inter,-apple-system,sans-serif} }
   </style>
 </head>
@@ -69,6 +76,7 @@
   <main class="wrap">
     <section class="clean-note" aria-label="Current doctor note">
       <header class="clean-note-head">
+        <a class="clean-home" href="./index.html">Home</a>
         <div>
           <h1 id="clean-title">Doctor Note</h1>
           <div id="clean-meta" class="clean-meta"></div>
@@ -80,11 +88,11 @@
 
     <nav class="nav" aria-label="Primary">
       <a href="./index.html">Home</a>
-      <a href="./dashboard.html">Lab Results</a>
-      <a href="./vault.html">Health Vault</a>
       <a class="active" href="./doctor-notes.html">Doctor Notes</a>
+      <a href="./dashboard.html">Lab Results</a>
       <a href="./bp.html">Blood Pressure</a>
       <a href="./composition.html">Body Composition</a>
+      <a href="./vault.html">Health Vault</a>
     </nav>
 
     <header class="hero">

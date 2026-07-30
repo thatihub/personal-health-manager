@@ -80,6 +80,52 @@ h3, .chart h3, .section-head h3 { font-size: clamp(22px, 2.2vw, 32px) !important
   border-color: transparent !important;
 }
 
+/* Priority dashboard pills: Home, Doctor Notes, Labs, BP, and Composition */
+.nav > a:nth-child(-n+5),
+.top-nav > a:nth-child(-n+5) {
+  background: linear-gradient(145deg, rgba(20, 54, 78, 0.96), rgba(17, 35, 54, 0.96)) !important;
+  border-color: rgba(57, 180, 219, 0.48) !important;
+  color: #eefaff !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.06), 0 8px 18px rgba(0,0,0,.2) !important;
+}
+.nav > a:nth-child(2),
+.top-nav > a:nth-child(2) {
+  border-color: rgba(159, 122, 234, 0.62) !important;
+  background: linear-gradient(145deg, rgba(76, 55, 120, 0.78), rgba(37, 34, 70, 0.96)) !important;
+}
+.nav > a:nth-child(3),
+.top-nav > a:nth-child(3) {
+  border-color: rgba(18, 164, 212, 0.64) !important;
+}
+.nav > a:nth-child(4),
+.top-nav > a:nth-child(4) {
+  border-color: rgba(239, 111, 89, 0.58) !important;
+  background: linear-gradient(145deg, rgba(104, 48, 47, 0.74), rgba(54, 31, 39, 0.96)) !important;
+}
+.nav > a:nth-child(5),
+.top-nav > a:nth-child(5) {
+  border-color: rgba(27, 196, 113, 0.58) !important;
+  background: linear-gradient(145deg, rgba(27, 101, 72, 0.7), rgba(24, 53, 49, 0.96)) !important;
+}
+.nav > a:nth-child(-n+5).active,
+.top-nav > a:nth-child(-n+5).active {
+  background: linear-gradient(120deg, var(--page-accent-2), var(--page-accent)) !important;
+  border-color: transparent !important;
+  box-shadow: 0 10px 22px color-mix(in srgb, var(--page-accent) 28%, transparent) !important;
+}
+.nav > a:nth-child(2)::before,
+.top-nav > a:nth-child(2)::before { content: "📝"; margin-right: 7px; }
+.nav > a:nth-child(3)::before,
+.top-nav > a:nth-child(3)::before { content: "🧪"; margin-right: 7px; }
+.nav > a:nth-child(4)::before,
+.top-nav > a:nth-child(4)::before { content: "❤️"; margin-right: 7px; }
+.nav > a:nth-child(5)::before,
+.top-nav > a:nth-child(5)::before { content: "📊"; margin-right: 7px; }
+.nav > a:nth-child(6),
+.top-nav > a:nth-child(6) {
+  margin-left: 10px;
+}
+
 .hero, .card, .mini-panel, .stat, .kpi, .after-hours, .table-wrap, .status, .search, .search-input {
   background: var(--comp-panel) !important;
   border-color: var(--comp-line) !important;
