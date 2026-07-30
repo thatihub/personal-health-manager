@@ -1325,6 +1325,66 @@ class DashboardHandler(SimpleHTTPRequestHandler):
         tmp.write_text(f"window.VAULT_DATA = {json.dumps(payload, indent=2, ensure_ascii=False)};\n", encoding="utf-8")
         tmp.replace(path)
 
+    def _doctor_notes_payload(self) -> dict[str, object]:
+        path = PROJECT_DIR / "doctor_notes.json"
+        if not path.exists():
+            return {"current": None, "archived": []}
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            return {"current": None, "archived": []}
+        if not isinstance(payload, dict):
+            return {"current": None, "archived": []}
+        current = payload.get("current")
+        archived = payload.get("archived", [])
+        return {
+            "current": current if isinstance(current, dict) else None,
+            "archived": archived if isinstance(archived, list) else [],
+        }
+
+    def _handle_doctor_notes_save(self) -> None:
+        length = int(self.headers.get("Content-Length", "0"))
+        if length > 2_000_000:
+            self._json(413, {"ok": False, "error": "Notes file is too large"})
+            return
+        raw = self.rfile.read(length) if length else b"{}"
+        try:
+            payload = json.loads(raw.decode("utf-8"))
+        except (UnicodeDecodeError, json.JSONDecodeError):
+            self._json(400, {"ok": False, "error": "Invalid JSON body"})
+            return
+
+        if not isinstance(payload, dict):
+            self._json(400, {"ok": False, "error": "Notes data must be an object"})
+            return
+        current = payload.get("current")
+        archived = payload.get("archived", [])
+        if current is not None and not isinstance(current, dict):
+            self._json(400, {"ok": False, "error": "Current note must be an object or null"})
+            return
+        if not isinstance(archived, list) or any(not isinstance(note, dict) for note in archived):
+            self._json(400, {"ok": False, "error": "Archived notes must be a list"})
+            return
+        if len(archived) > 500:
+            self._json(400, {"ok": False, "error": "Archive limit is 500 notes"})
+            return
+
+        allowed = {"id", "doctor", "appointment_date", "title", "content", "updated_at", "archived_at"}
+        def clean_note(note: dict[str, object]) -> dict[str, str]:
+            cleaned: dict[str, str] = {}
+            for key in allowed:
+                value = note.get(key, "")
+                if value is not None:
+                    cleaned[key] = str(value)[:100_000 if key == "content" else 500]
+            return cleaned
+
+        saved = {
+            "current": clean_note(current) if current is not None else None,
+            "archived": [clean_note(note) for note in archived],
+        }
+        self._write_json_file(PROJECT_DIR / "doctor_notes.json", saved)
+        self._json(200, {"ok": True})
+
     def _handle_admin_upload(self) -> None:
         length = int(self.headers.get("Content-Length", "0"))
         raw = self.rfile.read(length) if length else b"{}"
@@ -1971,6 +2031,9 @@ class DashboardHandler(SimpleHTTPRequestHandler):
             return
         if self._serve_env_override(path):
             return
+        if path == "/api/doctor-notes":
+            self._json(200, {"ok": True, **self._doctor_notes_payload()})
+            return
         super().do_GET()
 
     def do_HEAD(self) -> None:  # noqa: N802
@@ -1984,6 +2047,12 @@ class DashboardHandler(SimpleHTTPRequestHandler):
         super().do_HEAD()
 
     def do_POST(self) -> None:  # noqa: N802
+        if self.path == "/api/doctor-notes":
+            if self._require_vault_auth():
+                return
+            self._handle_doctor_notes_save()
+            return
+
         if self.path == "/api/ag-import/preview":
             if self._require_admin_auth():
                 return

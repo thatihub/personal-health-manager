@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Doctor Notes | Personal Health Manager</title>
+  <style>
+    :root { --bg:#07101f; --panel:#26384e; --panel2:#1b2b3e; --ink:#eef6ff; --muted:#a9bfd2; --line:rgba(143,174,204,.28); --blue:#13a5d4; --green:#22c878; --amber:#f0a43a; --red:#ef6f59; }
+    * { box-sizing:border-box; }
+    body { margin:0; min-height:100vh; font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; color:var(--ink); background:radial-gradient(circle at 10% 5%,rgba(19,165,212,.13),transparent 30%),linear-gradient(155deg,#040a17,#09172b 55%,#050e1c); }
+    .wrap { max-width:1180px; margin:0 auto; padding:24px 18px 70px; }
+    .nav { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:25px; }
+    .nav a { color:#dceafa; text-decoration:none; font-weight:700; padding:10px 15px; min-height:46px; display:inline-flex; align-items:center; border:1px solid var(--line); border-radius:12px; background:rgba(17,28,42,.84); }
+    .nav a.active { color:white; border-color:transparent; background:linear-gradient(120deg,#0d89b6,var(--blue)); }
+    .hero { display:flex; justify-content:space-between; gap:18px; align-items:end; margin:0 0 22px; }
+    h1 { font-size:clamp(34px,5vw,54px); letter-spacing:-.04em; line-height:1; margin:0 0 10px; }
+    h2,h3 { margin:0; letter-spacing:-.025em; }
+    .sub,.muted { color:var(--muted); }
+    .status { font-size:13px; font-weight:700; color:#a9e9c9; min-height:20px; text-align:right; }
+    .layout { display:grid; grid-template-columns:minmax(0,1.65fr) minmax(280px,.75fr); gap:18px; align-items:start; }
+    .card { background:linear-gradient(160deg,rgba(49,68,91,.98),rgba(36,53,73,.98)); border:1px solid var(--line); border-radius:22px; box-shadow:0 18px 35px rgba(0,0,0,.3); padding:22px; }
+    .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:20px 0 14px; }
+    label { display:grid; gap:7px; color:#caddED; font-weight:750; font-size:13px; }
+    label.wide { grid-column:1/-1; }
+    input,textarea { width:100%; color:var(--ink); background:#0b1727; border:1px solid rgba(143,174,204,.35); border-radius:12px; padding:12px 13px; font:inherit; outline:none; }
+    input:focus,textarea:focus { border-color:var(--blue); box-shadow:0 0 0 3px rgba(19,165,212,.15); }
+    textarea { min-height:480px; resize:vertical; line-height:1.55; }
+    .toolbar { display:flex; gap:9px; flex-wrap:wrap; margin-top:15px; }
+    button { min-height:44px; border:1px solid rgba(255,255,255,.16); border-radius:11px; padding:10px 14px; color:white; background:#17283c; font-weight:800; cursor:pointer; }
+    button.primary { background:linear-gradient(120deg,#0c8ebd,var(--blue)); }
+    button.archive { background:linear-gradient(120deg,#168957,var(--green)); }
+    button.danger { color:#ffd5cf; border-color:rgba(239,111,89,.4); }
+    button:hover { filter:brightness(1.08); transform:translateY(-1px); }
+    .side-head { display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:14px; }
+    .count { background:#112237; color:#bfeeff; border:1px solid var(--line); border-radius:999px; padding:5px 9px; font-size:12px; font-weight:800; }
+    #search { margin-bottom:13px; }
+    .empty { color:var(--muted); border:1px dashed var(--line); border-radius:14px; padding:22px; text-align:center; }
+    .archive-list { display:grid; gap:11px; max-height:720px; overflow:auto; }
+    details.note { border:1px solid var(--line); border-radius:14px; background:rgba(13,28,45,.82); overflow:hidden; }
+    details.note summary { cursor:pointer; padding:14px; list-style:none; }
+    details.note summary::-webkit-details-marker { display:none; }
+    .note-title { font-weight:850; margin-bottom:5px; }
+    .note-meta { color:var(--muted); font-size:12px; }
+    .note-body { border-top:1px solid var(--line); padding:14px; }
+    .preview { white-space:pre-wrap; color:#d7e6f4; line-height:1.48; max-height:260px; overflow:auto; font-size:14px; }
+    .note-actions { display:flex; flex-wrap:wrap; gap:7px; margin-top:12px; }
+    .note-actions button { min-height:38px; padding:7px 10px; font-size:12px; }
+    @media (max-width:820px) { .layout{grid-template-columns:1fr}.hero{align-items:start;flex-direction:column}.status{text-align:left}.form-grid{grid-template-columns:1fr}textarea{min-height:390px} }
+    .print-view { display:none; }
+    .clean-note { display:none; max-width:860px; margin:34px auto; }
+    .clean-note-head { display:flex; justify-content:space-between; align-items:start; gap:20px; padding-bottom:20px; border-bottom:1px solid var(--line); }
+    .clean-note h1 { font-size:clamp(30px,4vw,44px); line-height:1.12; margin:0 0 9px; }
+    .clean-meta { color:var(--muted); font-size:15px; font-weight:650; }
+    .clean-content { font-size:17px; line-height:1.62; color:#edf5fd; padding:26px 2px 10px; }
+    .clean-outline { list-style:none; display:grid; gap:14px; padding:0; margin:0; }
+    .clean-outline li { position:relative; padding:17px 18px 17px 48px; border:1px solid rgba(143,174,204,.24); border-radius:15px; background:linear-gradient(145deg,rgba(39,58,80,.86),rgba(24,41,60,.88)); }
+    .clean-outline li::before { content:""; position:absolute; left:20px; top:25px; width:12px; height:12px; border-radius:50%; background:var(--blue); box-shadow:0 0 0 5px rgba(19,165,212,.14); }
+    .clean-outline strong { color:#fff; font-weight:850; }
+    .clean-closing { margin:20px 0 0; padding:17px 19px; border-left:4px solid var(--green); border-radius:4px 14px 14px 4px; background:rgba(22,137,87,.13); color:#dff8eb; font-weight:700; }
+    .clean-edit { flex:0 0 auto; background:linear-gradient(120deg,#0c8ebd,var(--blue)); }
+    body.view-mode .nav, body.view-mode .hero, body.view-mode .layout { display:none; }
+    body.view-mode .clean-note { display:block; }
+    body.edit-mode .clean-note { display:none; }
+    @media (max-width:620px) { .clean-note{margin:12px auto}.clean-note-head{flex-direction:column}.clean-edit{align-self:flex-start}.clean-content{font-size:16px} }
+    @media print { body{background:white;color:#111}.nav,.hero,.layout,.clean-note{display:none!important}.wrap{padding:0;max-width:none}.print-view{display:block}.print-view h1{font-size:26px;margin-bottom:8px}.print-meta{color:#444;margin-bottom:24px}.print-content{white-space:pre-wrap;font:15px/1.55 Inter,-apple-system,sans-serif} }
+  </style>
+</head>
+<body class="edit-mode">
+  <main class="wrap">
+    <section class="clean-note" aria-label="Current doctor note">
+      <header class="clean-note-head">
+        <div>
+          <h1 id="clean-title">Doctor Note</h1>
+          <div id="clean-meta" class="clean-meta"></div>
+        </div>
+        <button id="edit-note" class="clean-edit" type="button">Edit</button>
+      </header>
+      <div id="clean-content" class="clean-content"></div>
+    </section>
+
+    <nav class="nav" aria-label="Primary">
+      <a href="./index.html">Home</a>
+      <a href="./dashboard.html">Lab Results</a>
+      <a href="./vault.html">Health Vault</a>
+      <a class="active" href="./doctor-notes.html">Doctor Notes</a>
+      <a href="./bp.html">Blood Pressure</a>
+      <a href="./composition.html">Body Composition</a>
+    </nav>
+
+    <header class="hero">
+      <div>
+        <h1>Doctor Notes</h1>
+        <div class="sub">Keep one visit note ready, then archive it when the appointment is complete.</div>
+      </div>
+      <div id="status" class="status" role="status" aria-live="polite">Loading notes…</div>
+    </header>
+
+    <section class="layout">
+      <article class="card">
+        <h2>Current note</h2>
+        <div class="form-grid">
+          <label>Doctor
+            <input id="doctor" autocomplete="off" placeholder="Dr. name" />
+          </label>
+          <label>Appointment date
+            <input id="appointment-date" type="date" />
+          </label>
+          <label class="wide">Title
+            <input id="title" autocomplete="off" placeholder="Purpose of visit" />
+          </label>
+          <label class="wide">Note
+            <textarea id="content" placeholder="Paste your doctor note here…"></textarea>
+          </label>
+        </div>
+        <div class="toolbar">
+          <button id="save" class="primary" type="button">Save note</button>
+          <button id="copy" type="button">Copy</button>
+          <button id="print" type="button">Print</button>
+          <button id="archive" class="archive" type="button">Archive &amp; start new</button>
+          <button id="clear" class="danger" type="button">Clear draft</button>
+        </div>
+      </article>
+
+      <aside class="card archive-panel">
+        <div class="side-head">
+          <h2>Archive</h2>
+          <span id="count" class="count">0 notes</span>
+        </div>
+        <input id="search" type="search" placeholder="Search doctor, date, or note…" aria-label="Search archived notes" />
+        <div id="archive-list" class="archive-list"></div>
+      </aside>
+    </section>
+    <section id="print-view" class="print-view" aria-hidden="true">
+      <h1 id="print-title"></h1>
+      <div id="print-meta" class="print-meta"></div>
+      <div id="print-content" class="print-content"></div>
+    </section>
+  </main>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+    const fields = { doctor: $("doctor"), appointment_date: $("appointment-date"), title: $("title"), content: $("content") };
+    let store = { current: null, archived: [] };
+    let dirty = false;
+    let selectedPrintNote = null;
+
+    function id() {
+      return (crypto.randomUUID && crypto.randomUUID()) || `note-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+    }
+    function setStatus(message, error = false) {
+      $("status").textContent = message;
+      $("status").style.color = error ? "#ffb4a8" : "#a9e9c9";
+    }
+    function readForm() {
+      return {
+        id: store.current?.id || id(),
+        doctor: fields.doctor.value.trim(),
+        appointment_date: fields.appointment_date.value,
+        title: fields.title.value.trim(),
+        content: fields.content.value.trim(),
+        updated_at: new Date().toISOString()
+      };
+    }
+    function fillForm(note) {
+      Object.entries(fields).forEach(([key, input]) => input.value = note?.[key] || "");
+      dirty = false;
+    }
+    function showView(note = store.current) {
+      if (!hasContent(note)) return showEdit();
+      $("clean-title").textContent = note.title || "Doctor Note";
+      $("clean-meta").textContent = [note.doctor, note.appointment_date].filter(Boolean).join(" · ");
+      renderCleanContent(note.content || "");
+      document.body.classList.remove("edit-mode");
+      document.body.classList.add("view-mode");
+      window.scrollTo({top:0, behavior:"auto"});
+    }
+    function renderCleanContent(content) {
+      const container = $("clean-content");
+      container.replaceChildren();
+      const bullets = [];
+      const notes = [];
+      let currentBullet = "";
+      let currentNote = "";
+      content.split(/\r?\n/).forEach(rawLine => {
+        const line = rawLine.trim();
+        if (/^[•\-*]\s+/.test(line)) {
+          if (currentBullet) bullets.push(currentBullet);
+          if (currentNote) {
+            notes.push(currentNote);
+            currentNote = "";
+          }
+          currentBullet = line.replace(/^[•\-*]\s+/, "");
+        } else if (line && currentBullet) {
+          currentBullet += ` ${line}`;
+        } else if (line) {
+          currentNote += `${currentNote ? " " : ""}${line}`;
+        } else if (currentBullet) {
+          bullets.push(currentBullet);
+          currentBullet = "";
+        } else if (currentNote) {
+          notes.push(currentNote);
+          currentNote = "";
+        }
+      });
+      if (currentBullet) bullets.push(currentBullet);
+      if (currentNote) notes.push(currentNote);
+      if (bullets.length) {
+        const list = document.createElement("ul");
+        list.className = "clean-outline";
+        bullets.forEach(text => {
+          const item = document.createElement("li");
+          const colon = text.indexOf(":");
+          if (colon > 0 && colon < 55) {
+            const label = document.createElement("strong");
+            label.textContent = text.slice(0, colon + 1);
+            item.append(label, document.createTextNode(text.slice(colon + 1)));
+          } else {
+            item.textContent = text;
+          }
+          list.appendChild(item);
+        });
+        container.appendChild(list);
+      }
+      notes.forEach(text => {
+        const paragraph = document.createElement("p");
+        paragraph.className = "clean-closing";
+        paragraph.textContent = text;
+        container.appendChild(paragraph);
+      });
+      if (!bullets.length && !notes.length) container.textContent = "No note text.";
+    }
+    function showEdit() {
+      document.body.classList.remove("view-mode");
+      document.body.classList.add("edit-mode");
+      window.scrollTo({top:0, behavior:"auto"});
+    }
+    function hasContent(note) {
+      return Boolean(note && (note.doctor || note.appointment_date || note.title || note.content));
+    }
+    async function persist(message = "Saved") {
+      const response = await fetch("/api/doctor-notes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(store)
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(result.error || "Unable to save notes");
+      dirty = false;
+      setStatus(`${message} · ${new Date().toLocaleTimeString([], {hour:"numeric", minute:"2-digit"})}`);
+    }
+    async function saveCurrent() {
+      store.current = readForm();
+      await persist("Note saved");
+      showView(store.current);
+    }
+    function escapeHtml(value) {
+      return String(value || "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[c]));
+    }
+    function renderArchive() {
+      const query = $("search").value.trim().toLowerCase();
+      const notes = store.archived
+        .filter(n => `${n.doctor} ${n.appointment_date} ${n.title} ${n.content}`.toLowerCase().includes(query))
+        .sort((a,b) => (b.archived_at || b.updated_at || "").localeCompare(a.archived_at || a.updated_at || ""));
+      $("count").textContent = `${store.archived.length} ${store.archived.length === 1 ? "note" : "notes"}`;
+      if (!notes.length) {
+        $("archive-list").innerHTML = `<div class="empty">${query ? "No matching notes." : "Archived visit notes will appear here."}</div>`;
+        return;
+      }
+      $("archive-list").innerHTML = notes.map(note => `
+        <details class="note">
+          <summary>
+            <div class="note-title">${escapeHtml(note.title || "Untitled note")}</div>
+            <div class="note-meta">${escapeHtml(note.doctor || "No doctor")} · ${escapeHtml(note.appointment_date || "No date")}</div>
+          </summary>
+          <div class="note-body">
+            <div class="preview">${escapeHtml(note.content || "No note text")}</div>
+            <div class="note-actions">
+              <button data-action="copy" data-id="${escapeHtml(note.id)}">Copy</button>
+              <button data-action="print" data-id="${escapeHtml(note.id)}">Print</button>
+              <button data-action="restore" data-id="${escapeHtml(note.id)}">Restore</button>
+              <button class="danger" data-action="delete" data-id="${escapeHtml(note.id)}">Delete</button>
+            </div>
+          </div>
+        </details>`).join("");
+    }
+    async function copyText(note) {
+      const heading = [note.title, note.doctor, note.appointment_date].filter(Boolean).join("\n");
+      await navigator.clipboard.writeText(`${heading}${heading ? "\n\n" : ""}${note.content || ""}`);
+      setStatus("Copied to clipboard");
+    }
+    function printNote(note) {
+      selectedPrintNote = note;
+      window.print();
+    }
+    $("save").addEventListener("click", () => saveCurrent().catch(e => setStatus(e.message, true)));
+    $("edit-note").addEventListener("click", showEdit);
+    $("copy").addEventListener("click", () => copyText(readForm()).catch(() => setStatus("Clipboard access was unavailable", true)));
+    $("print").addEventListener("click", () => printNote(readForm()));
+    $("archive").addEventListener("click", async () => {
+      const note = readForm();
+      if (!hasContent(note)) return setStatus("Add something before archiving", true);
+      note.archived_at = new Date().toISOString();
+      store.archived.unshift(note);
+      store.current = null;
+      fillForm(null);
+      renderArchive();
+      showEdit();
+      try { await persist("Note archived"); } catch(e) { setStatus(e.message, true); }
+    });
+    $("clear").addEventListener("click", async () => {
+      if (!hasContent(readForm()) || confirm("Clear the current draft? This cannot be undone.")) {
+        store.current = null;
+        fillForm(null);
+        try { await persist("Draft cleared"); } catch(e) { setStatus(e.message, true); }
+      }
+    });
+    $("search").addEventListener("input", renderArchive);
+    Object.values(fields).forEach(input => input.addEventListener("input", () => { dirty = true; setStatus("Unsaved changes"); }));
+    $("archive-list").addEventListener("click", async (event) => {
+      const button = event.target.closest("button[data-action]");
+      if (!button) return;
+      const note = store.archived.find(n => n.id === button.dataset.id);
+      if (!note) return;
+      const action = button.dataset.action;
+      if (action === "copy") return copyText(note).catch(() => setStatus("Clipboard access was unavailable", true));
+      if (action === "print") return printNote(note);
+      if (action === "restore") {
+        if (hasContent(readForm()) && !confirm("Replace the current draft with this archived note?")) return;
+        store.archived = store.archived.filter(n => n.id !== note.id);
+        const { archived_at, ...restored } = note;
+        store.current = {...restored, updated_at:new Date().toISOString()};
+        fillForm(store.current);
+        renderArchive();
+        return persist("Note restored").then(() => showView(store.current)).catch(e => setStatus(e.message, true));
+      }
+      if (action === "delete" && confirm(`Delete “${note.title || "Untitled note"}” permanently?`)) {
+        store.archived = store.archived.filter(n => n.id !== note.id);
+        renderArchive();
+        return persist("Archived note deleted").catch(e => setStatus(e.message, true));
+      }
+    });
+    window.addEventListener("beforeunload", event => { if (dirty) { event.preventDefault(); event.returnValue = ""; } });
+    window.addEventListener("beforeprint", () => {
+      const note = selectedPrintNote || readForm();
+      $("print-title").textContent = note.title || "Doctor Note";
+      $("print-meta").textContent = [note.doctor, note.appointment_date].filter(Boolean).join(" · ");
+      $("print-content").textContent = note.content || "";
+    });
+    window.addEventListener("afterprint", () => { selectedPrintNote = null; });
+
+    fetch("/api/doctor-notes", {cache:"no-store"})
+      .then(async response => {
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || "Unable to load notes");
+        store = {current:result.current || null, archived:Array.isArray(result.archived) ? result.archived : []};
+        fillForm(store.current);
+        renderArchive();
+        setStatus(store.current?.updated_at ? `Last saved ${new Date(store.current.updated_at).toLocaleString()}` : "Ready for a new note");
+        if (hasContent(store.current)) showView(store.current);
+      })
+      .catch(error => setStatus(error.message, true));
+  </script>
+</body>
+</html>
