@@ -67,6 +67,7 @@
     .clean-topic summary:hover, .clean-topic summary:focus-visible { background:rgba(19,165,212,.09); }
     .clean-topic summary:focus-visible { outline:2px solid var(--blue); outline-offset:-2px; }
     .topic-description { margin:0; padding:0 17px 15px; border-top:1px solid rgba(143,174,204,.18); color:#d7e6f4; line-height:1.55; padding-top:13px; }
+    .topic-tests { margin:0; padding:13px 17px 15px 38px; border-top:1px solid rgba(143,174,204,.18); color:#d7e6f4; line-height:1.65; }
     .clean-closing { margin:20px 0 0; padding:17px 19px; border-left:4px solid var(--green); border-radius:4px 14px 14px 4px; background:rgba(22,137,87,.13); color:#dff8eb; font-weight:700; }
     .clean-edit { flex:0 0 auto; background:linear-gradient(120deg,#0c8ebd,var(--blue)); }
     .clean-home { min-height:44px; border:1px solid var(--line); border-radius:11px; padding:10px 14px; color:#dceafa; background:#17283c; font-weight:800; text-decoration:none; display:inline-flex; align-items:center; }
@@ -228,9 +229,7 @@
           details.className = "clean-topic";
           const summary = document.createElement("summary");
           summary.textContent = topic.keyword;
-          const description = document.createElement("p");
-          description.className = "topic-description";
-          description.textContent = topic.description;
+          const description = topicDescription(topic);
           details.append(summary, description);
           item.appendChild(details);
           list.appendChild(item);
@@ -244,6 +243,38 @@
         container.appendChild(paragraph);
       });
       if (!bullets.length && !notes.length) container.textContent = "No note text.";
+    }
+    function topicDescription(topic) {
+      const testLists = {
+        "Requested tests": [
+          "CMP",
+          "Cystatin C/eGFR",
+          "First-morning UACR",
+          "Urinalysis",
+          "Serum osmolality",
+          "Urine osmolality",
+          "Urine sodium"
+        ],
+        "Cardiovascular labs": [
+          "ApoB",
+          "Standard lipid panel",
+          "hs-CRP"
+        ]
+      };
+      if (testLists[topic.keyword]) {
+        const list = document.createElement("ul");
+        list.className = "topic-tests";
+        testLists[topic.keyword].forEach(test => {
+          const item = document.createElement("li");
+          item.textContent = test;
+          list.appendChild(item);
+        });
+        return list;
+      }
+      const paragraph = document.createElement("p");
+      paragraph.className = "topic-description";
+      paragraph.textContent = topic.description;
+      return paragraph;
     }
     function topicParts(text, index) {
       const clean = text.replace(/\*\*/g, "").trim();
