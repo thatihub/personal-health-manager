@@ -54,25 +54,6 @@
     }
     .nav a.active { background: linear-gradient(120deg, var(--blue), #1597c6); color: #fff; border-color: transparent; }
 
-    .bottom-tab { display: none; }
-    .bottom-tab a {
-      text-decoration: none;
-      color: #2b4655;
-      font-weight: 700;
-      font-size: 12px;
-      padding: 8px 6px;
-      border-radius: 10px;
-      text-align: center;
-      min-height: 42px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .bottom-tab a.active {
-      background: linear-gradient(120deg, var(--blue), #1597c6);
-      color: #fff;
-    }
-
     .hero {
       background: var(--panel);
       border: 1px solid var(--line);
@@ -92,6 +73,20 @@
       top: -120px;
       background: radial-gradient(circle, rgba(10,124,164,0.14), transparent 68%);
       pointer-events: none;
+    }
+    .hero-title-row {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .hero-title-row h1 { margin-bottom: 0; }
+    .hero-vault-link {
+      flex: 0 0 auto;
+      margin-top: 0;
+      padding-inline: 18px;
     }
     h1 {
       margin: 0 0 6px;
@@ -300,25 +295,10 @@
     @media (max-width: 640px) {
       body {
         padding: 12px;
-        padding-bottom: calc(86px + env(safe-area-inset-bottom));
       }
       .nav { display: none; }
-      .bottom-tab {
-        position: fixed;
-        left: 12px;
-        right: 12px;
-        bottom: max(10px, env(safe-area-inset-bottom));
-        z-index: 999;
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-        gap: 8px;
-        padding: 8px;
-        border-radius: 14px;
-        background: rgba(255,255,255,0.94);
-        border: 1px solid rgba(16,36,54,0.18);
-        box-shadow: 0 12px 26px rgba(16,36,54,0.18);
-        backdrop-filter: blur(8px);
-      }
+      .hero-title-row { align-items: flex-start; }
+      .hero-vault-link { padding-inline: 12px; }
       h1 { font-size: clamp(24px, 7vw, 34px); }
       .hero { padding: 14px; border-radius: 14px; }
       .stats { grid-template-columns: 1fr 1fr; }
@@ -331,25 +311,12 @@
 </head>
 <body class="page-home">
   <div class="wrap">
-    <nav class="nav">
-      <a class="active" href="./index.html">Home</a>
-      <a href="./doctor-notes.html">Doctor Notes</a>
-      <a href="./dashboard.html">Lab Results Dashboard</a>
-      <a href="./bp.html">Blood Pressure</a>
-      <a href="./composition.html">Body Composition</a>
-      <a href="./vault.html">Health Vault</a>
-      <a href="./bio-age.html">Biological Age</a>
-      <a href="./lab-import.html">Lab Import + Review</a>
-      <a href="./immunizations.html">Immunizations</a>
-      <a href="./admin.html">Admin</a>
-      <a href="./cabinet.html">Cabinet</a>
-      <a href="/health/youtube-comments">YT Comment Analyzer</a>
-      <a href="./history.html">History</a>
-    </nav>
-
     <section class="hero">
-      <h1>Personal Health Manager</h1>
-      <div class="sub" id="summary">One place for labs, scans, insurance links, care contacts, and daily health operations.</div>
+      <div class="hero-title-row">
+        <h1>Personal Health Manager</h1>
+        <a class="cta hero-vault-link" href="./vault.html">Health Vault</a>
+      </div>
+      <div class="sub" id="summary">Your health records, results, daily tracking, and visit planning in one place.</div>
       <div class="status-row">
         <div class="status-badge" id="vault-status">Vault: checking...</div>
         <div class="status-badge" id="updated-status">Last updated: loading...</div>
@@ -357,149 +324,174 @@
       <section class="stats" id="stats"></section>
     </section>
 
-    <!-- Priority 1: Primary Health Vault & Lab Results -->
+    <!-- Daily health workflow -->
     <section class="section-group">
       <h2 class="section-group-title">
-        <span class="group-icon">🛡️</span> Primary Health Vault & Lab Results
+        <span class="group-icon">❤️</span> Daily Tracking
       </h2>
       <div class="actions">
-        <article class="card card-blue">
-          <h3>Health Vault</h3>
-          <p>Scanned insurance details, useful links, member IDs, and phone contacts.</p>
-          <a class="cta" href="./vault.html">Open Vault</a>
+        <article class="card card-green">
+          <h3>Blood Pressure</h3>
+          <p>Track systolic pressure, diastolic pressure, and pulse over the last 90 days.</p>
+          <a class="cta" href="./bp.html">Open Blood Pressure</a>
         </article>
         <article class="card card-blue">
-          <h3>Lab Results Dashboard</h3>
-          <p>Lab trends, normal ranges, abnormal highlights, and latest value cards.</p>
-          <a class="cta" href="./dashboard.html">Open Lab Dashboard</a>
+          <h3>Doctor Notes</h3>
+          <p id="latest-doctor-note">Loading your latest visit note…</p>
+          <a class="cta" href="./doctor-notes.html">Open Doctor Notes</a>
         </article>
       </div>
     </section>
 
-    <!-- Priority 2: Diagnostic Dashboards & Summaries -->
+    <!-- Lab results and longer-term trends -->
     <section class="section-group">
       <h2 class="section-group-title">
-        <span class="group-icon">📊</span> Diagnostic Dashboards & Summaries
+        <span class="group-icon">📊</span> Lab Results &amp; Health Trends
+      </h2>
+      <div class="actions">
+        <article class="card card-blue">
+          <h3>Lab Results</h3>
+          <p>Review recent results, normal ranges, abnormal findings, and changes over time.</p>
+          <a class="cta" href="./dashboard.html">Open Lab Results</a>
+        </article>
+        <article class="card card-teal">
+          <h3>Body Composition</h3>
+          <p>Follow DEXA and InBody scan trends for body fat, lean mass, muscle, BMR, and weight.</p>
+          <a class="cta" href="./composition.html">Open Body Composition</a>
+        </article>
+        <article class="card card-amber">
+          <h3>Biological Age</h3>
+          <p>See biological-age estimates and the metabolic markers that contribute to them.</p>
+          <a class="cta" href="./bio-age.html">Open Biological Age</a>
+        </article>
+      </div>
+    </section>
+
+    <!-- Records and documents -->
+    <section class="section-group">
+      <h2 class="section-group-title">
+        <span class="group-icon">🗂️</span> Records &amp; Documents
+      </h2>
+      <div class="actions">
+        <article class="card card-green">
+          <h3>Immunizations</h3>
+          <p>Review your vaccination history and immunization records.</p>
+          <a class="cta" href="./immunizations.html">Open Immunizations</a>
+        </article>
+        <article class="card card-purple">
+          <h3>Medicine Cabinet</h3>
+          <p>Keep your medications and health supplies organized in one place.</p>
+          <a class="cta" href="./cabinet.html">Open Cabinet</a>
+        </article>
+      </div>
+    </section>
+
+    <!-- Kaiser Permanente records -->
+    <section class="section-group">
+      <h2 class="section-group-title">
+        <span class="group-icon">🏥</span> Kaiser
       </h2>
       <div class="actions">
         <article class="card card-teal">
           <h3>Kaiser Health Summary</h3>
-          <p>Full Kaiser record snapshot: demographics, meds, problems, vitals, labs, immunizations.</p>
-          <a class="cta" href="./kaiser-health-summary.html">Open Kaiser Health Summary</a>
-        </article>
-        <article class="card card-teal">
-          <h3>Body Composition Dashboard</h3>
-          <p>DEXA and InBody scans tracking fat loss, lean retention, muscle mass, BMR, and morning weight targets.</p>
-          <a class="cta" href="./composition.html">Open Body Composition</a>
-        </article>
-        <article class="card card-amber">
-          <h3>Biological Age Dashboard</h3>
-          <p>Section scores, confidence, age delta, and colored border cards for metabolic trend tracking.</p>
-          <a class="cta" href="./bio-age.html">Open Biological Age</a>
-        </article>
-        <article class="card card-green">
-          <h3>Blood Pressure</h3>
-          <p>Uploads append historical BP data; view last 90 days of SYS, DIAS, and Pulse.</p>
-          <a class="cta" href="./bp.html">Open BP Dashboard</a>
+          <p>Review medications, allergies, conditions, care team, vitals, immunizations, and recent lab highlights.</p>
+          <a class="cta" href="./kaiser-health-summary.html">Open Health Summary</a>
         </article>
         <article class="card card-rose">
-          <h3>Kaiser Lab Results</h3>
-          <p>Historical Kaiser labs (2009–2022) in a dashboard-style view.</p>
+          <h3>Kaiser Labs</h3>
+          <p>Explore detailed Kaiser lab history from 2009 through 2022 by year and health category.</p>
           <a class="cta" href="./kaiser-labs.html">Open Kaiser Labs</a>
         </article>
       </div>
     </section>
 
-    <!-- Priority 3: Daily Operations & Workbenches -->
+    <!-- Tools for adding new health data -->
     <section class="section-group">
       <h2 class="section-group-title">
-        <span class="group-icon">⚙️</span> Daily Operations & Workbenches
+        <span class="group-icon">⬆️</span> Update Your Records
       </h2>
       <div class="actions">
-        <article class="card card-blue">
-          <h3>Doctor Notes</h3>
-          <p>Prepare your current visit note, then copy, print, archive, restore, or start a new one.</p>
-          <a class="cta" href="./doctor-notes.html">Open Doctor Notes</a>
-        </article>
-        <article class="card card-green">
-          <h3>Lab Import + Review</h3>
-          <p>Paste CSV/text, normalize test names and units, review duplicates, and save to longitudinal timeline.</p>
-          <a class="cta" href="./lab-import.html">Open Import Review</a>
-        </article>
         <article class="card card-purple">
-          <h3>Admin Upload</h3>
-          <p>Secure upload for updated JSON data files and rebuild trigger.</p>
-          <a class="cta" href="./admin.html">Open Admin</a>
+          <h3>Update Health Data</h3>
+          <p>Add lab results and upload blood pressure, body composition, Vault, or other health records.</p>
+          <a class="cta" href="./admin.html">Open Data Updates</a>
         </article>
       </div>
     </section>
 
-    <!-- Priority 4: Diabetes & Patient Insights -->
+    <!-- Archived tools -->
     <section class="section-group">
       <h2 class="section-group-title">
-        <span class="group-icon">💬</span> Diabetes & Patient Insights
+        <span class="group-icon">🗃️</span> Archive
       </h2>
       <div class="actions">
         <article class="card card-blue">
           <div class="dexcom-badge"><span class="dexcom-dot"></span>Dexcom</div>
           <h3>Diabetes Companion</h3>
-          <p>Open the Dex Diabetes Companion app for daily glucose-focused workflows and coaching tools.</p>
+          <p>Archived access to glucose-focused workflows and coaching tools.</p>
           <a class="cta" href="https://diabetes-companion-web.onrender.com" target="_blank" rel="noopener">Open Diabetes Companion</a>
         </article>
-        <article class="card card-rose">
-          <h3>YouTube Comment Analyzer</h3>
-          <p>Extract and analyze real-world patient comments, dose patterns, and side effects.</p>
-          <a class="cta" href="/health/youtube-comments">Open YT Analyzer</a>
-        </article>
       </div>
-    </section>
-
-    <!-- Priority 5: System & Project Tools -->
-    <section class="section-group">
-      <h2 class="section-group-title">
-        <span class="group-icon">🔧</span> System & Project Tools
-      </h2>
-      <div class="actions">
-        <article class="card card-purple">
-          <h3>Project History</h3>
-          <p>Track commits, stage-lock tags, and feature milestones.</p>
-          <a class="cta" href="./history.html">Open History</a>
-        </article>
-      </div>
-    </section>
-
-    <section class="utility">
-      <article class="mini-panel">
-        <h4>How To Use</h4>
-        <p>Start with Lab Dashboard for trend review, then open Health Vault for member IDs, care contacts, and after-hours phone access.</p>
-      </article>
-      <article class="mini-panel">
-        <h4>Daily Workflow</h4>
-        <p>Use Admin when importing new files. Verify updates with the Last updated badge before sharing data or making care decisions.</p>
-      </article>
     </section>
   </div>
 
   <script>
+    async function loadLatestDoctorNote() {
+      const noteSummary = document.getElementById('latest-doctor-note');
+      const urls = [
+        '/api/doctor-notes',
+        'https://personal-health-manager-5fo7.onrender.com/api/doctor-notes'
+      ];
+      for (const url of urls) {
+        try {
+          const response = await fetch(url, { cache: 'no-store' });
+          if (!response.ok) continue;
+          const result = await response.json();
+          const notes = [result.current, ...(Array.isArray(result.archived) ? result.archived : [])]
+            .filter(Boolean)
+            .sort((a, b) => String(b.updated_at || b.archived_at || '').localeCompare(String(a.updated_at || a.archived_at || '')));
+          const latest = notes[0];
+          if (!latest) break;
+          const title = latest.title || 'Latest visit note';
+          const details = [latest.doctor, latest.appointment_date].filter(Boolean).join(' · ');
+          noteSummary.textContent = `Latest: ${title}${details ? ` — ${details}` : ''}`;
+          return;
+        } catch (_error) {
+          // Try the deployed API when a local/static preview has no API server.
+        }
+      }
+      noteSummary.textContent = 'Prepare questions, symptoms, medication updates, and key details for your next appointment.';
+    }
+
     async function loadStats() {
       const statsRoot = document.getElementById('stats');
       const vaultStatus = document.getElementById('vault-status');
       const updatedStatus = document.getElementById('updated-status');
       try {
-        const statusRes = await fetch('/api/last-updated');
-        if (statusRes.ok) {
-          const status = await statusRes.json();
-          const locked = Boolean(status.vault_auth_enabled);
-          vaultStatus.textContent = `Vault: ${locked ? 'Locked' : 'Open'}`;
-          vaultStatus.classList.add(locked ? 'locked' : 'open');
-          updatedStatus.textContent = `Last updated: ${status.latest_display || '-'}`;
-        } else {
-          vaultStatus.textContent = 'Vault: unknown';
-          updatedStatus.textContent = 'Last updated: unavailable';
+        const statusUrls = [
+          '/api/last-updated',
+          'https://personal-health-manager-5fo7.onrender.com/api/last-updated'
+        ];
+        let status = null;
+        for (const url of statusUrls) {
+          try {
+            const statusRes = await fetch(url, { cache: 'no-store' });
+            if (statusRes.ok) {
+              status = await statusRes.json();
+              break;
+            }
+          } catch (_statusError) {
+            // Try the deployed API when a local/static preview has no API server.
+          }
         }
+        if (!status) throw new Error('Status API unavailable');
+        const locked = Boolean(status.vault_auth_enabled);
+        vaultStatus.textContent = `Vault: ${locked ? 'Locked' : 'Open'}`;
+        vaultStatus.classList.add(locked ? 'locked' : 'open');
+        updatedStatus.textContent = `Last updated: ${status.latest_display || '-'}`;
       } catch (_e) {
-        vaultStatus.textContent = 'Vault: unknown';
-        updatedStatus.textContent = 'Last updated: unavailable';
+        vaultStatus.textContent = 'Vault: status unavailable';
+        updatedStatus.textContent = 'Last updated: status unavailable';
       }
       let dexaWeight = '-';
       let dexaFatPct = '-';
@@ -543,18 +535,12 @@
 
         statsRoot.innerHTML = cards.map(([l,v]) => `<div class="stat"><div class="label">${l}</div><div class="val">${v}</div></div>`).join('');
       } catch (e) {
-        statsRoot.innerHTML = '<div class="stat"><div class="label">Status</div><div class="val">Load failed</div></div>';
+        statsRoot.replaceChildren();
       }
     }
+    loadLatestDoctorNote();
     loadStats();
   </script>
 
-  <nav class="bottom-tab" aria-label="Primary">
-    <a href="./index.html" class="active">Home</a>
-    <a href="./dashboard.html">Lab Results</a>
-    <a href="./bp.html">BP</a>
-    <a href="./vault.html">Vault</a>
-    <a href="./cabinet.html">Cabinet</a>
-  </nav>
 </body>
 </html>

@@ -414,10 +414,27 @@
     });
     window.addEventListener("afterprint", () => { selectedPrintNote = null; });
 
-    fetch("/api/doctor-notes", {cache:"no-store"})
-      .then(async response => {
-        const result = await response.json();
-        if (!response.ok) throw new Error(result.error || "Unable to load notes");
+    async function loadDoctorNotes() {
+      const urls = [
+        "/api/doctor-notes",
+        "https://personal-health-manager-5fo7.onrender.com/api/doctor-notes"
+      ];
+      let lastError = new Error("Unable to load notes");
+      for (const url of urls) {
+        try {
+          const response = await fetch(url, {cache:"no-store"});
+          const result = await response.json();
+          if (!response.ok) throw new Error(result.error || "Unable to load notes");
+          return result;
+        } catch (error) {
+          lastError = error;
+        }
+      }
+      throw lastError;
+    }
+
+    loadDoctorNotes()
+      .then(result => {
         store = {current:result.current || null, archived:Array.isArray(result.archived) ? result.archived : []};
         fillForm(store.current);
         renderArchive();

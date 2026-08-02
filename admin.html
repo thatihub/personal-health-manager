@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Health Admin</title>
+  <title>Update Health Data</title>
   <style>
     body.page-admin {
       --page-accent: #14b8a6;
@@ -159,8 +159,8 @@
       <a href="./cabinet.html">Cabinet</a>
     </nav>
 
-    <h1>Health Admin</h1>
-    <div class="sub">Upload and process clinical reports or sync raw JSON dataset files.</div>
+    <h1>Update Health Data</h1>
+    <div class="sub">Add lab results and upload new blood pressure, body composition, Vault, or other health records.</div>
 
     <div class="section-group-title">Intelligent File Parsers & Ingestors</div>
     <div class="admin-grid">
@@ -173,6 +173,7 @@
               <input id="pdf-file" type="file" accept=".pdf,application/pdf" />
             </div>
             <button class="btn" id="upload-pdf" type="button">Upload + Parse PDF</button>
+            <a class="btn" href="./lab-import.html">Enter Labs Manually</a>
           </div>
         </div>
       </article>
