@@ -1175,8 +1175,6 @@
             <div class="sub-pills">
               <span class="sub-pill">Savings Card</span>
               <span class="sub-pill">Contacts</span>
-              <span class="sub-pill">Medications</span>
-              <span class="sub-pill">Device Notes</span>
             </div>
             <div id="pharmacy"></div>
           </div>
@@ -1933,9 +1931,7 @@
         : '';
       document.getElementById('pharmacy').innerHTML =
         savingsCardHtml +
-        `<div class="row"><div class="v">Contacts</div>${(rx.pharmacy_contacts || []).map((p) => `<div><span class="chip">${p.name || '-'}</span> ${phoneLink(p.phone)} ${p.website ? `• ${link(p.website)} ${copyButton(p.website)}` : ''}${p.notes ? `<div class="muted">${linkifyPhones(p.notes)}</div>` : ''}</div>`).join('')}</div>` +
-        `<div class="row"><div class="v">Medications</div>${list(rx.active_medications || [])}</div>` +
-        `<div class="row"><div class="v">Device Notes</div>${list(rx.device_notes || [])}</div>`;
+        `<div class="row"><div class="v">Contacts</div>${(rx.pharmacy_contacts || []).map((p) => `<div><span class="chip">${p.name || '-'}</span> ${phoneLink(p.phone)} ${p.website ? `• ${link(p.website)} ${copyButton(p.website)}` : ''}${p.notes ? `<div class="muted">${linkifyPhones(p.notes)}</div>` : ''}</div>`).join('')}</div>`;
 
       const primaryCare = prov.primary_care || [];
       const endo = prov.endocrinology || [];

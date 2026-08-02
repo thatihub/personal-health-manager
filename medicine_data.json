@@ -1,0 +1,77 @@
+{
+  "medications": [
+    {
+      "type": "Medication",
+      "rx_number": "",
+      "name": "Metformin Hydrochloride",
+      "dose": "500 mg",
+      "notes": "",
+      "id": "metformin-500",
+      "schedule": "4 tablets/day"
+    },
+    {
+      "type": "Medication",
+      "rx_number": "",
+      "name": "Amlodipine Besylate",
+      "dose": "2.5 mg",
+      "notes": "",
+      "id": "amlodipine-2-5",
+      "schedule": "1 tablet/day"
+    },
+    {
+      "type": "Medication",
+      "rx_number": "",
+      "name": "Losartan Potassium",
+      "dose": "50 mg",
+      "notes": "",
+      "id": "losartan-50",
+      "schedule": "1 tablet/day"
+    },
+    {
+      "type": "Medication",
+      "rx_number": "",
+      "name": "Atorvastatin Calcium",
+      "dose": "10 mg",
+      "notes": "",
+      "id": "atorvastatin-10",
+      "schedule": "1 tablet/day"
+    },
+    {
+      "type": "Insulin",
+      "rx_number": "",
+      "name": "Tresiba FlexTouch",
+      "dose": "100 units/mL",
+      "notes": "",
+      "id": "tresiba-flextouch",
+      "schedule": "32 units/day"
+    },
+    {
+      "type": "Insulin",
+      "rx_number": "",
+      "name": "Humalog Mix 50:50",
+      "dose": "100 units/mL",
+      "notes": "",
+      "id": "humalog-mix-50-50",
+      "schedule": "25u breakfast, 50u lunch, 25u dinner"
+    },
+    {
+      "type": "Device",
+      "rx_number": "1802943",
+      "name": "Dexcom G7 CGM",
+      "dose": "15-day sensor",
+      "notes": "Current replacement cycle: every 15 days",
+      "id": "dexcom-g7-cgm",
+      "schedule": "Replace every 15 days"
+    },
+    {
+      "type": "Supply",
+      "rx_number": "",
+      "name": "Test strips",
+      "dose": "",
+      "notes": "",
+      "id": "test-strips",
+      "schedule": "As needed"
+    }
+  ],
+  "updated_at": "2026-08-02T16:27:18.873530-07:00"
+}

@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: youtube-analyzer
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python server.py
+    envVars:
+      - key: PORT
+        value: 8080
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: YOUTUBE_API_KEY
+        sync: false
+      - key: HTTP_PROXY
+        sync: false
+      - key: HTTPS_PROXY
+        sync: false

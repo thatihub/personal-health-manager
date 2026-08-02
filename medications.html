@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Medication Manager</title>
+  <link rel="stylesheet" href="./companion_theme.css?v=20260729-2" />
+  <style>
+    :root { --med-accent:#9f7aea; --med-green:#1bc471; --med-red:#ef6f59; }
+    body { margin:0; min-height:100vh; padding:22px; }
+    .wrap { max-width:1160px; margin:0 auto; }
+    .topbar { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:26px; }
+    .brand { color:#b9cada; font-size:13px; font-weight:800; letter-spacing:.08em; }
+    .back { min-height:42px; display:inline-flex; align-items:center; padding:8px 14px; border:1px solid var(--comp-line); border-radius:11px; color:#e7f1fb; background:rgba(17,28,42,.84); text-decoration:none; font-weight:750; }
+    .hero { display:flex; align-items:end; justify-content:space-between; gap:18px; margin-bottom:22px; padding:0 !important; background:none !important; border:0 !important; box-shadow:none !important; overflow:visible !important; }
+    .hero h1 { margin:0 0 7px; }
+    .hero p { margin:0; color:var(--comp-muted); max-width:650px; }
+    .primary { min-height:46px; padding:10px 16px; border:0; border-radius:12px; color:#fff; background:linear-gradient(120deg,#7656c7,var(--med-accent)); font-weight:800; cursor:pointer; }
+    .toolbar { display:grid; grid-template-columns:minmax(220px,1fr) auto; gap:10px; align-items:center; margin-bottom:18px; padding:12px; border:1px solid var(--comp-line); border-radius:16px; background:rgba(16,28,43,.72); }
+    .search { min-height:44px; width:100%; padding:10px 13px; border:1px solid var(--comp-line); border-radius:11px; color:#eef6fc; background:rgba(44,58,76,.96); font:inherit; }
+    .count { color:#b8cad9; font-size:13px; font-weight:700; white-space:nowrap; }
+    .med-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+    .med-card { border:1px solid var(--comp-line); border-left:4px solid var(--med-accent); border-radius:16px; padding:17px; background:linear-gradient(165deg,rgba(58,74,96,.98),rgba(39,53,72,.98)); box-shadow:0 10px 22px rgba(0,0,0,.24); }
+    .med-card[data-type="Insulin"] { border-left-color:#12a4d4; }
+    .med-card[data-type="Device"], .med-card[data-type="Supply"] { border-left-color:var(--med-green); }
+    .med-head { display:flex; justify-content:space-between; align-items:start; gap:12px; margin-bottom:14px; }
+    .med-name { margin:0 0 6px; font-size:20px !important; }
+    .type { display:inline-flex; padding:4px 8px; border-radius:999px; color:#d9ccff; background:rgba(159,122,234,.15); border:1px solid rgba(159,122,234,.32); font-size:11px; font-weight:800; }
+    .med-actions { display:flex; gap:6px; }
+    .icon-btn { min-height:36px; padding:7px 10px; border:1px solid var(--comp-line); border-radius:9px; color:#dce9f5; background:rgba(20,31,45,.85); font-weight:750; cursor:pointer; }
+    .icon-btn.delete { color:#ffb4a8; }
+    .facts { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .fact { min-width:0; padding:10px; border-radius:11px; background:rgba(9,17,27,.46); }
+    .fact.wide { grid-column:1/-1; }
+    .label { margin-bottom:4px; color:#91a9bd; font-size:10px !important; font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
+    .value { color:#eef6fc; font-size:14px; line-height:1.4; overflow-wrap:anywhere; }
+    .empty { grid-column:1/-1; padding:44px; text-align:center; color:var(--comp-muted); border:1px dashed var(--comp-line); border-radius:16px; }
+    .status { min-height:22px; margin-top:14px; color:#8fdbff; font-size:13px; }
+    dialog { width:min(680px,calc(100vw - 28px)); padding:0; border:1px solid var(--comp-line); border-radius:18px; color:#eef6fc; background:#111d2c; box-shadow:0 30px 80px rgba(0,0,0,.65); }
+    dialog::backdrop { background:rgba(1,7,17,.72); backdrop-filter:blur(3px); }
+    .dialog-head { display:flex; justify-content:space-between; align-items:center; padding:18px 20px; border-bottom:1px solid var(--comp-line); }
+    .dialog-head h2 { margin:0; font-size:22px !important; }
+    .close { border:0; color:#dce9f5; background:transparent; font-size:24px; cursor:pointer; }
+    form { padding:20px; }
+    .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    .field { display:grid; gap:6px; }
+    .field.wide { grid-column:1/-1; }
+    .field label { color:#b8cad9; font-size:12px; font-weight:750; }
+    .field input,.field select,.field textarea { width:100%; min-height:44px; padding:10px 11px; border:1px solid var(--comp-line); border-radius:10px; color:#eef6fc; background:#1d2c3e; font:inherit; }
+    .field textarea { min-height:82px; resize:vertical; }
+    .dialog-actions { display:flex; justify-content:flex-end; gap:9px; margin-top:18px; }
+    .secondary { min-height:44px; padding:9px 14px; border:1px solid var(--comp-line); border-radius:11px; color:#dce9f5; background:#1c2b40; font-weight:750; cursor:pointer; }
+    @media(max-width:760px){ body{padding:15px}.brand{display:none}.hero{align-items:start;flex-direction:column}.toolbar{grid-template-columns:1fr}.med-grid{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.field.wide{grid-column:auto}.facts{grid-template-columns:1fr}.fact.wide{grid-column:auto} }
+  </style>
+</head>
+<body class="page-medications">
+  <main class="wrap">
+    <div class="topbar"><div class="brand">PERSONAL HEALTH MANAGER</div><a class="back" href="./index.html">← Home</a></div>
+    <section class="hero">
+      <div><h1>Medication Manager</h1><p>One editable place for prescriptions, insulin, devices, supplies, doses, and schedules.</p></div>
+      <button class="primary" id="add-medication" type="button">+ Add medication</button>
+    </section>
+    <div class="toolbar">
+      <input class="search" id="search" type="search" placeholder="Search medicine, Rx number, dose, or schedule…" />
+      <div class="count" id="count">Loading…</div>
+    </div>
+    <section class="med-grid" id="med-grid" aria-live="polite"></section>
+    <div class="status" id="status" role="status"></div>
+  </main>
+
+  <dialog id="editor">
+    <div class="dialog-head"><h2 id="editor-title">Add medication</h2><button class="close" id="close-editor" type="button" aria-label="Close">×</button></div>
+    <form id="med-form">
+      <input id="med-id" type="hidden" />
+      <div class="form-grid">
+        <div class="field wide"><label for="med-name">Medicine or item name *</label><input id="med-name" required /></div>
+        <div class="field"><label for="med-rx">Rx number</label><input id="med-rx" /></div>
+        <div class="field"><label for="med-type">Type</label><select id="med-type"><option>Medication</option><option>Insulin</option><option>Device</option><option>Supply</option><option>Other</option></select></div>
+        <div class="field"><label for="med-dose">Dose or strength</label><input id="med-dose" placeholder="Example: 500 mg" /></div>
+        <div class="field"><label for="med-schedule">Schedule</label><input id="med-schedule" placeholder="Example: 1 tablet/day" /></div>
+        <div class="field wide"><label for="med-notes">Notes</label><textarea id="med-notes"></textarea></div>
+      </div>
+      <div class="dialog-actions"><button class="secondary" id="cancel-editor" type="button">Cancel</button><button class="primary" type="submit">Save medication</button></div>
+    </form>
+  </dialog>
+
+  <script>
+    let medications = [];
+    const grid = document.getElementById('med-grid');
+    const search = document.getElementById('search');
+    const count = document.getElementById('count');
+    const status = document.getElementById('status');
+    const editor = document.getElementById('editor');
+    const form = document.getElementById('med-form');
+    const fields = {
+      id: document.getElementById('med-id'), name: document.getElementById('med-name'),
+      rx_number: document.getElementById('med-rx'), type: document.getElementById('med-type'),
+      dose: document.getElementById('med-dose'), schedule: document.getElementById('med-schedule'),
+      notes: document.getElementById('med-notes')
+    };
+    const escapeHtml = (value='') => String(value).replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+    function render() {
+      const q = search.value.trim().toLowerCase();
+      const visible = medications.filter(m => Object.values(m).join(' ').toLowerCase().includes(q));
+      count.textContent = `${visible.length} of ${medications.length} items`;
+      if (!visible.length) { grid.innerHTML = '<div class="empty">No medications match this search.</div>'; return; }
+      grid.innerHTML = visible.map(m => `<article class="med-card" data-type="${escapeHtml(m.type)}">
+        <div class="med-head"><div><h2 class="med-name">${escapeHtml(m.name)}</h2><span class="type">${escapeHtml(m.type || 'Medication')}</span></div>
+        <div class="med-actions"><button class="icon-btn" type="button" data-edit="${escapeHtml(m.id)}">Edit</button><button class="icon-btn delete" type="button" data-delete="${escapeHtml(m.id)}">Delete</button></div></div>
+        <div class="facts">
+          <div class="fact"><div class="label">Rx number</div><div class="value">${escapeHtml(m.rx_number || '—')}</div></div>
+          <div class="fact"><div class="label">Dose / strength</div><div class="value">${escapeHtml(m.dose || '—')}</div></div>
+          <div class="fact wide"><div class="label">Schedule</div><div class="value">${escapeHtml(m.schedule || '—')}</div></div>
+          ${m.notes ? `<div class="fact wide"><div class="label">Notes</div><div class="value">${escapeHtml(m.notes)}</div></div>` : ''}
+        </div></article>`).join('');
+    }
+    async function load() {
+      try {
+        let response = await fetch('/api/medications', {cache:'no-store'});
+        if (!response.ok) response = await fetch('./medicine_data.json', {cache:'no-store'});
+        const data = await response.json(); medications = Array.isArray(data.medications) ? data.medications : []; render();
+      } catch (error) { grid.innerHTML = '<div class="empty">Medication data could not be loaded.</div>'; count.textContent = 'Unavailable'; }
+    }
+    function openEditor(item=null) {
+      document.getElementById('editor-title').textContent = item ? 'Edit medication' : 'Add medication';
+      Object.entries(fields).forEach(([key,input]) => input.value = item?.[key] || '');
+      fields.type.value = item?.type || 'Medication'; editor.showModal(); fields.name.focus();
+    }
+    function closeEditor() { editor.close(); form.reset(); fields.id.value=''; }
+    async function saveAll(message) {
+      status.textContent = 'Saving…';
+      const response = await fetch('/api/medications', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({medications})});
+      const data = await response.json().catch(()=>({}));
+      if (!response.ok) throw new Error(data.error || 'Save failed');
+      medications = data.medications || medications; status.textContent = message; render();
+    }
+    document.getElementById('add-medication').addEventListener('click', () => openEditor());
+    document.getElementById('close-editor').addEventListener('click', closeEditor);
+    document.getElementById('cancel-editor').addEventListener('click', closeEditor);
+    search.addEventListener('input', render);
+    grid.addEventListener('click', async event => {
+      const editId = event.target.closest('[data-edit]')?.dataset.edit;
+      const deleteId = event.target.closest('[data-delete]')?.dataset.delete;
+      if (editId) openEditor(medications.find(m => m.id === editId));
+      if (deleteId) {
+        const item = medications.find(m => m.id === deleteId);
+        if (!item || !confirm(`Delete ${item.name}?`)) return;
+        const previous = medications; medications = medications.filter(m => m.id !== deleteId);
+        try { await saveAll(`${item.name} deleted.`); } catch (error) { medications = previous; render(); status.textContent = error.message; }
+      }
+    });
+    form.addEventListener('submit', async event => {
+      event.preventDefault();
+      const record = Object.fromEntries(Object.entries(fields).map(([key,input]) => [key,input.value.trim()]));
+      record.id = record.id || `med-${Date.now()}`;
+      const previous = medications.map(m => ({...m}));
+      const index = medications.findIndex(m => m.id === record.id);
+      if (index >= 0) medications[index] = record; else medications.push(record);
+      closeEditor(); render();
+      try { await saveAll(`${record.name} saved.`); } catch (error) { medications = previous; render(); status.textContent = error.message; }
+    });
+    load();
+  </script>
+</body>
+</html>

@@ -32,6 +32,7 @@ BP_DATA_PATH = PROJECT_DIR / "bp_readings.csv"
 AG_IMPORTS_PATH = PROJECT_DIR / "ag_lab_imports.json"
 CONSOLIDATED_LABS_PATH = PROJECT_DIR / "consolidated_labs.json"
 DEXA_DATA_PATH = PROJECT_DIR / "dexa_records.json"
+MEDICINE_DATA_PATH = PROJECT_DIR / "medicine_data.json"
 
 
 def parse_args() -> argparse.Namespace:
@@ -1139,7 +1140,7 @@ class DashboardHandler(SimpleHTTPRequestHandler):
 
     def _is_vault_protected_path(self) -> bool:
         path = self.path.split("?", 1)[0]
-        return path in {"/vault.html", "/vault_data.json"}
+        return path in {"/vault.html", "/vault_data.json", "/medications.html", "/api/medications"}
 
     def _is_admin_protected_path(self) -> bool:
         path = self.path.split("?", 1)[0]
@@ -1341,6 +1342,45 @@ class DashboardHandler(SimpleHTTPRequestHandler):
             "current": current if isinstance(current, dict) else None,
             "archived": archived if isinstance(archived, list) else [],
         }
+
+    def _medicine_payload(self) -> dict[str, object]:
+        if not MEDICINE_DATA_PATH.exists():
+            return {"medications": [], "updated_at": ""}
+        try:
+            payload = json.loads(MEDICINE_DATA_PATH.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            return {"medications": [], "updated_at": ""}
+        if not isinstance(payload, dict) or not isinstance(payload.get("medications", []), list):
+            return {"medications": [], "updated_at": ""}
+        return payload
+
+    def _handle_medicine_save(self) -> None:
+        length = int(self.headers.get("Content-Length", "0"))
+        if length > 1_000_000:
+            self._json(413, {"ok": False, "error": "Medication data is too large"})
+            return
+        raw = self.rfile.read(length) if length else b"{}"
+        try:
+            payload = json.loads(raw.decode("utf-8"))
+        except (UnicodeDecodeError, json.JSONDecodeError):
+            self._json(400, {"ok": False, "error": "Invalid JSON body"})
+            return
+        medicines = payload.get("medications") if isinstance(payload, dict) else None
+        if not isinstance(medicines, list) or len(medicines) > 500:
+            self._json(400, {"ok": False, "error": "Medications must be a list of no more than 500 records"})
+            return
+        allowed = {"id", "name", "rx_number", "dose", "schedule", "type", "notes"}
+        cleaned: list[dict[str, str]] = []
+        for item in medicines:
+            if not isinstance(item, dict) or not str(item.get("name", "")).strip():
+                self._json(400, {"ok": False, "error": "Every medication needs a name"})
+                return
+            record = {key: str(item.get(key, ""))[:1000].strip() for key in allowed}
+            record["id"] = record["id"] or str(uuid4())
+            cleaned.append(record)
+        saved = {"medications": cleaned, "updated_at": datetime.now().astimezone().isoformat()}
+        self._write_json_file(MEDICINE_DATA_PATH, saved)
+        self._json(200, {"ok": True, **saved})
 
     def _handle_doctor_notes_save(self) -> None:
         length = int(self.headers.get("Content-Length", "0"))
@@ -2035,6 +2075,9 @@ class DashboardHandler(SimpleHTTPRequestHandler):
         if path == "/api/doctor-notes":
             self._json(200, {"ok": True, **self._doctor_notes_payload()})
             return
+        if path == "/api/medications":
+            self._json(200, {"ok": True, **self._medicine_payload()})
+            return
         super().do_GET()
 
     def do_HEAD(self) -> None:  # noqa: N802
@@ -2048,6 +2091,12 @@ class DashboardHandler(SimpleHTTPRequestHandler):
         super().do_HEAD()
 
     def do_POST(self) -> None:  # noqa: N802
+        if self.path == "/api/medications":
+            if self._require_vault_auth():
+                return
+            self._handle_medicine_save()
+            return
+
         if self.path == "/api/doctor-notes":
             if self._require_vault_auth():
                 return
