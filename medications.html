@@ -19,22 +19,31 @@
     .toolbar { display:grid; grid-template-columns:minmax(220px,1fr) auto; gap:10px; align-items:center; margin-bottom:18px; padding:12px; border:1px solid var(--comp-line); border-radius:16px; background:rgba(16,28,43,.72); }
     .search { min-height:44px; width:100%; padding:10px 13px; border:1px solid var(--comp-line); border-radius:11px; color:#eef6fc; background:rgba(44,58,76,.96); font:inherit; }
     .count { color:#b8cad9; font-size:13px; font-weight:700; white-space:nowrap; }
-    .med-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
-    .med-card { border:1px solid var(--comp-line); border-left:4px solid var(--med-accent); border-radius:16px; padding:17px; background:linear-gradient(165deg,rgba(58,74,96,.98),rgba(39,53,72,.98)); box-shadow:0 10px 22px rgba(0,0,0,.24); }
-    .med-card[data-type="Insulin"] { border-left-color:#12a4d4; }
-    .med-card[data-type="Device"], .med-card[data-type="Supply"] { border-left-color:var(--med-green); }
-    .med-head { display:flex; justify-content:space-between; align-items:start; gap:12px; margin-bottom:14px; }
-    .med-name { margin:0 0 6px; font-size:20px !important; }
-    .type { display:inline-flex; padding:4px 8px; border-radius:999px; color:#d9ccff; background:rgba(159,122,234,.15); border:1px solid rgba(159,122,234,.32); font-size:11px; font-weight:800; }
-    .med-actions { display:flex; gap:6px; }
-    .icon-btn { min-height:36px; padding:7px 10px; border:1px solid var(--comp-line); border-radius:9px; color:#dce9f5; background:rgba(20,31,45,.85); font-weight:750; cursor:pointer; }
-    .icon-btn.delete { color:#ffb4a8; }
-    .facts { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-    .fact { min-width:0; padding:10px; border-radius:11px; background:rgba(9,17,27,.46); }
-    .fact.wide { grid-column:1/-1; }
-    .label { margin-bottom:4px; color:#91a9bd; font-size:10px !important; font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
-    .value { color:#eef6fc; font-size:14px; line-height:1.4; overflow-wrap:anywhere; }
-    .empty { grid-column:1/-1; padding:44px; text-align:center; color:var(--comp-muted); border:1px dashed var(--comp-line); border-radius:16px; }
+    .med-list { overflow:hidden; border:1px solid rgba(116,144,172,.3); border-radius:14px; background:rgba(14,25,39,.5); box-shadow:0 16px 34px rgba(0,0,0,.18); }
+    .list-head,.med-row { display:grid; grid-template-columns:minmax(210px,1.45fr) minmax(110px,.65fr) minmax(120px,.75fr) minmax(220px,1.4fr) auto; gap:18px; align-items:center; }
+    .list-head { min-height:44px; padding:0 16px; color:#9bb1c4; font-size:10px; font-weight:850; letter-spacing:.1em; text-transform:uppercase; border-bottom:1px solid rgba(116,144,172,.3); background:linear-gradient(90deg,rgba(35,52,72,.94),rgba(25,40,59,.94)); }
+    .med-row { position:relative; min-height:78px; padding:14px 16px 14px 20px; border-bottom:1px solid rgba(116,144,172,.2); transition:background .16s ease,transform .16s ease; }
+    .med-row:last-child { border-bottom:0; }
+    .med-row:nth-child(odd) { background:rgba(44,60,80,.16); }
+    .med-row::before { content:""; position:absolute; left:0; top:14px; bottom:14px; width:3px; border-radius:0 4px 4px 0; background:var(--med-accent); }
+    .med-row[data-type="Insulin"]::before { background:#12a4d4; }
+    .med-row[data-type="Device"]::before,.med-row[data-type="Supply"]::before { background:var(--med-green); }
+    .med-row:hover { background:rgba(87,108,136,.2); }
+    .med-main { min-width:0; padding-left:2px; }
+    .med-name { margin:0 0 5px; color:#f5f9fd !important; font-size:16px !important; line-height:1.25; }
+    .type { display:inline-flex; align-items:center; gap:5px; color:#bbaaf8; font-size:10px; font-weight:800; letter-spacing:.035em; text-transform:uppercase; }
+    .type::before { content:""; width:6px; height:6px; border-radius:50%; background:currentColor; box-shadow:0 0 9px currentColor; }
+    .med-row[data-type="Insulin"] .type { color:#6fd8f7; }
+    .med-row[data-type="Device"] .type,.med-row[data-type="Supply"] .type { color:#69dda3; }
+    .cell { min-width:0; color:#dce8f3; font-size:13px; line-height:1.45; overflow-wrap:anywhere; }
+    .rx-value { color:#a9c0d2; font-family:ui-monospace,"SFMono-Regular",Consolas,monospace; font-size:12px; }
+    .dose-value { color:#eaf3fb; font-weight:750; }
+    .schedule-value { color:#cae2f3; }
+    .note { display:block; margin-top:4px; color:#8fa8bb; font-size:11px; font-style:italic; }
+    .mobile-label { display:none; }
+    .edit-btn { min-height:38px; padding:7px 14px; border:1px solid rgba(159,122,234,.52); border-radius:9px; color:#eee8ff; background:linear-gradient(145deg,rgba(101,72,158,.56),rgba(66,49,108,.48)); font-weight:800; cursor:pointer; transition:transform .16s ease,filter .16s ease; }
+    .edit-btn:hover { transform:translateY(-1px); filter:brightness(1.14); }
+    .empty { padding:44px; text-align:center; color:var(--comp-muted); border-bottom:1px solid var(--comp-line); }
     .status { min-height:22px; margin-top:14px; color:#8fdbff; font-size:13px; }
     dialog { width:min(680px,calc(100vw - 28px)); padding:0; border:1px solid var(--comp-line); border-radius:18px; color:#eef6fc; background:#111d2c; box-shadow:0 30px 80px rgba(0,0,0,.65); }
     dialog::backdrop { background:rgba(1,7,17,.72); backdrop-filter:blur(3px); }
@@ -50,7 +59,17 @@
     .field textarea { min-height:82px; resize:vertical; }
     .dialog-actions { display:flex; justify-content:flex-end; gap:9px; margin-top:18px; }
     .secondary { min-height:44px; padding:9px 14px; border:1px solid var(--comp-line); border-radius:11px; color:#dce9f5; background:#1c2b40; font-weight:750; cursor:pointer; }
-    @media(max-width:760px){ body{padding:15px}.brand{display:none}.hero{align-items:start;flex-direction:column}.toolbar{grid-template-columns:1fr}.med-grid{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.field.wide{grid-column:auto}.facts{grid-template-columns:1fr}.fact.wide{grid-column:auto} }
+    .danger { margin-right:auto; min-height:44px; padding:9px 14px; border:1px solid rgba(239,111,89,.5); border-radius:11px; color:#ffc2b8; background:rgba(117,48,45,.28); font-weight:800; cursor:pointer; }
+    @media(max-width:760px){
+      body{padding:15px}.brand{display:none}.hero{align-items:start;flex-direction:column}.toolbar{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.field.wide{grid-column:auto}
+      .list-head{display:none}.med-list{border:0;border-top:1px solid var(--comp-line);border-radius:0;background:transparent;box-shadow:none}
+      .med-row{grid-template-columns:minmax(0,1fr) auto; gap:9px 12px; padding:16px 6px 16px 14px; align-items:start}
+      .med-row::before{top:16px;bottom:16px}
+      .med-main{grid-column:1}.med-row .edit-btn{grid-column:2;grid-row:1;align-self:center}
+      .cell{grid-column:1/-1;display:grid;grid-template-columns:82px minmax(0,1fr);gap:10px;font-size:13px;padding-left:2px}
+      .mobile-label{display:block;color:#91a9bd;font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
+      .dialog-actions{flex-wrap:wrap}.danger{width:100%;margin:0 0 4px}
+    }
   </style>
 </head>
 <body class="page-medications">
@@ -64,7 +83,7 @@
       <input class="search" id="search" type="search" placeholder="Search medicine, Rx number, dose, or schedule…" />
       <div class="count" id="count">Loading…</div>
     </div>
-    <section class="med-grid" id="med-grid" aria-live="polite"></section>
+    <section class="med-list" id="med-grid" aria-live="polite"></section>
     <div class="status" id="status" role="status"></div>
   </main>
 
@@ -80,10 +99,11 @@
         <div class="field"><label for="med-schedule">Schedule</label><input id="med-schedule" placeholder="Example: 1 tablet/day" /></div>
         <div class="field wide"><label for="med-notes">Notes</label><textarea id="med-notes"></textarea></div>
       </div>
-      <div class="dialog-actions"><button class="secondary" id="cancel-editor" type="button">Cancel</button><button class="primary" type="submit">Save medication</button></div>
+      <div class="dialog-actions"><button class="danger" id="delete-medication" type="button">Delete medication</button><button class="secondary" id="cancel-editor" type="button">Cancel</button><button class="primary" type="submit">Save medication</button></div>
     </form>
   </dialog>
 
+  <script src="./medicine_data.js"></script>
   <script>
     let medications = [];
     const grid = document.getElementById('med-grid');
@@ -104,31 +124,56 @@
       const visible = medications.filter(m => Object.values(m).join(' ').toLowerCase().includes(q));
       count.textContent = `${visible.length} of ${medications.length} items`;
       if (!visible.length) { grid.innerHTML = '<div class="empty">No medications match this search.</div>'; return; }
-      grid.innerHTML = visible.map(m => `<article class="med-card" data-type="${escapeHtml(m.type)}">
-        <div class="med-head"><div><h2 class="med-name">${escapeHtml(m.name)}</h2><span class="type">${escapeHtml(m.type || 'Medication')}</span></div>
-        <div class="med-actions"><button class="icon-btn" type="button" data-edit="${escapeHtml(m.id)}">Edit</button><button class="icon-btn delete" type="button" data-delete="${escapeHtml(m.id)}">Delete</button></div></div>
-        <div class="facts">
-          <div class="fact"><div class="label">Rx number</div><div class="value">${escapeHtml(m.rx_number || '—')}</div></div>
-          <div class="fact"><div class="label">Dose / strength</div><div class="value">${escapeHtml(m.dose || '—')}</div></div>
-          <div class="fact wide"><div class="label">Schedule</div><div class="value">${escapeHtml(m.schedule || '—')}</div></div>
-          ${m.notes ? `<div class="fact wide"><div class="label">Notes</div><div class="value">${escapeHtml(m.notes)}</div></div>` : ''}
-        </div></article>`).join('');
+      grid.innerHTML = `<div class="list-head" aria-hidden="true"><span>Medicine</span><span>Rx number</span><span>Dose</span><span>Schedule</span><span></span></div>` + visible.map(m => `<article class="med-row" data-type="${escapeHtml(m.type || 'Medication')}">
+        <div class="med-main"><h2 class="med-name">${escapeHtml(m.name)}</h2><span class="type">${escapeHtml(m.type || 'Medication')}</span></div>
+        <div class="cell"><span class="mobile-label">Rx number</span><span class="rx-value">${escapeHtml(m.rx_number || '—')}</span></div>
+        <div class="cell"><span class="mobile-label">Dose</span><span class="dose-value">${escapeHtml(m.dose || '—')}</span></div>
+        <div class="cell"><span class="mobile-label">Schedule</span><span class="schedule-value">${escapeHtml(m.schedule || '—')}${m.notes ? `<span class="note">${escapeHtml(m.notes)}</span>` : ''}</span></div>
+        <button class="edit-btn" type="button" data-edit="${escapeHtml(m.id)}" aria-label="Edit ${escapeHtml(m.name)}">Edit</button>
+      </article>`).join('');
     }
     async function load() {
+      if (location.protocol === 'file:') {
+        let data = window.MEDICINE_DATA || {medications:[]};
+        try {
+          const local = localStorage.getItem('medicine-manager-data');
+          if (local) data = JSON.parse(local);
+        } catch (_error) {
+          // Some browsers restrict storage for file URLs; built-in data still works.
+        }
+        medications = Array.isArray(data.medications) ? data.medications : [];
+        render();
+        return;
+      }
       try {
         let response = await fetch('/api/medications', {cache:'no-store'});
         if (!response.ok) response = await fetch('./medicine_data.json', {cache:'no-store'});
         const data = await response.json(); medications = Array.isArray(data.medications) ? data.medications : []; render();
-      } catch (error) { grid.innerHTML = '<div class="empty">Medication data could not be loaded.</div>'; count.textContent = 'Unavailable'; }
+      } catch (error) {
+        medications = Array.isArray(window.MEDICINE_DATA?.medications) ? window.MEDICINE_DATA.medications : [];
+        render();
+      }
     }
     function openEditor(item=null) {
       document.getElementById('editor-title').textContent = item ? 'Edit medication' : 'Add medication';
       Object.entries(fields).forEach(([key,input]) => input.value = item?.[key] || '');
-      fields.type.value = item?.type || 'Medication'; editor.showModal(); fields.name.focus();
+      fields.type.value = item?.type || 'Medication';
+      document.getElementById('delete-medication').hidden = !item;
+      editor.showModal(); fields.name.focus();
     }
     function closeEditor() { editor.close(); form.reset(); fields.id.value=''; }
     async function saveAll(message) {
       status.textContent = 'Saving…';
+      if (location.protocol === 'file:') {
+        try {
+          localStorage.setItem('medicine-manager-data', JSON.stringify({medications,updated_at:new Date().toISOString()}));
+          status.textContent = `${message} Saved on this device.`;
+        } catch (_error) {
+          status.textContent = `${message} This browser cannot retain changes for local files.`;
+        }
+        render();
+        return;
+      }
       const response = await fetch('/api/medications', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({medications})});
       const data = await response.json().catch(()=>({}));
       if (!response.ok) throw new Error(data.error || 'Save failed');
@@ -140,14 +185,13 @@
     search.addEventListener('input', render);
     grid.addEventListener('click', async event => {
       const editId = event.target.closest('[data-edit]')?.dataset.edit;
-      const deleteId = event.target.closest('[data-delete]')?.dataset.delete;
       if (editId) openEditor(medications.find(m => m.id === editId));
-      if (deleteId) {
-        const item = medications.find(m => m.id === deleteId);
-        if (!item || !confirm(`Delete ${item.name}?`)) return;
-        const previous = medications; medications = medications.filter(m => m.id !== deleteId);
-        try { await saveAll(`${item.name} deleted.`); } catch (error) { medications = previous; render(); status.textContent = error.message; }
-      }
+    });
+    document.getElementById('delete-medication').addEventListener('click', async () => {
+      const item = medications.find(m => m.id === fields.id.value);
+      if (!item || !confirm(`Delete ${item.name}?`)) return;
+      const previous = medications; medications = medications.filter(m => m.id !== item.id); closeEditor(); render();
+      try { await saveAll(`${item.name} deleted.`); } catch (error) { medications = previous; render(); status.textContent = error.message; }
     });
     form.addEventListener('submit', async event => {
       event.preventDefault();

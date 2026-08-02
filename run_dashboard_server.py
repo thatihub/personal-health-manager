@@ -1326,6 +1326,12 @@ class DashboardHandler(SimpleHTTPRequestHandler):
         tmp.write_text(f"window.VAULT_DATA = {json.dumps(payload, indent=2, ensure_ascii=False)};\n", encoding="utf-8")
         tmp.replace(path)
 
+    def _write_medicine_js(self, payload: object) -> None:
+        path = PROJECT_DIR / "medicine_data.js"
+        tmp = path.with_suffix(path.suffix + ".tmp")
+        tmp.write_text(f"window.MEDICINE_DATA = {json.dumps(payload, indent=2, ensure_ascii=False)};\n", encoding="utf-8")
+        tmp.replace(path)
+
     def _doctor_notes_payload(self) -> dict[str, object]:
         path = PROJECT_DIR / "doctor_notes.json"
         if not path.exists():
@@ -1380,6 +1386,7 @@ class DashboardHandler(SimpleHTTPRequestHandler):
             cleaned.append(record)
         saved = {"medications": cleaned, "updated_at": datetime.now().astimezone().isoformat()}
         self._write_json_file(MEDICINE_DATA_PATH, saved)
+        self._write_medicine_js(saved)
         self._json(200, {"ok": True, **saved})
 
     def _handle_doctor_notes_save(self) -> None:
