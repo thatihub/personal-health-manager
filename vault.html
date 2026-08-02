@@ -659,6 +659,27 @@
       font-size: 9px;
       top: 1px;
     }
+    .benefit-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      align-self: flex-start;
+      min-height: 42px;
+      margin-top: 8px;
+      padding: 9px 14px;
+      border: 1px solid rgba(255, 208, 129, 0.48);
+      border-radius: 11px;
+      background: linear-gradient(120deg, #b87412, #e29a27);
+      color: #fff !important;
+      text-decoration: none !important;
+      font-size: 13px;
+      font-weight: 850;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.24);
+    }
+    .benefit-action:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.08);
+    }
     .gym-badge a {
       color: #73ecb4 !important;
       text-decoration: none;
@@ -735,6 +756,37 @@
       font-weight: 600;
       color: #b5cde0;
     }
+
+    .qr-scan-access {
+      display: grid;
+      gap: 7px;
+      margin-top: 9px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 12px;
+      color: #d6e5f3;
+    }
+
+    .qr-scan-access-row {
+      display: grid;
+      grid-template-columns: 68px minmax(0, 1fr);
+      gap: 7px;
+      align-items: center;
+    }
+
+    .qr-scan-access-label {
+      color: #98adbf;
+      font-weight: 700;
+    }
+
+    .qr-scan-access a {
+      color: #73dfff !important;
+      font-weight: 750;
+      text-decoration: none;
+      overflow-wrap: anywhere;
+    }
+
+    .qr-scan-access a:hover { text-decoration: underline; }
 
     .qr-network-details {
       font-size: 12.5px;
@@ -850,36 +902,184 @@
     }
   </style>
   <link rel="stylesheet" href="./companion_theme.css?v=20260729-2" />
+  <style>
+    /* Vault-specific information hierarchy */
+    body.page-vault .wrap { max-width: 1180px; }
+    .vault-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .vault-brand {
+      color: #d8e8f5;
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: .02em;
+    }
+    .vault-nav { display: flex; align-items: center; gap: 8px; }
+    .vault-nav > a,
+    .vault-nav summary {
+      min-height: 42px !important;
+      padding: 8px 13px !important;
+      border-radius: 10px !important;
+      border: 1px solid var(--comp-line) !important;
+      background: rgba(17, 28, 42, .82) !important;
+      color: #d6e4f2 !important;
+      font-size: 13px !important;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      cursor: pointer;
+      list-style: none;
+    }
+    .vault-nav summary::-webkit-details-marker { display: none; }
+    .vault-nav-menu { position: relative; }
+    .vault-nav-menu[open] summary { border-color: rgba(18, 164, 212, .7) !important; }
+    .vault-nav-links {
+      position: absolute;
+      z-index: 20;
+      right: 0;
+      top: calc(100% + 8px);
+      width: 240px;
+      padding: 8px;
+      border: 1px solid var(--comp-line);
+      border-radius: 14px;
+      background: #111d2c;
+      box-shadow: 0 18px 40px rgba(0,0,0,.45);
+    }
+    .vault-nav-links a {
+      display: block;
+      padding: 10px 11px;
+      border-radius: 9px;
+      color: #dce9f5;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 650;
+    }
+    .vault-nav-links a:hover { background: rgba(18,164,212,.13); }
+    .vault-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 20px;
+      margin-bottom: 18px;
+    }
+    body.page-vault h1 { font-size: clamp(36px, 5vw, 58px) !important; margin-bottom: 4px; }
+    .vault-controls {
+      display: grid;
+      grid-template-columns: minmax(260px, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 18px;
+      padding: 12px;
+      border: 1px solid var(--comp-line);
+      border-radius: 16px;
+      background: rgba(16, 28, 43, .72);
+    }
+    .vault-controls .search-wrap,
+    .vault-controls .toolbar { margin: 0; }
+    .vault-controls .search-input {
+      width: 100%;
+      min-height: 42px !important;
+      border-radius: 10px !important;
+      box-shadow: none !important;
+    }
+    .vault-controls .search-note { display: none; }
+    .vault-controls .toolbar-btn {
+      min-height: 40px !important;
+      padding: 8px 11px !important;
+      box-shadow: none !important;
+      font-size: 12px !important;
+    }
+    .vault-tools { position: relative; }
+    .vault-tools summary { list-style: none; }
+    .vault-tools summary::-webkit-details-marker { display: none; }
+    .vault-tools-menu {
+      position: absolute;
+      z-index: 15;
+      right: 0;
+      top: calc(100% + 8px);
+      min-width: 205px;
+      padding: 8px;
+      border: 1px solid var(--comp-line);
+      border-radius: 13px;
+      background: #111d2c;
+      box-shadow: 0 18px 40px rgba(0,0,0,.45);
+    }
+    .vault-tools-menu .toolbar-btn { width: 100%; justify-content: flex-start; margin: 3px 0; }
+    .vault-block-heading { margin: 24px 0 10px; }
+    .vault-block-heading h2 { margin: 0 0 3px; font-size: 20px !important; }
+    .vault-block-heading p { margin: 0; color: var(--comp-muted); font-size: 13px; }
+    body.page-vault .quick-reference-card { margin-bottom: 22px; }
+    body.page-vault .grid { gap: 10px; }
+    body.page-vault .card { border-radius: 14px !important; border-top-width: 3px; box-shadow: 0 8px 18px rgba(0,0,0,.22) !important; }
+    body.page-vault .card:hover { transform: none; box-shadow: 0 10px 22px rgba(0,0,0,.27) !important; }
+    body.page-vault summary.section-head { min-height: 64px; padding: 12px 15px; }
+    body.page-vault .section-head h3 { font-size: 18px !important; letter-spacing: -.015em !important; }
+    body.page-vault .drag-handle { opacity: .4; font-size: 13px; }
+    @media (max-width: 760px) {
+      .vault-topbar { margin-bottom: 16px; }
+      .vault-brand { display: none; }
+      .vault-nav { width: 100%; justify-content: space-between; }
+      .vault-title-row { align-items: start; flex-direction: column; gap: 8px; }
+      .vault-controls { grid-template-columns: 1fr; }
+      .vault-controls .toolbar { display: grid; grid-template-columns: 1fr 1fr auto; width: 100%; }
+      .vault-controls .toolbar-btn { justify-content: center; }
+      .vault-tools-menu { right: 0; }
+    }
+  </style>
   <script src="./vault_data.js"></script>
 </head>
 
 <body class="page-vault">
   <div class="wrap">
-    <nav class="nav">
-      <a href="./index.html">Home</a>
-      <a href="./doctor-notes.html">Doctor Notes</a>
-      <a href="./dashboard.html">Lab Results Dashboard</a>
-      <a href="./bp.html">Blood Pressure</a>
-      <a href="./composition.html">Body Composition</a>
-      <a class="active" href="./vault.html">Health Vault</a>
-      <a href="./kaiser-labs.html">Kaiser Labs</a>
-      <a href="./immunizations.html">Immunizations</a>
-      <a href="./cabinet.html">Cabinet</a>
-    </nav>
-
-    <h1>Health Vault</h1>
-    <div class="sub">SCAN 2026, benefits, contacts, medications, and care references.</div>
-    <div class="updated-banner" id="last-updated-banner">Last updated: loading...</div>
-    <div class="search-wrap">
-      <input id="vault-search" class="search-input" type="search"
-        placeholder="Search: phone, doctor, program, medication, vaccine..." />
-      <span class="search-note">Type to filter cards</span>
-    </div>
-    <div class="toolbar">
-      <button class="toolbar-btn" type="button" id="expand-all">Expand all sections</button>
-      <button class="toolbar-btn" type="button" id="collapse-all">Collapse all sections</button>
-      <button class="toolbar-btn" type="button" id="edit-json">Edit Vault JSON</button>
-      <a class="toolbar-btn" href="./kaiser-health-summary.html" target="_blank" rel="noopener">Open Kaiser summary</a>
+    <header>
+      <div class="vault-topbar">
+        <div class="vault-brand">PERSONAL HEALTH MANAGER</div>
+        <nav class="vault-nav" aria-label="Vault navigation">
+          <a href="./index.html">← Home</a>
+          <a href="./vault.html" aria-current="page">Health Vault</a>
+          <details class="vault-nav-menu">
+            <summary>Other pages ▾</summary>
+            <div class="vault-nav-links">
+              <a href="./doctor-notes.html">Doctor Notes</a>
+              <a href="./dashboard.html">Lab Results</a>
+              <a href="./bp.html">Blood Pressure</a>
+              <a href="./composition.html">Body Composition</a>
+              <a href="./kaiser-labs.html">Kaiser Labs</a>
+              <a href="./immunizations.html">Immunizations</a>
+            </div>
+          </details>
+        </nav>
+      </div>
+      <div class="vault-title-row">
+        <div>
+          <h1>Health Vault</h1>
+          <div class="sub">Your SCAN plan, care contacts, medications, benefits, and health references.</div>
+        </div>
+        <div class="updated-banner" id="last-updated-banner">Last updated: loading...</div>
+      </div>
+    </header>
+    <div class="vault-controls">
+      <div class="search-wrap">
+        <input id="vault-search" class="search-input" type="search"
+          placeholder="Search doctors, phone numbers, benefits, medications..." />
+        <span class="search-note">Type to filter cards</span>
+      </div>
+      <div class="toolbar">
+        <button class="toolbar-btn" type="button" id="expand-all">Expand all</button>
+        <button class="toolbar-btn" type="button" id="collapse-all">Collapse all</button>
+        <details class="vault-tools">
+          <summary class="toolbar-btn">More tools ▾</summary>
+          <div class="vault-tools-menu">
+            <button class="toolbar-btn" type="button" id="edit-json">Edit Vault data</button>
+            <a class="toolbar-btn" href="./kaiser-health-summary.html" target="_blank" rel="noopener">Open Kaiser summary</a>
+          </div>
+        </details>
+      </div>
     </div>
     <section class="json-editor hidden" id="json-editor-panel">
       <h2>Vault JSON Editor (edit any field, add new fields)</h2>
@@ -897,6 +1097,10 @@
       </div>
       <div class="status" id="json-editor-status">Edit mode is off.</div>
     </section>
+    <div class="vault-block-heading">
+      <h2>Quick essentials</h2>
+      <p>Member details and numbers you may need right away.</p>
+    </div>
     <section class="quick-reference-card hidden" id="quick-reference-panel">
       <div class="qr-grid">
         <div class="qr-col qr-identity">
@@ -906,6 +1110,16 @@
             <span id="qr-copy-container"></span>
           </div>
           <div class="qr-sub-label" id="qr-plan-name">SCAN Medicare 2026</div>
+          <div class="qr-scan-access" id="qr-scan-access" aria-label="SCAN support and online access">
+            <div class="qr-scan-access-row">
+              <span class="qr-scan-access-label">Support</span>
+              <span id="qr-scan-support">loading...</span>
+            </div>
+            <div class="qr-scan-access-row">
+              <span class="qr-scan-access-label">Login</span>
+              <a id="qr-scan-login" href="https://www.scanhealthplan.com" target="_blank" rel="noopener">Member portal ↗</a>
+            </div>
+          </div>
         </div>
         
         <div class="qr-col qr-network">
@@ -923,7 +1137,11 @@
       </div>
     </section>
 
-    <section class="grid">
+    <div class="vault-block-heading">
+      <h2>Vault sections</h2>
+      <p>Open only the category you need. You can drag sections into your preferred order.</p>
+    </div>
+    <section class="grid" aria-label="Health Vault categories">
       <article class="card accent-blue" id="providers-card">
         <details class="section">
           <summary class="section-head">
@@ -1071,21 +1289,6 @@
             <div class="muted" style="margin-top:8px;">
               <a class="link" href="./kaiser-health-summary.html" target="_blank" rel="noopener">Open detailed Kaiser health summary</a>
             </div>
-          </div>
-        </details>
-      </article>
-      <article class="card accent-blue hidden" id="custom-sections-card">
-        <details class="section">
-          <summary class="section-head">
-            <div style="display: flex; align-items: center; gap: 8px;">
-              <span class="drag-handle" title="Drag to reorder">⋮⋮</span>
-              <h3>Custom Sections</h3>
-            </div>
-            <span class="chev">⌄</span>
-          </summary>
-          <div class="section-body">
-            <div class="sub-pills" id="custom-subpills"></div>
-            <div id="custom-sections"></div>
           </div>
         </details>
       </article>
@@ -1450,6 +1653,10 @@
         const benefitsContentHtml = generalBenefits.map((b) => {
           const emoji = emojiForName(b.title);
           const bulletList = b.details ? b.details.map(d => `<div class="vault-detail-bullet">${linkifyPhones(String(d))}</div>`).join('') : "";
+          const isOtc = /otc health|health solutions/i.test(String(b.title || ""));
+          const otcBalanceButton = isOtc && b.website
+            ? `<a class="benefit-action" href="${b.website}" target="_blank" rel="noopener">Check OTC Balance ↗</a>`
+            : "";
           return `
             <div class="vault-item-card" style="border-left-color: #f0a43a !important;">
               <div class="vault-item-header">
@@ -1460,6 +1667,7 @@
                 ${b.email ? `<div>✉️ ${b.email} ${copyButton(b.email)}</div>` : ''}
                 ${b.website ? `<div>🌐 ${link(b.website)} ${copyButton(b.website)}</div>` : ''}
                 ${bulletList ? `<div style="margin-top: 4px; display: flex; flex-direction: column; gap: 4px;">${bulletList}</div>` : ''}
+                ${otcBalanceButton}
               </div>
             </div>
           `;
@@ -1630,6 +1838,21 @@
         if (qrCopyContainer) {
           qrCopyContainer.innerHTML = copyButton(qMemberIdVal, "Copy");
         }
+
+        // Put SCAN support and portal access directly below the member plan.
+        const scanMainSupport = (scan.support_contacts || []).find((contact) =>
+          /scan main customer service/i.test(String(contact.name || ""))
+        );
+        const scanWebsiteContact = (scan.support_contacts || []).find((contact) => contact.website);
+        const scanWebsite = scanWebsiteContact?.website || "https://www.scanhealthplan.com";
+        const qrScanSupport = document.getElementById("qr-scan-support");
+        const qrScanLogin = document.getElementById("qr-scan-login");
+        if (qrScanSupport) {
+          qrScanSupport.innerHTML = scanMainSupport?.phone
+            ? `${phoneLink(scanMainSupport.phone)}${scanMainSupport.hours ? ` <span class="muted">(${scanMainSupport.hours})</span>` : ""}`
+            : "See SCAN Member Services";
+        }
+        if (qrScanLogin) qrScanLogin.href = scanWebsite;
  
         // Populate network in Quick Reference defensively
         const prov = scan.providers || {};
@@ -1722,7 +1945,6 @@
         `<div class="row"><div class="v">Endocrinology</div>${list(endo.map((d) => `${d.name || '-'}${d.phone ? ` • ${phoneInline(d.phone)}` : ''}${d.address ? ` • ${d.address}` : ''}`))}</div>` +
         `<div class="row"><div class="v">Doctor Lookup & Telehealth</div>${list(lookup.map((d) => `${d.title || '-'}${d.url ? ` • ${link(d.url)}` : ''}${d.notes ? ` • ${d.notes}` : ''}`))}</div>` +
         `<div class="row"><div class="v">Network</div>${list(networks.map((n) => `${n.name || '-'}${n.phone ? ` • ${phoneInline(n.phone)}` : ''}${n.support ? ` • support ${phoneInline(n.support)}` : ''}${n.website ? ` • ${link(n.website)}` : ''}`))}</div>`;
-      document.getElementById('custom-subpills').innerHTML = '';
       const providerPills = [];
       if (primaryCare.length) providerPills.push('Primary Care');
       if (endo.length) providerPills.push('Endocrinology');
@@ -1763,22 +1985,6 @@
         "kaiser_data",
         "kaiser"
       ]);
-      const customEntries = Object.entries(scan).filter(([k]) => !known.has(k));
-      const customCard = document.getElementById("custom-sections-card");
-      const customRoot = document.getElementById("custom-sections");
-      const customPillRoot = document.getElementById("custom-subpills");
-      if (customEntries.length) {
-        customRoot.innerHTML = customEntries.map(([k, v]) =>
-          `<div class="row"><div class="v">${k}</div>${typeof v === "object" ? list(v) : `<div>${linkifyPhones(String(v))}</div>`}</div>`
-        ).join("");
-        customPillRoot.innerHTML = customEntries.map(([k]) => `<span class="sub-pill">${k}</span>`).join("");
-        customCard.classList.remove("hidden");
-      } else {
-        customRoot.innerHTML = "";
-        customPillRoot.innerHTML = "";
-        customCard.classList.add("hidden");
-      }
-
       bindCopyButtons();
       initDragAndDrop();
     }
@@ -1887,13 +2093,6 @@
     load();
   </script>
 
-  <nav class="bottom-tab" aria-label="Primary">
-    <a href="./index.html">Home</a>
-    <a href="./dashboard.html">Lab Results</a>
-    <a href="./bp.html">BP</a>
-    <a href="./vault.html" class="active">Vault</a>
-    <a href="./cabinet.html">Cabinet</a>
-  </nav>
 </body>
 
 </html>
