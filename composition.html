@@ -219,8 +219,10 @@
 
     .inbody-card {
       margin-bottom: 16px;
-      padding: 18px;
       border-top: 4px solid #73ecb4 !important;
+      background:
+        radial-gradient(circle at 90% 0%, rgba(115, 236, 180, .11), transparent 34%),
+        rgba(13, 24, 38, .96) !important;
     }
     .inbody-head {
       display: flex;
@@ -250,12 +252,70 @@
       font-size: 12px;
       font-weight: 800;
     }
+    .inbody-overview {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(250px, .8fr);
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+    .latest-scan-panel, .change-panel {
+      border: 1px solid var(--comp-line);
+      border-radius: 16px;
+      padding: 16px;
+      background: rgba(8, 17, 30, .55);
+    }
+    .eyebrow {
+      margin: 0 0 5px;
+      color: #73ecb4;
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .latest-scan-panel h3, .change-panel h3, .history-head h3 {
+      margin: 0;
+      color: var(--comp-ink);
+      font-size: 18px;
+    }
+    .latest-scan-panel > p, .change-panel > p, .history-head p {
+      margin: 5px 0 0;
+      color: var(--comp-muted);
+      font-size: 12.5px;
+      line-height: 1.45;
+    }
+    .latest-metrics {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-top: 14px;
+    }
+    .latest-metric {
+      padding: 10px;
+      border-radius: 10px;
+      background: rgba(115, 236, 180, .06);
+    }
+    .latest-metric span { display: block; color: var(--comp-muted); font-size: 10px; text-transform: uppercase; }
+    .latest-metric strong { display: block; margin-top: 3px; color: var(--comp-ink); font-size: 18px; }
+    .change-list { display: grid; gap: 8px; margin-top: 14px; }
+    .change-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 13px; }
+    .change-row span { color: var(--comp-muted); }
+    .change-row strong { color: #73ecb4; font-size: 14px; }
     .inbody-trends {
       display: grid;
       grid-template-columns: repeat(4, minmax(135px, 1fr));
       gap: 10px;
       margin-bottom: 14px;
     }
+    .history-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 18px 2px 4px;
+    }
+    .inbody-table th:first-child, .inbody-table td:first-child { position: sticky; left: 0; z-index: 1; }
+    .inbody-table tbody tr.latest-row td { background: rgba(115, 236, 180, .09) !important; }
+    .source-note { color: var(--comp-muted); font-size: 11px; font-weight: 500; }
     .inbody-chart-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -365,6 +425,8 @@
       font-weight: 800;
     }
     @media (max-width: 800px) {
+      .inbody-overview { grid-template-columns: 1fr; }
+      .latest-metrics { grid-template-columns: 1fr 1fr; }
       .inbody-trends { grid-template-columns: 1fr 1fr; }
       .inbody-chart-grid { grid-template-columns: 1fr; }
       .inbody-head { flex-direction: column; }
@@ -372,6 +434,7 @@
     }
     @media (max-width: 480px) {
       .inbody-trends { grid-template-columns: 1fr; }
+      .history-head { align-items: flex-start; flex-direction: column; }
     }
   </style>
   <link rel="stylesheet" href="./companion_theme.css?v=20260729-2" />
@@ -411,7 +474,7 @@
     
     <section class="kpis" id="kpi-root">
       <div class="card kpi" style="border-top: 4px solid #67d8ff !important;">
-        <div class="label">Latest Home Weight</div>
+        <div class="label">Home Weight (Reference Only)</div>
         <div class="value" id="kpi-home-weight">-</div>
       </div>
       <div class="card kpi" style="border-top: 4px solid #ffb0be !important;">
@@ -460,18 +523,32 @@
     </section>
 
     <section class="card inbody-card dashboard-collapse" aria-labelledby="inbody-title">
-      <details class="section">
+      <details class="section" open>
         <summary class="section-head dashboard-summary">
           <div>
             <h2 id="inbody-title" style="color:#73ecb4;">InBody Scan Dashboard</h2>
-            <p>Monthly Fitness 19 scans. June 28 is the most useful baseline for evaluating the first month on Mounjaro 5 mg.</p>
+            <p>Four source-verified Fitness 19 scans, kept separate from DEXA measurements.</p>
           </div>
           <div class="summary-actions">
-            <span class="trend-badge">3 monthly scans</span>
+            <span class="trend-badge" id="inbody-scan-count">4 scans · May–Aug 2026</span>
             <span class="chev" aria-hidden="true">⌄</span>
           </div>
         </summary>
         <div class="section-body">
+          <div class="inbody-overview">
+            <section class="latest-scan-panel" aria-labelledby="latest-inbody-heading">
+              <div class="eyebrow">Latest source report</div>
+              <h3 id="latest-inbody-heading">August 29, 2026</h3>
+              <p>Fitness 19, Sunnyvale · 11:58 · InBody 270</p>
+              <div class="latest-metrics" id="inbody-latest-metrics"></div>
+            </section>
+            <section class="change-panel" aria-labelledby="baseline-change-heading">
+              <div class="eyebrow">Comparable trend</div>
+              <h3 id="baseline-change-heading">Change since June 28</h3>
+              <p>June is the practical 5 mg baseline; May remains visible but is flagged as an outlier.</p>
+              <div class="change-list" id="inbody-change-list"></div>
+            </section>
+          </div>
           <div class="inbody-trends" id="inbody-trends"></div>
           <div class="inbody-chart-grid">
             <div class="inbody-chart">
@@ -491,8 +568,16 @@
               </div>
             </div>
           </div>
+          <div class="history-head">
+            <div>
+              <div class="eyebrow">Complete source history</div>
+              <h3>All InBody scans</h3>
+              <p>Reported scan values only; newest first. SMI is the report's skeletal muscle index.</p>
+            </div>
+            <span class="source-note">4 source files verified</span>
+          </div>
           <div class="table-wrap">
-            <table>
+            <table class="inbody-table">
               <thead>
                 <tr>
                   <th>Date</th>
@@ -511,9 +596,9 @@
             </table>
           </div>
           <div class="med-note">
-            <p><strong>Mounjaro timeline:</strong> Started 2.5 mg on April 24, 2026; continued 2.5 mg through May; increased to 5 mg on June 24; continued 5 mg through July. The May 29 scan was about five weeks after starting 2.5 mg, the June 28 scan was four days after the increase, and the July 26 scan reflects about one month at 5 mg.</p>
+            <p><strong>Mounjaro timeline:</strong> Started 2.5 mg on April 24, 2026. The first InBody scan was May 29, 2026. Dose increased to 5 mg on June 24; June 28 is the practical 5 mg baseline, followed by the July 26 and August 29 scans. Home weight is reference-only and is never substituted for InBody scan weight.</p>
           </div>
-          <p class="scan-caution"><strong>Interpretation note:</strong> May composition values are retained as the first baseline but flagged because the large right-to-left leg difference suggests a measurement artifact. The more reliable June-to-July trend was −3.0 lb total weight, −2.4 lb fat mass, and −0.6 lb lean mass—about 80% of the measured loss came from fat.</p>
+          <p class="scan-caution"><strong>Interpretation note:</strong> May is retained for completeness but should not be used for composition trending: its right leg lean mass (21.63 lb) is 4.48 lb above the left, and its body-fat result differs sharply from later scans. From June 28 to August 29, scan weight decreased 2.0 lb, fat mass decreased 2.0 lb, and lean mass was unchanged.</p>
         </div>
       </details>
     </section>
@@ -752,7 +837,7 @@
     
     function renderKPIs(latest) {
       if (!latest) return;
-      document.getElementById("kpi-home-weight").textContent = `${latest.home_weight_lb} lb`;
+      document.getElementById("kpi-home-weight").textContent = latest.home_weight_lb != null ? `${latest.home_weight_lb} lb` : "Not recorded";
       document.getElementById("kpi-fat-pct").textContent = `${latest.body_fat_pct}%`;
       document.getElementById("kpi-lean-mass").textContent = `${latest.adjusted_lean_body_mass_lb || latest.lean_body_mass_lb} lb`;
       document.getElementById("kpi-muscle-mass").textContent = `${latest.skeletal_muscle_mass_lb} lb`;
@@ -760,13 +845,13 @@
     }
 
     function renderInBodyCard(records) {
-      const scans = records.filter(r => r.scan_type === "InBody");
+      const scans = records.filter(r => r.scan_type === "InBody").sort((a, b) => a.date.localeCompare(b.date));
       const tbody = document.getElementById("table-body-inbody");
       const trends = document.getElementById("inbody-trends");
       if (!tbody || !trends || !scans.length) return;
 
-      tbody.innerHTML = scans.map(r => `
-        <tr>
+      tbody.innerHTML = scans.slice().reverse().map((r, index) => `
+        <tr class="${index === 0 ? "latest-row" : ""}">
           <td>${fmtDate(r.date)}</td>
           <td style="color:#58c8ff;">${r.scan_weight_lb.toFixed(1)} lb</td>
           <td style="color:#8beee0;">${r.bmi.toFixed(1)}</td>
@@ -784,26 +869,40 @@
       const latest = scans[scans.length - 1];
       const change = (key) => latest[key] - baseline[key];
       const signed = (value, suffix) => `${value > 0 ? "+" : ""}${value.toFixed(1)}${suffix}`;
+      document.getElementById("inbody-scan-count").textContent = `${scans.length} scans · May–Aug 2026`;
+      document.getElementById("latest-inbody-heading").textContent = fmtDate(latest.date);
+      document.getElementById("inbody-latest-metrics").innerHTML = [
+        ["Weight", `${latest.scan_weight_lb.toFixed(1)} lb`],
+        ["Body fat", `${latest.body_fat_pct.toFixed(1)}%`],
+        ["Lean mass", `${latest.lean_body_mass_lb.toFixed(1)} lb`],
+        ["Muscle", `${latest.skeletal_muscle_mass_lb.toFixed(1)} lb`]
+      ].map(([label, value]) => `<div class="latest-metric"><span>${label}</span><strong>${value}</strong></div>`).join("");
+      document.getElementById("inbody-change-list").innerHTML = [
+        ["Scan weight", signed(change("scan_weight_lb"), " lb")],
+        ["Fat mass", signed(change("body_fat_mass_lb"), " lb")],
+        ["Lean mass", signed(change("lean_body_mass_lb"), " lb")],
+        ["Skeletal muscle", signed(change("skeletal_muscle_mass_lb"), " lb")]
+      ].map(([label, value]) => `<div class="change-row"><span>${label}</span><strong>${value}</strong></div>`).join("");
       const tiles = [
         {
-          label: "Weight",
-          value: `${latest.scan_weight_lb.toFixed(1)} lb`,
-          detail: `${signed(change("scan_weight_lb"), " lb")} since Jun 28`
+          label: "BMI",
+          value: latest.bmi.toFixed(1),
+          detail: `${signed(change("bmi"), "")} since Jun 28`
         },
         {
-          label: "Fat Mass",
-          value: `${latest.body_fat_mass_lb.toFixed(1)} lb`,
-          detail: `${signed(change("body_fat_mass_lb"), " lb")} since Jun 28`
+          label: "Body Water",
+          value: `${latest.total_body_water_lb.toFixed(1)} lb`,
+          detail: `${signed(change("total_body_water_lb"), " lb")} since Jun 28`
         },
         {
-          label: "Lean Mass",
-          value: `${latest.lean_body_mass_lb.toFixed(1)} lb`,
-          detail: `${signed(change("lean_body_mass_lb"), " lb")} since Jun 28`
+          label: "SMI",
+          value: latest.appendicular_lean_mass_index.toFixed(1),
+          detail: `${signed(change("appendicular_lean_mass_index"), "")} since Jun 28`
         },
         {
-          label: "Skeletal Muscle",
-          value: `${latest.skeletal_muscle_mass_lb.toFixed(1)} lb`,
-          detail: `${signed(change("skeletal_muscle_mass_lb"), " lb")} since Jun 28`
+          label: "Basal Metabolic Rate",
+          value: `${Math.round(latest.basal_metabolic_rate_kcal)} kcal`,
+          detail: `${latest.basal_metabolic_rate_kcal - baseline.basal_metabolic_rate_kcal >= 0 ? "+" : ""}${Math.round(latest.basal_metabolic_rate_kcal - baseline.basal_metabolic_rate_kcal)} kcal since Jun 28`
         }
       ];
       trends.innerHTML = tiles.map(tile => `

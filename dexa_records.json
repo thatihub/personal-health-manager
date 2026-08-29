@@ -138,5 +138,42 @@
       "left_leg": 15.19,
       "right_leg": 15.06
     }
+  },
+  {
+    "date": "2026-08-29",
+    "scan_type": "InBody",
+    "location": "Fitness 19, Sunnyvale",
+    "height_in": 62.0,
+    "scan_weight_lb": 162.6,
+    "home_weight_lb": null,
+    "clothing_diff_lb": null,
+    "bmi": 29.7,
+    "body_fat_pct": 36.1,
+    "body_fat_mass_lb": 58.8,
+    "lean_body_mass_lb": 103.8,
+    "skeletal_muscle_mass_lb": 58.0,
+    "total_body_water_lb": 76.1,
+    "dry_lean_mass_lb": 27.8,
+    "basal_metabolic_rate_kcal": 1388.0,
+    "adjusted_body_fat_mass_lb": 58.8,
+    "adjusted_lean_body_mass_lb": 103.8,
+    "waist_size_in": null,
+    "notes": "InBody scan at Fitness 19, Sunnyvale, 11:58. No same-day home weight was provided, so only source-reported scan values are shown.",
+    "visceral_fat_area_cm2": null,
+    "visceral_fat_mass_g": null,
+    "visceral_fat_volume_cm3": null,
+    "appendicular_lean_mass_index": 7.8,
+    "lean_height2_index": null,
+    "lean_index_percentile": null,
+    "bmd_g_cm2": null,
+    "bmd_t_score": null,
+    "bmd_z_score": null,
+    "segmental_lean_mass_lb": {
+      "left_arm": 5.82,
+      "right_arm": 5.97,
+      "trunk": 49.0,
+      "left_leg": 15.5,
+      "right_leg": 15.54
+    }
   }
 ]
