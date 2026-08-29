@@ -27,6 +27,12 @@
     .kpi { padding: 14px; }
     .kpi .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
     .kpi .value { font-size: 28px; font-weight: 800; margin-top: 4px; }
+    .kpi .reference-meta {
+      margin-top: 4px;
+      color: var(--comp-muted);
+      font-size: 11px;
+      line-height: 1.35;
+    }
     
     .grid {
       display: grid;
@@ -440,6 +446,7 @@
   <link rel="stylesheet" href="./companion_theme.css?v=20260729-2" />
   <script>
     document.write('<script src="./dexa_data.js?ts=' + Date.now() + '"><\/script>');
+    document.write('<script src="./home_weight_reference.js?ts=' + Date.now() + '"><\/script>');
   </script>
 </head>
 <body class="page-composition">
@@ -476,6 +483,7 @@
       <div class="card kpi" style="border-top: 4px solid #67d8ff !important;">
         <div class="label">Home Weight (Reference Only)</div>
         <div class="value" id="kpi-home-weight">-</div>
+        <div class="reference-meta" id="kpi-home-weight-meta">Separate from InBody scan weight</div>
       </div>
       <div class="card kpi" style="border-top: 4px solid #ffb0be !important;">
         <div class="label">Body Fat %</div>
@@ -837,7 +845,11 @@
     
     function renderKPIs(latest) {
       if (!latest) return;
-      document.getElementById("kpi-home-weight").textContent = latest.home_weight_lb != null ? `${latest.home_weight_lb} lb` : "Not recorded";
+      const homeReference = window.HOME_WEIGHT_REFERENCE;
+      document.getElementById("kpi-home-weight").textContent = homeReference ? `${homeReference.weight_lb.toFixed(1).replace(/\.0$/, "")} lb` : "Not recorded";
+      document.getElementById("kpi-home-weight-meta").textContent = homeReference
+        ? `${homeReference.source} · ${fmtDate(homeReference.date)} · separate from InBody scan weight`
+        : "Separate from InBody scan weight";
       document.getElementById("kpi-fat-pct").textContent = `${latest.body_fat_pct}%`;
       document.getElementById("kpi-lean-mass").textContent = `${latest.adjusted_lean_body_mass_lb || latest.lean_body_mass_lb} lb`;
       document.getElementById("kpi-muscle-mass").textContent = `${latest.skeletal_muscle_mass_lb} lb`;
