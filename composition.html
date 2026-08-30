@@ -207,12 +207,21 @@
     }
     .hidden { display: none !important; }
 
-    .inbody-card {
+    body.page-composition .inbody-card {
       margin-bottom: 16px;
       border-top: 4px solid #73ecb4 !important;
       background:
         radial-gradient(circle at 90% 0%, rgba(115, 236, 180, .11), transparent 34%),
         rgba(13, 24, 38, .96) !important;
+    }
+    body.page-composition .dexa-card {
+      border-top: 4px solid #a99cf2 !important;
+      background:
+        radial-gradient(circle at 92% 0%, rgba(169, 156, 242, .16), transparent 38%),
+        linear-gradient(145deg, rgba(27, 25, 53, .96), rgba(20, 27, 45, .96)) !important;
+    }
+    body.page-composition .dexa-card > details > .section-head {
+      background: rgba(91, 79, 174, .08);
     }
     .inbody-head {
       display: flex;
@@ -534,7 +543,7 @@
       </details>
     </section>
 
-    <section class="card dashboard-collapse" aria-labelledby="dexa-title">
+    <section class="card dashboard-collapse dexa-card" aria-labelledby="dexa-title">
       <details class="section">
         <summary class="section-head dashboard-summary">
           <div>
