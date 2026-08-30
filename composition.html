@@ -11,7 +11,21 @@
       --page-accent-2: #5b4fe8;
     }
     .wrap { max-width: 1280px; margin: 0 auto; }
-    .nav { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+    .composition-nav {
+      display: flex;
+      justify-content: flex-start;
+      margin-bottom: 14px;
+    }
+    .composition-nav a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 40px;
+      padding: 0 16px;
+    }
+    @media (max-width: 600px) {
+      .composition-nav { margin: 8px 0 12px; }
+      .composition-nav a { width: 100%; justify-content: center; }
+    }
     
     .hero {
       margin-bottom: 14px;
@@ -109,40 +123,6 @@
     .section-body {
       padding: 14px;
       border-top: 1px solid var(--comp-line);
-    }
-    
-    .tracker-card {
-      margin-bottom: 16px;
-      border-left: 5px solid var(--page-accent) !important;
-    }
-    .tracker-grid {
-      display: grid;
-      grid-template-columns: 2fr 1fr;
-      gap: 20px;
-    }
-    @media (max-width: 768px) {
-      .tracker-grid { grid-template-columns: 1fr; }
-    }
-    .tracker-col h4 { margin: 0 0 10px; font-size: 16px; text-transform: uppercase; letter-spacing: 0.5px; color: #f4f8fc; }
-    .tracker-col p { margin: 0 0 12px; font-size: 14.5px; line-height: 1.45; color: var(--comp-muted); }
-    
-    .goals-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-    .goals-list li {
-      position: relative;
-      padding-left: 20px;
-      margin-bottom: 8px;
-      font-size: 14.5px;
-      line-height: 1.4;
-    }
-    .goals-list li::before {
-      content: "✦";
-      position: absolute;
-      left: 0;
-      color: var(--page-accent);
     }
     
     .table-wrap {
@@ -447,18 +427,8 @@
         document.getElementById('file-protocol-warning').style.display = 'block';
       }
     </script>
-    <nav class="nav">
+    <nav class="nav composition-nav" aria-label="Body Composition navigation">
       <a href="./index.html">Home</a>
-      <a href="./doctor-notes.html">Doctor Notes</a>
-      <a href="./dashboard.html">Lab Results Dashboard</a>
-      <a href="./bp.html">Blood Pressure</a>
-      <a class="active" href="./composition.html">Body Composition</a>
-      <a href="./vault.html">Health Vault</a>
-      <a href="./bio-age.html">Biological Age</a>
-      <a href="./lab-import.html">Lab Import + Review</a>
-      <a href="./kaiser-labs.html">Kaiser Labs</a>
-      <a href="./immunizations.html">Immunizations</a>
-      <a href="./admin.html">Admin</a>
     </nav>
     
     <section class="card inbody-card dashboard-collapse" aria-labelledby="inbody-title">
@@ -730,32 +700,6 @@
       </details>
     </section>
 
-    <section class="card tracker-card" style="padding: 0;">
-      <details class="section">
-        <summary class="section-head">
-          <h3 style="color: #ffd081 !important;">Active Health Goals & Important Protocol Rules</h3>
-          <span class="chev">⌄</span>
-        </summary>
-        <div class="section-body">
-          <div class="tracker-grid">
-            <div class="tracker-col">
-              <h4>Active Health Goals & Protocol</h4>
-              <p><strong>Primary Goal:</strong> Lose body fat slowly while preserving vital muscle tissue, especially because you are taking Mounjaro and insulin.</p>
-              <ul class="goals-list">
-                <li><strong>Current Protein Intake:</strong> 50–60 g/day, the maximum currently tolerated. Keep it spread across meals and confirm the individualized target with the clinician.</li>
-                <li><strong>Resistance Training:</strong> Perform compound exercises 2–3 times per week to trigger muscle protein synthesis.</li>
-                <li><strong>Weight Targets:</strong> Focus on steady progress. First target is 155–160 lb; Second target is 145–150 lb.</li>
-              </ul>
-            </div>
-            <div class="tracker-col" style="border-left: 1px solid var(--comp-line); padding-left: 20px;">
-              <h4>Important Protocol Rules</h4>
-              <p style="font-size: 13.5px;"><strong>Clothing Adjustment:</strong> Scans include clothes (jeans/t-shirts), accounting for ~5–5.5 lb difference compared to home morning weight. <em>Never directly compare clothed scan weight to morning home weight.</em></p>
-              <p style="font-size: 13.5px;"><strong>Future Scans:</strong> Retest every 8–12 weeks. Always wear the same light gym clothes (t-shirt and shorts) to standardise clothed scans.</p>
-            </div>
-          </div>
-        </div>
-      </details>
-    </section>
   </div>
   
   <script>
