@@ -545,38 +545,46 @@
               <h3>All DEXA measurements</h3>
               <p>All available report fields in one table. Scroll horizontally to review every measurement.</p>
             </div>
-            <span class="source-note" id="dexa-scan-count">DEXA scan</span>
+            <div class="history-actions">
+              <span class="source-note" id="dexa-scan-count">DEXA scan</span>
+              <div class="view-switcher" role="group" aria-label="DEXA history view">
+                <button class="active" id="dexa-view-table" type="button" aria-pressed="true">Table</button>
+                <button id="dexa-view-charts" type="button" aria-pressed="false">Charts</button>
+              </div>
+            </div>
           </div>
-          <div class="table-wrap">
-            <table class="dexa-history-table">
-              <thead>
-                <tr>
-                  <th>Date</th>
-                  <th>Location</th>
-                  <th>Height</th>
-                  <th>Scan Weight</th>
-                  <th>Home Weight</th>
-                  <th>Clothing Diff.</th>
-                  <th>BMI</th>
-                  <th>Body Fat</th>
-                  <th>Fat Mass</th>
-                  <th>Lean Mass</th>
-                  <th>VAT Area</th>
-                  <th>VAT Mass</th>
-                  <th>VAT Volume</th>
-                  <th>ALM Index</th>
-                  <th>Lean/Height²</th>
-                  <th>Lean Percentile</th>
-                  <th>BMD</th>
-                  <th>T-Score</th>
-                  <th>Z-Score</th>
-                </tr>
-              </thead>
-              <tbody id="table-body-dexa-history"></tbody>
-            </table>
+          <div id="dexa-history-table-view">
+            <div class="table-wrap">
+              <table class="dexa-history-table">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Location</th>
+                    <th>Height</th>
+                    <th>Scan Weight</th>
+                    <th>Home Weight</th>
+                    <th>Clothing Diff.</th>
+                    <th>BMI</th>
+                    <th>Body Fat</th>
+                    <th>Fat Mass</th>
+                    <th>Lean Mass</th>
+                    <th>VAT Area</th>
+                    <th>VAT Mass</th>
+                    <th>VAT Volume</th>
+                    <th>ALM Index</th>
+                    <th>Lean/Height²</th>
+                    <th>Lean Percentile</th>
+                    <th>BMD</th>
+                    <th>T-Score</th>
+                    <th>Z-Score</th>
+                  </tr>
+                </thead>
+                <tbody id="table-body-dexa-history"></tbody>
+              </table>
+            </div>
+            <div class="dexa-report-note" id="dexa-report-note"></div>
           </div>
-          <div class="dexa-report-note" id="dexa-report-note"></div>
-          <section class="grid" id="dashboard-grid">
+          <section class="grid" id="dashboard-grid" aria-label="DEXA charts">
       <article class="card chart">
         <div class="chart-head">
           <h3>Weight Tracking (Clothed vs Home)</h3>
@@ -772,6 +780,28 @@
         tableButton.setAttribute("aria-pressed", String(!chartsActive));
         chartsButton.setAttribute("aria-pressed", String(chartsActive));
         if (chartsActive) requestAnimationFrame(() => drawInBodyCharts(rawInBodyRecords));
+      };
+      tableButton.addEventListener("click", () => show("table"));
+      chartsButton.addEventListener("click", () => show("charts"));
+      show("table");
+    }
+
+    function setupDexaHistorySwitcher() {
+      const tableButton = document.getElementById("dexa-view-table");
+      const chartsButton = document.getElementById("dexa-view-charts");
+      const tableView = document.getElementById("dexa-history-table-view");
+      const chartsView = document.getElementById("dashboard-grid");
+      if (!tableButton || !chartsButton || !tableView || !chartsView) return;
+
+      const show = (view) => {
+        const chartsActive = view === "charts";
+        tableView.classList.toggle("hidden", chartsActive);
+        chartsView.classList.toggle("hidden", !chartsActive);
+        tableButton.classList.toggle("active", !chartsActive);
+        chartsButton.classList.toggle("active", chartsActive);
+        tableButton.setAttribute("aria-pressed", String(!chartsActive));
+        chartsButton.setAttribute("aria-pressed", String(chartsActive));
+        if (chartsActive) requestAnimationFrame(() => drawCharts(rawDexaRecords));
       };
       tableButton.addEventListener("click", () => show("table"));
       chartsButton.addEventListener("click", () => show("charts"));
@@ -1066,6 +1096,7 @@
           setupInBodyHistorySwitcher();
           populateTables(rawDexaRecords);
           drawCharts(rawDexaRecords);
+          setupDexaHistorySwitcher();
           
           // Default to the Table view on page load
           const defaultToTable = true;
