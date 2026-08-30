@@ -279,15 +279,15 @@
     }
     .latest-metric {
       padding: 10px;
+      border: 1px solid rgba(255, 255, 255, .08);
       border-radius: 10px;
-      background: rgba(115, 236, 180, .06);
+      background: #070b10;
     }
-    .latest-metric span { display: block; color: var(--comp-muted); font-size: 10px; text-transform: uppercase; }
-    .latest-metric strong { display: block; margin-top: 3px; color: var(--comp-ink); font-size: 18px; }
+    .latest-metric span { display: block; color: #aebdcc; font-size: 10px; text-transform: uppercase; }
+    .latest-metric strong { display: block; margin-top: 3px; color: #ffffff; font-size: 18px; }
     .latest-metric small { display: block; margin-top: 3px; color: var(--comp-muted); font-size: 9.5px; line-height: 1.35; }
-    .latest-metric.reference { border: 1px dashed rgba(88, 200, 255, .35); background: rgba(88, 200, 255, .05); }
+    .latest-metric.reference { border: 1px dashed rgba(88, 200, 255, .45); background: #081018; }
     .latest-scan-context { margin: 0 0 8px; color: var(--comp-muted); font-size: 11.5px; }
-    .inbody-updated { margin-top: 3px; color: var(--comp-muted); font-size: 12px; font-weight: 700; }
     .change-list { display: grid; gap: 8px; margin-top: 14px; }
     .change-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 13px; }
     .change-row span { color: var(--comp-muted); }
@@ -458,7 +458,6 @@
         <summary class="section-head dashboard-summary">
           <div>
             <h2 id="inbody-title" style="color:#73ecb4;">InBody Scan Dashboard</h2>
-            <div class="inbody-updated" id="last-updated-banner">InBody updated: Aug 29, 2026</div>
           </div>
           <div class="summary-actions">
             <span class="trend-badge" id="inbody-scan-count">3 scans · Jun–Aug 2026</span>
@@ -806,7 +805,6 @@
       const change = (key) => latest[key] - baseline[key];
       const signed = (value, suffix) => `${value > 0 ? "+" : ""}${value.toFixed(1)}${suffix}`;
       document.getElementById("inbody-scan-count").textContent = `${scans.length} scans · Jun–Aug 2026`;
-      document.getElementById("last-updated-banner").textContent = `InBody updated: ${fmtDate(latest.date)}`;
       document.getElementById("latest-scan-context").textContent = `Latest scan · ${fmtDate(latest.date)} · Fitness 19, Sunnyvale · 11:58`;
       const homeReference = window.HOME_WEIGHT_REFERENCE;
       const latestMetrics = [
