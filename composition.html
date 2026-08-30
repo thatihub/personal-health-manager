@@ -242,11 +242,13 @@
       font-size: 12px;
       font-weight: 800;
     }
-    .inbody-overview {
-      display: block;
+    .inbody-summary-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(280px, .75fr);
+      gap: 12px;
       margin-bottom: 14px;
     }
-    .change-panel {
+    .summary-metrics-panel, .change-panel {
       border: 1px solid var(--comp-line);
       border-radius: 16px;
       padding: 16px;
@@ -273,9 +275,9 @@
     }
     .latest-metrics {
       display: grid;
-      grid-template-columns: repeat(6, minmax(120px, 1fr));
+      grid-template-columns: repeat(3, minmax(120px, 1fr));
       gap: 8px;
-      margin: 0 0 14px;
+      margin: 0;
     }
     .latest-metric {
       padding: 10px;
@@ -288,7 +290,7 @@
     .latest-metric small { display: block; margin-top: 3px; color: var(--comp-muted); font-size: 9.5px; line-height: 1.35; }
     .latest-metric.reference { border: 1px dashed rgba(88, 200, 255, .45); background: #081018; }
     .latest-scan-context { margin: 0 0 8px; color: var(--comp-muted); font-size: 11.5px; }
-    .change-list { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-top: 14px; }
+    .change-list { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 14px; }
     .change-row { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; padding: 8px 10px; border-radius: 9px; background: rgba(115, 236, 180, .045); font-size: 13px; }
     .change-row span { color: var(--comp-muted); }
     .change-row strong { color: #73ecb4; font-size: 14px; }
@@ -409,7 +411,7 @@
       font-weight: 800;
     }
     @media (max-width: 800px) {
-      .inbody-overview { grid-template-columns: 1fr; }
+      .inbody-summary-row { grid-template-columns: 1fr; }
       .latest-metrics { grid-template-columns: 1fr 1fr; }
       .change-list { grid-template-columns: 1fr 1fr; }
       .inbody-chart-grid { grid-template-columns: 1fr; }
@@ -466,9 +468,11 @@
           </div>
         </summary>
         <div class="section-body">
-          <p class="latest-scan-context" id="latest-scan-context">Latest scan · Aug 29, 2026 · Fitness 19, Sunnyvale · 11:58</p>
-          <div class="latest-metrics" id="inbody-latest-metrics"></div>
-          <div class="inbody-overview">
+          <div class="inbody-summary-row">
+            <section class="summary-metrics-panel" aria-label="Latest InBody scan metrics">
+              <p class="latest-scan-context" id="latest-scan-context">Latest scan · Aug 29, 2026 · Fitness 19, Sunnyvale · 11:58</p>
+              <div class="latest-metrics" id="inbody-latest-metrics"></div>
+            </section>
             <section class="change-panel" aria-labelledby="baseline-change-heading">
               <div class="eyebrow">Comparable trend</div>
               <h3 id="baseline-change-heading">Change since June 28</h3>
