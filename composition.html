@@ -288,8 +288,8 @@
     .latest-metric small { display: block; margin-top: 3px; color: var(--comp-muted); font-size: 9.5px; line-height: 1.35; }
     .latest-metric.reference { border: 1px dashed rgba(88, 200, 255, .45); background: #081018; }
     .latest-scan-context { margin: 0 0 8px; color: var(--comp-muted); font-size: 11.5px; }
-    .change-list { display: grid; gap: 8px; margin-top: 14px; }
-    .change-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 13px; }
+    .change-list { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-top: 14px; }
+    .change-row { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; padding: 8px 10px; border-radius: 9px; background: rgba(115, 236, 180, .045); font-size: 13px; }
     .change-row span { color: var(--comp-muted); }
     .change-row strong { color: #73ecb4; font-size: 14px; }
     .history-head {
@@ -411,6 +411,7 @@
     @media (max-width: 800px) {
       .inbody-overview { grid-template-columns: 1fr; }
       .latest-metrics { grid-template-columns: 1fr 1fr; }
+      .change-list { grid-template-columns: 1fr 1fr; }
       .inbody-chart-grid { grid-template-columns: 1fr; }
       .inbody-head { flex-direction: column; }
       .dashboard-section-head { flex-direction: column; }
