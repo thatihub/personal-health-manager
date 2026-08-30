@@ -292,12 +292,6 @@
     .change-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 13px; }
     .change-row span { color: var(--comp-muted); }
     .change-row strong { color: #73ecb4; font-size: 14px; }
-    .inbody-trends {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(135px, 1fr));
-      gap: 10px;
-      margin-bottom: 14px;
-    }
     .history-head {
       display: flex;
       align-items: end;
@@ -349,31 +343,6 @@
       font-size: 14px;
     }
     .inbody-chart svg { height: 190px; }
-    .trend-tile {
-      padding: 12px;
-      border: 1px solid var(--comp-line);
-      border-radius: 12px;
-      background: rgba(8, 17, 30, 0.48);
-    }
-    .trend-tile .label {
-      color: var(--comp-muted);
-      font-size: 10px;
-      font-weight: 800;
-      letter-spacing: .7px;
-      text-transform: uppercase;
-    }
-    .trend-tile .value {
-      margin-top: 5px;
-      color: var(--comp-ink);
-      font-size: 21px;
-      font-weight: 800;
-    }
-    .trend-tile .detail {
-      margin-top: 3px;
-      color: #73ecb4;
-      font-size: 11.5px;
-      font-weight: 700;
-    }
     .med-note {
       margin-top: 14px;
       padding: 13px 14px;
@@ -442,13 +411,11 @@
     @media (max-width: 800px) {
       .inbody-overview { grid-template-columns: 1fr; }
       .latest-metrics { grid-template-columns: 1fr 1fr; }
-      .inbody-trends { grid-template-columns: 1fr 1fr; }
       .inbody-chart-grid { grid-template-columns: 1fr; }
       .inbody-head { flex-direction: column; }
       .dashboard-section-head { flex-direction: column; }
     }
     @media (max-width: 480px) {
-      .inbody-trends { grid-template-columns: 1fr; }
       .history-head { align-items: flex-start; flex-direction: column; }
     }
   </style>
@@ -494,7 +461,7 @@
             <div class="inbody-updated" id="last-updated-banner">InBody updated: Aug 29, 2026</div>
           </div>
           <div class="summary-actions">
-            <span class="trend-badge" id="inbody-scan-count">4 scans · May–Aug 2026</span>
+            <span class="trend-badge" id="inbody-scan-count">3 scans · Jun–Aug 2026</span>
             <span class="chev" aria-hidden="true">⌄</span>
           </div>
         </summary>
@@ -505,11 +472,10 @@
             <section class="change-panel" aria-labelledby="baseline-change-heading">
               <div class="eyebrow">Comparable trend</div>
               <h3 id="baseline-change-heading">Change since June 28</h3>
-              <p>June is the practical 5 mg baseline; May remains visible but is flagged as an outlier.</p>
+              <p>June 28 is the practical 5 mg baseline for the displayed trend.</p>
               <div class="change-list" id="inbody-change-list"></div>
             </section>
           </div>
-          <div class="inbody-trends" id="inbody-trends"></div>
           <div class="history-head">
             <div>
               <div class="eyebrow">Complete source history</div>
@@ -517,7 +483,7 @@
               <p>Reported scan values only; newest first. SMI is the report's skeletal muscle index.</p>
             </div>
             <div class="history-actions">
-              <span class="source-note">4 source files verified</span>
+              <span class="source-note">3 displayed scans</span>
               <div class="view-switcher" role="group" aria-label="InBody history view">
                 <button class="active" id="inbody-view-table" type="button" aria-pressed="true">Table</button>
                 <button id="inbody-view-charts" type="button" aria-pressed="false">Charts</button>
@@ -562,9 +528,8 @@
             </div>
           </div>
           <div class="med-note">
-            <p><strong>Mounjaro timeline:</strong> Started 2.5 mg on April 24, 2026. The first InBody scan was May 29, 2026. Dose increased to 5 mg on June 24; June 28 is the practical 5 mg baseline, followed by the July 26 and August 29 scans. Home weight is reference-only and is never substituted for InBody scan weight.</p>
+            <p><strong>Mounjaro context:</strong> 2.5 mg started Apr 24; 5 mg started Jun 24. June 28 is the comparison baseline.</p>
           </div>
-          <p class="scan-caution"><strong>Interpretation note:</strong> May is retained for completeness but should not be used for composition trending: its right leg lean mass (21.63 lb) is 4.48 lb above the left, and its body-fat result differs sharply from later scans. From June 28 to August 29, scan weight decreased 2.0 lb, fat mass decreased 2.0 lb, and lean mass was unchanged.</p>
         </div>
       </details>
     </section>
@@ -817,10 +782,9 @@
     }
     
     function renderInBodyCard(records) {
-      const scans = records.filter(r => r.scan_type === "InBody").sort((a, b) => a.date.localeCompare(b.date));
+      const scans = records.filter(r => r.scan_type === "InBody" && r.date >= "2026-06-28").sort((a, b) => a.date.localeCompare(b.date));
       const tbody = document.getElementById("table-body-inbody");
-      const trends = document.getElementById("inbody-trends");
-      if (!tbody || !trends || !scans.length) return;
+      if (!tbody || !scans.length) return;
 
       tbody.innerHTML = scans.slice().reverse().map((r, index) => `
         <tr class="${index === 0 ? "latest-row" : ""}">
@@ -841,7 +805,7 @@
       const latest = scans[scans.length - 1];
       const change = (key) => latest[key] - baseline[key];
       const signed = (value, suffix) => `${value > 0 ? "+" : ""}${value.toFixed(1)}${suffix}`;
-      document.getElementById("inbody-scan-count").textContent = `${scans.length} scans · May–Aug 2026`;
+      document.getElementById("inbody-scan-count").textContent = `${scans.length} scans · Jun–Aug 2026`;
       document.getElementById("last-updated-banner").textContent = `InBody updated: ${fmtDate(latest.date)}`;
       document.getElementById("latest-scan-context").textContent = `Latest scan · ${fmtDate(latest.date)} · Fitness 19, Sunnyvale · 11:58`;
       const homeReference = window.HOME_WEIGHT_REFERENCE;
@@ -867,35 +831,6 @@
         ["Lean mass", signed(change("lean_body_mass_lb"), " lb")],
         ["Skeletal muscle", signed(change("skeletal_muscle_mass_lb"), " lb")]
       ].map(([label, value]) => `<div class="change-row"><span>${label}</span><strong>${value}</strong></div>`).join("");
-      const tiles = [
-        {
-          label: "BMI",
-          value: latest.bmi.toFixed(1),
-          detail: `${signed(change("bmi"), "")} since Jun 28`
-        },
-        {
-          label: "Body Water",
-          value: `${latest.total_body_water_lb.toFixed(1)} lb`,
-          detail: `${signed(change("total_body_water_lb"), " lb")} since Jun 28`
-        },
-        {
-          label: "SMI",
-          value: latest.appendicular_lean_mass_index.toFixed(1),
-          detail: `${signed(change("appendicular_lean_mass_index"), "")} since Jun 28`
-        },
-        {
-          label: "Basal Metabolic Rate",
-          value: `${Math.round(latest.basal_metabolic_rate_kcal)} kcal`,
-          detail: `${latest.basal_metabolic_rate_kcal - baseline.basal_metabolic_rate_kcal >= 0 ? "+" : ""}${Math.round(latest.basal_metabolic_rate_kcal - baseline.basal_metabolic_rate_kcal)} kcal since Jun 28`
-        }
-      ];
-      trends.innerHTML = tiles.map(tile => `
-        <div class="trend-tile">
-          <div class="label">${tile.label}</div>
-          <div class="value">${tile.value}</div>
-          <div class="detail">${tile.detail}</div>
-        </div>
-      `).join("");
     }
 
     function drawInBodyCharts(records) {
@@ -1172,7 +1107,7 @@
         }
 
         rawRecords = (out && out.rows) || [];
-        rawInBodyRecords = rawRecords.filter(r => r.scan_type === "InBody");
+        rawInBodyRecords = rawRecords.filter(r => r.scan_type === "InBody" && r.date >= "2026-06-28");
         rawDexaRecords = rawRecords.filter(r => r.scan_type === "DEXA");
         
         if (rawRecords.length > 0) {
