@@ -318,6 +318,16 @@
     .dexa-history-table { min-width: 1840px !important; }
     .dexa-history-table th:first-child, .dexa-history-table td:first-child { position: sticky; left: 0; z-index: 1; }
     .dexa-history-table tbody tr td:first-child { background: rgba(39, 34, 73, .98) !important; }
+    .dexa-report-note {
+      margin-top: 10px;
+      padding: 12px 14px;
+      border-left: 4px solid #a99cf2;
+      border-radius: 10px;
+      background: rgba(169, 156, 242, .08);
+      color: var(--comp-muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
     .source-note { color: var(--comp-muted); font-size: 11px; font-weight: 500; }
     .inbody-chart-grid {
       display: grid;
@@ -520,7 +530,7 @@
       <details class="section">
         <summary class="section-head dashboard-summary">
           <div>
-            <h2 id="dexa-title" style="color:#c9bbff;">Kalos DEXA Dashboard</h2>
+            <h2 id="dexa-title" style="color:#c9bbff;">DEXA Scan Dashboard</h2>
             <p>DEXA-only measurements for body composition, visceral fat, muscle indices, and bone density. Future DEXA scans will be compared only with DEXA.</p>
           </div>
           <div class="summary-actions">
@@ -560,17 +570,16 @@
                   <th>BMD</th>
                   <th>T-Score</th>
                   <th>Z-Score</th>
-                  <th>Notes</th>
                 </tr>
               </thead>
               <tbody id="table-body-dexa-history"></tbody>
             </table>
           </div>
+          <div class="dexa-report-note" id="dexa-report-note"></div>
           <section class="grid" id="dashboard-grid">
       <article class="card chart">
         <div class="chart-head">
           <h3>Weight Tracking (Clothed vs Home)</h3>
-          <button class="view-btn" id="btn-toggle-weight" type="button">Switch to Table</button>
         </div>
         <div class="graph-shell" id="shell-weight">
           <svg id="chart-weight"></svg>
@@ -579,26 +588,11 @@
             <div class="legend-item"><span class="legend-color" style="background:#ffb073;"></span>Clothed Scan Weight</div>
           </div>
         </div>
-        <div class="table-wrap hidden" id="table-wrap-weight">
-          <table>
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Home Weight</th>
-                <th>Scan Weight</th>
-                <th>Difference</th>
-                <th>Notes</th>
-              </tr>
-            </thead>
-            <tbody id="table-body-weight"></tbody>
-          </table>
-        </div>
       </article>
       
       <article class="card chart">
         <div class="chart-head">
           <h3>Body Composition (Muscle vs Fat)</h3>
-          <button class="view-btn" id="btn-toggle-composition" type="button">Switch to Table</button>
         </div>
         <div class="graph-shell" id="shell-composition">
           <svg id="chart-composition"></svg>
@@ -608,44 +602,14 @@
             <div class="legend-item"><span class="legend-color" style="background:#ff8fa0;"></span>Adjusted Fat Mass (Morning Est)</div>
           </div>
         </div>
-        <div class="table-wrap hidden" id="table-wrap-composition">
-          <table>
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Skeletal Muscle</th>
-                <th>Adjusted Lean Mass</th>
-                <th>Adjusted Fat Mass</th>
-                <th>Lean Mass (Scan)</th>
-                <th>Fat Mass (Scan)</th>
-              </tr>
-            </thead>
-            <tbody id="table-body-composition"></tbody>
-          </table>
-        </div>
       </article>
       
       <article class="card chart" style="grid-column: span 2;">
         <div class="chart-head">
           <h3>Body Fat Percentage</h3>
-          <button class="view-btn" id="btn-toggle-fat-pct" type="button">Switch to Table</button>
         </div>
         <div class="graph-shell" id="shell-fat-pct">
           <svg id="chart-fat-pct" style="height: 180px;"></svg>
-        </div>
-        <div class="table-wrap hidden" id="table-wrap-fat-pct">
-          <table>
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Body Fat %</th>
-                <th>BMI</th>
-                <th>BMR (kcal)</th>
-                <th>Notes</th>
-              </tr>
-            </thead>
-            <tbody id="table-body-fat-pct"></tbody>
-          </table>
         </div>
       </article>
 
@@ -653,7 +617,6 @@
       <article class="card chart">
         <div class="chart-head">
           <h3>Visceral Fat (VAT) Area</h3>
-          <button class="view-btn" id="btn-toggle-vat" type="button">Switch to Table</button>
         </div>
         <div class="graph-shell" id="shell-vat">
           <svg id="chart-vat" style="height: 180px;"></svg>
@@ -661,27 +624,12 @@
             <div class="legend-item"><span class="legend-color" style="background:#ff8fa0;"></span>Estimated VAT Area (cm²) [Ideal: < 100, High: > 200]</div>
           </div>
         </div>
-        <div class="table-wrap hidden" id="table-wrap-vat">
-          <table>
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>VAT Area (cm²)</th>
-                <th>VAT Mass (g)</th>
-                <th>VAT Volume (cm³)</th>
-                <th>Notes</th>
-              </tr>
-            </thead>
-            <tbody id="table-body-vat"></tbody>
-          </table>
-        </div>
       </article>
 
       <!-- Card 5: Sarcopenia & Muscle Indices -->
       <article class="card chart">
         <div class="chart-head">
           <h3>Sarcopenia & Muscle Indices</h3>
-          <button class="view-btn" id="btn-toggle-indices" type="button">Switch to Table</button>
         </div>
         <div class="graph-shell" id="shell-indices">
           <svg id="chart-indices" style="height: 180px;"></svg>
@@ -690,27 +638,12 @@
             <div class="legend-item"><span class="legend-color" style="background:#58c8ff;"></span>Lean/Height² Index (kg/m²)</div>
           </div>
         </div>
-        <div class="table-wrap hidden" id="table-wrap-indices">
-          <table>
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>ALM Index (kg/m²)</th>
-                <th>Lean/Height² (kg/m²)</th>
-                <th>Age Percentile</th>
-                <th>Notes</th>
-              </tr>
-            </thead>
-            <tbody id="table-body-indices"></tbody>
-          </table>
-        </div>
       </article>
 
       <!-- Card 6: Bone Mineral Density (BMD) Tracker -->
       <article class="card chart" style="grid-column: span 2;">
         <div class="chart-head">
           <h3 style="color: #ffd081 !important;">Bone Mineral Density (BMD) & Scores</h3>
-          <button class="view-btn" id="btn-toggle-bmd" type="button">Switch to Table</button>
         </div>
         <div class="graph-shell" id="shell-bmd">
           <svg id="chart-bmd" style="height: 180px;"></svg>
@@ -719,20 +652,6 @@
             <div class="legend-item"><span class="legend-color" style="background:#ff8fa0;"></span>T-Score [Normal: >= -1.0, Osteopenia: -1.0 to -2.5, Osteoporosis: <= -2.5]</div>
             <div class="legend-item"><span class="legend-color" style="background:#58c8ff;"></span>Z-Score</div>
           </div>
-        </div>
-        <div class="table-wrap hidden" id="table-wrap-bmd">
-          <table>
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Total BMD (g/cm²)</th>
-                <th>T-Score</th>
-                <th>Z-Score</th>
-                <th>Bone Health Status</th>
-              </tr>
-            </thead>
-            <tbody id="table-body-bmd"></tbody>
-          </table>
         </div>
       </article>
           </section>
@@ -892,10 +811,18 @@
             <td style="color:#ffd081;">${value(r.bmd_g_cm2, " g/cm²", 3)}</td>
             <td>${value(r.bmd_t_score)}</td>
             <td>${value(r.bmd_z_score)}</td>
-            <td class="cell-notes">${r.notes || "-"}</td>
           </tr>
         `).join("");
         document.getElementById("dexa-scan-count").textContent = `${records.length} DEXA scan${records.length === 1 ? "" : "s"}`;
+      }
+
+      const reportNote = document.getElementById("dexa-report-note");
+      if (reportNote) {
+        const notes = reversed
+          .filter(r => r.notes)
+          .map(r => `${fmtDate(r.date)}: ${r.notes}`);
+        reportNote.textContent = notes.length ? `Report note: ${notes.join(" ")}` : "";
+        reportNote.classList.toggle("hidden", notes.length === 0);
       }
       
       // Card 1 Table: Weight
@@ -909,7 +836,6 @@
               <td style="color:#58c8ff;">${r.home_weight_lb} lb</td>
               <td style="color:#ffb073;">${r.scan_weight_lb} lb</td>
               <td style="color:#ff8fa0;">+${diff} lb</td>
-              <td class="cell-notes">${r.notes || ""}</td>
             </tr>
           `;
         }).join("");
@@ -939,7 +865,6 @@
             <td style="color:#ff8fa0;">${r.body_fat_pct}%</td>
             <td style="color:#8beee0;">${r.bmi || "-"}</td>
             <td style="color:#ffd081;">${r.basal_metabolic_rate_kcal ? r.basal_metabolic_rate_kcal + ' kcal' : '-'}</td>
-            <td class="cell-notes">${r.notes || ""}</td>
           </tr>
         `).join("");
       }
@@ -953,7 +878,6 @@
             <td style="color:#ff8fa0; font-weight: 800;">${r.visceral_fat_area_cm2 !== null && r.visceral_fat_area_cm2 !== undefined ? r.visceral_fat_area_cm2 + ' cm²' : '-'}</td>
             <td style="color:#ffb073;">${r.visceral_fat_mass_g !== null && r.visceral_fat_mass_g !== undefined ? r.visceral_fat_mass_g + ' g' : '-'}</td>
             <td style="color:#ffd081;">${r.visceral_fat_volume_cm3 !== null && r.visceral_fat_volume_cm3 !== undefined ? r.visceral_fat_volume_cm3 + ' cm³' : '-'}</td>
-            <td class="cell-notes">${r.notes || ""}</td>
           </tr>
         `).join("");
       }
@@ -967,7 +891,6 @@
             <td style="color:#73ecb4; font-weight: 800;">${r.appendicular_lean_mass_index !== null && r.appendicular_lean_mass_index !== undefined ? r.appendicular_lean_mass_index + ' kg/m²' : '-'}</td>
             <td style="color:#58c8ff;">${r.lean_height2_index !== null && r.lean_height2_index !== undefined ? r.lean_height2_index + ' kg/m²' : '-'}</td>
             <td style="color:#b9a6ff;">${r.lean_index_percentile !== null && r.lean_index_percentile !== undefined ? r.lean_index_percentile + 'th' : '-'}</td>
-            <td class="cell-notes">${r.notes || ""}</td>
           </tr>
         `).join("");
       }
