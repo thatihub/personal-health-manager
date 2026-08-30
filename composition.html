@@ -824,7 +824,7 @@
         ["Skeletal muscle", `${latest.skeletal_muscle_mass_lb.toFixed(1)} lb`, "", ""],
         ["Basal metabolic rate", `${Math.round(latest.basal_metabolic_rate_kcal)} kcal`, "", ""]
       ];
-      if (homeReference) latestMetrics.push([
+      if (homeReference) latestMetrics.splice(3, 0, [
         "Home weight · reference only",
         `${homeReference.weight_lb.toFixed(1).replace(/\.0$/, "")} lb`,
         `${fmtDate(homeReference.date)} · ${homeReference.source} · not an InBody measurement`,
