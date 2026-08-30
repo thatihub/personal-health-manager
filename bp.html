@@ -118,13 +118,17 @@
     tbody tr:nth-child(odd) td { background:#ffffff; }
     tbody tr:nth-child(even) td { background:#f6fbff; }
     .empty { color:#a92840; }
+    .hidden { display: none !important; }
     @media (min-width: 1100px) {
       .chart-grid { grid-template-columns: 1fr 1fr 1fr; }
       svg { height: 260px; }
     }
     .view-toggle-container {
       display: flex;
-      justify-content: flex-start;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
       margin-bottom: 14px;
     }
     .view-toggle {
@@ -195,10 +199,14 @@
         <button id="btn-raw" class="toggle-btn active" onclick="setViewMode('raw')">All Readings</button>
         <button id="btn-avg" class="toggle-btn" onclick="setViewMode('avg')">Averaged Trend</button>
       </div>
+      <div class="view-toggle" role="group" aria-label="Blood pressure data view">
+        <button id="btn-bp-table" class="toggle-btn active" type="button" onclick="setDataView('table')" aria-pressed="true">Table</button>
+        <button id="btn-bp-charts" class="toggle-btn" type="button" onclick="setDataView('charts')" aria-pressed="false">Charts</button>
+      </div>
     </div>
 
     <section class="card kpis" id="kpis"></section>
-    <section class="card">
+    <section class="card hidden" id="bp-charts-view">
       <div class="chart-grid">
         <div class="mini">
           <div class="mini-head">
@@ -223,7 +231,7 @@
         </div>
       </div>
     </section>
-    <section class="card" style="overflow:auto; max-height:520px;">
+    <section class="card" id="bp-table-view" style="overflow:auto; max-height:520px;">
       <table>
         <thead><tr><th>Date</th><th>Time</th><th>SYS</th><th>DIAS</th><th title="Pulse Pressure (Systolic - Diastolic). Normal range: 40-60 mmHg.">PP <span style="font-size: 11.5px; cursor: help; opacity: 0.8;">ⓘ</span></th><th>Pulse</th></tr></thead>
         <tbody id="bp-body"></tbody>
@@ -325,6 +333,19 @@
 
     let allRawRows = [];
     let currentViewMode = "raw";
+    let currentDataView = "table";
+
+    function setDataView(view) {
+      currentDataView = view;
+      const chartsActive = view === "charts";
+      document.getElementById("bp-table-view").classList.toggle("hidden", chartsActive);
+      document.getElementById("bp-charts-view").classList.toggle("hidden", !chartsActive);
+      document.getElementById("btn-bp-table").classList.toggle("active", !chartsActive);
+      document.getElementById("btn-bp-charts").classList.toggle("active", chartsActive);
+      document.getElementById("btn-bp-table").setAttribute("aria-pressed", String(!chartsActive));
+      document.getElementById("btn-bp-charts").setAttribute("aria-pressed", String(chartsActive));
+      if (chartsActive) requestAnimationFrame(renderDashboard);
+    }
 
     function getAveragedRows(rawRows) {
       const groups = {};

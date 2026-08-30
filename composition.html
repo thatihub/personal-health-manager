@@ -18,22 +18,6 @@
       padding: 20px;
     }
     
-    .kpis {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-      gap: 12px;
-      margin-bottom: 16px;
-    }
-    .kpi { padding: 14px; }
-    .kpi .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
-    .kpi .value { font-size: 28px; font-weight: 800; margin-top: 4px; }
-    .kpi .reference-meta {
-      margin-top: 4px;
-      color: var(--comp-muted);
-      font-size: 11px;
-      line-height: 1.35;
-    }
-    
     .grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -259,12 +243,10 @@
       font-weight: 800;
     }
     .inbody-overview {
-      display: grid;
-      grid-template-columns: minmax(0, 1.2fr) minmax(250px, .8fr);
-      gap: 14px;
+      display: block;
       margin-bottom: 14px;
     }
-    .latest-scan-panel, .change-panel {
+    .change-panel {
       border: 1px solid var(--comp-line);
       border-radius: 16px;
       padding: 16px;
@@ -278,12 +260,12 @@
       letter-spacing: 1px;
       text-transform: uppercase;
     }
-    .latest-scan-panel h3, .change-panel h3, .history-head h3 {
+    .change-panel h3, .history-head h3 {
       margin: 0;
       color: var(--comp-ink);
       font-size: 18px;
     }
-    .latest-scan-panel > p, .change-panel > p, .history-head p {
+    .change-panel > p, .history-head p {
       margin: 5px 0 0;
       color: var(--comp-muted);
       font-size: 12.5px;
@@ -291,9 +273,9 @@
     }
     .latest-metrics {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(6, minmax(120px, 1fr));
       gap: 8px;
-      margin-top: 14px;
+      margin: 0 0 14px;
     }
     .latest-metric {
       padding: 10px;
@@ -302,6 +284,10 @@
     }
     .latest-metric span { display: block; color: var(--comp-muted); font-size: 10px; text-transform: uppercase; }
     .latest-metric strong { display: block; margin-top: 3px; color: var(--comp-ink); font-size: 18px; }
+    .latest-metric small { display: block; margin-top: 3px; color: var(--comp-muted); font-size: 9.5px; line-height: 1.35; }
+    .latest-metric.reference { border: 1px dashed rgba(88, 200, 255, .35); background: rgba(88, 200, 255, .05); }
+    .latest-scan-context { margin: 0 0 8px; color: var(--comp-muted); font-size: 11.5px; }
+    .inbody-updated { margin-top: 3px; color: var(--comp-muted); font-size: 12px; font-weight: 700; }
     .change-list { display: grid; gap: 8px; margin-top: 14px; }
     .change-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 13px; }
     .change-row span { color: var(--comp-muted); }
@@ -318,6 +304,29 @@
       justify-content: space-between;
       gap: 12px;
       margin: 18px 2px 4px;
+    }
+    .history-actions { display: flex; align-items: center; gap: 10px; }
+    .view-switcher {
+      display: inline-flex;
+      padding: 3px;
+      border: 1px solid var(--comp-line);
+      border-radius: 10px;
+      background: rgba(8, 17, 30, .7);
+    }
+    .view-switcher button {
+      border: 0;
+      border-radius: 7px;
+      padding: 7px 12px;
+      color: var(--comp-muted);
+      background: transparent;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .view-switcher button.active {
+      color: #07111d;
+      background: #73ecb4;
     }
     .inbody-table th:first-child, .inbody-table td:first-child { position: sticky; left: 0; z-index: 1; }
     .inbody-table tbody tr.latest-row td { background: rgba(115, 236, 180, .09) !important; }
@@ -475,67 +484,14 @@
     
     <header class="hero">
       <h1>Body Composition</h1>
-      <div class="sub" id="summary-subtitle">DEXA & InBody Longitudinal scan metrics (2026)</div>
-      <div class="updated-banner" id="last-updated-banner">Last updated: loading...</div>
     </header>
     
-    <section class="kpis" id="kpi-root">
-      <div class="card kpi" style="border-top: 4px solid #67d8ff !important;">
-        <div class="label">Home Weight (Reference Only)</div>
-        <div class="value" id="kpi-home-weight">-</div>
-        <div class="reference-meta" id="kpi-home-weight-meta">Separate from InBody scan weight</div>
-      </div>
-      <div class="card kpi" style="border-top: 4px solid #ffb0be !important;">
-        <div class="label">Body Fat %</div>
-        <div class="value" id="kpi-fat-pct">-</div>
-      </div>
-      <div class="card kpi" style="border-top: 4px solid #c9bbff !important;">
-        <div class="label">Lean Body Mass</div>
-        <div class="value" id="kpi-lean-mass">-</div>
-      </div>
-      <div class="card kpi" style="border-top: 4px solid #73ecb4 !important;">
-        <div class="label">Skeletal Muscle</div>
-        <div class="value" id="kpi-muscle-mass">-</div>
-      </div>
-      <div class="card kpi" style="border-top: 4px solid #ffd081 !important;">
-        <div class="label">Basal Met Rate</div>
-        <div class="value" id="kpi-bmr">-</div>
-      </div>
-    </section>
-    
-    <section class="card tracker-card" style="padding: 0;">
-      <details class="section">
-        <summary class="section-head">
-          <h3 style="color: #ffd081 !important;">Active Health Goals & Important Protocol Rules</h3>
-          <span class="chev">⌄</span>
-        </summary>
-        <div class="section-body">
-          <div class="tracker-grid">
-            <div class="tracker-col">
-              <h4>Active Health Goals & Protocol</h4>
-              <p><strong>Primary Goal:</strong> Lose body fat slowly while preserving vital muscle tissue, especially because you are taking Mounjaro and insulin.</p>
-              <ul class="goals-list">
-                <li><strong>Current Protein Intake:</strong> 50–60 g/day, the maximum currently tolerated. Keep it spread across meals and confirm the individualized target with the clinician.</li>
-                <li><strong>Resistance Training:</strong> Perform compound exercises 2–3 times per week to trigger muscle protein synthesis.</li>
-                <li><strong>Weight Targets:</strong> Focus on steady progress. First target is 155–160 lb; Second target is 145–150 lb.</li>
-              </ul>
-            </div>
-            <div class="tracker-col" style="border-left: 1px solid var(--comp-line); padding-left: 20px;">
-              <h4>Important Protocol Rules</h4>
-              <p style="font-size: 13.5px;"><strong>Clothing Adjustment:</strong> Scans include clothes (jeans/t-shirts), accounting for ~5–5.5 lb difference compared to home morning weight. <em>Never directly compare clothed scan weight to morning home weight.</em></p>
-              <p style="font-size: 13.5px;"><strong>Future Scans:</strong> Retest every 8–12 weeks. Always wear the same light gym clothes (t-shirt and shorts) to standardise clothed scans.</p>
-            </div>
-          </div>
-        </div>
-      </details>
-    </section>
-
     <section class="card inbody-card dashboard-collapse" aria-labelledby="inbody-title">
       <details class="section" open>
         <summary class="section-head dashboard-summary">
           <div>
             <h2 id="inbody-title" style="color:#73ecb4;">InBody Scan Dashboard</h2>
-            <p>Four source-verified Fitness 19 scans, kept separate from DEXA measurements.</p>
+            <div class="inbody-updated" id="last-updated-banner">InBody updated: Aug 29, 2026</div>
           </div>
           <div class="summary-actions">
             <span class="trend-badge" id="inbody-scan-count">4 scans · May–Aug 2026</span>
@@ -543,13 +499,9 @@
           </div>
         </summary>
         <div class="section-body">
+          <p class="latest-scan-context" id="latest-scan-context">Latest scan · Aug 29, 2026 · Fitness 19, Sunnyvale · 11:58</p>
+          <div class="latest-metrics" id="inbody-latest-metrics"></div>
           <div class="inbody-overview">
-            <section class="latest-scan-panel" aria-labelledby="latest-inbody-heading">
-              <div class="eyebrow">Latest source report</div>
-              <h3 id="latest-inbody-heading">August 29, 2026</h3>
-              <p>Fitness 19, Sunnyvale · 11:58 · InBody 270</p>
-              <div class="latest-metrics" id="inbody-latest-metrics"></div>
-            </section>
             <section class="change-panel" aria-labelledby="baseline-change-heading">
               <div class="eyebrow">Comparable trend</div>
               <h3 id="baseline-change-heading">Change since June 28</h3>
@@ -558,33 +510,21 @@
             </section>
           </div>
           <div class="inbody-trends" id="inbody-trends"></div>
-          <div class="inbody-chart-grid">
-            <div class="inbody-chart">
-              <h3>InBody Weight and Fat Mass</h3>
-              <svg id="chart-inbody-weight-fat" aria-label="InBody weight and fat-mass trend"></svg>
-              <div class="legend">
-                <div class="legend-item"><span class="legend-color" style="background:#58c8ff;"></span>Scan Weight</div>
-                <div class="legend-item"><span class="legend-color" style="background:#ff8fa0;"></span>Fat Mass</div>
-              </div>
-            </div>
-            <div class="inbody-chart">
-              <h3>InBody Lean and Skeletal Muscle Mass</h3>
-              <svg id="chart-inbody-muscle" aria-label="InBody lean and skeletal-muscle trend"></svg>
-              <div class="legend">
-                <div class="legend-item"><span class="legend-color" style="background:#b9a6ff;"></span>Lean Mass</div>
-                <div class="legend-item"><span class="legend-color" style="background:#73ecb4;"></span>Skeletal Muscle</div>
-              </div>
-            </div>
-          </div>
           <div class="history-head">
             <div>
               <div class="eyebrow">Complete source history</div>
               <h3>All InBody scans</h3>
               <p>Reported scan values only; newest first. SMI is the report's skeletal muscle index.</p>
             </div>
-            <span class="source-note">4 source files verified</span>
+            <div class="history-actions">
+              <span class="source-note">4 source files verified</span>
+              <div class="view-switcher" role="group" aria-label="InBody history view">
+                <button class="active" id="inbody-view-table" type="button" aria-pressed="true">Table</button>
+                <button id="inbody-view-charts" type="button" aria-pressed="false">Charts</button>
+              </div>
+            </div>
           </div>
-          <div class="table-wrap">
+          <div class="table-wrap" id="inbody-history-table">
             <table class="inbody-table">
               <thead>
                 <tr>
@@ -602,6 +542,24 @@
               </thead>
               <tbody id="table-body-inbody"></tbody>
             </table>
+          </div>
+          <div class="inbody-chart-grid hidden" id="inbody-history-charts">
+            <div class="inbody-chart">
+              <h3>Weight and fat mass</h3>
+              <svg id="chart-inbody-weight-fat" aria-label="InBody weight and fat-mass trend"></svg>
+              <div class="legend">
+                <div class="legend-item"><span class="legend-color" style="background:#58c8ff;"></span>Scan Weight</div>
+                <div class="legend-item"><span class="legend-color" style="background:#ff8fa0;"></span>Fat Mass</div>
+              </div>
+            </div>
+            <div class="inbody-chart">
+              <h3>Lean and skeletal muscle mass</h3>
+              <svg id="chart-inbody-muscle" aria-label="InBody lean and skeletal-muscle trend"></svg>
+              <div class="legend">
+                <div class="legend-item"><span class="legend-color" style="background:#b9a6ff;"></span>Lean Mass</div>
+                <div class="legend-item"><span class="legend-color" style="background:#73ecb4;"></span>Skeletal Muscle</div>
+              </div>
+            </div>
           </div>
           <div class="med-note">
             <p><strong>Mounjaro timeline:</strong> Started 2.5 mg on April 24, 2026. The first InBody scan was May 29, 2026. Dose increased to 5 mg on June 24; June 28 is the practical 5 mg baseline, followed by the July 26 and August 29 scans. Home weight is reference-only and is never substituted for InBody scan weight.</p>
@@ -797,6 +755,33 @@
         </div>
       </details>
     </section>
+
+    <section class="card tracker-card" style="padding: 0;">
+      <details class="section">
+        <summary class="section-head">
+          <h3 style="color: #ffd081 !important;">Active Health Goals & Important Protocol Rules</h3>
+          <span class="chev">⌄</span>
+        </summary>
+        <div class="section-body">
+          <div class="tracker-grid">
+            <div class="tracker-col">
+              <h4>Active Health Goals & Protocol</h4>
+              <p><strong>Primary Goal:</strong> Lose body fat slowly while preserving vital muscle tissue, especially because you are taking Mounjaro and insulin.</p>
+              <ul class="goals-list">
+                <li><strong>Current Protein Intake:</strong> 50–60 g/day, the maximum currently tolerated. Keep it spread across meals and confirm the individualized target with the clinician.</li>
+                <li><strong>Resistance Training:</strong> Perform compound exercises 2–3 times per week to trigger muscle protein synthesis.</li>
+                <li><strong>Weight Targets:</strong> Focus on steady progress. First target is 155–160 lb; Second target is 145–150 lb.</li>
+              </ul>
+            </div>
+            <div class="tracker-col" style="border-left: 1px solid var(--comp-line); padding-left: 20px;">
+              <h4>Important Protocol Rules</h4>
+              <p style="font-size: 13.5px;"><strong>Clothing Adjustment:</strong> Scans include clothes (jeans/t-shirts), accounting for ~5–5.5 lb difference compared to home morning weight. <em>Never directly compare clothed scan weight to morning home weight.</em></p>
+              <p style="font-size: 13.5px;"><strong>Future Scans:</strong> Retest every 8–12 weeks. Always wear the same light gym clothes (t-shirt and shorts) to standardise clothed scans.</p>
+            </div>
+          </div>
+        </div>
+      </details>
+    </section>
   </div>
   
   <script>
@@ -831,31 +816,6 @@
       }
     }
     
-    async function updateLastUpdatedBanner() {
-      try {
-        const res = await fetch("/api/last-updated");
-        if (res.ok) {
-          const payload = await res.json();
-          document.getElementById("last-updated-banner").textContent = `Last updated: ${payload.latest_display || "-"}`;
-        }
-      } catch (_err) {
-        document.getElementById("last-updated-banner").textContent = "Last updated: unavailable";
-      }
-    }
-    
-    function renderKPIs(latest) {
-      if (!latest) return;
-      const homeReference = window.HOME_WEIGHT_REFERENCE;
-      document.getElementById("kpi-home-weight").textContent = homeReference ? `${homeReference.weight_lb.toFixed(1).replace(/\.0$/, "")} lb` : "Not recorded";
-      document.getElementById("kpi-home-weight-meta").textContent = homeReference
-        ? `${homeReference.source} · ${fmtDate(homeReference.date)} · separate from InBody scan weight`
-        : "Separate from InBody scan weight";
-      document.getElementById("kpi-fat-pct").textContent = `${latest.body_fat_pct}%`;
-      document.getElementById("kpi-lean-mass").textContent = `${latest.adjusted_lean_body_mass_lb || latest.lean_body_mass_lb} lb`;
-      document.getElementById("kpi-muscle-mass").textContent = `${latest.skeletal_muscle_mass_lb} lb`;
-      document.getElementById("kpi-bmr").textContent = `${latest.basal_metabolic_rate_kcal} kcal`;
-    }
-
     function renderInBodyCard(records) {
       const scans = records.filter(r => r.scan_type === "InBody").sort((a, b) => a.date.localeCompare(b.date));
       const tbody = document.getElementById("table-body-inbody");
@@ -882,13 +842,25 @@
       const change = (key) => latest[key] - baseline[key];
       const signed = (value, suffix) => `${value > 0 ? "+" : ""}${value.toFixed(1)}${suffix}`;
       document.getElementById("inbody-scan-count").textContent = `${scans.length} scans · May–Aug 2026`;
-      document.getElementById("latest-inbody-heading").textContent = fmtDate(latest.date);
-      document.getElementById("inbody-latest-metrics").innerHTML = [
-        ["Weight", `${latest.scan_weight_lb.toFixed(1)} lb`],
-        ["Body fat", `${latest.body_fat_pct.toFixed(1)}%`],
-        ["Lean mass", `${latest.lean_body_mass_lb.toFixed(1)} lb`],
-        ["Muscle", `${latest.skeletal_muscle_mass_lb.toFixed(1)} lb`]
-      ].map(([label, value]) => `<div class="latest-metric"><span>${label}</span><strong>${value}</strong></div>`).join("");
+      document.getElementById("last-updated-banner").textContent = `InBody updated: ${fmtDate(latest.date)}`;
+      document.getElementById("latest-scan-context").textContent = `Latest scan · ${fmtDate(latest.date)} · Fitness 19, Sunnyvale · 11:58`;
+      const homeReference = window.HOME_WEIGHT_REFERENCE;
+      const latestMetrics = [
+        ["Scan weight", `${latest.scan_weight_lb.toFixed(1)} lb`, "", ""],
+        ["Body fat", `${latest.body_fat_pct.toFixed(1)}%`, "", ""],
+        ["Lean mass", `${latest.lean_body_mass_lb.toFixed(1)} lb`, "", ""],
+        ["Skeletal muscle", `${latest.skeletal_muscle_mass_lb.toFixed(1)} lb`, "", ""],
+        ["Basal metabolic rate", `${Math.round(latest.basal_metabolic_rate_kcal)} kcal`, "", ""]
+      ];
+      if (homeReference) latestMetrics.push([
+        "Home weight · reference only",
+        `${homeReference.weight_lb.toFixed(1).replace(/\.0$/, "")} lb`,
+        `${fmtDate(homeReference.date)} · ${homeReference.source} · not an InBody measurement`,
+        "reference"
+      ]);
+      document.getElementById("inbody-latest-metrics").innerHTML = latestMetrics.map(([label, value, note, extraClass]) =>
+        `<div class="latest-metric ${extraClass}"><span>${label}</span><strong>${value}</strong>${note ? `<small>${note}</small>` : ""}</div>`
+      ).join("");
       document.getElementById("inbody-change-list").innerHTML = [
         ["Scan weight", signed(change("scan_weight_lb"), " lb")],
         ["Fat mass", signed(change("body_fat_mass_lb"), " lb")],
@@ -936,6 +908,28 @@
         { key: "lean_body_mass_lb", color: "#b9a6ff" },
         { key: "skeletal_muscle_mass_lb", color: "#73ecb4" }
       ]);
+    }
+
+    function setupInBodyHistorySwitcher() {
+      const tableButton = document.getElementById("inbody-view-table");
+      const chartsButton = document.getElementById("inbody-view-charts");
+      const tableView = document.getElementById("inbody-history-table");
+      const chartsView = document.getElementById("inbody-history-charts");
+      if (!tableButton || !chartsButton || !tableView || !chartsView) return;
+
+      const show = (view) => {
+        const chartsActive = view === "charts";
+        tableView.classList.toggle("hidden", chartsActive);
+        chartsView.classList.toggle("hidden", !chartsActive);
+        tableButton.classList.toggle("active", !chartsActive);
+        chartsButton.classList.toggle("active", chartsActive);
+        tableButton.setAttribute("aria-pressed", String(!chartsActive));
+        chartsButton.setAttribute("aria-pressed", String(chartsActive));
+        if (chartsActive) requestAnimationFrame(() => drawInBodyCharts(rawInBodyRecords));
+      };
+      tableButton.addEventListener("click", () => show("table"));
+      chartsButton.addEventListener("click", () => show("charts"));
+      show("table");
     }
     
     function populateTables(records) {
@@ -1162,8 +1156,6 @@
     }
     
     async function init() {
-      updateLastUpdatedBanner();
-      
       try {
         let out = null;
         try {
@@ -1184,9 +1176,8 @@
         rawDexaRecords = rawRecords.filter(r => r.scan_type === "DEXA");
         
         if (rawRecords.length > 0) {
-          renderKPIs(rawRecords[rawRecords.length - 1]);
           renderInBodyCard(rawRecords);
-          drawInBodyCharts(rawInBodyRecords);
+          setupInBodyHistorySwitcher();
           populateTables(rawDexaRecords);
           drawCharts(rawDexaRecords);
           
@@ -1213,7 +1204,7 @@
     }
     
     window.addEventListener("resize", () => {
-      if (rawInBodyRecords.length > 0) drawInBodyCharts(rawInBodyRecords);
+      if (rawInBodyRecords.length > 0 && !document.getElementById("inbody-history-charts")?.classList.contains("hidden")) drawInBodyCharts(rawInBodyRecords);
       if (rawDexaRecords.length > 0) drawCharts(rawDexaRecords);
     });
     
