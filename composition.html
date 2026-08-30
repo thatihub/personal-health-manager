@@ -315,6 +315,9 @@
     }
     .inbody-table th:first-child, .inbody-table td:first-child { position: sticky; left: 0; z-index: 1; }
     .inbody-table tbody tr.latest-row td { background: rgba(115, 236, 180, .09) !important; }
+    .dexa-history-table { min-width: 1840px !important; }
+    .dexa-history-table th:first-child, .dexa-history-table td:first-child { position: sticky; left: 0; z-index: 1; }
+    .dexa-history-table tbody tr td:first-child { background: rgba(39, 34, 73, .98) !important; }
     .source-note { color: var(--comp-muted); font-size: 11px; font-weight: 500; }
     .inbody-chart-grid {
       display: grid;
@@ -526,6 +529,43 @@
           </div>
         </summary>
         <div class="section-body">
+          <div class="history-head">
+            <div>
+              <div class="eyebrow" style="color:#c9bbff;">Complete source history</div>
+              <h3>All DEXA measurements</h3>
+              <p>All available report fields in one table. Scroll horizontally to review every measurement.</p>
+            </div>
+            <span class="source-note" id="dexa-scan-count">DEXA scan</span>
+          </div>
+          <div class="table-wrap">
+            <table class="dexa-history-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Location</th>
+                  <th>Height</th>
+                  <th>Scan Weight</th>
+                  <th>Home Weight</th>
+                  <th>Clothing Diff.</th>
+                  <th>BMI</th>
+                  <th>Body Fat</th>
+                  <th>Fat Mass</th>
+                  <th>Lean Mass</th>
+                  <th>VAT Area</th>
+                  <th>VAT Mass</th>
+                  <th>VAT Volume</th>
+                  <th>ALM Index</th>
+                  <th>Lean/Height²</th>
+                  <th>Lean Percentile</th>
+                  <th>BMD</th>
+                  <th>T-Score</th>
+                  <th>Z-Score</th>
+                  <th>Notes</th>
+                </tr>
+              </thead>
+              <tbody id="table-body-dexa-history"></tbody>
+            </table>
+          </div>
           <section class="grid" id="dashboard-grid">
       <article class="card chart">
         <div class="chart-head">
@@ -821,6 +861,42 @@
     
     function populateTables(records) {
       const reversed = records.slice().reverse();
+      const value = (input, suffix = "", digits = 1) =>
+        input === null || input === undefined ? "-" : `${Number(input).toFixed(digits)}${suffix}`;
+      const ordinal = (input) => {
+        if (input === null || input === undefined) return "-";
+        const suffix = ["th", "st", "nd", "rd"][((input % 100 - 20) % 10 + 10) % 10] || "th";
+        return `${input}${suffix}`;
+      };
+
+      const dexaHistory = document.getElementById("table-body-dexa-history");
+      if (dexaHistory) {
+        dexaHistory.innerHTML = reversed.map(r => `
+          <tr>
+            <td>${fmtDate(r.date)}</td>
+            <td>${r.location || "-"}</td>
+            <td>${value(r.height_in, " in")}</td>
+            <td style="color:#58c8ff;">${value(r.scan_weight_lb, " lb")}</td>
+            <td>${value(r.home_weight_lb, " lb")}</td>
+            <td>${value(r.clothing_diff_lb, " lb")}</td>
+            <td>${value(r.bmi)}</td>
+            <td style="color:#ff8fa0;">${value(r.body_fat_pct, "%")}</td>
+            <td style="color:#ffb0be;">${value(r.body_fat_mass_lb, " lb")}</td>
+            <td style="color:#b9a6ff;">${value(r.lean_body_mass_lb, " lb")}</td>
+            <td>${value(r.visceral_fat_area_cm2, " cm²")}</td>
+            <td>${value(r.visceral_fat_mass_g, " g", 0)}</td>
+            <td>${value(r.visceral_fat_volume_cm3, " cm³", 0)}</td>
+            <td style="color:#73ecb4;">${value(r.appendicular_lean_mass_index, " kg/m²")}</td>
+            <td>${value(r.lean_height2_index, " kg/m²")}</td>
+            <td>${ordinal(r.lean_index_percentile)}</td>
+            <td style="color:#ffd081;">${value(r.bmd_g_cm2, " g/cm²", 3)}</td>
+            <td>${value(r.bmd_t_score)}</td>
+            <td>${value(r.bmd_z_score)}</td>
+            <td class="cell-notes">${r.notes || "-"}</td>
+          </tr>
+        `).join("");
+        document.getElementById("dexa-scan-count").textContent = `${records.length} DEXA scan${records.length === 1 ? "" : "s"}`;
+      }
       
       // Card 1 Table: Weight
       const tbodyWeight = document.getElementById("table-body-weight");
