@@ -658,7 +658,7 @@
         </div>
         <div class="table-wrap" id="table-wrap-lipids">
           <table id="table-lipids">
-            <thead><tr><th>Date</th><th>LDL</th><th>HDL</th><th>Triglycerides</th><th>TG/HDL <span class="info-btn" onclick="document.getElementById('tg-hdl-dialog').showModal()" title="Click for ratio details">ⓘ</span></th></tr></thead>
+            <thead><tr><th>Date</th><th>Total Chol.</th><th>LDL</th><th>HDL</th><th>Triglycerides</th><th>VLDL</th><th>LDL/HDL</th><th>TG/HDL <span class="info-btn" onclick="document.getElementById('tg-hdl-dialog').showModal()" title="Click for ratio details">ⓘ</span></th></tr></thead>
             <tbody></tbody>
           </table>
         </div>
@@ -732,7 +732,7 @@
         </div>
         <div class="table-wrap" id="table-wrap-metabolic">
           <table id="table-metabolic">
-            <thead><tr><th>Date</th><th>BUN</th><th>Sodium</th><th>Chloride</th><th>Potassium</th><th>CO2</th></tr></thead>
+            <thead><tr><th>Date</th><th>BUN</th><th>BUN/Creat.</th><th>Sodium</th><th>Chloride</th><th>Potassium</th><th>CO2</th></tr></thead>
             <tbody></tbody>
           </table>
         </div>
@@ -937,11 +937,11 @@
     <section class="card notes">
       <strong>Important:</strong> This is an organizational and trend-visualization project, not medical advice.
       <ul>
-        <li>Most recent HbA1c (July 23, 2026): <strong>7.2%</strong> (high; up from 7.1% in June).</li>
-        <li>Most recent glucose (July 23, 2026): <strong>157 mg/dL</strong> (high).</li>
-        <li>Most recent TSH (July 23, 2026): <strong>3.17 uIU/mL</strong> (within the dashboard reference range).</li>
-        <li>Sodium (<strong>126 mmol/L</strong>) and chloride (<strong>90 mmol/L</strong>) remain low on the July 23 panel.</li>
-        <li>HDL is persistently low in recent reports (36-38).</li>
+        <li>Most recent HbA1c (September 9, 2026): <strong>6.9%</strong> (high, but improved from 7.2% in July).</li>
+        <li>Most recent glucose (September 9, 2026): <strong>157 mg/dL</strong> (high).</li>
+        <li>Most recent TSH (September 9, 2026): <strong>3.41 uIU/mL</strong> (within range).</li>
+        <li>Sodium (<strong>128 mmol/L</strong>) and chloride (<strong>92 mmol/L</strong>) remain low on the September 9 panel.</li>
+        <li>HDL is low at <strong>34 mg/dL</strong>; total cholesterol is also low at <strong>87 mg/dL</strong>.</li>
         <li>Urine ACR improved from 51 (June 2, 2025) to 19 (September 12, 2025), then 29 (February 12, 2026).</li>
       </ul>
     </section>
@@ -1060,9 +1060,12 @@
       hba1c: { type: "max_only", max: 5.6 },
       glucose: { type: "between", min: 70, max: 99 },
       cPeptide: { type: "between", min: 1.1, max: 4.4 },
+      totalChol: { type: "between", min: 100, max: 199 },
       ldl: { type: "max_only", max: 99 },
       hdl: { type: "min_only", min: 40 },
       triglycerides: { type: "max_only", max: 149 },
+      vldl: { type: "between", min: 5, max: 40 },
+      ldlHdlRatio: { type: "between", min: 0.0, max: 3.6 },
       tgHdl: { type: "max_only", max: 3.0 },
       lipoproteinA: { type: "max_only", max: 29.9 },
       vitaminD: { type: "between", min: 30.0, max: 100.0 },
@@ -1074,12 +1077,13 @@
       platelets: { type: "between", min: 150, max: 450 },
       psa: { type: "between", min: 0.0, max: 4.0 },
       hcv: { type: "exact", expected: "Non Reactive" },
-      creatinine: { type: "between", min: 0.7, max: 1.35 },
+      creatinine: { type: "between", min: 0.76, max: 1.27 },
       egfr: { type: "min_only", min: 59 },
       acr: { type: "max_only", max: 29 },
       bun: { type: "between", min: 8, max: 27 },
-      sodium: { type: "between", min: 135, max: 146 },
-      chloride: { type: "between", min: 98, max: 110 },
+      bunCreatinineRatio: { type: "between", min: 10, max: 24 },
+      sodium: { type: "between", min: 134, max: 144 },
+      chloride: { type: "between", min: 96, max: 106 },
       potassium: { type: "between", min: 3.5, max: 5.3 },
       co2: { type: "between", min: 20, max: 29 },
       tsh: { type: "between", min: 0.45, max: 4.5 },
@@ -1102,9 +1106,12 @@
       hba1c: "<= 5.6 %",
       glucose: "70-99 mg/dL",
       cPeptide: "1.1-4.4 ng/mL",
+      totalChol: "100-199 mg/dL",
       ldl: "<= 99 mg/dL",
       hdl: ">= 40 mg/dL",
       triglycerides: "<= 149 mg/dL",
+      vldl: "5-40 mg/dL",
+      ldlHdlRatio: "0.0-3.6",
       lipoproteinA: "< 30 mg/dL",
       vitaminD: "30.0-100.0 ng/mL",
       vitaminB12: "232-1245 pg/mL",
@@ -1115,12 +1122,13 @@
       platelets: "150-450 x10E3/uL",
       psa: "0.000-4.000 ng/mL",
       hcv: "Non Reactive",
-      creatinine: "0.70-1.35 mg/dL",
+      creatinine: "0.76-1.27 mg/dL",
       egfr: ">= 59",
       acr: "<= 29 mg/g",
       bun: "8-27 mg/dL",
-      sodium: "135-146 mmol/L",
-      chloride: "98-110 mmol/L",
+      bunCreatinineRatio: "10-24",
+      sodium: "134-144 mmol/L",
+      chloride: "96-106 mmol/L",
       potassium: "3.5-5.3 mmol/L",
       co2: "20-29 mmol/L",
       tsh: "0.45-4.5 uIU/mL",
@@ -1258,9 +1266,9 @@
     }
 
     fillTable("table-glycemic", ["hba1c", "glucose", "cPeptide"]);
-    fillTable("table-lipids", ["ldl", "hdl", "triglycerides", "tgHdl"]);
+    fillTable("table-lipids", ["totalChol", "ldl", "hdl", "triglycerides", "vldl", "ldlHdlRatio", "tgHdl"]);
     fillTable("table-kidney", ["creatinine", "egfr", "acr"]);
-    fillTable("table-metabolic", ["bun", "sodium", "chloride", "potassium", "co2"]);
+    fillTable("table-metabolic", ["bun", "bunCreatinineRatio", "sodium", "chloride", "potassium", "co2"]);
     fillTable("table-thyroid", ["tsh", "freeT4", "thyroxineT4", "t3Uptake", "freeThyroxineIndex", "tgAb", "tpoAb"]);
     fillTable("table-chemistry", ["calcium", "totalProtein", "albumin", "globulin", "bilirubin", "alkPhos", "ast", "alt", "astAlt"]);
     fillTable("table-specialty", ["lipoproteinA", "psa", "hcv"]);

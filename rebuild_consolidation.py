@@ -54,6 +54,8 @@ FIELDS = [
     "hdl_mg_dl",
     "ldl_mg_dl",
     "triglycerides_mg_dl",
+    "vldl_mg_dl",
+    "ldl_hdl_ratio",
     "lipoprotein_a_mg_dl",
     "bun_mg_dl",
     "bun_creatinine_ratio",
@@ -64,6 +66,7 @@ FIELDS = [
     "calcium_mg_dl",
     "total_protein_g_dl",
     "albumin_g_dl",
+    "globulin_g_dl",
     "bilirubin_mg_dl",
     "alk_phos_u_l",
     "ast_u_l",
@@ -540,7 +543,7 @@ def write_csv(rows: list[dict[str, Any]], path: Path) -> None:
     with path.open("w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=FIELDS)
         writer.writeheader()
-        writer.writerows(rows)
+        writer.writerows({field: row.get(field) for field in FIELDS} for row in rows)
 
 
 def write_json(rows: list[dict[str, Any]], path: Path) -> None:
@@ -560,8 +563,11 @@ def build_dashboard_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
                 "hdl": row["hdl_mg_dl"],
                 "ldl": row["ldl_mg_dl"],
                 "triglycerides": row["triglycerides_mg_dl"],
+                "vldl": row.get("vldl_mg_dl"),
+                "ldlHdlRatio": row.get("ldl_hdl_ratio"),
                 "lipoproteinA": row["lipoprotein_a_mg_dl"],
                 "bun": row["bun_mg_dl"],
+                "bunCreatinineRatio": row["bun_creatinine_ratio"],
                 "sodium": row["sodium_mmol_l"],
                 "chloride": row["chloride_mmol_l"],
                 "potassium": row["potassium_mmol_l"],
@@ -570,9 +576,13 @@ def build_dashboard_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
                 "totalProtein": row["total_protein_g_dl"],
                 "albumin": row["albumin_g_dl"],
                 "globulin": (
-                    round(row["total_protein_g_dl"] - row["albumin_g_dl"], 2)
-                    if row["total_protein_g_dl"] is not None and row["albumin_g_dl"] is not None
-                    else None
+                    row.get("globulin_g_dl")
+                    if row.get("globulin_g_dl") is not None
+                    else (
+                        round(row["total_protein_g_dl"] - row["albumin_g_dl"], 2)
+                        if row["total_protein_g_dl"] is not None and row["albumin_g_dl"] is not None
+                        else None
+                    )
                 ),
                 "bilirubin": row["bilirubin_mg_dl"],
                 "alkPhos": row["alk_phos_u_l"],
@@ -639,6 +649,17 @@ def merge_rows(existing_rows: list[dict[str, Any]], new_rows: list[dict[str, Any
     return merged_list
 
 
+def load_manual_rows() -> list[dict[str, Any]]:
+    path = PROJECT_DIR / "manual_lab_results.json"
+    if not path.exists():
+        return []
+    rows = json.loads(path.read_text(encoding="utf-8"))
+    for row in rows:
+        for field in FIELDS:
+            row.setdefault(field, None if field != "notes" else "")
+    return rows
+
+
 def main() -> None:
     import argparse
     import sys
@@ -664,7 +685,9 @@ def main() -> None:
             continue
         filtered_pdfs.append(pdf)
 
-    new_rows = build_rows()
+    pdf_rows = build_rows()
+    manual_rows = load_manual_rows()
+    new_rows = merge_rows(pdf_rows, manual_rows)
 
     # If PDFs were found in ROOT_DIR but none parsed successfully, exit with code 3.
     # This signals a parsing failure (e.g. invalid PDF format) to the calling server.
