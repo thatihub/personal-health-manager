@@ -2230,5 +2230,693 @@ window.BP_DASH_DATA = [
     "diastolic": 72,
     "pulse": 101,
     "source_file": "Report from Apr 11 2026 to Jun 10 2026.csv"
+  },
+  {
+    "date": "2026-07-29",
+    "time": "20:35",
+    "systolic": 119,
+    "diastolic": 64,
+    "pulse": 107,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-07-31",
+    "time": "02:10",
+    "systolic": 137,
+    "diastolic": 72,
+    "pulse": 83,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-07-31",
+    "time": "19:59",
+    "systolic": 127,
+    "diastolic": 68,
+    "pulse": 89,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-07-31",
+    "time": "20:00",
+    "systolic": 130,
+    "diastolic": 70,
+    "pulse": 88,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-07-31",
+    "time": "22:50",
+    "systolic": 128,
+    "diastolic": 67,
+    "pulse": 91,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-07-31",
+    "time": "22:51",
+    "systolic": 127,
+    "diastolic": 71,
+    "pulse": 90,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-08-01",
+    "time": "17:17",
+    "systolic": 104,
+    "diastolic": 60,
+    "pulse": 93,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-08-01",
+    "time": "17:18",
+    "systolic": 110,
+    "diastolic": 60,
+    "pulse": 92,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-08-01",
+    "time": "22:54",
+    "systolic": 132,
+    "diastolic": 72,
+    "pulse": 90,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-08-01",
+    "time": "22:55",
+    "systolic": 136,
+    "diastolic": 73,
+    "pulse": 87,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-08-02",
+    "time": "18:49",
+    "systolic": 135,
+    "diastolic": 74,
+    "pulse": 97,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-08-02",
+    "time": "19:31",
+    "systolic": 111,
+    "diastolic": 61,
+    "pulse": 98,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-08-02",
+    "time": "19:32",
+    "systolic": 131,
+    "diastolic": 70,
+    "pulse": 97,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-08-02",
+    "time": "19:33",
+    "systolic": 130,
+    "diastolic": 69,
+    "pulse": 97,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-08-03",
+    "time": "09:06",
+    "systolic": 135,
+    "diastolic": 72,
+    "pulse": 94,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-08-03",
+    "time": "09:07",
+    "systolic": 133,
+    "diastolic": 69,
+    "pulse": 95,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-08-03",
+    "time": "10:55",
+    "systolic": 128,
+    "diastolic": 69,
+    "pulse": 97,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-08-03",
+    "time": "10:56",
+    "systolic": 121,
+    "diastolic": 69,
+    "pulse": 96,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-08-03",
+    "time": "13:33",
+    "systolic": 132,
+    "diastolic": 75,
+    "pulse": 91,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-08-03",
+    "time": "13:35",
+    "systolic": 130,
+    "diastolic": 70,
+    "pulse": 89,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-08-03",
+    "time": "20:30",
+    "systolic": 130,
+    "diastolic": 73,
+    "pulse": 89,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-08-03",
+    "time": "20:31",
+    "systolic": 128,
+    "diastolic": 70,
+    "pulse": 89,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-08-03",
+    "time": "21:46",
+    "systolic": 136,
+    "diastolic": 78,
+    "pulse": 88,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-08-03",
+    "time": "21:48",
+    "systolic": 144,
+    "diastolic": 78,
+    "pulse": 89,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-08-03",
+    "time": "21:49",
+    "systolic": 144,
+    "diastolic": 72,
+    "pulse": 89,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-08-04",
+    "time": "09:21",
+    "systolic": 122,
+    "diastolic": 77,
+    "pulse": 90,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-08-04",
+    "time": "09:26",
+    "systolic": 124,
+    "diastolic": 72,
+    "pulse": 81,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-08-05",
+    "time": "12:02",
+    "systolic": 143,
+    "diastolic": 71,
+    "pulse": 104,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-08-05",
+    "time": "17:33",
+    "systolic": 116,
+    "diastolic": 63,
+    "pulse": 118,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-08-05",
+    "time": "17:34",
+    "systolic": 105,
+    "diastolic": 63,
+    "pulse": 116,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-08-05",
+    "time": "21:15",
+    "systolic": 138,
+    "diastolic": 73,
+    "pulse": 106,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-08-05",
+    "time": "21:16",
+    "systolic": 129,
+    "diastolic": 63,
+    "pulse": 104,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-08-29",
+    "time": "16:41",
+    "systolic": 114,
+    "diastolic": 64,
+    "pulse": 90,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-08-29",
+    "time": "23:14",
+    "systolic": 133,
+    "diastolic": 70,
+    "pulse": 89,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-08-29",
+    "time": "23:15",
+    "systolic": 135,
+    "diastolic": 72,
+    "pulse": 91,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-08-29",
+    "time": "23:16",
+    "systolic": 132,
+    "diastolic": 69,
+    "pulse": 92,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-08-30",
+    "time": "12:11",
+    "systolic": 107,
+    "diastolic": 59,
+    "pulse": 90,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-08-30",
+    "time": "12:13",
+    "systolic": 95,
+    "diastolic": 54,
+    "pulse": 88,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-08-30",
+    "time": "12:14",
+    "systolic": 109,
+    "diastolic": 58,
+    "pulse": 87,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-08-30",
+    "time": "22:04",
+    "systolic": 128,
+    "diastolic": 73,
+    "pulse": 97,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-08-30",
+    "time": "22:05",
+    "systolic": 131,
+    "diastolic": 73,
+    "pulse": 95,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-08-30",
+    "time": "22:06",
+    "systolic": 122,
+    "diastolic": 76,
+    "pulse": 99,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-08-31",
+    "time": "09:33",
+    "systolic": 118,
+    "diastolic": 69,
+    "pulse": 84,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-08-31",
+    "time": "09:34",
+    "systolic": 120,
+    "diastolic": 69,
+    "pulse": 84,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-08-31",
+    "time": "17:07",
+    "systolic": 115,
+    "diastolic": 64,
+    "pulse": 83,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-08-31",
+    "time": "17:09",
+    "systolic": 112,
+    "diastolic": 61,
+    "pulse": 83,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-08-31",
+    "time": "20:46",
+    "systolic": 123,
+    "diastolic": 67,
+    "pulse": 85,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-08-31",
+    "time": "20:47",
+    "systolic": 130,
+    "diastolic": 71,
+    "pulse": 88,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-08-31",
+    "time": "20:48",
+    "systolic": 125,
+    "diastolic": 72,
+    "pulse": 88,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-08-31",
+    "time": "22:34",
+    "systolic": 131,
+    "diastolic": 77,
+    "pulse": 87,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-08-31",
+    "time": "22:35",
+    "systolic": 128,
+    "diastolic": 73,
+    "pulse": 89,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-08-31",
+    "time": "22:36",
+    "systolic": 132,
+    "diastolic": 73,
+    "pulse": 85,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-09-01",
+    "time": "16:13",
+    "systolic": 116,
+    "diastolic": 68,
+    "pulse": 91,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-09-01",
+    "time": "16:15",
+    "systolic": 118,
+    "diastolic": 69,
+    "pulse": 93,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-09-01",
+    "time": "16:16",
+    "systolic": 127,
+    "diastolic": 65,
+    "pulse": 93,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-09-01",
+    "time": "21:09",
+    "systolic": 133,
+    "diastolic": 72,
+    "pulse": 92,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-09-01",
+    "time": "21:10",
+    "systolic": 132,
+    "diastolic": 69,
+    "pulse": 92,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-09-01",
+    "time": "21:11",
+    "systolic": 134,
+    "diastolic": 73,
+    "pulse": 92,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-09-02",
+    "time": "11:44",
+    "systolic": 109,
+    "diastolic": 66,
+    "pulse": 86,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-09-02",
+    "time": "11:45",
+    "systolic": 123,
+    "diastolic": 70,
+    "pulse": 89,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-09-02",
+    "time": "11:46",
+    "systolic": 113,
+    "diastolic": 68,
+    "pulse": 86,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-09-02",
+    "time": "13:36",
+    "systolic": 118,
+    "diastolic": 61,
+    "pulse": 99,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-09-02",
+    "time": "13:38",
+    "systolic": 114,
+    "diastolic": 64,
+    "pulse": 100,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-09-02",
+    "time": "13:39",
+    "systolic": 107,
+    "diastolic": 59,
+    "pulse": 95,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-09-02",
+    "time": "22:26",
+    "systolic": 138,
+    "diastolic": 67,
+    "pulse": 90,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-09-02",
+    "time": "22:27",
+    "systolic": 132,
+    "diastolic": 81,
+    "pulse": 92,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-09-02",
+    "time": "22:28",
+    "systolic": 133,
+    "diastolic": 66,
+    "pulse": 89,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-09-03",
+    "time": "16:46",
+    "systolic": 120,
+    "diastolic": 67,
+    "pulse": 89,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-09-03",
+    "time": "16:47",
+    "systolic": 128,
+    "diastolic": 70,
+    "pulse": 90,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-09-03",
+    "time": "21:38",
+    "systolic": 144,
+    "diastolic": 75,
+    "pulse": 90,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-09-03",
+    "time": "21:39",
+    "systolic": 147,
+    "diastolic": 76,
+    "pulse": 92,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-09-03",
+    "time": "21:41",
+    "systolic": 139,
+    "diastolic": 75,
+    "pulse": 92,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-09-04",
+    "time": "10:46",
+    "systolic": 128,
+    "diastolic": 64,
+    "pulse": 82,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-09-04",
+    "time": "21:11",
+    "systolic": 129,
+    "diastolic": 71,
+    "pulse": 83,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-09-04",
+    "time": "21:13",
+    "systolic": 123,
+    "diastolic": 69,
+    "pulse": 81,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-09-04",
+    "time": "21:14",
+    "systolic": 123,
+    "diastolic": 67,
+    "pulse": 84,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-09-05",
+    "time": "05:53",
+    "systolic": 131,
+    "diastolic": 72,
+    "pulse": 89,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-09-13",
+    "time": "21:40",
+    "systolic": 125,
+    "diastolic": 69,
+    "pulse": 92,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-09-13",
+    "time": "21:41",
+    "systolic": 128,
+    "diastolic": 70,
+    "pulse": 92,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-09-13",
+    "time": "21:42",
+    "systolic": 120,
+    "diastolic": 66,
+    "pulse": 90,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-09-14",
+    "time": "11:32",
+    "systolic": 123,
+    "diastolic": 71,
+    "pulse": 81,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-09-14",
+    "time": "11:33",
+    "systolic": 122,
+    "diastolic": 72,
+    "pulse": 81,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-09-14",
+    "time": "11:34",
+    "systolic": 118,
+    "diastolic": 71,
+    "pulse": 80,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-09-14",
+    "time": "16:43",
+    "systolic": 107,
+    "diastolic": 63,
+    "pulse": 95,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-09-14",
+    "time": "16:44",
+    "systolic": 109,
+    "diastolic": 62,
+    "pulse": 95,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
+  },
+  {
+    "date": "2026-09-14",
+    "time": "16:45",
+    "systolic": 107,
+    "diastolic": 60,
+    "pulse": 94,
+    "source_file": "june-july-Aug-Sept-2026.pdf"
   }
 ];

@@ -2062,7 +2062,7 @@ class DashboardHandler(SimpleHTTPRequestHandler):
             self._json(200, self._history_payload())
             return
         if path == "/api/bp-data":
-            self._json(200, {"ok": True, "days": 90, "rows": self._bp_last_days(90)})
+            self._json(200, {"ok": True, "days": 90, "rows": self._bp_last_days(90), "history_rows": self._read_existing_bp()})
             self._export_static_files()
             return
         if path == "/api/dexa-data":

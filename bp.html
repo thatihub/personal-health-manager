@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Blood Pressure (Last 90 Days)</title>
+  <title>Blood Pressure (Three-Month Comparison)</title>
   <style>
     :root {
       --ink: #102b3d;
@@ -161,6 +161,14 @@
       color: #fff !important;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
     }
+    .bp-compare-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:18px; }
+    .bp-period { font-size:13px; margin:6px 0; color:var(--comp-ink); }
+    .bp-detail { font-size:12px; color:var(--comp-muted); line-height:1.6; }
+    .bp-method { border-top:1px solid var(--comp-line); margin-top:12px; padding-top:8px; }
+    #bp-comparison .kpi-val { margin:5px 0; }
+    #bp-comparison small { font-size:12px; font-weight:500; }
+    #bp-comparison .bp-delta { font-size:20px; }
+    @media(max-width:650px) { .bp-compare-grid {grid-template-columns:1fr;} }
   </style>
   <link rel="stylesheet" href="./companion_theme.css?v=20260729-2" />
   <script>
@@ -188,7 +196,8 @@
       <a href="./admin.html">Admin</a>
     </nav>
     <h1>Blood Pressure</h1>
-    <div class="sub">Showing last 90 days only (SYS, DIAS, Pulse).</div>
+    <div class="sub">Three-month comparison and current-period readings (SYS, DIAS, Pulse).</div>
+    <section id="bp-comparison" class="card" aria-label="Three-month blood pressure comparison"></section>
     <section class="hero">
       <div class="hero-title">Blood Pressure Monitor</div>
       <div class="hero-sub">Professional view with separate SYS, DIAS, and Pulse trend panels.</div>
@@ -239,6 +248,7 @@
     </section>
   </div>
 
+  <script src="./bp_comparison.js?v=20260914"></script>
   <script>
     function fmtDate(iso) {
       const d = new Date(`${iso}T00:00:00`);
@@ -265,7 +275,7 @@
       return t;
     }
 
-    function showNoDataInChart(svgId, message = "No BP data for last 90 days") {
+    function showNoDataInChart(svgId, message = "No BP data for current period") {
       const svg = document.getElementById(svgId);
       if (!svg) return;
       const w = svg.clientWidth || 1000;
@@ -412,10 +422,10 @@
 
       if (!rows.length) {
         kpis.innerHTML = `
-          <div><div class="kpi-label">Status</div><div class="kpi-val empty" style="font-size:20px;">No BP data in last 90 days</div></div>
+          <div><div class="kpi-label">Status</div><div class="kpi-val empty" style="font-size:20px;">No BP data in current period</div></div>
           <div><div class="kpi-label">Next step</div><div class="kpi-val" style="font-size:18px;">Upload BP CSV from Admin page</div></div>
         `;
-        body.innerHTML = `<tr><td colspan="6" class="empty">No BP data for last 90 days.</td></tr>`;
+        body.innerHTML = `<tr><td colspan="6" class="empty">No BP data for current period.</td></tr>`;
         showNoDataInChart("bp-chart-sys");
         showNoDataInChart("bp-chart-dias");
         showNoDataInChart("bp-chart-pulse");
@@ -457,8 +467,8 @@
         <div class="card"><div class="kpi-label">Latest DIAS</div><div class="kpi-val">${latest.diastolic}</div></div>
         <div class="card" title="Pulse Pressure (SYS - DIAS). Normal range: 40-60 mmHg. High (>60) indicates arterial stiffness. Low (<40) indicates low cardiac output."><div class="kpi-label">Latest PP <span style="cursor:help; opacity:0.8;">ⓘ</span></div><div class="kpi-val" style="color: ${ppColor} !important;">${latestPP}</div></div>
         <div class="card"><div class="kpi-label">Latest Pulse</div><div class="kpi-val">${latest.pulse}</div></div>
-        <div class="card"><div class="kpi-label">90d Avg SYS/DIAS</div><div class="kpi-val">${avgSys}/${avgDias}</div></div>
-        <div class="card" title="Average Pulse Pressure over the last 90 days. Normal range: 40-60 mmHg."><div class="kpi-label">90d Avg PP <span style="cursor:help; opacity:0.8;">ⓘ</span></div><div class="kpi-val" style="color: ${avgPPColor} !important;">${avgPP}</div></div>
+        <div class="card"><div class="kpi-label">3mo Avg SYS/DIAS</div><div class="kpi-val">${avgSys}/${avgDias}</div></div>
+        <div class="card" title="Average Pulse Pressure over the current three-month period. Normal range: 40-60 mmHg."><div class="kpi-label">3mo Avg PP <span style="cursor:help; opacity:0.8;">ⓘ</span></div><div class="kpi-val" style="color: ${avgPPColor} !important;">${avgPP}</div></div>
       `;
       
       body.innerHTML = rows.slice().reverse().map(r => {
@@ -493,40 +503,19 @@
         const res = await fetch("/api/bp-data");
         if (res.ok) {
           const out = await res.json();
-          rows = (out.rows || []).slice();
+          rows = (out.history_rows || window.BP_DASH_DATA || out.rows || []).slice();
         }
       } catch (_e) {
         console.warn("Fetch BP API failed, trying local fallback", _e);
       }
 
-      if (!rows.length && window.BP_DASH_DATA && window.BP_DASH_DATA.length) {
-        // Fallback to static JS data
-        // Filter to last 90 days matching server behavior
-        const dated = [];
-        for (const r of window.BP_DASH_DATA) {
-          const parts = (r.date || "").split("-");
-          if (parts.length === 3) {
-            const dt = new Date(`${r.date}T${r.time || '00:00'}:00`);
-            if (!isNaN(dt.getTime())) {
-              dated.push({ dt, r });
-            }
-          }
-        }
-        if (dated.length > 0) {
-          // Find max date in the dataset
-          let maxDt = dated[0].dt;
-          for (const item of dated) {
-            if (item.dt > maxDt) maxDt = item.dt;
-          }
-          // Threshold is max date minus 90 days
-          const threshold = new Date(maxDt.getTime() - 90 * 24 * 60 * 60 * 1000);
-          rows = dated
-            .filter(item => item.dt >= threshold)
-            .map(item => item.r);
-          rows.sort((a, b) => a.date.localeCompare(b.date) || a.time.localeCompare(b.time));
-        }
-      }
-      allRawRows = rows;
+      // Older running servers return only 90 days. The refreshed static export
+      // retains the complete history and also supports opening this page offline.
+      if (window.BP_DASH_DATA?.length && !rows.length) rows = window.BP_DASH_DATA.slice();
+      rows.sort((a, b) => a.date.localeCompare(b.date) || a.time.localeCompare(b.time));
+      const comparison = BPComparison.calculate(rows);
+      BPComparison.render(document.getElementById("bp-comparison"), comparison);
+      allRawRows = comparison.current.rows;
       renderDashboard();
     }
     load();
