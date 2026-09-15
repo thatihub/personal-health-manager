@@ -68,6 +68,8 @@
     .clean-topic summary:focus-visible { outline:2px solid var(--blue); outline-offset:-2px; }
     .topic-description { margin:0; padding:0 17px 15px; border-top:1px solid rgba(143,174,204,.18); color:#d7e6f4; line-height:1.55; padding-top:13px; }
     .topic-tests { margin:0; padding:13px 17px 15px 38px; border-top:1px solid rgba(143,174,204,.18); color:#d7e6f4; line-height:1.65; }
+    .topic-tests li { color:inherit; }
+    .topic-subdetails { margin:4px 0; padding-left:24px; list-style-type:circle; font-size:.95em; }
     .clean-closing { margin:20px 0 0; padding:17px 19px; border-left:4px solid var(--green); border-radius:4px 14px 14px 4px; background:rgba(22,137,87,.13); color:#dff8eb; font-weight:700; }
     .clean-edit { flex:0 0 auto; background:linear-gradient(120deg,#0c8ebd,var(--blue)); }
     .clean-home { min-height:44px; border:1px solid var(--line); border-radius:11px; padding:10px 14px; color:#dceafa; background:#17283c; font-weight:800; text-decoration:none; display:inline-flex; align-items:center; }
@@ -194,42 +196,49 @@
       container.replaceChildren();
       const bullets = [];
       const notes = [];
-      let currentBullet = "";
+      let currentBullet = null;
       let currentNote = "";
+      const stack = [];
       content.split(/\r?\n/).forEach(rawLine => {
         const line = rawLine.trim();
-        if (/^[•\-*]\s+/.test(line)) {
-          if (currentBullet) bullets.push(currentBullet);
+        const match = rawLine.match(/^(\s*)[•\-*]\s+(.+)$/);
+        if (match) {
           if (currentNote) {
             notes.push(currentNote);
             currentNote = "";
           }
-          currentBullet = line.replace(/^[•\-*]\s+/, "");
+          const indent = match[1].replace(/\t/g, "    ").length;
+          const node = { text: match[2], children: [], indent };
+          while (stack.length && stack[stack.length - 1].indent >= indent) stack.pop();
+          if (stack.length) stack[stack.length - 1].children.push(node);
+          else bullets.push(node);
+          stack.push(node);
+          currentBullet = node;
         } else if (line && currentBullet) {
-          currentBullet += ` ${line}`;
+          currentBullet.text += ` ${line}`;
         } else if (line) {
           currentNote += `${currentNote ? " " : ""}${line}`;
-        } else if (currentBullet) {
-          bullets.push(currentBullet);
-          currentBullet = "";
-        } else if (currentNote) {
-          notes.push(currentNote);
-          currentNote = "";
+        } else {
+          currentBullet = null;
+          if (currentNote) {
+            notes.push(currentNote);
+            currentNote = "";
+          }
         }
       });
-      if (currentBullet) bullets.push(currentBullet);
       if (currentNote) notes.push(currentNote);
       if (bullets.length) {
         const list = document.createElement("ul");
         list.className = "clean-outline";
-        bullets.forEach((text, index) => {
-          const topic = topicParts(text, index);
+        bullets.forEach((node, index) => {
+          const topic = topicParts(node.text, index);
+          if (node.children.length) topic.keyword = node.text.replace(/\*\*/g, "").replace(/:\s*$/, "").trim();
           const item = document.createElement("li");
           const details = document.createElement("details");
           details.className = "clean-topic";
           const summary = document.createElement("summary");
           summary.textContent = topic.keyword;
-          const description = topicDescription(topic);
+          const description = node.children.length ? nestedDetails(node.children) : topicDescription(topic);
           details.append(summary, description);
           item.appendChild(details);
           list.appendChild(item);
@@ -243,6 +252,17 @@
         container.appendChild(paragraph);
       });
       if (!bullets.length && !notes.length) container.textContent = "No note text.";
+    }
+    function nestedDetails(nodes, nested = false) {
+      const list = document.createElement("ul");
+      list.className = nested ? "topic-subdetails" : "topic-tests";
+      nodes.forEach(node => {
+        const item = document.createElement("li");
+        item.textContent = node.text.replace(/\*\*/g, "");
+        if (node.children.length) item.appendChild(nestedDetails(node.children, true));
+        list.appendChild(item);
+      });
+      return list;
     }
     function topicDescription(topic) {
       const testLists = {
