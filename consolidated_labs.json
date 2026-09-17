@@ -804,9 +804,9 @@
     "date": "2026-09-15",
     "collection_time": "15:05",
     "source": "Labcorp",
-    "report_file": "Basic Metabolic Panel sept 15 2026.pdf",
+    "report_file": "Basic Metabolic Panel and Hemoglobin-A1c - TSH - Free T4 Sept 15 2026.pdf",
     "glucose_mg_dl": 80,
-    "hba1c_pct": null,
+    "hba1c_pct": 6.7,
     "total_chol_mg_dl": null,
     "hdl_mg_dl": null,
     "ldl_mg_dl": null,
@@ -832,8 +832,8 @@
     "egfr_ml_min_1_73": 66,
     "urine_acr_mg_g": null,
     "c_peptide_ng_ml": null,
-    "tsh_uiu_ml": null,
-    "free_t4_ng_dl": null,
+    "tsh_uiu_ml": 2.98,
+    "free_t4_ng_dl": 1.62,
     "thyroxine_t4_ug_dl": null,
     "t3_uptake_pct": null,
     "free_thyroxine_index": null,
@@ -849,6 +849,6 @@
     "psa_ng_ml": null,
     "hcv_antibody": null,
     "estimated_avg_glucose_mg_dl": null,
-    "notes": "Basic Metabolic Panel; non-fasting. Sodium and chloride flagged low by Labcorp."
+    "notes": "Basic Metabolic Panel; non-fasting. Sodium and chloride flagged low by Labcorp. Hemoglobin A1c 6.7% (high; reference 4.8-5.6); Free T4 1.62 ng/dL (reference 0.82-1.77); TSH 2.980 uIU/mL (reference 0.450-4.500)."
   }
 ]

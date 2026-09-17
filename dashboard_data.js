@@ -771,7 +771,7 @@ window.LAB_DASH_DATA = [
     "date": "2026-09-15",
     "source": "Labcorp",
     "glucose": 80,
-    "hba1c": null,
+    "hba1c": 6.7,
     "totalChol": null,
     "hdl": null,
     "ldl": null,
@@ -797,8 +797,8 @@ window.LAB_DASH_DATA = [
     "egfr": 66,
     "acr": null,
     "cPeptide": null,
-    "tsh": null,
-    "freeT4": null,
+    "tsh": 2.98,
+    "freeT4": 1.62,
     "thyroxineT4": null,
     "t3Uptake": null,
     "freeThyroxineIndex": null,
@@ -813,6 +813,6 @@ window.LAB_DASH_DATA = [
     "platelets": null,
     "psa": null,
     "hcv": null,
-    "notes": "Basic Metabolic Panel; non-fasting. Sodium and chloride flagged low by Labcorp."
+    "notes": "Basic Metabolic Panel; non-fasting. Sodium and chloride flagged low by Labcorp. Hemoglobin A1c 6.7% (high; reference 4.8-5.6); Free T4 1.62 ng/dL (reference 0.82-1.77); TSH 2.980 uIU/mL (reference 0.450-4.500)."
   }
 ];
