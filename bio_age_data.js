@@ -1,17 +1,17 @@
 window.BIO_AGE_DATA = {
   "ok": true,
-  "latest_date": "2026-09-09",
+  "latest_date": "2026-09-15",
   "chronological_age": 66,
-  "overall_score": 70.4,
-  "estimated_bio_age": 65.8,
-  "age_delta_years": -0.2,
-  "confidence": "medium",
+  "overall_score": 78.6,
+  "estimated_bio_age": 61.5,
+  "age_delta_years": -4.5,
+  "confidence": "low",
   "section_scores": [
     {
       "section_name": "Glucose / Diabetes",
-      "score": 44.0,
+      "score": 73.0,
       "trend": "up",
-      "border_color": "red",
+      "border_color": "yellow",
       "markers_present": 2,
       "markers_total": 3,
       "weight": 20
@@ -27,9 +27,9 @@ window.BIO_AGE_DATA = {
     },
     {
       "section_name": "Kidney",
-      "score": 68.5,
-      "trend": "down",
-      "border_color": "orange",
+      "score": 76.8,
+      "trend": "flat",
+      "border_color": "yellow",
       "markers_present": 4,
       "markers_total": 5,
       "weight": 15
@@ -164,11 +164,18 @@ window.BIO_AGE_DATA = {
         "El Camino MyChart / Labcorp"
       ],
       "tests_count": 19
+    },
+    {
+      "collection_date": "2026-09-15",
+      "lab_sources": [
+        "Labcorp"
+      ],
+      "tests_count": 7
     }
   ],
   "normalized_results": [
     {
-      "id": "res_017225eedb",
+      "id": "res_71e4ebf03e",
       "report_id": "con_52dc78b31c",
       "collection_date": "2023-05-30",
       "original_test_name": "albumin_g_dl",
@@ -188,7 +195,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_8f7df13dbe",
+      "id": "res_e3d666a799",
       "report_id": "con_52dc78b31c",
       "collection_date": "2023-05-30",
       "original_test_name": "alk_phos_u_l",
@@ -208,7 +215,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_f69d995c47",
+      "id": "res_2851d7446c",
       "report_id": "con_52dc78b31c",
       "collection_date": "2023-05-30",
       "original_test_name": "alt_u_l",
@@ -228,7 +235,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_6df718af26",
+      "id": "res_954720e6bb",
       "report_id": "con_52dc78b31c",
       "collection_date": "2023-05-30",
       "original_test_name": "ast_u_l",
@@ -248,7 +255,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_43bc946760",
+      "id": "res_c8472589e1",
       "report_id": "con_52dc78b31c",
       "collection_date": "2023-05-30",
       "original_test_name": "bilirubin_mg_dl",
@@ -268,7 +275,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_c3c810f32e",
+      "id": "res_f7852dcde3",
       "report_id": "con_52dc78b31c",
       "collection_date": "2023-05-30",
       "original_test_name": "calcium_mg_dl",
@@ -288,7 +295,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_4a2647aef2",
+      "id": "res_42efa73a52",
       "report_id": "con_52dc78b31c",
       "collection_date": "2023-05-30",
       "original_test_name": "creatinine_mg_dl",
@@ -308,7 +315,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_683e3393ee",
+      "id": "res_99c3b553ae",
       "report_id": "con_52dc78b31c",
       "collection_date": "2023-05-30",
       "original_test_name": "egfr_ml_min_1_73",
@@ -328,7 +335,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_f16367eb42",
+      "id": "res_a1a67c55d9",
       "report_id": "con_52dc78b31c",
       "collection_date": "2023-05-30",
       "original_test_name": "glucose_mg_dl",
@@ -348,7 +355,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_8e30889c35",
+      "id": "res_4feb819d5b",
       "report_id": "con_52dc78b31c",
       "collection_date": "2023-05-30",
       "original_test_name": "hba1c_pct",
@@ -368,7 +375,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_f0f8fe30d4",
+      "id": "res_f65eca9b0b",
       "report_id": "con_52dc78b31c",
       "collection_date": "2023-05-30",
       "original_test_name": "hdl_mg_dl",
@@ -388,7 +395,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_da568239d7",
+      "id": "res_081b6847bb",
       "report_id": "con_52dc78b31c",
       "collection_date": "2023-05-30",
       "original_test_name": "ldl_mg_dl",
@@ -408,7 +415,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_9d7f3d843c",
+      "id": "res_48960e69f1",
       "report_id": "con_52dc78b31c",
       "collection_date": "2023-05-30",
       "original_test_name": "potassium_mmol_l",
@@ -428,7 +435,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_38d6cab7b5",
+      "id": "res_554de0ae85",
       "report_id": "con_52dc78b31c",
       "collection_date": "2023-05-30",
       "original_test_name": "sodium_mmol_l",
@@ -448,7 +455,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_8cfb5dab69",
+      "id": "res_c516cfd72c",
       "report_id": "con_52dc78b31c",
       "collection_date": "2023-05-30",
       "original_test_name": "total_chol_mg_dl",
@@ -468,7 +475,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_8f4611078d",
+      "id": "res_655e7eab92",
       "report_id": "con_52dc78b31c",
       "collection_date": "2023-05-30",
       "original_test_name": "triglycerides_mg_dl",
@@ -488,7 +495,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_ab370ad303",
+      "id": "res_fcca629847",
       "report_id": "con_ee24bd78a6",
       "collection_date": "2024-01-15",
       "original_test_name": "albumin_g_dl",
@@ -508,7 +515,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_e4263025a5",
+      "id": "res_74208b2958",
       "report_id": "con_ee24bd78a6",
       "collection_date": "2024-01-15",
       "original_test_name": "alk_phos_u_l",
@@ -528,7 +535,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_4ff2c091dd",
+      "id": "res_adbdf60213",
       "report_id": "con_ee24bd78a6",
       "collection_date": "2024-01-15",
       "original_test_name": "alt_u_l",
@@ -548,7 +555,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_4f30236c88",
+      "id": "res_77b226b2ef",
       "report_id": "con_ee24bd78a6",
       "collection_date": "2024-01-15",
       "original_test_name": "ast_u_l",
@@ -568,7 +575,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_25e3d66a15",
+      "id": "res_e069fa6486",
       "report_id": "con_ee24bd78a6",
       "collection_date": "2024-01-15",
       "original_test_name": "bilirubin_mg_dl",
@@ -588,7 +595,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_6969f2d0a3",
+      "id": "res_f4083dfcab",
       "report_id": "con_ee24bd78a6",
       "collection_date": "2024-01-15",
       "original_test_name": "calcium_mg_dl",
@@ -608,7 +615,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_df5e170670",
+      "id": "res_0151ba19ee",
       "report_id": "con_ee24bd78a6",
       "collection_date": "2024-01-15",
       "original_test_name": "creatinine_mg_dl",
@@ -628,7 +635,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_10927dbdd1",
+      "id": "res_a96ecee855",
       "report_id": "con_ee24bd78a6",
       "collection_date": "2024-01-15",
       "original_test_name": "egfr_ml_min_1_73",
@@ -648,7 +655,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_e02fa6fa4c",
+      "id": "res_059a13fa17",
       "report_id": "con_ee24bd78a6",
       "collection_date": "2024-01-15",
       "original_test_name": "glucose_mg_dl",
@@ -668,7 +675,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_f07a254f62",
+      "id": "res_18760349dd",
       "report_id": "con_ee24bd78a6",
       "collection_date": "2024-01-15",
       "original_test_name": "hba1c_pct",
@@ -688,7 +695,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_7473d61e2d",
+      "id": "res_f43ab5430c",
       "report_id": "con_ee24bd78a6",
       "collection_date": "2024-01-15",
       "original_test_name": "hdl_mg_dl",
@@ -708,7 +715,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_6c3a782c6f",
+      "id": "res_d349f7178a",
       "report_id": "con_ee24bd78a6",
       "collection_date": "2024-01-15",
       "original_test_name": "ldl_mg_dl",
@@ -728,7 +735,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_a96d13330d",
+      "id": "res_57fb317f17",
       "report_id": "con_ee24bd78a6",
       "collection_date": "2024-01-15",
       "original_test_name": "potassium_mmol_l",
@@ -748,7 +755,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_fee7579531",
+      "id": "res_f29b67106f",
       "report_id": "con_ee24bd78a6",
       "collection_date": "2024-01-15",
       "original_test_name": "sodium_mmol_l",
@@ -768,7 +775,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_a1cce3bd07",
+      "id": "res_d460dc4f8f",
       "report_id": "con_ee24bd78a6",
       "collection_date": "2024-01-15",
       "original_test_name": "total_chol_mg_dl",
@@ -788,7 +795,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_07eb30848b",
+      "id": "res_f218387909",
       "report_id": "con_ee24bd78a6",
       "collection_date": "2024-01-15",
       "original_test_name": "triglycerides_mg_dl",
@@ -808,7 +815,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_3e708d80c6",
+      "id": "res_f3575674f8",
       "report_id": "con_b41c339342",
       "collection_date": "2024-06-11",
       "original_test_name": "albumin_g_dl",
@@ -828,7 +835,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_d6a1076a77",
+      "id": "res_0bc3178138",
       "report_id": "con_b41c339342",
       "collection_date": "2024-06-11",
       "original_test_name": "alk_phos_u_l",
@@ -848,7 +855,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_1eb03edacc",
+      "id": "res_2fd5d5dd3c",
       "report_id": "con_b41c339342",
       "collection_date": "2024-06-11",
       "original_test_name": "alt_u_l",
@@ -868,7 +875,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_f81866ba42",
+      "id": "res_9f5cc674cd",
       "report_id": "con_b41c339342",
       "collection_date": "2024-06-11",
       "original_test_name": "ast_u_l",
@@ -888,7 +895,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_bfa927c576",
+      "id": "res_56a3e5dc6e",
       "report_id": "con_b41c339342",
       "collection_date": "2024-06-11",
       "original_test_name": "bilirubin_mg_dl",
@@ -908,7 +915,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_1dca53a86c",
+      "id": "res_090ca2afd4",
       "report_id": "con_b41c339342",
       "collection_date": "2024-06-11",
       "original_test_name": "calcium_mg_dl",
@@ -928,7 +935,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_f62df9852f",
+      "id": "res_82042a4135",
       "report_id": "con_b41c339342",
       "collection_date": "2024-06-11",
       "original_test_name": "creatinine_mg_dl",
@@ -948,7 +955,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_b71c37912e",
+      "id": "res_8643674701",
       "report_id": "con_b41c339342",
       "collection_date": "2024-06-11",
       "original_test_name": "egfr_ml_min_1_73",
@@ -968,7 +975,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_3437a2e872",
+      "id": "res_f32493e7d1",
       "report_id": "con_b41c339342",
       "collection_date": "2024-06-11",
       "original_test_name": "glucose_mg_dl",
@@ -988,7 +995,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_e4742d6fec",
+      "id": "res_fcb90716ee",
       "report_id": "con_b41c339342",
       "collection_date": "2024-06-11",
       "original_test_name": "hba1c_pct",
@@ -1008,7 +1015,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_5a9cfd4106",
+      "id": "res_affa77eec4",
       "report_id": "con_b41c339342",
       "collection_date": "2024-06-11",
       "original_test_name": "potassium_mmol_l",
@@ -1028,7 +1035,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_a1b79ea932",
+      "id": "res_307af3be6f",
       "report_id": "con_b41c339342",
       "collection_date": "2024-06-11",
       "original_test_name": "sodium_mmol_l",
@@ -1048,7 +1055,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_4a6d1a7ffd",
+      "id": "res_e5626f3e8a",
       "report_id": "con_1fd18553e4",
       "collection_date": "2025-01-28",
       "original_test_name": "hba1c_pct",
@@ -1068,7 +1075,7 @@ window.BIO_AGE_DATA = {
       "notes": "Value reported as <12"
     },
     {
-      "id": "res_8d029e2b3d",
+      "id": "res_72bdb6c3aa",
       "report_id": "con_1fd18553e4",
       "collection_date": "2025-01-28",
       "original_test_name": "hdl_mg_dl",
@@ -1088,7 +1095,7 @@ window.BIO_AGE_DATA = {
       "notes": "Value reported as <12"
     },
     {
-      "id": "res_c1d4d10d36",
+      "id": "res_4994926cda",
       "report_id": "con_1fd18553e4",
       "collection_date": "2025-01-28",
       "original_test_name": "ldl_mg_dl",
@@ -1108,7 +1115,7 @@ window.BIO_AGE_DATA = {
       "notes": "Value reported as <12"
     },
     {
-      "id": "res_de9d52e333",
+      "id": "res_6645735afe",
       "report_id": "con_1fd18553e4",
       "collection_date": "2025-01-28",
       "original_test_name": "total_chol_mg_dl",
@@ -1128,7 +1135,7 @@ window.BIO_AGE_DATA = {
       "notes": "Value reported as <12"
     },
     {
-      "id": "res_de4e4e6a00",
+      "id": "res_498ca8f05a",
       "report_id": "con_1fd18553e4",
       "collection_date": "2025-01-28",
       "original_test_name": "triglycerides_mg_dl",
@@ -1148,7 +1155,7 @@ window.BIO_AGE_DATA = {
       "notes": "Value reported as <12"
     },
     {
-      "id": "res_725d2a257d",
+      "id": "res_5b0de4c29e",
       "report_id": "con_46c1b0db01",
       "collection_date": "2025-06-02",
       "original_test_name": "albumin_g_dl",
@@ -1168,7 +1175,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_7514664779",
+      "id": "res_4fc36b200a",
       "report_id": "con_46c1b0db01",
       "collection_date": "2025-06-02",
       "original_test_name": "alk_phos_u_l",
@@ -1188,7 +1195,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_d367d71361",
+      "id": "res_1d76446298",
       "report_id": "con_46c1b0db01",
       "collection_date": "2025-06-02",
       "original_test_name": "alt_u_l",
@@ -1208,7 +1215,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_3570983449",
+      "id": "res_d22acd8756",
       "report_id": "con_46c1b0db01",
       "collection_date": "2025-06-02",
       "original_test_name": "ast_u_l",
@@ -1228,7 +1235,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_5f2baab283",
+      "id": "res_a97fb5ea3f",
       "report_id": "con_46c1b0db01",
       "collection_date": "2025-06-02",
       "original_test_name": "bilirubin_mg_dl",
@@ -1248,7 +1255,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_1dca341a4a",
+      "id": "res_de1b3b11a1",
       "report_id": "con_46c1b0db01",
       "collection_date": "2025-06-02",
       "original_test_name": "bun_mg_dl",
@@ -1268,7 +1275,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_76607febde",
+      "id": "res_918965e973",
       "report_id": "con_46c1b0db01",
       "collection_date": "2025-06-02",
       "original_test_name": "calcium_mg_dl",
@@ -1288,7 +1295,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_84a3f47f3e",
+      "id": "res_2501fa0475",
       "report_id": "con_46c1b0db01",
       "collection_date": "2025-06-02",
       "original_test_name": "creatinine_mg_dl",
@@ -1308,7 +1315,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_ecd69d40dc",
+      "id": "res_9f57b245d8",
       "report_id": "con_46c1b0db01",
       "collection_date": "2025-06-02",
       "original_test_name": "egfr_ml_min_1_73",
@@ -1328,7 +1335,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_d111267797",
+      "id": "res_2eda801db4",
       "report_id": "con_46c1b0db01",
       "collection_date": "2025-06-02",
       "original_test_name": "glucose_mg_dl",
@@ -1348,7 +1355,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_25424f488d",
+      "id": "res_fea3e98031",
       "report_id": "con_46c1b0db01",
       "collection_date": "2025-06-02",
       "original_test_name": "hba1c_pct",
@@ -1368,7 +1375,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_49a2adaec3",
+      "id": "res_533bb310ac",
       "report_id": "con_46c1b0db01",
       "collection_date": "2025-06-02",
       "original_test_name": "hdl_mg_dl",
@@ -1388,7 +1395,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_bd65da0b7d",
+      "id": "res_95ce7612c6",
       "report_id": "con_46c1b0db01",
       "collection_date": "2025-06-02",
       "original_test_name": "hematocrit_pct",
@@ -1408,7 +1415,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_c4db2aefc1",
+      "id": "res_53e0ce8b7c",
       "report_id": "con_46c1b0db01",
       "collection_date": "2025-06-02",
       "original_test_name": "hemoglobin_g_dl",
@@ -1428,7 +1435,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_5e5eb9fd3c",
+      "id": "res_71f84f1d4d",
       "report_id": "con_46c1b0db01",
       "collection_date": "2025-06-02",
       "original_test_name": "ldl_mg_dl",
@@ -1448,7 +1455,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_fb92b9e2de",
+      "id": "res_7eb9f1f87a",
       "report_id": "con_46c1b0db01",
       "collection_date": "2025-06-02",
       "original_test_name": "platelets_x10e3_ul",
@@ -1468,7 +1475,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_a0a229f89b",
+      "id": "res_f734443653",
       "report_id": "con_46c1b0db01",
       "collection_date": "2025-06-02",
       "original_test_name": "potassium_mmol_l",
@@ -1488,7 +1495,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_7aeb1210c6",
+      "id": "res_aff71f8015",
       "report_id": "con_46c1b0db01",
       "collection_date": "2025-06-02",
       "original_test_name": "rbc_x10e6_ul",
@@ -1508,7 +1515,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_86dde75c45",
+      "id": "res_610ebe2f09",
       "report_id": "con_46c1b0db01",
       "collection_date": "2025-06-02",
       "original_test_name": "sodium_mmol_l",
@@ -1528,7 +1535,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_6652b0ad9d",
+      "id": "res_10d50be176",
       "report_id": "con_46c1b0db01",
       "collection_date": "2025-06-02",
       "original_test_name": "total_chol_mg_dl",
@@ -1548,7 +1555,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_081dc96779",
+      "id": "res_e54b4aace7",
       "report_id": "con_46c1b0db01",
       "collection_date": "2025-06-02",
       "original_test_name": "triglycerides_mg_dl",
@@ -1568,7 +1575,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_b4dd6588a8",
+      "id": "res_331188f1cb",
       "report_id": "con_46c1b0db01",
       "collection_date": "2025-06-02",
       "original_test_name": "urine_acr_mg_g",
@@ -1588,7 +1595,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_082d78bc03",
+      "id": "res_07063ebf63",
       "report_id": "con_46c1b0db01",
       "collection_date": "2025-06-02",
       "original_test_name": "wbc_x10e3_ul",
@@ -1608,7 +1615,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_d633786dfa",
+      "id": "res_30daccdc9c",
       "report_id": "con_a1ea064d6d",
       "collection_date": "2025-06-23",
       "original_test_name": "albumin_g_dl",
@@ -1628,7 +1635,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_b3fa3ca99f",
+      "id": "res_3d5df6fdea",
       "report_id": "con_a1ea064d6d",
       "collection_date": "2025-06-23",
       "original_test_name": "alk_phos_u_l",
@@ -1648,7 +1655,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_e64c958bf3",
+      "id": "res_9f4413d8cc",
       "report_id": "con_a1ea064d6d",
       "collection_date": "2025-06-23",
       "original_test_name": "alt_u_l",
@@ -1668,7 +1675,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_cd6b87a0b3",
+      "id": "res_e367ead325",
       "report_id": "con_a1ea064d6d",
       "collection_date": "2025-06-23",
       "original_test_name": "ast_u_l",
@@ -1688,7 +1695,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_3b6a89895f",
+      "id": "res_5fbd2121b3",
       "report_id": "con_a1ea064d6d",
       "collection_date": "2025-06-23",
       "original_test_name": "bilirubin_mg_dl",
@@ -1708,7 +1715,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_4ff39f490d",
+      "id": "res_fb6df2c5b2",
       "report_id": "con_a1ea064d6d",
       "collection_date": "2025-06-23",
       "original_test_name": "bun_mg_dl",
@@ -1728,7 +1735,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_0f6a5e4f8b",
+      "id": "res_8f3b7f47c1",
       "report_id": "con_a1ea064d6d",
       "collection_date": "2025-06-23",
       "original_test_name": "calcium_mg_dl",
@@ -1748,7 +1755,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_f546b954fe",
+      "id": "res_9ef458c59a",
       "report_id": "con_a1ea064d6d",
       "collection_date": "2025-06-23",
       "original_test_name": "creatinine_mg_dl",
@@ -1768,7 +1775,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_41d92128e5",
+      "id": "res_a5ec67973f",
       "report_id": "con_a1ea064d6d",
       "collection_date": "2025-06-23",
       "original_test_name": "egfr_ml_min_1_73",
@@ -1788,7 +1795,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_ac0a25c414",
+      "id": "res_1506b7f256",
       "report_id": "con_a1ea064d6d",
       "collection_date": "2025-06-23",
       "original_test_name": "glucose_mg_dl",
@@ -1808,7 +1815,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_60f25b0df9",
+      "id": "res_38a2641e72",
       "report_id": "con_a1ea064d6d",
       "collection_date": "2025-06-23",
       "original_test_name": "hba1c_pct",
@@ -1828,7 +1835,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_096a5da3c4",
+      "id": "res_60520aa965",
       "report_id": "con_a1ea064d6d",
       "collection_date": "2025-06-23",
       "original_test_name": "hdl_mg_dl",
@@ -1848,7 +1855,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_edcab166cc",
+      "id": "res_9622d4e147",
       "report_id": "con_a1ea064d6d",
       "collection_date": "2025-06-23",
       "original_test_name": "hematocrit_pct",
@@ -1868,7 +1875,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_81648cd910",
+      "id": "res_c956524b38",
       "report_id": "con_a1ea064d6d",
       "collection_date": "2025-06-23",
       "original_test_name": "hemoglobin_g_dl",
@@ -1888,7 +1895,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_eeaa8d8629",
+      "id": "res_5037bf4510",
       "report_id": "con_a1ea064d6d",
       "collection_date": "2025-06-23",
       "original_test_name": "ldl_mg_dl",
@@ -1908,7 +1915,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_7be38a95ab",
+      "id": "res_bdb946b622",
       "report_id": "con_a1ea064d6d",
       "collection_date": "2025-06-23",
       "original_test_name": "platelets_x10e3_ul",
@@ -1928,7 +1935,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_bc95c34a74",
+      "id": "res_e3391a3025",
       "report_id": "con_a1ea064d6d",
       "collection_date": "2025-06-23",
       "original_test_name": "potassium_mmol_l",
@@ -1948,7 +1955,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_18b2924b71",
+      "id": "res_2dc20ddde7",
       "report_id": "con_a1ea064d6d",
       "collection_date": "2025-06-23",
       "original_test_name": "rbc_x10e6_ul",
@@ -1968,7 +1975,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_f1cd35f2cf",
+      "id": "res_3ae495d805",
       "report_id": "con_a1ea064d6d",
       "collection_date": "2025-06-23",
       "original_test_name": "sodium_mmol_l",
@@ -1988,7 +1995,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_86f488911d",
+      "id": "res_f215a82f6b",
       "report_id": "con_a1ea064d6d",
       "collection_date": "2025-06-23",
       "original_test_name": "total_chol_mg_dl",
@@ -2008,7 +2015,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_72a8049a24",
+      "id": "res_ca9c589e7f",
       "report_id": "con_a1ea064d6d",
       "collection_date": "2025-06-23",
       "original_test_name": "triglycerides_mg_dl",
@@ -2028,7 +2035,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_e3d53c7579",
+      "id": "res_9fc3bb44c1",
       "report_id": "con_a1ea064d6d",
       "collection_date": "2025-06-23",
       "original_test_name": "tsh_uiu_ml",
@@ -2048,7 +2055,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_8c3a53be1d",
+      "id": "res_ef037bbba2",
       "report_id": "con_a1ea064d6d",
       "collection_date": "2025-06-23",
       "original_test_name": "wbc_x10e3_ul",
@@ -2068,7 +2075,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_0d82830d09",
+      "id": "res_09b282007b",
       "report_id": "con_ca078495f7",
       "collection_date": "2025-09-12",
       "original_test_name": "albumin_g_dl",
@@ -2088,7 +2095,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_a8058132c1",
+      "id": "res_77879d8245",
       "report_id": "con_ca078495f7",
       "collection_date": "2025-09-12",
       "original_test_name": "alk_phos_u_l",
@@ -2108,7 +2115,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_1bdd4204b8",
+      "id": "res_bec4830ac5",
       "report_id": "con_ca078495f7",
       "collection_date": "2025-09-12",
       "original_test_name": "alt_u_l",
@@ -2128,7 +2135,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_dd39702c38",
+      "id": "res_37b5c3c033",
       "report_id": "con_ca078495f7",
       "collection_date": "2025-09-12",
       "original_test_name": "ast_u_l",
@@ -2148,7 +2155,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_12a80bebfa",
+      "id": "res_ec5281185d",
       "report_id": "con_ca078495f7",
       "collection_date": "2025-09-12",
       "original_test_name": "bilirubin_mg_dl",
@@ -2168,7 +2175,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_222180def0",
+      "id": "res_9c5eff3fe0",
       "report_id": "con_ca078495f7",
       "collection_date": "2025-09-12",
       "original_test_name": "bun_mg_dl",
@@ -2188,7 +2195,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_7f82d782d4",
+      "id": "res_bb9e8763ee",
       "report_id": "con_ca078495f7",
       "collection_date": "2025-09-12",
       "original_test_name": "calcium_mg_dl",
@@ -2208,7 +2215,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_368729d1b2",
+      "id": "res_71d79953fd",
       "report_id": "con_ca078495f7",
       "collection_date": "2025-09-12",
       "original_test_name": "creatinine_mg_dl",
@@ -2228,7 +2235,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_44dd3f120a",
+      "id": "res_a01d8a265a",
       "report_id": "con_ca078495f7",
       "collection_date": "2025-09-12",
       "original_test_name": "egfr_ml_min_1_73",
@@ -2248,7 +2255,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_0dcfe88ca6",
+      "id": "res_2be0020234",
       "report_id": "con_ca078495f7",
       "collection_date": "2025-09-12",
       "original_test_name": "glucose_mg_dl",
@@ -2268,7 +2275,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_4e2269381b",
+      "id": "res_590dc972d0",
       "report_id": "con_ca078495f7",
       "collection_date": "2025-09-12",
       "original_test_name": "hba1c_pct",
@@ -2288,7 +2295,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_08781de84a",
+      "id": "res_4c5b2e391a",
       "report_id": "con_ca078495f7",
       "collection_date": "2025-09-12",
       "original_test_name": "hematocrit_pct",
@@ -2308,7 +2315,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_49f42d6250",
+      "id": "res_44bc8c149b",
       "report_id": "con_ca078495f7",
       "collection_date": "2025-09-12",
       "original_test_name": "hemoglobin_g_dl",
@@ -2328,7 +2335,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_3657af4400",
+      "id": "res_11e056e358",
       "report_id": "con_ca078495f7",
       "collection_date": "2025-09-12",
       "original_test_name": "platelets_x10e3_ul",
@@ -2348,7 +2355,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_50173db65e",
+      "id": "res_f7d973f177",
       "report_id": "con_ca078495f7",
       "collection_date": "2025-09-12",
       "original_test_name": "potassium_mmol_l",
@@ -2368,7 +2375,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_79ce840443",
+      "id": "res_e7749ebac3",
       "report_id": "con_ca078495f7",
       "collection_date": "2025-09-12",
       "original_test_name": "rbc_x10e6_ul",
@@ -2388,7 +2395,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_8e3b35fc85",
+      "id": "res_e688713b38",
       "report_id": "con_ca078495f7",
       "collection_date": "2025-09-12",
       "original_test_name": "sodium_mmol_l",
@@ -2408,7 +2415,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_3a9dfd7565",
+      "id": "res_da15fbfad8",
       "report_id": "con_ca078495f7",
       "collection_date": "2025-09-12",
       "original_test_name": "urine_acr_mg_g",
@@ -2428,7 +2435,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_04b7dddb2c",
+      "id": "res_c04c9caa07",
       "report_id": "con_ca078495f7",
       "collection_date": "2025-09-12",
       "original_test_name": "wbc_x10e3_ul",
@@ -2448,7 +2455,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_2260b476e4",
+      "id": "res_5d4a03bc66",
       "report_id": "con_7bdaac1c26",
       "collection_date": "2026-02-12",
       "original_test_name": "albumin_g_dl",
@@ -2468,7 +2475,7 @@ window.BIO_AGE_DATA = {
       "notes": "Value reported as >2000"
     },
     {
-      "id": "res_eaf22a7675",
+      "id": "res_d7458255f9",
       "report_id": "con_7bdaac1c26",
       "collection_date": "2026-02-12",
       "original_test_name": "alk_phos_u_l",
@@ -2488,7 +2495,7 @@ window.BIO_AGE_DATA = {
       "notes": "Value reported as >2000"
     },
     {
-      "id": "res_f18a23e103",
+      "id": "res_edefd4382e",
       "report_id": "con_7bdaac1c26",
       "collection_date": "2026-02-12",
       "original_test_name": "alt_u_l",
@@ -2508,7 +2515,7 @@ window.BIO_AGE_DATA = {
       "notes": "Value reported as >2000"
     },
     {
-      "id": "res_f52c1bcd7c",
+      "id": "res_8ccf0bbcc6",
       "report_id": "con_7bdaac1c26",
       "collection_date": "2026-02-12",
       "original_test_name": "ast_u_l",
@@ -2528,7 +2535,7 @@ window.BIO_AGE_DATA = {
       "notes": "Value reported as >2000"
     },
     {
-      "id": "res_b359102bc0",
+      "id": "res_4153b0336b",
       "report_id": "con_7bdaac1c26",
       "collection_date": "2026-02-12",
       "original_test_name": "bilirubin_mg_dl",
@@ -2548,7 +2555,7 @@ window.BIO_AGE_DATA = {
       "notes": "Value reported as >2000"
     },
     {
-      "id": "res_bffc5d6f82",
+      "id": "res_c122405a38",
       "report_id": "con_7bdaac1c26",
       "collection_date": "2026-02-12",
       "original_test_name": "bun_mg_dl",
@@ -2568,7 +2575,7 @@ window.BIO_AGE_DATA = {
       "notes": "Value reported as >2000"
     },
     {
-      "id": "res_f8e96650ba",
+      "id": "res_b9fbc4a754",
       "report_id": "con_7bdaac1c26",
       "collection_date": "2026-02-12",
       "original_test_name": "calcium_mg_dl",
@@ -2588,7 +2595,7 @@ window.BIO_AGE_DATA = {
       "notes": "Value reported as >2000"
     },
     {
-      "id": "res_83bcd1402d",
+      "id": "res_c502567d0e",
       "report_id": "con_7bdaac1c26",
       "collection_date": "2026-02-12",
       "original_test_name": "creatinine_mg_dl",
@@ -2608,7 +2615,7 @@ window.BIO_AGE_DATA = {
       "notes": "Value reported as >2000"
     },
     {
-      "id": "res_f3eeee73bc",
+      "id": "res_9825981fae",
       "report_id": "con_7bdaac1c26",
       "collection_date": "2026-02-12",
       "original_test_name": "egfr_ml_min_1_73",
@@ -2628,7 +2635,7 @@ window.BIO_AGE_DATA = {
       "notes": "Value reported as >2000"
     },
     {
-      "id": "res_dcd151cf90",
+      "id": "res_1e8135aad2",
       "report_id": "con_7bdaac1c26",
       "collection_date": "2026-02-12",
       "original_test_name": "free_t4_ng_dl",
@@ -2648,7 +2655,7 @@ window.BIO_AGE_DATA = {
       "notes": "Value reported as >2000"
     },
     {
-      "id": "res_310b55c867",
+      "id": "res_5b84422788",
       "report_id": "con_7bdaac1c26",
       "collection_date": "2026-02-12",
       "original_test_name": "glucose_mg_dl",
@@ -2668,7 +2675,7 @@ window.BIO_AGE_DATA = {
       "notes": "Value reported as >2000"
     },
     {
-      "id": "res_ede95cd478",
+      "id": "res_31f5351650",
       "report_id": "con_7bdaac1c26",
       "collection_date": "2026-02-12",
       "original_test_name": "hba1c_pct",
@@ -2688,7 +2695,7 @@ window.BIO_AGE_DATA = {
       "notes": "Value reported as >2000"
     },
     {
-      "id": "res_59b18a4d4d",
+      "id": "res_6eaa55a7b8",
       "report_id": "con_7bdaac1c26",
       "collection_date": "2026-02-12",
       "original_test_name": "hdl_mg_dl",
@@ -2708,7 +2715,7 @@ window.BIO_AGE_DATA = {
       "notes": "Value reported as >2000"
     },
     {
-      "id": "res_dca65361b7",
+      "id": "res_7c7c6fb960",
       "report_id": "con_7bdaac1c26",
       "collection_date": "2026-02-12",
       "original_test_name": "hematocrit_pct",
@@ -2728,7 +2735,7 @@ window.BIO_AGE_DATA = {
       "notes": "Value reported as >2000"
     },
     {
-      "id": "res_998fa5ecb6",
+      "id": "res_15f251ed55",
       "report_id": "con_7bdaac1c26",
       "collection_date": "2026-02-12",
       "original_test_name": "hemoglobin_g_dl",
@@ -2748,7 +2755,7 @@ window.BIO_AGE_DATA = {
       "notes": "Value reported as >2000"
     },
     {
-      "id": "res_9ce38e7458",
+      "id": "res_0964d998b2",
       "report_id": "con_7bdaac1c26",
       "collection_date": "2026-02-12",
       "original_test_name": "ldl_mg_dl",
@@ -2768,7 +2775,7 @@ window.BIO_AGE_DATA = {
       "notes": "Value reported as >2000"
     },
     {
-      "id": "res_d3cba74f0e",
+      "id": "res_154017f3f6",
       "report_id": "con_7bdaac1c26",
       "collection_date": "2026-02-12",
       "original_test_name": "platelets_x10e3_ul",
@@ -2788,7 +2795,7 @@ window.BIO_AGE_DATA = {
       "notes": "Value reported as >2000"
     },
     {
-      "id": "res_1c7c45e0d6",
+      "id": "res_e9e0e953ae",
       "report_id": "con_7bdaac1c26",
       "collection_date": "2026-02-12",
       "original_test_name": "potassium_mmol_l",
@@ -2808,7 +2815,7 @@ window.BIO_AGE_DATA = {
       "notes": "Value reported as >2000"
     },
     {
-      "id": "res_7a3f27064b",
+      "id": "res_4cb3790d4d",
       "report_id": "con_7bdaac1c26",
       "collection_date": "2026-02-12",
       "original_test_name": "psa_ng_ml",
@@ -2828,7 +2835,7 @@ window.BIO_AGE_DATA = {
       "notes": "Value reported as >2000"
     },
     {
-      "id": "res_e009210e25",
+      "id": "res_086b44faef",
       "report_id": "con_7bdaac1c26",
       "collection_date": "2026-02-12",
       "original_test_name": "rbc_x10e6_ul",
@@ -2848,7 +2855,7 @@ window.BIO_AGE_DATA = {
       "notes": "Value reported as >2000"
     },
     {
-      "id": "res_a09497fab1",
+      "id": "res_739b90a4d7",
       "report_id": "con_7bdaac1c26",
       "collection_date": "2026-02-12",
       "original_test_name": "sodium_mmol_l",
@@ -2868,7 +2875,7 @@ window.BIO_AGE_DATA = {
       "notes": "Value reported as >2000"
     },
     {
-      "id": "res_541f534818",
+      "id": "res_232847fc99",
       "report_id": "con_7bdaac1c26",
       "collection_date": "2026-02-12",
       "original_test_name": "total_chol_mg_dl",
@@ -2888,7 +2895,7 @@ window.BIO_AGE_DATA = {
       "notes": "Value reported as >2000"
     },
     {
-      "id": "res_c78f2a42c6",
+      "id": "res_0a20e68220",
       "report_id": "con_7bdaac1c26",
       "collection_date": "2026-02-12",
       "original_test_name": "triglycerides_mg_dl",
@@ -2908,7 +2915,7 @@ window.BIO_AGE_DATA = {
       "notes": "Value reported as >2000"
     },
     {
-      "id": "res_046d788fb7",
+      "id": "res_f2d6a29b97",
       "report_id": "con_7bdaac1c26",
       "collection_date": "2026-02-12",
       "original_test_name": "tsh_uiu_ml",
@@ -2928,7 +2935,7 @@ window.BIO_AGE_DATA = {
       "notes": "Value reported as >2000"
     },
     {
-      "id": "res_dcca439d33",
+      "id": "res_1d4a3af3cc",
       "report_id": "con_7bdaac1c26",
       "collection_date": "2026-02-12",
       "original_test_name": "urine_acr_mg_g",
@@ -2948,7 +2955,7 @@ window.BIO_AGE_DATA = {
       "notes": "Value reported as >2000"
     },
     {
-      "id": "res_8918485d6a",
+      "id": "res_6c1c282792",
       "report_id": "con_7bdaac1c26",
       "collection_date": "2026-02-12",
       "original_test_name": "vitamin_b12_pg_ml",
@@ -2968,7 +2975,7 @@ window.BIO_AGE_DATA = {
       "notes": "Value reported as >2000"
     },
     {
-      "id": "res_a82b37cc21",
+      "id": "res_c16200f75f",
       "report_id": "con_7bdaac1c26",
       "collection_date": "2026-02-12",
       "original_test_name": "vitamin_d_ng_ml",
@@ -2988,7 +2995,7 @@ window.BIO_AGE_DATA = {
       "notes": "Value reported as >2000"
     },
     {
-      "id": "res_df8e3a4997",
+      "id": "res_bc9945d7b4",
       "report_id": "con_7bdaac1c26",
       "collection_date": "2026-02-12",
       "original_test_name": "wbc_x10e3_ul",
@@ -3008,7 +3015,7 @@ window.BIO_AGE_DATA = {
       "notes": "Value reported as >2000"
     },
     {
-      "id": "res_95e9fb13c7",
+      "id": "res_ba63ecebb5",
       "report_id": "con_4d9f7163e0",
       "collection_date": "2026-04-27",
       "original_test_name": "free_t4_ng_dl",
@@ -3028,7 +3035,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_702f18b5b2",
+      "id": "res_1bcd1004d1",
       "report_id": "con_4d9f7163e0",
       "collection_date": "2026-04-27",
       "original_test_name": "tsh_uiu_ml",
@@ -3048,7 +3055,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_a0599cd790",
+      "id": "res_31051b7909",
       "report_id": "con_fb1580c4ec",
       "collection_date": "2026-06-08",
       "original_test_name": "albumin_g_dl",
@@ -3068,7 +3075,7 @@ window.BIO_AGE_DATA = {
       "notes": "Value reported as <1.5"
     },
     {
-      "id": "res_41995989f4",
+      "id": "res_f1616b5dd4",
       "report_id": "con_fb1580c4ec",
       "collection_date": "2026-06-08",
       "original_test_name": "alk_phos_u_l",
@@ -3088,7 +3095,7 @@ window.BIO_AGE_DATA = {
       "notes": "Value reported as <1.5"
     },
     {
-      "id": "res_5534d23195",
+      "id": "res_ba012694aa",
       "report_id": "con_fb1580c4ec",
       "collection_date": "2026-06-08",
       "original_test_name": "alt_u_l",
@@ -3108,7 +3115,7 @@ window.BIO_AGE_DATA = {
       "notes": "Value reported as <1.5"
     },
     {
-      "id": "res_b3d556eb72",
+      "id": "res_25fbb7c275",
       "report_id": "con_fb1580c4ec",
       "collection_date": "2026-06-08",
       "original_test_name": "ast_u_l",
@@ -3128,7 +3135,7 @@ window.BIO_AGE_DATA = {
       "notes": "Value reported as <1.5"
     },
     {
-      "id": "res_b74109fccd",
+      "id": "res_135f4dadff",
       "report_id": "con_fb1580c4ec",
       "collection_date": "2026-06-08",
       "original_test_name": "bilirubin_mg_dl",
@@ -3148,7 +3155,7 @@ window.BIO_AGE_DATA = {
       "notes": "Value reported as <1.5"
     },
     {
-      "id": "res_e25f099659",
+      "id": "res_adb3868264",
       "report_id": "con_fb1580c4ec",
       "collection_date": "2026-06-08",
       "original_test_name": "bun_mg_dl",
@@ -3168,7 +3175,7 @@ window.BIO_AGE_DATA = {
       "notes": "Value reported as <1.5"
     },
     {
-      "id": "res_4d5a68d305",
+      "id": "res_52ea6f107e",
       "report_id": "con_fb1580c4ec",
       "collection_date": "2026-06-08",
       "original_test_name": "calcium_mg_dl",
@@ -3188,7 +3195,7 @@ window.BIO_AGE_DATA = {
       "notes": "Value reported as <1.5"
     },
     {
-      "id": "res_9bef78a707",
+      "id": "res_662b819e0b",
       "report_id": "con_fb1580c4ec",
       "collection_date": "2026-06-08",
       "original_test_name": "creatinine_mg_dl",
@@ -3208,7 +3215,7 @@ window.BIO_AGE_DATA = {
       "notes": "Value reported as <1.5"
     },
     {
-      "id": "res_f760d5eb98",
+      "id": "res_8623a58c62",
       "report_id": "con_fb1580c4ec",
       "collection_date": "2026-06-08",
       "original_test_name": "egfr_ml_min_1_73",
@@ -3228,7 +3235,7 @@ window.BIO_AGE_DATA = {
       "notes": "Value reported as <1.5"
     },
     {
-      "id": "res_d204069895",
+      "id": "res_e6a0b6672d",
       "report_id": "con_fb1580c4ec",
       "collection_date": "2026-06-08",
       "original_test_name": "free_t4_ng_dl",
@@ -3248,7 +3255,7 @@ window.BIO_AGE_DATA = {
       "notes": "Value reported as <1.5"
     },
     {
-      "id": "res_dc54a0f3e1",
+      "id": "res_a8b26b301a",
       "report_id": "con_fb1580c4ec",
       "collection_date": "2026-06-08",
       "original_test_name": "glucose_mg_dl",
@@ -3268,7 +3275,7 @@ window.BIO_AGE_DATA = {
       "notes": "Value reported as <1.5"
     },
     {
-      "id": "res_e0b35359b4",
+      "id": "res_9b0bfc21aa",
       "report_id": "con_fb1580c4ec",
       "collection_date": "2026-06-08",
       "original_test_name": "hba1c_pct",
@@ -3288,7 +3295,7 @@ window.BIO_AGE_DATA = {
       "notes": "Value reported as <1.5"
     },
     {
-      "id": "res_50bf590444",
+      "id": "res_edfb34c32a",
       "report_id": "con_fb1580c4ec",
       "collection_date": "2026-06-08",
       "original_test_name": "hdl_mg_dl",
@@ -3308,7 +3315,7 @@ window.BIO_AGE_DATA = {
       "notes": "Value reported as <1.5"
     },
     {
-      "id": "res_0b9a23ac5e",
+      "id": "res_b10ac88838",
       "report_id": "con_fb1580c4ec",
       "collection_date": "2026-06-08",
       "original_test_name": "ldl_mg_dl",
@@ -3328,7 +3335,7 @@ window.BIO_AGE_DATA = {
       "notes": "Value reported as <1.5"
     },
     {
-      "id": "res_00fa9c135f",
+      "id": "res_8dbccf1ffc",
       "report_id": "con_fb1580c4ec",
       "collection_date": "2026-06-08",
       "original_test_name": "potassium_mmol_l",
@@ -3348,7 +3355,7 @@ window.BIO_AGE_DATA = {
       "notes": "Value reported as <1.5"
     },
     {
-      "id": "res_edc06f3b4d",
+      "id": "res_31d1a76b8a",
       "report_id": "con_fb1580c4ec",
       "collection_date": "2026-06-08",
       "original_test_name": "sodium_mmol_l",
@@ -3368,7 +3375,7 @@ window.BIO_AGE_DATA = {
       "notes": "Value reported as <1.5"
     },
     {
-      "id": "res_72defd3c9e",
+      "id": "res_fe23cd14e4",
       "report_id": "con_fb1580c4ec",
       "collection_date": "2026-06-08",
       "original_test_name": "thyroglobulin_ab_iu_ml",
@@ -3388,7 +3395,7 @@ window.BIO_AGE_DATA = {
       "notes": "Value reported as <1.5"
     },
     {
-      "id": "res_486c62ca9a",
+      "id": "res_5c898cafc1",
       "report_id": "con_fb1580c4ec",
       "collection_date": "2026-06-08",
       "original_test_name": "total_chol_mg_dl",
@@ -3408,7 +3415,7 @@ window.BIO_AGE_DATA = {
       "notes": "Value reported as <1.5"
     },
     {
-      "id": "res_55810a8a04",
+      "id": "res_73cee514e7",
       "report_id": "con_fb1580c4ec",
       "collection_date": "2026-06-08",
       "original_test_name": "triglycerides_mg_dl",
@@ -3428,7 +3435,7 @@ window.BIO_AGE_DATA = {
       "notes": "Value reported as <1.5"
     },
     {
-      "id": "res_93cb70f9b4",
+      "id": "res_d4f9241c46",
       "report_id": "con_fb1580c4ec",
       "collection_date": "2026-06-08",
       "original_test_name": "tsh_uiu_ml",
@@ -3448,7 +3455,7 @@ window.BIO_AGE_DATA = {
       "notes": "Value reported as <1.5"
     },
     {
-      "id": "res_2a62d85553",
+      "id": "res_8c7cde1a96",
       "report_id": "con_75de7e666d",
       "collection_date": "2026-07-23",
       "original_test_name": "albumin_g_dl",
@@ -3468,7 +3475,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_fc81b8d460",
+      "id": "res_ee86dc0fcd",
       "report_id": "con_75de7e666d",
       "collection_date": "2026-07-23",
       "original_test_name": "alk_phos_u_l",
@@ -3488,7 +3495,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_2b973fc19e",
+      "id": "res_c1117f4232",
       "report_id": "con_75de7e666d",
       "collection_date": "2026-07-23",
       "original_test_name": "alt_u_l",
@@ -3508,7 +3515,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_4dbe406142",
+      "id": "res_b557529ee6",
       "report_id": "con_75de7e666d",
       "collection_date": "2026-07-23",
       "original_test_name": "ast_u_l",
@@ -3528,7 +3535,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_3a5c50ff22",
+      "id": "res_54e459f38c",
       "report_id": "con_75de7e666d",
       "collection_date": "2026-07-23",
       "original_test_name": "bilirubin_mg_dl",
@@ -3548,7 +3555,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_4122c94111",
+      "id": "res_c216bf41fe",
       "report_id": "con_75de7e666d",
       "collection_date": "2026-07-23",
       "original_test_name": "bun_mg_dl",
@@ -3568,7 +3575,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_41ac771d5d",
+      "id": "res_810ba23a7a",
       "report_id": "con_75de7e666d",
       "collection_date": "2026-07-23",
       "original_test_name": "calcium_mg_dl",
@@ -3588,7 +3595,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_76a27ce6a7",
+      "id": "res_6517cbcec8",
       "report_id": "con_75de7e666d",
       "collection_date": "2026-07-23",
       "original_test_name": "creatinine_mg_dl",
@@ -3608,7 +3615,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_d30abca29f",
+      "id": "res_a5d1a3b6f4",
       "report_id": "con_75de7e666d",
       "collection_date": "2026-07-23",
       "original_test_name": "egfr_ml_min_1_73",
@@ -3628,7 +3635,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_7c0f9e9c03",
+      "id": "res_0d335cbd59",
       "report_id": "con_75de7e666d",
       "collection_date": "2026-07-23",
       "original_test_name": "free_t4_ng_dl",
@@ -3648,7 +3655,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_fab1229390",
+      "id": "res_437b689a75",
       "report_id": "con_75de7e666d",
       "collection_date": "2026-07-23",
       "original_test_name": "glucose_mg_dl",
@@ -3668,7 +3675,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_4c6d90a83f",
+      "id": "res_d21d948eb6",
       "report_id": "con_75de7e666d",
       "collection_date": "2026-07-23",
       "original_test_name": "hba1c_pct",
@@ -3688,7 +3695,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_73913a0ee2",
+      "id": "res_acc7aaf7e7",
       "report_id": "con_75de7e666d",
       "collection_date": "2026-07-23",
       "original_test_name": "potassium_mmol_l",
@@ -3708,7 +3715,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_f7d39983dd",
+      "id": "res_028eae440f",
       "report_id": "con_75de7e666d",
       "collection_date": "2026-07-23",
       "original_test_name": "sodium_mmol_l",
@@ -3728,7 +3735,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_3cf8630977",
+      "id": "res_140b533f6c",
       "report_id": "con_75de7e666d",
       "collection_date": "2026-07-23",
       "original_test_name": "tsh_uiu_ml",
@@ -3748,7 +3755,7 @@ window.BIO_AGE_DATA = {
       "notes": ""
     },
     {
-      "id": "res_6d8fb78132",
+      "id": "res_1eb2bccb55",
       "report_id": "con_7c5818cb6d",
       "collection_date": "2026-09-09",
       "original_test_name": "albumin_g_dl",
@@ -3768,7 +3775,7 @@ window.BIO_AGE_DATA = {
       "notes": "Verified El Camino MyChart values; collected 5:00 AM. A1C high (4.8-5.6); C-peptide normal fasting (1.1-4.4); total cholesterol low (100-199); HDL low (>39); glucose high (70-99); creatinine high (0.76-1.27); eGFR low (>59); sodium low (134-144); chloride low (96-106)."
     },
     {
-      "id": "res_5533851d13",
+      "id": "res_13b5f7918a",
       "report_id": "con_7c5818cb6d",
       "collection_date": "2026-09-09",
       "original_test_name": "alk_phos_u_l",
@@ -3788,7 +3795,7 @@ window.BIO_AGE_DATA = {
       "notes": "Verified El Camino MyChart values; collected 5:00 AM. A1C high (4.8-5.6); C-peptide normal fasting (1.1-4.4); total cholesterol low (100-199); HDL low (>39); glucose high (70-99); creatinine high (0.76-1.27); eGFR low (>59); sodium low (134-144); chloride low (96-106)."
     },
     {
-      "id": "res_9ef31a8909",
+      "id": "res_ece6dc9b15",
       "report_id": "con_7c5818cb6d",
       "collection_date": "2026-09-09",
       "original_test_name": "alt_u_l",
@@ -3808,7 +3815,7 @@ window.BIO_AGE_DATA = {
       "notes": "Verified El Camino MyChart values; collected 5:00 AM. A1C high (4.8-5.6); C-peptide normal fasting (1.1-4.4); total cholesterol low (100-199); HDL low (>39); glucose high (70-99); creatinine high (0.76-1.27); eGFR low (>59); sodium low (134-144); chloride low (96-106)."
     },
     {
-      "id": "res_ceb9890f8d",
+      "id": "res_406d1a78ed",
       "report_id": "con_7c5818cb6d",
       "collection_date": "2026-09-09",
       "original_test_name": "ast_u_l",
@@ -3828,7 +3835,7 @@ window.BIO_AGE_DATA = {
       "notes": "Verified El Camino MyChart values; collected 5:00 AM. A1C high (4.8-5.6); C-peptide normal fasting (1.1-4.4); total cholesterol low (100-199); HDL low (>39); glucose high (70-99); creatinine high (0.76-1.27); eGFR low (>59); sodium low (134-144); chloride low (96-106)."
     },
     {
-      "id": "res_a4fdcaac0b",
+      "id": "res_4778d3e18a",
       "report_id": "con_7c5818cb6d",
       "collection_date": "2026-09-09",
       "original_test_name": "bilirubin_mg_dl",
@@ -3848,7 +3855,7 @@ window.BIO_AGE_DATA = {
       "notes": "Verified El Camino MyChart values; collected 5:00 AM. A1C high (4.8-5.6); C-peptide normal fasting (1.1-4.4); total cholesterol low (100-199); HDL low (>39); glucose high (70-99); creatinine high (0.76-1.27); eGFR low (>59); sodium low (134-144); chloride low (96-106)."
     },
     {
-      "id": "res_8480d695f9",
+      "id": "res_66f43555bd",
       "report_id": "con_7c5818cb6d",
       "collection_date": "2026-09-09",
       "original_test_name": "bun_mg_dl",
@@ -3868,7 +3875,7 @@ window.BIO_AGE_DATA = {
       "notes": "Verified El Camino MyChart values; collected 5:00 AM. A1C high (4.8-5.6); C-peptide normal fasting (1.1-4.4); total cholesterol low (100-199); HDL low (>39); glucose high (70-99); creatinine high (0.76-1.27); eGFR low (>59); sodium low (134-144); chloride low (96-106)."
     },
     {
-      "id": "res_91b0a8bf81",
+      "id": "res_c0bf23c0c5",
       "report_id": "con_7c5818cb6d",
       "collection_date": "2026-09-09",
       "original_test_name": "calcium_mg_dl",
@@ -3888,7 +3895,7 @@ window.BIO_AGE_DATA = {
       "notes": "Verified El Camino MyChart values; collected 5:00 AM. A1C high (4.8-5.6); C-peptide normal fasting (1.1-4.4); total cholesterol low (100-199); HDL low (>39); glucose high (70-99); creatinine high (0.76-1.27); eGFR low (>59); sodium low (134-144); chloride low (96-106)."
     },
     {
-      "id": "res_0ef154870c",
+      "id": "res_8c9f449345",
       "report_id": "con_7c5818cb6d",
       "collection_date": "2026-09-09",
       "original_test_name": "creatinine_mg_dl",
@@ -3908,7 +3915,7 @@ window.BIO_AGE_DATA = {
       "notes": "Verified El Camino MyChart values; collected 5:00 AM. A1C high (4.8-5.6); C-peptide normal fasting (1.1-4.4); total cholesterol low (100-199); HDL low (>39); glucose high (70-99); creatinine high (0.76-1.27); eGFR low (>59); sodium low (134-144); chloride low (96-106)."
     },
     {
-      "id": "res_113836d135",
+      "id": "res_34931228ae",
       "report_id": "con_7c5818cb6d",
       "collection_date": "2026-09-09",
       "original_test_name": "egfr_ml_min_1_73",
@@ -3928,7 +3935,7 @@ window.BIO_AGE_DATA = {
       "notes": "Verified El Camino MyChart values; collected 5:00 AM. A1C high (4.8-5.6); C-peptide normal fasting (1.1-4.4); total cholesterol low (100-199); HDL low (>39); glucose high (70-99); creatinine high (0.76-1.27); eGFR low (>59); sodium low (134-144); chloride low (96-106)."
     },
     {
-      "id": "res_ed1f6ff9d2",
+      "id": "res_97a841f841",
       "report_id": "con_7c5818cb6d",
       "collection_date": "2026-09-09",
       "original_test_name": "free_t4_ng_dl",
@@ -3948,7 +3955,7 @@ window.BIO_AGE_DATA = {
       "notes": "Verified El Camino MyChart values; collected 5:00 AM. A1C high (4.8-5.6); C-peptide normal fasting (1.1-4.4); total cholesterol low (100-199); HDL low (>39); glucose high (70-99); creatinine high (0.76-1.27); eGFR low (>59); sodium low (134-144); chloride low (96-106)."
     },
     {
-      "id": "res_2849a5a8f2",
+      "id": "res_038c6c8d42",
       "report_id": "con_7c5818cb6d",
       "collection_date": "2026-09-09",
       "original_test_name": "glucose_mg_dl",
@@ -3968,7 +3975,7 @@ window.BIO_AGE_DATA = {
       "notes": "Verified El Camino MyChart values; collected 5:00 AM. A1C high (4.8-5.6); C-peptide normal fasting (1.1-4.4); total cholesterol low (100-199); HDL low (>39); glucose high (70-99); creatinine high (0.76-1.27); eGFR low (>59); sodium low (134-144); chloride low (96-106)."
     },
     {
-      "id": "res_100690af95",
+      "id": "res_79fe7353ca",
       "report_id": "con_7c5818cb6d",
       "collection_date": "2026-09-09",
       "original_test_name": "hba1c_pct",
@@ -3988,7 +3995,7 @@ window.BIO_AGE_DATA = {
       "notes": "Verified El Camino MyChart values; collected 5:00 AM. A1C high (4.8-5.6); C-peptide normal fasting (1.1-4.4); total cholesterol low (100-199); HDL low (>39); glucose high (70-99); creatinine high (0.76-1.27); eGFR low (>59); sodium low (134-144); chloride low (96-106)."
     },
     {
-      "id": "res_002e1d41c0",
+      "id": "res_57265a429d",
       "report_id": "con_7c5818cb6d",
       "collection_date": "2026-09-09",
       "original_test_name": "hdl_mg_dl",
@@ -4008,7 +4015,7 @@ window.BIO_AGE_DATA = {
       "notes": "Verified El Camino MyChart values; collected 5:00 AM. A1C high (4.8-5.6); C-peptide normal fasting (1.1-4.4); total cholesterol low (100-199); HDL low (>39); glucose high (70-99); creatinine high (0.76-1.27); eGFR low (>59); sodium low (134-144); chloride low (96-106)."
     },
     {
-      "id": "res_2a396cde21",
+      "id": "res_146b96c8c5",
       "report_id": "con_7c5818cb6d",
       "collection_date": "2026-09-09",
       "original_test_name": "ldl_mg_dl",
@@ -4028,7 +4035,7 @@ window.BIO_AGE_DATA = {
       "notes": "Verified El Camino MyChart values; collected 5:00 AM. A1C high (4.8-5.6); C-peptide normal fasting (1.1-4.4); total cholesterol low (100-199); HDL low (>39); glucose high (70-99); creatinine high (0.76-1.27); eGFR low (>59); sodium low (134-144); chloride low (96-106)."
     },
     {
-      "id": "res_82790784d3",
+      "id": "res_8f4a145ef2",
       "report_id": "con_7c5818cb6d",
       "collection_date": "2026-09-09",
       "original_test_name": "potassium_mmol_l",
@@ -4048,7 +4055,7 @@ window.BIO_AGE_DATA = {
       "notes": "Verified El Camino MyChart values; collected 5:00 AM. A1C high (4.8-5.6); C-peptide normal fasting (1.1-4.4); total cholesterol low (100-199); HDL low (>39); glucose high (70-99); creatinine high (0.76-1.27); eGFR low (>59); sodium low (134-144); chloride low (96-106)."
     },
     {
-      "id": "res_38f0539004",
+      "id": "res_6b32fa6a1c",
       "report_id": "con_7c5818cb6d",
       "collection_date": "2026-09-09",
       "original_test_name": "sodium_mmol_l",
@@ -4068,7 +4075,7 @@ window.BIO_AGE_DATA = {
       "notes": "Verified El Camino MyChart values; collected 5:00 AM. A1C high (4.8-5.6); C-peptide normal fasting (1.1-4.4); total cholesterol low (100-199); HDL low (>39); glucose high (70-99); creatinine high (0.76-1.27); eGFR low (>59); sodium low (134-144); chloride low (96-106)."
     },
     {
-      "id": "res_3b3f99d624",
+      "id": "res_d78867e036",
       "report_id": "con_7c5818cb6d",
       "collection_date": "2026-09-09",
       "original_test_name": "total_chol_mg_dl",
@@ -4088,7 +4095,7 @@ window.BIO_AGE_DATA = {
       "notes": "Verified El Camino MyChart values; collected 5:00 AM. A1C high (4.8-5.6); C-peptide normal fasting (1.1-4.4); total cholesterol low (100-199); HDL low (>39); glucose high (70-99); creatinine high (0.76-1.27); eGFR low (>59); sodium low (134-144); chloride low (96-106)."
     },
     {
-      "id": "res_ab6869596c",
+      "id": "res_7248d224dc",
       "report_id": "con_7c5818cb6d",
       "collection_date": "2026-09-09",
       "original_test_name": "triglycerides_mg_dl",
@@ -4108,7 +4115,7 @@ window.BIO_AGE_DATA = {
       "notes": "Verified El Camino MyChart values; collected 5:00 AM. A1C high (4.8-5.6); C-peptide normal fasting (1.1-4.4); total cholesterol low (100-199); HDL low (>39); glucose high (70-99); creatinine high (0.76-1.27); eGFR low (>59); sodium low (134-144); chloride low (96-106)."
     },
     {
-      "id": "res_e57a567cb1",
+      "id": "res_c02a743c58",
       "report_id": "con_7c5818cb6d",
       "collection_date": "2026-09-09",
       "original_test_name": "tsh_uiu_ml",
@@ -4126,9 +4133,149 @@ window.BIO_AGE_DATA = {
       "specimen_type": "",
       "parser_confidence": 1.0,
       "notes": "Verified El Camino MyChart values; collected 5:00 AM. A1C high (4.8-5.6); C-peptide normal fasting (1.1-4.4); total cholesterol low (100-199); HDL low (>39); glucose high (70-99); creatinine high (0.76-1.27); eGFR low (>59); sodium low (134-144); chloride low (96-106)."
+    },
+    {
+      "id": "res_19af2982cc",
+      "report_id": "con_a1ae202dac",
+      "collection_date": "2026-09-15",
+      "original_test_name": "bun_mg_dl",
+      "standard_test_name": "bun",
+      "value_numeric": 15.0,
+      "value_text": "15.0",
+      "original_unit": "mg/dL",
+      "standard_unit": "mg/dL",
+      "reference_range_low": null,
+      "reference_range_high": null,
+      "flag": "normal",
+      "section_name": "Kidney",
+      "lab_source": "Labcorp",
+      "source_type": "consolidated",
+      "specimen_type": "",
+      "parser_confidence": 1.0,
+      "notes": "Basic Metabolic Panel; non-fasting. Sodium and chloride flagged low by Labcorp."
+    },
+    {
+      "id": "res_22306a1c7c",
+      "report_id": "con_a1ae202dac",
+      "collection_date": "2026-09-15",
+      "original_test_name": "calcium_mg_dl",
+      "standard_test_name": "calcium",
+      "value_numeric": 10.0,
+      "value_text": "10.0",
+      "original_unit": "mg/dL",
+      "standard_unit": "mg/dL",
+      "reference_range_low": null,
+      "reference_range_high": null,
+      "flag": "normal",
+      "section_name": "Electrolytes / Minerals",
+      "lab_source": "Labcorp",
+      "source_type": "consolidated",
+      "specimen_type": "",
+      "parser_confidence": 1.0,
+      "notes": "Basic Metabolic Panel; non-fasting. Sodium and chloride flagged low by Labcorp."
+    },
+    {
+      "id": "res_f72b2c9517",
+      "report_id": "con_a1ae202dac",
+      "collection_date": "2026-09-15",
+      "original_test_name": "creatinine_mg_dl",
+      "standard_test_name": "creatinine",
+      "value_numeric": 1.21,
+      "value_text": "1.21",
+      "original_unit": "mg/dL",
+      "standard_unit": "mg/dL",
+      "reference_range_low": null,
+      "reference_range_high": null,
+      "flag": "normal",
+      "section_name": "Kidney",
+      "lab_source": "Labcorp",
+      "source_type": "consolidated",
+      "specimen_type": "",
+      "parser_confidence": 1.0,
+      "notes": "Basic Metabolic Panel; non-fasting. Sodium and chloride flagged low by Labcorp."
+    },
+    {
+      "id": "res_ca7b96f9e5",
+      "report_id": "con_a1ae202dac",
+      "collection_date": "2026-09-15",
+      "original_test_name": "egfr_ml_min_1_73",
+      "standard_test_name": "egfr",
+      "value_numeric": 66.0,
+      "value_text": "66.0",
+      "original_unit": "mL/min/1.73m2",
+      "standard_unit": "mL/min/1.73m2",
+      "reference_range_low": null,
+      "reference_range_high": null,
+      "flag": "normal",
+      "section_name": "Kidney",
+      "lab_source": "Labcorp",
+      "source_type": "consolidated",
+      "specimen_type": "",
+      "parser_confidence": 1.0,
+      "notes": "Basic Metabolic Panel; non-fasting. Sodium and chloride flagged low by Labcorp."
+    },
+    {
+      "id": "res_7808c32e82",
+      "report_id": "con_a1ae202dac",
+      "collection_date": "2026-09-15",
+      "original_test_name": "glucose_mg_dl",
+      "standard_test_name": "glucose_fasting",
+      "value_numeric": 80.0,
+      "value_text": "80.0",
+      "original_unit": "mg/dL",
+      "standard_unit": "mg/dL",
+      "reference_range_low": null,
+      "reference_range_high": null,
+      "flag": "normal",
+      "section_name": "Glucose / Diabetes",
+      "lab_source": "Labcorp",
+      "source_type": "consolidated",
+      "specimen_type": "",
+      "parser_confidence": 1.0,
+      "notes": "Basic Metabolic Panel; non-fasting. Sodium and chloride flagged low by Labcorp."
+    },
+    {
+      "id": "res_78f7277d93",
+      "report_id": "con_a1ae202dac",
+      "collection_date": "2026-09-15",
+      "original_test_name": "potassium_mmol_l",
+      "standard_test_name": "potassium",
+      "value_numeric": 5.0,
+      "value_text": "5.0",
+      "original_unit": "mmol/L",
+      "standard_unit": "mmol/L",
+      "reference_range_low": null,
+      "reference_range_high": null,
+      "flag": "normal",
+      "section_name": "Electrolytes / Minerals",
+      "lab_source": "Labcorp",
+      "source_type": "consolidated",
+      "specimen_type": "",
+      "parser_confidence": 1.0,
+      "notes": "Basic Metabolic Panel; non-fasting. Sodium and chloride flagged low by Labcorp."
+    },
+    {
+      "id": "res_b763c73ba1",
+      "report_id": "con_a1ae202dac",
+      "collection_date": "2026-09-15",
+      "original_test_name": "sodium_mmol_l",
+      "standard_test_name": "sodium",
+      "value_numeric": 128.0,
+      "value_text": "128.0",
+      "original_unit": "mmol/L",
+      "standard_unit": "mmol/L",
+      "reference_range_low": null,
+      "reference_range_high": null,
+      "flag": "normal",
+      "section_name": "Electrolytes / Minerals",
+      "lab_source": "Labcorp",
+      "source_type": "consolidated",
+      "specimen_type": "",
+      "parser_confidence": 1.0,
+      "notes": "Basic Metabolic Panel; non-fasting. Sodium and chloride flagged low by Labcorp."
     }
   ],
   "reports": [],
   "model_version": "ag-v1",
-  "generated_at": "2026-09-14T21:34:01.272199-07:00"
+  "generated_at": "2026-09-16T18:07:43.361465-07:00"
 };

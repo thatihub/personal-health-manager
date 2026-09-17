@@ -37,7 +37,10 @@
     "estimated_avg_glucose_mg_dl": null,
     "notes": "",
     "date": "2022-09-15",
+    "vldl_mg_dl": null,
+    "ldl_hdl_ratio": null,
     "lipoprotein_a_mg_dl": null,
+    "globulin_g_dl": null,
     "wbc_x10e3_ul": null,
     "rbc_x10e6_ul": null,
     "hemoglobin_g_dl": null,
@@ -84,7 +87,10 @@
     "estimated_avg_glucose_mg_dl": null,
     "notes": "",
     "date": "2023-05-30",
+    "vldl_mg_dl": null,
+    "ldl_hdl_ratio": null,
     "lipoprotein_a_mg_dl": null,
+    "globulin_g_dl": null,
     "wbc_x10e3_ul": null,
     "rbc_x10e6_ul": null,
     "hemoglobin_g_dl": null,
@@ -131,7 +137,10 @@
     "estimated_avg_glucose_mg_dl": null,
     "notes": "C-peptide only report",
     "date": "2023-08-28",
+    "vldl_mg_dl": null,
+    "ldl_hdl_ratio": null,
     "lipoprotein_a_mg_dl": null,
+    "globulin_g_dl": null,
     "wbc_x10e3_ul": null,
     "rbc_x10e6_ul": null,
     "hemoglobin_g_dl": null,
@@ -178,7 +187,10 @@
     "estimated_avg_glucose_mg_dl": null,
     "notes": "",
     "date": "2024-01-15",
+    "vldl_mg_dl": null,
+    "ldl_hdl_ratio": null,
     "lipoprotein_a_mg_dl": null,
+    "globulin_g_dl": null,
     "wbc_x10e3_ul": null,
     "rbc_x10e6_ul": null,
     "hemoglobin_g_dl": null,
@@ -225,7 +237,10 @@
     "estimated_avg_glucose_mg_dl": null,
     "notes": "",
     "date": "2024-06-11",
+    "vldl_mg_dl": null,
+    "ldl_hdl_ratio": null,
     "lipoprotein_a_mg_dl": null,
+    "globulin_g_dl": null,
     "wbc_x10e3_ul": null,
     "rbc_x10e6_ul": null,
     "hemoglobin_g_dl": null,
@@ -272,7 +287,10 @@
     "estimated_avg_glucose_mg_dl": null,
     "notes": "C-peptide only report",
     "date": "2024-10-02",
+    "vldl_mg_dl": null,
+    "ldl_hdl_ratio": null,
     "lipoprotein_a_mg_dl": null,
+    "globulin_g_dl": null,
     "wbc_x10e3_ul": null,
     "rbc_x10e6_ul": null,
     "hemoglobin_g_dl": null,
@@ -320,6 +338,9 @@
     "estimated_avg_glucose_mg_dl": 175.0,
     "notes": "Value reported as <12",
     "date": "2025-01-28",
+    "vldl_mg_dl": null,
+    "ldl_hdl_ratio": null,
+    "globulin_g_dl": null,
     "wbc_x10e3_ul": null,
     "rbc_x10e6_ul": null,
     "hemoglobin_g_dl": null,
@@ -373,7 +394,10 @@
     "psa_ng_ml": null,
     "hcv_antibody": null,
     "notes": "",
-    "date": "2025-06-02"
+    "date": "2025-06-02",
+    "vldl_mg_dl": null,
+    "ldl_hdl_ratio": null,
+    "globulin_g_dl": null
   },
   {
     "source": "Labcorp",
@@ -420,7 +444,10 @@
     "psa_ng_ml": null,
     "hcv_antibody": null,
     "notes": "",
-    "date": "2025-06-23"
+    "date": "2025-06-23",
+    "vldl_mg_dl": null,
+    "ldl_hdl_ratio": null,
+    "globulin_g_dl": null
   },
   {
     "source": "Labcorp",
@@ -467,7 +494,10 @@
     "psa_ng_ml": null,
     "hcv_antibody": null,
     "notes": "",
-    "date": "2025-09-12"
+    "date": "2025-09-12",
+    "vldl_mg_dl": null,
+    "ldl_hdl_ratio": null,
+    "globulin_g_dl": null
   },
   {
     "source": "Labcorp",
@@ -514,7 +544,10 @@
     "psa_ng_ml": 1.02,
     "hcv_antibody": "Non Reactive",
     "notes": "Value reported as >2000",
-    "date": "2026-02-12"
+    "date": "2026-02-12",
+    "vldl_mg_dl": null,
+    "ldl_hdl_ratio": null,
+    "globulin_g_dl": null
   },
   {
     "source": "Labcorp",
@@ -561,7 +594,10 @@
     "psa_ng_ml": null,
     "hcv_antibody": null,
     "notes": "",
-    "date": "2026-02-17"
+    "date": "2026-02-17",
+    "vldl_mg_dl": null,
+    "ldl_hdl_ratio": null,
+    "globulin_g_dl": null
   },
   {
     "source": "Labcorp",
@@ -608,7 +644,10 @@
     "psa_ng_ml": null,
     "hcv_antibody": null,
     "notes": "",
-    "date": "2026-04-27"
+    "date": "2026-04-27",
+    "vldl_mg_dl": null,
+    "ldl_hdl_ratio": null,
+    "globulin_g_dl": null
   },
   {
     "source": "Labcorp",
@@ -655,7 +694,10 @@
     "psa_ng_ml": null,
     "hcv_antibody": null,
     "notes": "Value reported as <1.5",
-    "date": "2026-06-08"
+    "date": "2026-06-08",
+    "vldl_mg_dl": null,
+    "ldl_hdl_ratio": null,
+    "globulin_g_dl": null
   },
   {
     "source": "Labcorp",
@@ -702,7 +744,10 @@
     "psa_ng_ml": null,
     "hcv_antibody": null,
     "notes": "",
-    "date": "2026-07-23"
+    "date": "2026-07-23",
+    "vldl_mg_dl": null,
+    "ldl_hdl_ratio": null,
+    "globulin_g_dl": null
   },
   {
     "date": "2026-09-09",
