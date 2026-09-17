@@ -1568,6 +1568,14 @@ class DashboardHandler(SimpleHTTPRequestHandler):
         upload_dir.mkdir(parents=True, exist_ok=True)
         duplicate = self._find_duplicate_pdf(upload_dir, file_bytes)
         if duplicate is not None:
+            do_rebuild = str(fields.get("rebuild", "1")).strip() != "0"
+            if do_rebuild:
+                result, rebuild_error = self._guarded_rebuild(upload_dir_override=upload_dir)
+                if rebuild_error is not None:
+                    self._json(422, {"ok": False, "error": rebuild_error, "uploaded": duplicate.name})
+                    return
+                self._json(200, {"ok": True, "duplicate": True, "uploaded": duplicate.name, "rebuild": True, "reprocessed": True})
+                return
             self._json(
                 200,
                 {

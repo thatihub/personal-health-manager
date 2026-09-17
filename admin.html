@@ -436,7 +436,9 @@
           return;
         }
         if (out.duplicate) {
-          setStatus(`File already uploaded.\nExisting file: ${out.uploaded}\nNo rebuild needed.`);
+          setStatus(out.reprocessed
+            ? `Existing file reprocessed.\nFile: ${out.uploaded}\nRefresh Lab Results Dashboard now.`
+            : `File already uploaded.\nExisting file: ${out.uploaded}\nNo rebuild needed.`);
           return;
         }
         setStatus(`Done.\nUploaded: ${out.uploaded}\nParsing/Rebuild: complete.\nRefresh Lab Results Dashboard now.`);
