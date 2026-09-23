@@ -145,6 +145,8 @@
     .stats .stat:nth-child(3) { border-top: 4px solid var(--amber); }
     .stats .stat:nth-child(4) { border-top: 4px solid var(--rose); }
     .stats .stat:nth-child(5) { border-top: 4px solid var(--blue); }
+    .stats .stat:nth-child(6) { border-top: 4px solid var(--teal); }
+    .stat .detail { font-size: 11px; line-height: 1.4; margin-top: 6px; color: var(--comp-muted); }
     .label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .4px; }
     .val { font-size: 24px; font-weight: 800; margin-top: 3px; color: #153347; }
 
@@ -498,22 +500,32 @@
         vaultStatus.textContent = 'Vault: status unavailable';
         updatedStatus.textContent = 'Last updated: status unavailable';
       }
-      let dexaWeight = '-';
-      let dexaFatPct = '-';
-      try {
-        const dexaRes = await fetch('/api/dexa-data');
-        if (dexaRes.ok) {
-          const dexaOut = await dexaRes.json();
-          const dexaRows = dexaOut.rows || [];
-          if (dexaRows.length > 0) {
-            const latestDexa = dexaRows[dexaRows.length - 1];
-            dexaWeight = `${latestDexa.home_weight_lb} lb`;
-            dexaFatPct = `${latestDexa.body_fat_pct}%`;
-          }
-        }
-      } catch (_err) {
-        console.error('Failed to load dexa stats', _err);
-      }
+      const readHealthData = async (url) => {
+        try {
+          const response = await fetch(url, { cache: 'no-store' });
+          return response.ok ? await response.json() : null;
+        } catch (_error) { return null; }
+      };
+      const [weightData, scanData] = await Promise.all([
+        readHealthData('/api/weight-data'), readHealthData('/api/dexa-data')
+      ]);
+      const context = weightData?.health_context;
+      const validNumber = value => typeof value === 'number' && Number.isFinite(value);
+      const now = new Date();
+      const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+      const scans = (Array.isArray(scanData?.rows) ? scanData.rows : context?.latest_scans || [])
+        .filter(scan => scan && scan.date && scan.date <= today)
+        .slice().sort((a, b) => b.date.localeCompare(a.date));
+      const latestFat = scans.find(scan => validNumber(scan.body_fat_pct));
+      const latestLean = scans.find(scan => validNumber(scan.lean_body_mass_lb));
+      const scanSource = scan => scan ? `${scan.scan_type || 'Body scan'} · ${scan.date}` : 'No scan measurement';
+      const healthCards = [
+        ['Body Fat %', latestFat ? `${latestFat.body_fat_pct}%` : '-', scanSource(latestFat)],
+        ['Current Weight', validNumber(context?.weight_lb) ? `${context.weight_lb} lb` : '-',
+          validNumber(context?.weight_lb) ? `${context.source} · ${context.date}` : 'No current weight available'],
+        ['Lean Body Mass', latestLean ? `${latestLean.lean_body_mass_lb} lb` : '-', scanSource(latestLean)]
+      ];
+      let labCards = [ ['Reports', '-'], ['Latest HbA1c', '-'], ['Latest TSH', '-'] ];
 
       try {
         const res = await fetch(`./dashboard_data.js?ts=${Date.now()}`, { cache: "no-store" });
@@ -530,17 +542,26 @@
           return '-';
         };
 
-        const cards = [
+        labCards = [
           ['Reports', rows.length],
           ['Latest HbA1c', lastVal('hba1c')],
-          ['Latest TSH', lastVal('tsh')],
-          ['Body Fat %', dexaFatPct],
-          ['Morning Weight', dexaWeight]
+          ['Latest TSH', lastVal('tsh')]
         ];
-
-        statsRoot.innerHTML = cards.map(([l,v]) => `<div class="stat"><div class="label">${l}</div><div class="val">${v}</div></div>`).join('');
-      } catch (e) {
-        statsRoot.replaceChildren();
+      } catch (_error) {
+        // Weight and scan summaries stay available if lab data cannot be loaded.
+      }
+      statsRoot.replaceChildren();
+      for (const [label, value, detail] of [...labCards, ...healthCards]) {
+        const card = document.createElement('div');
+        card.className = 'stat';
+        for (const [className, text] of [['label', label], ['val', value], ['detail', detail]]) {
+          if (text === undefined) continue;
+          const element = document.createElement('div');
+          element.className = className;
+          element.textContent = text;
+          card.append(element);
+        }
+        statsRoot.append(card);
       }
     }
     loadLatestDoctorNote();
