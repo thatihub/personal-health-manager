@@ -432,6 +432,7 @@
 </head>
 <body class="page-composition">
   <div class="wrap">
+    <section class="card" style="padding:20px;margin-bottom:20px"><h2>Weight &amp; Body Scan Context</h2><a href="weight.html">Record or edit daily weight</a><div id="weight-context">Loading…</div></section>
     <div id="file-protocol-warning" style="display:none; background:rgba(220,137,32,0.14); color:#b3c3d4; padding:12px; border-radius:12px; margin-bottom:14px; font-weight:700; border:1px solid rgba(220,137,32,0.3); font-size:14px;">
       ℹ️ Note: You are viewing this page directly from the filesystem (file://). Dashboard panels are loaded from local cache files and are fully interactive. However, performing new uploads or raw data changes requires starting the server and visiting <a href="http://localhost:3002/composition.html" style="color:#ffffff; text-decoration:underline;">http://localhost:3002/composition.html</a> instead.
     </div>
@@ -1151,5 +1152,7 @@
     
     init();
   </script>
+<script src="weight_context.js"></script>
+<script>loadWeightContext();</script>
 </body>
 </html>

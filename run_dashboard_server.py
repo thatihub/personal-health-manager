@@ -20,10 +20,13 @@ from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from uuid import uuid4
 import youtube_analyzer
+import weight_tracking
 
 
 PROJECT_DIR = Path(__file__).resolve().parent
 REBUILD_LOCK = threading.Lock()
+WEIGHT_LOCK = threading.Lock()
+WEIGHT_DATA_PATH = PROJECT_DIR / "weight_entries.json"
 VAULT_AUTH_USER = os.getenv("VAULT_BASIC_AUTH_USER", "").strip()
 VAULT_AUTH_PASS = os.getenv("VAULT_BASIC_AUTH_PASS", "").strip()
 ADMIN_AUTH_USER = os.getenv("ADMIN_BASIC_AUTH_USER", "").strip()
@@ -927,6 +930,7 @@ class DashboardHandler(SimpleHTTPRequestHandler):
             "timeline": timeline,
             "normalized_results": all_results,
             "reports": imports.get("reports", []),
+            "weight_context": self._weight_context(),
             "model_version": "ag-v1",
             "generated_at": datetime.now().astimezone().isoformat(),
         }
@@ -951,6 +955,43 @@ class DashboardHandler(SimpleHTTPRequestHandler):
             if abs(r_val - c_val) <= 0.0001:
                 return True
         return False
+
+    def _weight_context(self, rows=None):
+        reference = None
+        reference_path = PROJECT_DIR / "home_weight_reference.js"
+        if reference_path.exists():
+            text = reference_path.read_text(encoding="utf-8")
+            weight = re.search(r"weight_lb:\s*([0-9.]+)", text)
+            date = re.search(r'date:\s*"([0-9-]+)"', text)
+            if weight and date:
+                reference = {"weight_lb": float(weight.group(1)), "date": date.group(1), "source": "User-reported home weight (legacy reference)"}
+        if rows is None:
+            try:
+                rows = weight_tracking.load_entries(WEIGHT_DATA_PATH)
+            except (ValueError, OSError, TypeError, KeyError):
+                # Keep the existing lab dashboard available if the weight file is damaged.
+                return {"error": "Weight data could not be read; existing file was preserved."}
+        return weight_tracking.health_context(rows, self._load_dexa_data(), reference=reference)
+
+    def _handle_weight_save(self):
+        try:
+            length = int(self.headers.get("Content-Length", "0"))
+            if length <= 0 or length > 16384:
+                raise ValueError("Invalid weight entry size.")
+            payload = json.loads(self.rfile.read(length))
+            with WEIGHT_LOCK:
+                rows = weight_tracking.load_entries(WEIGHT_DATA_PATH)
+                rows = weight_tracking.save_entry(rows, payload)
+                self._write_json_file(WEIGHT_DATA_PATH, rows)
+            self._json(200, {"ok": True})
+        except FileExistsError as error:
+            self._json(409, {"ok": False, "error": str(error)})
+        except LookupError as error:
+            self._json(404, {"ok": False, "error": str(error)})
+        except (ValueError, TypeError, UnicodeDecodeError) as error:
+            self._json(400, {"ok": False, "error": str(error)})
+        except OSError:
+            self._json(500, {"ok": False, "error": "Could not save weight file. Existing entries were preserved."})
 
     def _load_dexa_data(self) -> list[dict[str, object]]:
         if not DEXA_DATA_PATH.exists():
@@ -2059,6 +2100,13 @@ class DashboardHandler(SimpleHTTPRequestHandler):
 
     def do_GET(self) -> None:  # noqa: N802
         path = self.path.split("?", 1)[0]
+        if path == "/api/weight-data":
+            try:
+                rows = weight_tracking.load_entries(WEIGHT_DATA_PATH)
+                self._json(200, {"ok": True, "rows": rows, "health_context": self._weight_context(rows)})
+            except (ValueError, OSError, TypeError, KeyError):
+                self._json(500, {"ok": False, "error": "Cannot read weight file. Existing data was preserved."})
+            return
         if path == "/api/last-updated":
             self._json(200, self._last_updated_payload())
             return
@@ -2106,6 +2154,11 @@ class DashboardHandler(SimpleHTTPRequestHandler):
         super().do_HEAD()
 
     def do_POST(self) -> None:  # noqa: N802
+        if self.path == "/api/admin/weight-entry":
+            if self._require_admin_auth():
+                return
+            self._handle_weight_save()
+            return
         if self.path == "/api/medications":
             if self._require_vault_auth():
                 return

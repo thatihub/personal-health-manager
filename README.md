@@ -152,3 +152,29 @@ BP CSV notes:
 - Incoming CSV rows are merged into `bp_readings.csv`.
 - Duplicate rows (same date, time, SYS, DIAS, Pulse) are skipped.
 - `/bp.html` displays only the latest 90 days.
+
+## Daily weight
+
+Open `/weight.html` from Home using the running app server. New entries default to the
+browser's current local date/time. Edit an existing row to change its time, date, or
+weight. A second entry for the same entered calendar day is rejected, including when
+moving an entry to an occupied day. Measurements use pounds.
+
+`GET /api/weight-data` returns entries and health context. `POST /api/admin/weight-entry`
+uses the existing admin authentication and atomic JSON-file writer. Entries are stored
+in `weight_entries.json` (created only on first save), with stable `id`, local wall-clock
+`measured_at` (`YYYY-MM-DDTHH:mm`, intentionally no timezone conversion), `weight_lb`,
+and timezone-aware audit timestamps `created_at`/`updated_at`. Writes are serialized.
+Invalid or unreadable existing data is not replaced. Existing scans and legacy home
+weight remain intact; no fabricated daily entries are migrated.
+
+The latest non-future daily measurement feeds current BMI (using recorded scan height)
+and weight change. Without daily entries, the existing home reference, then scan weight,
+is used. Current context is included in the biological dashboard API and displayed on
+Daily Weight, Biological Age, and Body Composition. DEXA and InBody context is kept
+separate, with scan dates and original notes. Historical composition, BMR, and age-score
+formulas are unchanged: weight alone cannot establish new fat/muscle measurements or
+justify an additional biological-age adjustment. Future-dated entries stay in history
+but are excluded from current context using the server's local calendar date.
+
+Run weight regressions: `python3 -m unittest discover -s tests -p 'test_weight*.py'`.
