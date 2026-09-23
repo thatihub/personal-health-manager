@@ -172,9 +172,56 @@ The latest non-future daily measurement feeds current BMI (using recorded scan h
 and weight change. Without daily entries, the existing home reference, then scan weight,
 is used. Current context is included in the biological dashboard API and displayed on
 Daily Weight, Biological Age, and Body Composition. DEXA and InBody context is kept
-separate, with scan dates and original notes. Historical composition, BMR, and age-score
-formulas are unchanged: weight alone cannot establish new fat/muscle measurements or
-justify an additional biological-age adjustment. Future-dated entries stay in history
+separate, with scan dates and original notes. Historical composition and BMR are unchanged: weight alone cannot establish new
+fat/muscle measurements or justify an additional biological-age adjustment. The
+clinical PhenoAge replacement is documented below. Future-dated entries stay in history
 but are excluded from current context using the server's local calendar date.
 
 Run weight regressions: `python3 -m unittest discover -s tests -p 'test_weight*.py'`.
+
+## Clinical PhenoAge (Levine 2018)
+
+The biological-age API/page now uses the published clinical PhenoAge calculation,
+replacing the custom score-to-years lookup. Existing lab wellness scores remain
+visible but are explicitly labeled custom/educational and never feed the age output.
+This is clinical PhenoAge, not the DNA-methylation version and not a diagnosis or
+individual lifespan prediction. No individual accuracy/confidence percentage is claimed.
+
+Sources:
+- https://doi.org/10.18632/aging.101414 (Table 1 and Supplement 1)
+- https://cdn.aging-us.com/article/101414/supplementary/SD1/0/aging-v10i4-101414-supplementary-material-SD1.pdf
+- https://github.com/dayoonkwon/BioAge/blob/master/R/phenoage_calc.R (`orig=TRUE`, full-precision coefficients)
+
+`phenoage.py` records coefficients and explicit unit conversions. The formula uses
+albumin (g/L), creatinine (µmol/L), glucose (mmol/L), natural-log CRP (mg/dL),
+lymphocyte percentage, MCV (fL), RDW-CV (%), alkaline phosphatase (U/L), WBC
+(10³/µL), and age at collection. The final denominator is **0.090165**, as in the
+original supplement and BioAge implementation. The calculation evaluates the
+algebraically equivalent log-hazard expression to avoid probability rounding errors.
+
+App data policy (a conservative application rule, not an additional validated model):
+- Use one collection date and one lab source for all nine markers. Separate reports
+  from that same date/source may contribute; conflicting duplicate measurements block
+  the estimate. No cross-date assembly, substitutions, imputation, or invented ages.
+- Show the most recent collection containing a required marker. For multiple sources
+  on that date, use the source with most valid inputs (then source name for stable ties).
+  Previous complete assessments appear separately, each with its collection date.
+- Use the existing Vault birth date (including environment overrides) and completed
+  years at collection; no default age. Require age 20+, matching the original adult
+  population. Future-dated labs are excluded. No claim that old results describe today.
+- Check original numeric text and original units. Reject unknown/missing units,
+  nonfinite/negative values, censored results (< or >), zero CRP, absolute lymphocytes,
+  RDW-SD, and conflicting values. CRP and hs-CRP measure the same analyte and accept
+  mg/L or mg/dL. Conflicting same-day CRP/hs-CRP requires review.
+- The displayed difference is PhenoAge minus age at collection, **not** the
+  regression-residual PhenoAgeAccel measure used in some research.
+- Weight/BMI and DEXA/InBody information stay separate. No fabricated age adjustments.
+
+The API retains `estimated_bio_age` and `age_delta_years` as nullable compatibility
+fields, with full details under `phenoage`. `model_version` identifies the new method.
+Old cached `ag-v1` age estimates are never displayed as PhenoAge; use the running
+server to refresh the static export. Original lab, scan, and weight records are not
+rewritten. Missing inputs can be supplied through the existing Lab Import + Review.
+
+Tests: `python3 -m unittest discover -s tests -p 'test_*.py'` and
+`node tests/phenoage-view.cjs`.

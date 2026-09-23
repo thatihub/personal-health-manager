@@ -72,4 +72,4 @@ def health_context(rows, scans, today=None, reference=None):
             'change_lb': round(eligible[-1]['weight_lb'] - eligible[0]['weight_lb'], 2) if len(eligible) > 1 else None,
             'change_since': eligible[0]['measured_at'][:10] if len(eligible) > 1 else None,
             'latest_scans': [next(s for s in reversed(scans) if s.get('scan_type') == kind) for kind in sorted({s.get('scan_type', '') for s in scans})],
-            'age_model_note': 'Weight and scan context supplement the lab-based age estimate; they do not change its formula. Scan composition and BMR remain measurements from the scan date.'}
+            'age_model_note': 'Daily weight updates BMI and weight trends. DEXA/InBody measurements provide dated body-composition context. Neither changes the clinical PhenoAge formula, which requires nine blood markers and age. Scan composition and BMR remain measurements from the scan date.'}

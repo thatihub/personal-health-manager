@@ -1,0 +1,22 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict'),path=require('node:path');
+class Element {constructor(){this.children=[];this.textContent='';} replaceChildren(){this.children=[];this.textContent='';} append(item){this.children.push(item);}}
+const elements=Object.fromEntries(['summary-stats','phenoage-status','phenoage-policy','phenoage-interpretation','phenoage-inputs','phenoage-history'].map(id=>[id,new Element()]));
+const context=vm.createContext({document:{getElementById:id=>elements[id],createElement:()=>new Element()}});
+vm.runInContext(fs.readFileSync(path.join(__dirname,'../phenoage_view.js'),'utf8'),context);
+const text=node=>[node.textContent,...node.children.map(text)].join(' ');
+context.renderPhenoAge({model_version:'ag-v1',estimated_bio_age:54,chronological_age:65});
+assert.ok(text(elements['summary-stats']).includes('Unavailable'));
+assert.ok(!text(elements['summary-stats']).includes('54'));
+assert.ok(elements['phenoage-status'].textContent.includes('retired'));
+const data={model_version:'clinical-phenoage-levine2018-v1',chronological_age:50,phenoage:{status:'unavailable',ready_count:5,required_count:9,collection_date:'2026-09-15',age_at_collection:50,lab_source:'Test',reasons:['Missing: CRP.'],inputs:[{label:'CRP',value:null,status:'missing',detail:'Missing'}]}};
+context.renderPhenoAge(data);
+assert.ok(text(elements['summary-stats']).includes('5 / 9'));
+assert.ok(elements['phenoage-status'].textContent.includes('Missing: CRP'));
+assert.ok(!text(elements['summary-stats']).includes('null'));
+data.phenoage.status='available';data.phenoage.estimated_age=41.8;data.phenoage.age_difference=-8.2;data.phenoage.reasons=[];
+context.renderPhenoAge(data);
+assert.ok(text(elements['summary-stats']).includes('41.8 years'));
+assert.ok(text(elements['summary-stats']).includes('-8.2 years'));
+const html=fs.readFileSync(path.join(__dirname,'../bio-age.html'),'utf8');
+for(const match of html.matchAll(/<script>([\s\S]*?)<\/script>/g)) new vm.Script(match[1]);
+console.log('PASS: legacy cache rejected, incomplete inputs, nullable ages, dated published estimate, page syntax');

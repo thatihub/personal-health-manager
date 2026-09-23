@@ -21,6 +21,7 @@ from pathlib import Path
 from uuid import uuid4
 import youtube_analyzer
 import weight_tracking
+import phenoage
 
 
 PROJECT_DIR = Path(__file__).resolve().parent
@@ -436,10 +437,17 @@ class DashboardHandler(SimpleHTTPRequestHandler):
             "wbc": "wbc",
             "white blood cell": "wbc",
             "platelets": "platelets",
+            "mean corpuscular volume": "mcv",
+            "mean cell volume": "mcv",
             "mcv": "mcv",
+            "red cell distribution width": "rdw",
+            "red blood cell distribution width": "rdw",
             "rdw": "rdw",
             "lymphocyte %": "lymphocyte_pct",
             "lymphocyte": "lymphocyte_pct",
+            "high sensitivity c-reactive protein": "hs_crp",
+            "c-reactive protein": "crp",
+            "c reactive protein": "crp",
             "hs-crp": "hs_crp",
             "crp": "crp",
             "esr": "esr",
@@ -541,6 +549,16 @@ class DashboardHandler(SimpleHTTPRequestHandler):
             return round(value * 18.0, 2), "mg/dL", "Converted from mmol/L to mg/dL"
         if standard_name == "creatinine" and u in {"umol/l", "µmol/l"}:
             return round(value / 88.4, 3), "mg/dL", "Converted from umol/L to mg/dL"
+        marker = "crp" if standard_name == "hs_crp" else standard_name
+        if marker in phenoage.SPECS:
+            normalize_unit = lambda text: text.lower().replace("µ", "u").replace("μ", "u").replace(" ", "")
+            factors = phenoage.SPECS[marker][3]
+            original = normalize_unit(u)
+            target = normalize_unit(std_unit)
+            if original not in factors:
+                return value, unit, "Missing or unsupported units; excluded from PhenoAge until reviewed"
+            converted = value * factors[original] / factors[target]
+            return converted, std_unit, (f"Converted from {unit} to {std_unit}" if original != target else None)
         return value, std_unit, note
 
     def _normalize_import_row(
@@ -664,6 +682,11 @@ class DashboardHandler(SimpleHTTPRequestHandler):
             "potassium_mmol_l": ("potassium", "mmol/L"),
             "calcium_mg_dl": ("calcium", "mg/dL"),
             "wbc_x10e3_ul": ("wbc", "10^3/uL"),
+            "mcv_fl": ("mcv", "fL"),
+            "rdw_pct": ("rdw", "%"),
+            "lymphocyte_pct": ("lymphocyte_pct", "%"),
+            "crp_mg_l": ("crp", "mg/L"),
+            "hs_crp_mg_l": ("hs_crp", "mg/L"),
             "rbc_x10e6_ul": ("rbc", "10^6/uL"),
             "hemoglobin_g_dl": ("hemoglobin", "g/dL"),
             "hematocrit_pct": ("hematocrit", "%"),
@@ -691,7 +714,7 @@ class DashboardHandler(SimpleHTTPRequestHandler):
                         "original_test_name": k,
                         "standard_test_name": standard_name,
                         "value_numeric": value,
-                        "value_text": str(value),
+                        "value_text": str(report.get(k)),
                         "original_unit": unit,
                         "standard_unit": unit,
                         "reference_range_low": None,
@@ -773,45 +796,22 @@ class DashboardHandler(SimpleHTTPRequestHandler):
             return "orange"
         return "red"
 
-    def _age_delta_from_score(self, score: float) -> float:
-        # score -> age delta years
-        points = [
-            (50.0, 12.0),
-            (55.0, 9.0),
-            (60.0, 6.0),
-            (65.0, 3.0),
-            (70.0, 0.0),
-            (75.0, -3.0),
-            (80.0, -5.0),
-            (85.0, -7.0),
-            (90.0, -9.0),
-            (95.0, -12.0),
-        ]
-        if score <= points[0][0]:
-            return points[0][1]
-        if score >= points[-1][0]:
-            return points[-1][1]
-        for (s1, d1), (s2, d2) in zip(points, points[1:]):
-            if s1 <= score <= s2:
-                ratio = (score - s1) / (s2 - s1)
-                return d1 + ratio * (d2 - d1)
-        return 0.0
-
-    def _chronological_age(self) -> int:
-        dob = None
+    def _date_of_birth(self):
         try:
-            vault = json.loads((PROJECT_DIR / "vault_data.json").read_text(encoding="utf-8"))
+            override = _decode_env_text("VAULT_DATA_JSON", "VAULT_DATA_JSON_B64")
+            vault = json.loads(override if override is not None else (PROJECT_DIR / "vault_data.json").read_text(encoding="utf-8"))
             scan = vault.get("scan_2026", {})
-            kaiser = str(scan.get("kaiser_permanent_summary") or scan.get("kaiser_permanente_summary") or "")
-            m = re.search(r"Date of birth:\s*([0-9]{1,2}/[0-9]{1,2}/[0-9]{4})", kaiser, flags=re.I)
-            if m:
-                dob = datetime.strptime(m.group(1), "%m/%d/%Y").date()
-        except Exception:
-            dob = None
-        if dob is None:
-            return 65
-        today = datetime.now().date()
-        return today.year - dob.year - ((today.month, today.day) < (dob.month, dob.day))
+            summary = str(scan.get("kaiser_permanent_summary") or scan.get("kaiser_permanente_summary") or "")
+            match = re.search(r"Date of birth:\s*([0-9]{1,2}/[0-9]{1,2}/[0-9]{4})", summary, flags=re.I)
+            if match:
+                dob = datetime.strptime(match.group(1), "%m/%d/%Y").date()
+                return dob if dob <= datetime.now().date() else None
+        except (ValueError, OSError, TypeError, AttributeError):
+            pass
+        return None
+
+    def _chronological_age(self):
+        return phenoage.age_on(self._date_of_birth(), datetime.now().date())
 
     def _compute_ag_snapshot(self) -> dict[str, object]:
         imports = self._load_ag_imports()
@@ -885,22 +885,8 @@ class DashboardHandler(SimpleHTTPRequestHandler):
         latest_date = ""
         if all_results:
             latest_date = str(all_results[-1].get("collection_date") or "")
-        latest_rows = [r for r in all_results if str(r.get("collection_date") or "") == latest_date]
-        latest_markers = {str(r.get("standard_test_name") or "") for r in latest_rows}
-        core_groups = [
-            {"hba1c", "glucose_fasting"},
-            {"creatinine", "egfr"},
-            {"albumin"},
-            {"hemoglobin", "hematocrit", "wbc", "platelets"},
-            {"ldl", "hdl", "triglycerides", "total_cholesterol"},
-            {"hs_crp", "crp", "esr"},
-        ]
-        core_hits = sum(1 for group in core_groups if latest_markers.intersection(group))
-        confidence = "high" if core_hits >= 6 else ("medium" if core_hits >= 4 else "low")
-
         chronological_age = self._chronological_age()
-        age_delta = self._age_delta_from_score(overall_score)
-        bio_age = chronological_age + age_delta
+        phenotype = phenoage.assess(all_results, self._date_of_birth())
 
         # Year-by-year timeline
         by_date: dict[str, list[dict[str, object]]] = {}
@@ -923,15 +909,17 @@ class DashboardHandler(SimpleHTTPRequestHandler):
             "latest_date": latest_date,
             "chronological_age": chronological_age,
             "overall_score": round(overall_score, 1),
-            "estimated_bio_age": round(bio_age, 1),
-            "age_delta_years": round(age_delta, 1),
-            "confidence": confidence,
+            "estimated_bio_age": phenotype["estimated_age"],
+            "age_delta_years": phenotype["age_difference"],
+            "confidence": "not_assessed",
+            "phenoage": phenotype,
+            "score_note": "Custom lab wellness scores are educational summaries, not validated biological-age estimates.",
             "section_scores": section_scores,
             "timeline": timeline,
             "normalized_results": all_results,
             "reports": imports.get("reports", []),
             "weight_context": self._weight_context(),
-            "model_version": "ag-v1",
+            "model_version": phenoage.MODEL_VERSION,
             "generated_at": datetime.now().astimezone().isoformat(),
         }
 
