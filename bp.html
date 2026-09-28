@@ -4,178 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Blood Pressure (Three-Month Comparison)</title>
-  <style>
-    :root {
-      --ink: #102b3d;
-      --muted: #4d697b;
-      --line: rgba(16, 43, 61, 0.14);
-      --panel: rgba(255,255,255,0.86);
-      --shadow: 0 14px 30px rgba(16, 43, 61, 0.12);
-      --blue: #0b7ca5;
-      --teal: #0e9a78;
-      --amber: #dc8920;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: "Avenir Next", "Trebuchet MS", "Segoe UI", sans-serif;
-      background:
-        radial-gradient(circle at 10% 8%, rgba(11,124,165,0.2), transparent 35%),
-        radial-gradient(circle at 88% 16%, rgba(220,137,32,0.14), transparent 32%),
-        linear-gradient(160deg, #f3faff 0%, #fffaf2 46%, #f2fff9 100%);
-      color: var(--ink);
-      padding: 18px;
-    }
-    .wrap { max-width: 1360px; margin: 0 auto; }
-    .nav { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
-    .nav a {
-      text-decoration:none; padding:9px 12px; border-radius:12px;
-      border:1px solid var(--line); background:rgba(255,255,255,.9);
-      color:#264a5f; font-weight:700; font-size:13px; min-height:44px; display:inline-flex; align-items:center;
-      transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
-    }
-    .nav a:hover { transform: translateY(-1px); box-shadow: 0 8px 16px rgba(16,43,61,.12); }
-    .nav a.active { background:linear-gradient(120deg,#0b7ca5,#17a1c8); color:#fff; border-color:transparent; }
-    h1 { margin:0 0 6px; font-family: "Avenir Next Condensed", "Trebuchet MS", sans-serif; letter-spacing:.2px; }
-    .sub { color:var(--muted); margin-bottom:14px; }
-    .hero {
-      margin-bottom: 12px;
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      padding: 12px 14px;
-      background: linear-gradient(120deg, rgba(11,124,165,0.14), rgba(14,154,120,0.12) 55%, rgba(220,137,32,0.12));
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-    }
-    .hero-title {
-      font-size: 13px;
-      text-transform: uppercase;
-      letter-spacing: .6px;
-      color: #1f5b78;
-      font-weight: 800;
-      margin-bottom: 4px;
-    }
-    .hero-sub {
-      font-size: 15px;
-      color: #1a4159;
-      font-weight: 700;
-    }
-    .card {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      padding: 12px;
-      margin-bottom: 12px;
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-    }
-    .kpis { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:10px; }
-    .kpi-label { color:var(--muted); font-size:11px; text-transform:uppercase; }
-    .kpi-val { font-size:24px; font-weight:800; color:#14384d; }
-    .chart-grid { display:grid; grid-template-columns:1fr; gap:12px; }
-    .mini {
-      border: 1px solid rgba(16,43,61,.16);
-      border-radius: 10px;
-      padding: 10px;
-      background: rgba(255,255,255,.82);
-    }
-    .mini-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin: 0 0 6px;
-    }
-    .mini h3 {
-      margin: 0;
-      font-size: 13px;
-      letter-spacing: .3px;
-      text-transform: uppercase;
-      color: #173f57;
-      font-weight: 800;
-    }
-    .mini-meta {
-      font-size: 11px;
-      font-weight: 700;
-      color: #1f5877;
-      background: #e8f4fb;
-      border: 1px solid #c4dded;
-      border-radius: 999px;
-      padding: 2px 8px;
-    }
-    svg {
-      width:100%;
-      height:230px;
-      display:block;
-      shape-rendering:geometricPrecision;
-      text-rendering: geometricPrecision;
-      -webkit-font-smoothing: antialiased;
-    }
-    table { width:100%; border-collapse:collapse; font-size:14px; }
-    th, td { padding:9px; text-align:center; border-bottom:1px solid rgba(16,43,61,.12); }
-    th { background:#e8f4fb; color:#18445d; position:sticky; top:0; }
-    tbody tr:nth-child(odd) td { background:#ffffff; }
-    tbody tr:nth-child(even) td { background:#f6fbff; }
-    .empty { color:#a92840; }
-    .hidden { display: none !important; }
-    @media (min-width: 1100px) {
-      .chart-grid { grid-template-columns: 1fr 1fr 1fr; }
-      svg { height: 260px; }
-    }
-    .view-toggle-container {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-bottom: 14px;
-    }
-    .view-toggle {
-      display: inline-flex;
-      background: rgba(17, 28, 42, 0.6);
-      border: 1px solid var(--comp-line);
-      border-radius: 14px;
-      padding: 4px;
-      gap: 4px;
-      box-shadow: var(--comp-shadow);
-    }
-    .toggle-btn {
-      background: transparent;
-      border: none;
-      padding: 8px 18px;
-      font-size: 13.5px;
-      font-weight: 700;
-      color: var(--comp-muted);
-      border-radius: 10px;
-      cursor: pointer;
-      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-      outline: none;
-    }
-    .toggle-btn:hover {
-      color: var(--comp-ink);
-      background: rgba(255, 255, 255, 0.04);
-    }
-    .toggle-btn.active {
-      background: linear-gradient(120deg, var(--page-accent-2), var(--page-accent)) !important;
-      color: #fff !important;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-    }
-    .bp-compare-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:18px; }
-    .bp-period { font-size:13px; margin:6px 0; color:var(--comp-ink); }
-    .bp-detail { font-size:12px; color:var(--comp-muted); line-height:1.6; }
-    .bp-method { border-top:1px solid var(--comp-line); margin-top:12px; padding-top:8px; }
-    #bp-comparison .kpi-val { margin:5px 0; }
-    #bp-comparison small { font-size:12px; font-weight:500; }
-    #bp-comparison .bp-delta { font-size:20px; }
-    @media(max-width:650px) { .bp-compare-grid {grid-template-columns:1fr;} }
-  </style>
-  <link rel="stylesheet" href="./companion_theme.css?v=20260729-2" />
+  
+  <link rel="stylesheet" href="./static/css/theme.css" />
+  <script src="./static/js/app.js"></script>
+  <script src="./static/js/charts.js"></script>
   <script>
     document.write('<script src="./bp_data.js?ts=' + Date.now() + '"><\/script>');
   </script>
 </head>
-<body class="page-bp">
+<body data-page="bp">
   <div class="wrap">
     <div id="file-protocol-warning" style="display:none; background:rgba(220,137,32,0.14); color:#6d430c; padding:12px; border-radius:12px; margin-bottom:14px; font-weight:700; border:1px solid rgba(220,137,32,0.3); font-size:14px;">
       ℹ️ Note: You are viewing this page directly from the filesystem (file://). Dashboard panels are loaded from local cache files and are fully interactive. However, performing new uploads or raw data changes requires starting the server and visiting <a href="http://localhost:3002/bp.html" style="color:#4d2e05; text-decoration:underline;">http://localhost:3002/bp.html</a> instead.
@@ -185,19 +22,10 @@
         document.getElementById('file-protocol-warning').style.display = 'block';
       }
     </script>
-    <nav class="nav">
-      <a href="./index.html">Home</a>
-      <a href="./doctor-notes.html">Doctor Notes</a>
-      <a href="./dashboard.html">Lab Results Dashboard</a>
-      <a class="active" href="./bp.html">Blood Pressure</a>
-      <a href="./composition.html">Body Composition</a>
-      <a href="./vault.html">Health Vault</a>
-      <a href="./immunizations.html">Immunizations</a>
-      <a href="./admin.html">Admin</a>
-    </nav>
+    
     <h1>Blood Pressure</h1>
     <div class="sub">Three-month comparison and current-period readings (SYS, DIAS, Pulse).</div>
-    <section id="bp-comparison" class="card" aria-label="Three-month blood pressure comparison"></section>
+    <section id="bp-comparison" aria-label="Three-month blood pressure comparison"></section>
     <section class="hero">
       <div class="hero-title">Blood Pressure Monitor</div>
       <div class="hero-sub">Professional view with separate SYS, DIAS, and Pulse trend panels.</div>
@@ -214,7 +42,7 @@
       </div>
     </div>
 
-    <section class="card kpis" id="kpis"></section>
+    <section class="kpis" id="kpis"></section>
     <section class="card hidden" id="bp-charts-view">
       <div class="chart-grid">
         <div class="mini">
@@ -288,12 +116,6 @@
     }
 
     function drawSingle(rows, svgId, key, color, metaId) {
-      const svg = document.getElementById(svgId);
-      const w = svg.clientWidth || 1000;
-      const h = svg.clientHeight || 230;
-      const pad = { l: 48, r: 12, t: 12, b: 30 };
-      const innerW = w - pad.l - pad.r;
-      const innerH = h - pad.t - pad.b;
       const vals = rows.map(r => Number(r[key]));
       const vMin = Math.min(...vals);
       const vMax = Math.max(...vals);
@@ -301,44 +123,31 @@
       const min = vMin - padY;
       const max = vMax + padY;
       const latest = vals[vals.length - 1];
-      const y = (v) => pad.t + (1 - ((v - min) / ((max - min) || 1))) * innerH;
-      const x = (i) => pad.l + (i / Math.max(1, rows.length - 1)) * innerW;
-      const centerVal = Number(((vMin + vMax) / 2).toFixed(1));
-      const centerY = y(centerVal);
       const meta = document.getElementById(metaId);
       if (meta) meta.textContent = `Latest ${latest} | ${vMin}-${vMax}`;
-
-      let html = "";
-      for (let i = 0; i < 4; i++) {
-        const frac = i / 3;
-        const yy = pad.t + frac * innerH;
-        const tickVal = (max - frac * (max - min)).toFixed(0);
-        html += `<line x1="${pad.l}" y1="${yy}" x2="${pad.l + innerW}" y2="${yy}" stroke="#95b1c7" stroke-opacity="0.45" stroke-dasharray="3 4" stroke-width="0.9"/>`;
-        html += `<text x="${pad.l - 6}" y="${yy + 4}" text-anchor="end" fill="#5b7890" font-size="10" font-weight="700">${tickVal}</text>`;
-      }
-      html += `<line x1="${pad.l}" y1="${centerY}" x2="${pad.l + innerW}" y2="${centerY}" stroke="#c5d9e8" stroke-opacity="0.65" stroke-dasharray="5 5" stroke-width="0.9"/>`;
-      html += `<text x="${pad.l + 6}" y="${centerY - 6}" fill="#35566d" font-size="11" font-weight="800">${centerVal}</text>`;
-
-      const path = rows.map((r, i) => `${i ? "L" : "M"}${x(i)} ${y(Number(r[key]))}`).join(" ");
-      html += `<path d="${path}" fill="none" stroke="${color}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>`;
-
+      const centerVal = Number(((vMin + vMax) / 2).toFixed(1));
       const markerStep = Math.max(4, Math.floor(rows.length / 18));
-      rows.forEach((r, i) => {
-        const isMajor = i === 0 || i === rows.length - 1 || i % markerStep === 0;
-        if (!isMajor) return;
-        const isLast = i === rows.length - 1;
-        const radius = isLast ? 2.6 : 1.8;
-        const strokeWidth = isLast ? 1.0 : 0.7;
-        html += `<circle cx="${x(i)}" cy="${y(Number(r[key]))}" r="${radius}" fill="${color}" stroke="#ffffff" stroke-width="${strokeWidth}"/>`;
-      });
-
       const last = rows.length - 1;
-      [0, Math.floor(last / 2), last].filter((v, i, a) => a.indexOf(v) === i).forEach((i) => {
-      html += `<text x="${x(i)}" y="${h - 8}" text-anchor="middle" fill="#516e84" font-size="10" font-weight="700">${rows[i].date.slice(5)}</text>`;
+      const xIdx = [0, Math.floor(last / 2), last].filter((v, i, a) => a.indexOf(v) === i);
+      Charts.line(svgId, {
+        series: [{
+          values: vals, color: color, width: 1.8,
+          dots: (i) => {
+            const isMajor = i === 0 || i === rows.length - 1 || i % markerStep === 0;
+            if (!isMajor) return null;
+            const isLast = i === rows.length - 1;
+            return { r: isLast ? 2.6 : 1.8, fill: color, stroke: "#ffffff", sw: isLast ? 1.0 : 0.7 };
+          }
+        }],
+        count: rows.length,
+        pad: { l: 48, r: 12, t: 12, b: 30 }, fallbackW: 1000, fallbackH: 230,
+        y: { min: min, max: max, ticks: 4, tickFormat: (v) => v.toFixed(0),
+             tickFill: "#5b7890", tickSize: 10, gridStroke: "rgba(149,177,199,0.45)", gridW: 0.9 },
+        centerLine: { value: centerVal, label: String(centerVal), stroke: "rgba(197,217,232,0.65)", labelFill: "#35566d" },
+        xLabel: { fn: (i) => xIdx.indexOf(i) !== -1 ? rows[i].date.slice(5) : null,
+                  fill: "#516e84", size: 10, dy: -8 },
+        cornerText: { text: `Range ${vMin}-${vMax}`, fill: "#35566d", size: 11 }
       });
-      html += `<text x="${pad.l}" y="${pad.t + 10}" fill="#35566d" font-size="11" font-weight="800">Range ${vMin}-${vMax}</text>`;
-      svg.setAttribute("viewBox", `0 0 ${w} ${h}`);
-      svg.innerHTML = html;
     }
 
     let allRawRows = [];
@@ -422,8 +231,8 @@
 
       if (!rows.length) {
         kpis.innerHTML = `
-          <div><div class="kpi-label">Status</div><div class="kpi-val empty" style="font-size:20px;">No BP data in current period</div></div>
-          <div><div class="kpi-label">Next step</div><div class="kpi-val" style="font-size:18px;">Upload BP CSV from Admin page</div></div>
+          <div class="bp-kpi bp-kpi-avg"><div class="bp-kpi-tag">Status</div><div class="bp-kpi-value" style="font-size:18px;">No BP data in current period</div></div>
+          <div class="bp-kpi bp-kpi-dias"><div class="bp-kpi-tag">Next step</div><div class="bp-kpi-value" style="font-size:18px;">Upload BP CSV from Admin page</div></div>
         `;
         body.innerHTML = `<tr><td colspan="6" class="empty">No BP data for current period.</td></tr>`;
         showNoDataInChart("bp-chart-sys");
@@ -439,36 +248,23 @@
       const avgSys = avg("systolic");
       const avgDias = avg("diastolic");
       const avgPP = avgSys - avgDias;
-      
-      // Color-coding for Latest PP
-      let ppColor = '#85f2b8'; // Normal green
-      let ppLabel = 'Normal';
-      if (latestPP > 60) {
-        ppColor = '#ff8fa0'; // Widened (high) red/pink
-        ppLabel = 'Widened';
-      } else if (latestPP < 40) {
-        ppColor = '#ffd081'; // Narrow (low) yellow/amber
-        ppLabel = 'Narrow';
-      }
-      
-      // Color-coding for Average PP
-      let avgPPColor = '#85f2b8';
-      let avgPPLabel = 'Normal';
-      if (avgPP > 60) {
-        avgPPColor = '#ff8fa0';
-        avgPPLabel = 'Widened';
-      } else if (avgPP < 40) {
-        avgPPColor = '#ffd081';
-        avgPPLabel = 'Narrow';
-      }
+
+      // Pill background by PP status (black text on all pills)
+      const ppPill = pp => pp > 60
+        ? ['Widened', 'linear-gradient(135deg,#ff9db0,#f0506e)']
+        : pp < 40
+          ? ['Narrow', 'linear-gradient(135deg,#ffd081,#f0a43a)']
+          : ['Normal', 'linear-gradient(135deg,#7fe3b2,#3cb98a)'];
+      const [ppLabel, ppBg] = ppPill(latestPP);
+      const [avgPPLabel, avgPPBg] = ppPill(avgPP);
 
       kpis.innerHTML = `
-        <div class="card"><div class="kpi-label">Latest SYS</div><div class="kpi-val">${latest.systolic}</div></div>
-        <div class="card"><div class="kpi-label">Latest DIAS</div><div class="kpi-val">${latest.diastolic}</div></div>
-        <div class="card" title="Pulse Pressure (SYS - DIAS). Normal range: 40-60 mmHg. High (>60) indicates arterial stiffness. Low (<40) indicates low cardiac output."><div class="kpi-label">Latest PP <span style="cursor:help; opacity:0.8;">ⓘ</span></div><div class="kpi-val" style="color: ${ppColor} !important;">${latestPP}</div></div>
-        <div class="card"><div class="kpi-label">Latest Pulse</div><div class="kpi-val">${latest.pulse}</div></div>
-        <div class="card"><div class="kpi-label">3mo Avg SYS/DIAS</div><div class="kpi-val">${avgSys}/${avgDias}</div></div>
-        <div class="card" title="Average Pulse Pressure over the current three-month period. Normal range: 40-60 mmHg."><div class="kpi-label">3mo Avg PP <span style="cursor:help; opacity:0.8;">ⓘ</span></div><div class="kpi-val" style="color: ${avgPPColor} !important;">${avgPP}</div></div>
+        <div class="bp-kpi bp-kpi-sys"><div class="bp-kpi-tag">Latest SYS</div><div class="bp-kpi-value">${latest.systolic}</div></div>
+        <div class="bp-kpi bp-kpi-dias"><div class="bp-kpi-tag">Latest DIAS</div><div class="bp-kpi-value">${latest.diastolic}</div></div>
+        <div class="bp-kpi" style="background:${ppBg};" title="Pulse Pressure (SYS - DIAS). Normal range: 40-60 mmHg. High (>60) indicates arterial stiffness. Low (<40) indicates low cardiac output."><div class="bp-kpi-tag">Latest PP ⓘ · ${ppLabel}</div><div class="bp-kpi-value">${latestPP}</div></div>
+        <div class="bp-kpi bp-kpi-pulse"><div class="bp-kpi-tag">Latest Pulse</div><div class="bp-kpi-value">${latest.pulse}</div></div>
+        <div class="bp-kpi bp-kpi-avg"><div class="bp-kpi-tag">3mo Avg SYS/DIAS</div><div class="bp-kpi-value">${avgSys}/${avgDias}</div></div>
+        <div class="bp-kpi" style="background:${avgPPBg};" title="Average Pulse Pressure over the current three-month period. Normal range: 40-60 mmHg."><div class="bp-kpi-tag">3mo Avg PP ⓘ · ${avgPPLabel}</div><div class="bp-kpi-value">${avgPP}</div></div>
       `;
       
       body.innerHTML = rows.slice().reverse().map(r => {
@@ -520,5 +316,6 @@
     }
     load();
   </script>
+  <script src="./static/js/shell.js"></script>
 </body>
 </html>

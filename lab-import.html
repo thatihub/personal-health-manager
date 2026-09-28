@@ -4,123 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Lab Import + Review</title>
-  <style>
-    body.page-import {
-      --page-accent: #e38f1f;
-      --page-accent-2: #be7415;
-    }
-    .wrap { max-width: 1120px; margin: 0 auto; }
-    .nav { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
-    
-    .panel {
-      background: linear-gradient(165deg, rgba(58, 74, 96, 0.98), rgba(47, 63, 84, 0.98)) !important;
-      border: 1px solid var(--comp-line) !important;
-      border-radius: 20px !important;
-      box-shadow: var(--comp-shadow) !important;
-      padding: 20px;
-      margin-bottom: 16px;
-      backdrop-filter: blur(4px);
-      -webkit-backdrop-filter: blur(4px);
-    }
-    
-    .row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; }
-    .row label { font-weight: 700; color: var(--comp-ink); font-size: 14.5px; }
-    
-    input, select, textarea {
-      min-height: 44px;
-      border-radius: 10px;
-      border: 1px solid var(--comp-line);
-      background: rgba(10, 20, 35, 0.6);
-      color: var(--comp-ink);
-      padding: 8px 12px;
-      font-size: 14px;
-      transition: border-color 0.2s ease;
-    }
-    input:focus, select:focus, textarea:focus {
-      border-color: var(--page-accent);
-      outline: none;
-    }
-    textarea { 
-      width: 100%; 
-      min-height: 180px; 
-      resize: vertical; 
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; 
-      line-height: 1.5;
-    }
-    
-    .status {
-      border: 1px solid var(--comp-line) !important;
-      border-radius: 12px !important;
-      padding: 14px !important;
-      background: rgba(8, 17, 30, 0.6) !important;
-      color: #73ecb4 !important;
-      font-size: 14px !important;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      white-space: pre-wrap;
-      box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
-    }
-    .hint { font-size: 12.5px; color: var(--comp-muted); margin-top: 6px; }
-    
-    .table-wrap { 
-      overflow: auto; 
-      border: 1px solid var(--comp-line); 
-      border-radius: 12px; 
-      background: rgba(8, 17, 30, 0.4) !important;
-    }
-    table { 
-      width: 100%; 
-      border-collapse: collapse; 
-      min-width: 980px; 
-      background: #0d1826 !important;
-      color: #f2f7fc !important;
-    }
-    th, td { 
-      border-bottom: 1px solid rgba(127, 161, 194, 0.26) !important; 
-      text-align: left; 
-      padding: 12px 14px !important; 
-      font-size: 14px; 
-    }
-    th { 
-      background: linear-gradient(120deg, #1a3047, #203a54) !important;
-      color: #f5fbff !important;
-      font-size: 11px; 
-      text-transform: uppercase; 
-      letter-spacing: .8px; 
-      font-weight: 800;
-      border-bottom: 2px solid rgba(150, 182, 212, 0.42) !important;
-    }
-    tbody td {
-      font-weight: 700 !important;
-    }
-    tbody tr:nth-child(odd) td { background: #0f1c2b !important; }
-    tbody tr:nth-child(even) td { background: #132335 !important; }
-    tbody tr:hover td { background: #1c324a !important; }
-    
-    .pill {
-      display: inline-block;
-      border-radius: 999px;
-      padding: 3px 10px;
-      background: rgba(114, 104, 242, 0.2);
-      color: #c9bbff;
-      font-size: 11.5px;
-      font-weight: 700;
-      border: 1px solid rgba(114, 104, 242, 0.4);
-    }
-  </style>
-  <link rel="stylesheet" href="./companion_theme.css?v=20260729-2" />
+  
+  <link rel="stylesheet" href="./static/css/theme.css" />
+  <script src="./static/js/app.js"></script>
 </head>
-<body class="page-import">
+<body data-page="lab-import">
   <div class="wrap">
-    <nav class="nav">
-      <a href="./index.html">Home</a>
-      <a href="./doctor-notes.html">Doctor Notes</a>
-      <a href="./dashboard.html">Lab Results Dashboard</a>
-      <a href="./bp.html">Blood Pressure</a>
-      <a href="./composition.html">Body Composition</a>
-      <a href="./bio-age.html">Biological Age</a>
-      <a class="active" href="./lab-import.html">Lab Import + Review</a>
-      <a href="./admin.html">Admin</a>
-    </nav>
+    
 
     <h1>Lab Import + Review</h1>
     <div class="sub">Paste CSV/text from Quest, Labcorp, Kaiser, screenshots/OCR, or portal exports. Review normalized rows, then save.</div>
@@ -292,5 +182,6 @@ TSH | 12.7 | uIU/mL | 2026-02-01"></textarea>
     document.getElementById("preview-btn").addEventListener("click", previewImport);
     document.getElementById("save-btn").addEventListener("click", saveImport);
   </script>
+  <script src="./static/js/shell.js"></script>
 </body>
 </html>

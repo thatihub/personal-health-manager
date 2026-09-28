@@ -26,17 +26,25 @@
   const fmt = s => date(s).toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric',timeZone:'UTC'});
   function render(el, result) {
     const {previous:p,current:c} = result;
-    const card = (label,period) => `<div><div class="kpi-label">${label}</div>
-      <div class="bp-period">${period.start ? fmt(period.start) + ' – ' + fmt(period.end) : 'Awaiting data'}</div>
-      <div class="kpi-val">${period.count ? Math.round(period.systolic) + '/' + Math.round(period.diastolic) + ' <small>mmHg</small>' : 'Needs data'}</div>
-      <div class="bp-detail">${period.count ? period.count + ' readings · ' + new Set(period.rows.map(r=>r.date)).size + ' days measured' : 'Upload readings for this period'}</div>
-      ${period.count ? '<div class="bp-detail">Recorded ' + fmt(period.rows[0].date) + ' – ' + fmt(period.rows[period.rows.length-1].date) + '</div>' : ''}</div>`;
+    const meta = period => period.count
+      ? `<div class="bp-pill-meta">${fmt(period.start)} – ${fmt(period.end)}</div>`
+        + `<div class="bp-pill-meta">${period.count} readings · ${new Set(period.rows.map(r=>r.date)).size} days measured</div>`
+        + `<div class="bp-pill-meta">Recorded ${fmt(period.rows[0].date)} – ${fmt(period.rows[period.rows.length-1].date)}</div>`
+      : `<div class="bp-pill-meta">Awaiting data — upload readings for this period</div>`;
+    const val = period => period.count
+      ? `${Math.round(period.systolic)}/${Math.round(period.diastolic)} <span class="bp-pill-unit">mmHg</span>`
+      : `Needs data`;
     const delta = k => { const v = c[k] - p[k]; return (v < 0 ? '↓ ' : v > 0 ? '↑ ' : '') + Math.abs(v).toFixed(1); };
-    el.innerHTML = `<div class="bp-compare-grid">${card('Previous 3 Months',p)}${card('Current 3 Months',c)}
-      <div><div class="kpi-label">Change · Current − Previous</div>
-      <div class="kpi-val bp-delta">${p.count && c.count ? 'SYS ' + delta('systolic') + '<br>DIA ' + delta('diastolic') : 'Awaiting data'}</div>
-      <div class="bp-detail">${p.count && c.count ? 'mmHg · based on unrounded averages' : 'Both periods need readings'}</div></div></div>
-      <div class="bp-detail bp-method">All individual readings, equally weighted. Non-overlapping calendar-month windows ending on the latest reading date. Unmeasured days are excluded. The trend toggle does not change this comparison.</div>`;
+    const deltaBody = (p.count && c.count)
+      ? `<div class="bp-pill-delta-row">SYS ${delta('systolic')}</div><div class="bp-pill-delta-row">DIA ${delta('diastolic')}</div>`
+        + `<div class="bp-pill-meta">mmHg · based on unrounded averages</div>`
+      : `<div class="bp-pill-value">Awaiting data</div><div class="bp-pill-meta">Both periods need readings</div>`;
+    el.innerHTML = `<div class="bp-pills">`
+      + `<div class="bp-pill bp-pill-prev"><div class="bp-pill-tag">Previous 3 Months</div><div class="bp-pill-value">${val(p)}</div>${meta(p)}</div>`
+      + `<div class="bp-pill bp-pill-cur"><div class="bp-pill-tag">Current 3 Months</div><div class="bp-pill-value">${val(c)}</div>${meta(c)}</div>`
+      + `<div class="bp-pill bp-pill-delta"><div class="bp-pill-tag">Change · Current − Previous</div>${deltaBody}</div>`
+      + `</div>`
+      + `<div class="bp-detail bp-method">All individual readings, equally weighted. Non-overlapping calendar-month windows ending on the latest reading date. Unmeasured days are excluded. The trend toggle does not change this comparison.</div>`;
   }
   root.BPComparison = {calculate,render};
 })(typeof window !== 'undefined' ? window : globalThis);

@@ -9,10 +9,25 @@ Personal health workspace with:
 - `bp.html` - Blood Pressure Dashboard (last 90 days)
 - `vault.html` - Health Vault (insurance links, contacts, scanned-doc index)
 
+## v2 architecture (revamp, Sep 2026)
+
+- `static/css/theme.css` — the single design system (dark-first, token-based).
+  No per-page `<style>` blocks; per-page accent comes from `body[data-page]`,
+  set by `static/js/shell.js` from its page registry.
+- `static/js/shell.js` — shared top nav + storage pill + mobile bottom tab bar,
+  injected on every page.
+- `static/js/app.js` — shared fetch helpers, toasts, formatting, header badges.
+- `static/js/charts.js` — shared SVG chart builders used by the chart pages.
+- `run_dashboard_server.py` — thin entry: route dispatch only (~300 lines).
+- `api/` — domain modules mixed into the request handler:
+  `config.py` (paths, auth, env), `auth.py`, `core.py`, `labs.py`, `bp.py`,
+  `weight.py`, `uploads.py`, `records.py`.
+- All 17 pages + all API routes keep their exact URLs and behavior.
+
 ## Start locally
 
 ```bash
-python3 /Users/prakashthatikunta/Documents/Health/personal_health_manager/run_dashboard_server.py --port 3002
+python3 /Users/prakashthatikunta/Documents/Health/personal_health_manager_muse/run_dashboard_server.py --port 3002
 ```
 
 Open:
@@ -22,7 +37,7 @@ Open:
 ## Rebuild lab data
 
 ```bash
-python3 /Users/prakashthatikunta/Documents/Health/personal_health_manager/rebuild_consolidation.py
+python3 /Users/prakashthatikunta/Documents/Health/personal_health_manager_muse/rebuild_consolidation.py
 ```
 
 This regenerates:
@@ -94,7 +109,7 @@ Notes:
 ### Prepare base64 values locally
 
 ```bash
-cd "/Users/prakashthatikunta/Documents/Health/personal_health_manager"
+cd "/Users/prakashthatikunta/Documents/Health/personal_health_manager_muse"
 base64 < vault_data.json | tr -d '\n'
 base64 < consolidated_labs.json | tr -d '\n'
 ```
@@ -102,7 +117,7 @@ base64 < consolidated_labs.json | tr -d '\n'
 For dashboard JSON array from `dashboard_data.js`:
 
 ```bash
-cd "/Users/prakashthatikunta/Documents/Health/personal_health_manager"
+cd "/Users/prakashthatikunta/Documents/Health/personal_health_manager_muse"
 sed 's/^window.LAB_DASH_DATA = //; s/;[[:space:]]*$//' dashboard_data.js | base64 | tr -d '\n'
 ```
 
@@ -225,3 +240,36 @@ rewritten. Missing inputs can be supplied through the existing Lab Import + Revi
 
 Tests: `python3 -m unittest discover -s tests -p 'test_*.py'` and
 `node tests/phenoage-view.cjs`.
+
+## Durable hosted storage for weight and body scans
+
+Render's default filesystem is ephemeral. The repository's existing free-plan
+configuration does **not** preserve writes across restarts, deploys, or spin-downs.
+See https://render.com/docs/disks and https://render.com/docs/free .
+
+The app now disables scan/weight saves on Render until a real mounted disk is
+configured. `/api/storage-status` reports whether these writes are enabled and the
+Admin and Weight pages show a notice when they are disabled. Local file storage
+continues to work without configuration. This does not make the existing free plan
+durable; a hosting/account change is still required. No paid plan is enabled by code.
+
+Setup in Render (requires a paid service and disk):
+1. Back up any currently available records before a deploy/restart.
+2. Attach a persistent disk with mount path `/var/data`.
+3. Set `HEALTH_DATA_DIR=/var/data` for the service.
+4. Restart the service. Existing repository scan/weight JSON is copied into the data
+   folder only when the destination does not exist. Subsequent startups never replace
+   the durable files with repository defaults. Restore previously exported records to
+   the mounted folder before entering new data when those are newer than the seeds.
+
+The data folder holds `weight_entries.json`, `dexa_records.json`, uploaded
+`dexa_scans/`, and prior scan JSON versions in `record_backups/`. Scan reads and both
+scan write paths use the same configured location. Individual scan updates preserve
+unrelated dates and modalities and require an explicit DEXA/InBody type. Corrupt JSON
+blocks saving; it is never interpreted as an empty history. These protections cover
+weight and scan storage; other existing app files still use their previous locations.
+A disk cannot recover changes that were already lost from ephemeral storage.
+
+Tests: `python3 -m unittest discover -s tests -p 'test_*.py'` includes simulated
+restart/deploy seeding, actual fresh-process persistence, scan save/load, same-day
+modalities, corrupted-file preservation, backups, and hosted write protection.
