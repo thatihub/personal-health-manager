@@ -9,6 +9,7 @@ from urllib.request import Request, urlopen
 from urllib.error import HTTPError
 import weight_tracking as w
 import run_dashboard_server as server
+from api import config as server_config
 
 
 class WeightTests(unittest.TestCase):
@@ -49,7 +50,7 @@ class WeightTests(unittest.TestCase):
     def test_api_persistence_conflicts_corrupt_file_and_auth(self):
         with tempfile.TemporaryDirectory() as directory:
             path=Path(directory)/'weight_entries.json'
-            with patch.object(server,'WEIGHT_DATA_PATH',path), patch.object(server,'ADMIN_AUTH_USER',''), patch.object(server,'ADMIN_AUTH_PASS',''):
+            with patch.object(server_config,'WEIGHT_DATA_PATH',path), patch.object(server_config,'ADMIN_AUTH_USER',''), patch.object(server_config,'ADMIN_AUTH_PASS',''):
                 http=ThreadingHTTPServer(('127.0.0.1',0),server.DashboardHandler)
                 thread=Thread(target=http.serve_forever,daemon=True);thread.start()
                 base=f'http://127.0.0.1:{http.server_port}'
@@ -66,7 +67,7 @@ class WeightTests(unittest.TestCase):
                         data=json.load(response)
                     self.assertEqual(len(data['rows']),1)
                     self.assertEqual(data['health_context']['weight_lb'],148)
-                    with patch.object(server,'ADMIN_AUTH_USER','tester'),patch.object(server,'ADMIN_AUTH_PASS','secret'):
+                    with patch.object(server_config,'ADMIN_AUTH_USER','tester'),patch.object(server_config,'ADMIN_AUTH_PASS','secret'):
                         with self.assertRaises(HTTPError) as caught: post(self.entry())
                         self.assertEqual(caught.exception.code,401)
                     path.write_text('{broken')

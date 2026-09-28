@@ -4,88 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Project Cabinet</title>
-  <style>
-    :root {
-      --ink: #102b3d;
-      --muted: #4f6a7b;
-      --line: rgba(16,43,61,.14);
-      --panel: rgba(255,255,255,.86);
-      --shadow: 0 14px 30px rgba(16,43,61,.12);
-      --blue: #0b7ca5;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: "Avenir Next", "Trebuchet MS", "Segoe UI", sans-serif;
-      background:
-        radial-gradient(circle at 8% 8%, rgba(11,124,165,.2), transparent 34%),
-        radial-gradient(circle at 84% 12%, rgba(14,154,120,.14), transparent 30%),
-        linear-gradient(160deg, #f3faff 0%, #fffaf1 44%, #f2fff9 100%);
-      color: var(--ink);
-      padding: 18px;
-    }
-    .wrap { max-width: 1240px; margin: 0 auto; }
-    .nav { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
-    .nav a {
-      text-decoration:none; padding:9px 12px; border-radius:12px;
-      border:1px solid var(--line); background:rgba(255,255,255,.9);
-      color:#264a5f; font-weight:700; font-size:13px; min-height:44px; display:inline-flex; align-items:center;
-      transition: transform .18s ease, box-shadow .18s ease;
-    }
-    .nav a:hover { transform: translateY(-1px); box-shadow: 0 8px 16px rgba(16,43,61,.12); }
-    .nav a.active { background:linear-gradient(120deg,#0b7ca5,#17a1c8); color:#fff; border-color:transparent; }
-    h1 { margin:0 0 6px; font-family: "Avenir Next Condensed", "Trebuchet MS", sans-serif; letter-spacing: .2px; }
-    .sub { color:var(--muted); margin-bottom:10px; }
-    .search {
-      width: min(540px, 100%);
-      min-height: 44px;
-      border-radius: 12px;
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,.9);
-      color: var(--ink);
-      padding: 10px 12px;
-      margin-bottom: 12px;
-      font-size: 14px;
-      box-shadow: var(--shadow);
-    }
-    .grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:12px; }
-    .card {
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      background: var(--panel);
-      padding: 12px;
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-    }
-    .card h3 { margin: 0 0 8px; color: #163f57; }
-    .item {
-      border-top: 1px solid rgba(16,43,61,.12);
-      padding: 8px 0;
-    }
-    .item:first-child { border-top: 0; padding-top: 0; }
-    .k { color:#5f7b8f; font-size: 12px; text-transform: uppercase; letter-spacing: .4px; }
-    .v { color:#173d54; font-weight: 700; }
-    .muted { color:var(--muted); font-size: 12px; margin-top: 2px; }
-    a.link { color:#0b7ca5; text-decoration: none; }
-    .hidden { display: none; }
-  </style>
-  <link rel="stylesheet" href="./companion_theme.css?v=20260729-2" />
+  
+  <link rel="stylesheet" href="./static/css/theme.css" />
+  <script src="./static/js/app.js"></script>
 </head>
-<body class="page-cabinet">
+<body data-page="cabinet">
   <div class="wrap">
-    <nav class="nav">
-      <a href="./index.html">Home</a>
-      <a href="./doctor-notes.html">Doctor Notes</a>
-      <a href="./dashboard.html">Lab Results Dashboard</a>
-      <a href="./bp.html">Blood Pressure</a>
-      <a href="./composition.html">Body Composition</a>
-      <a href="./vault.html">Health Vault</a>
-      <a href="./kaiser-labs.html">Kaiser Labs</a>
-      <a href="./immunizations.html">Immunizations</a>
-      <a href="./admin.html">Admin</a>
-      <a href="./history.html">History</a>
-    </nav>
+    
     <h1 id="title">Project Cabinet</h1>
     <div class="sub" id="subtitle">Organized place for health documents, references, and quick links.</div>
     <input id="q" class="search" type="search" placeholder="Search section, document, or keyword..." />
@@ -100,8 +25,7 @@
       const subtitle = document.getElementById("subtitle");
       let data;
       try {
-        const res = await fetch("./cabinet_data.json");
-        data = await res.json();
+        data = await App.getJSON("./cabinet_data.json");
       } catch (_e) {
         root.innerHTML = '<div class="card">Failed to load cabinet data.</div>';
         return;
@@ -141,5 +65,6 @@
 
     loadCabinet();
   </script>
+  <script src="./static/js/shell.js"></script>
 </body>
 </html>

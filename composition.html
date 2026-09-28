@@ -4,433 +4,16 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Body Composition Dashboard (DEXA / InBody)</title>
-  <style>
-    /* Styling overrides specifically for Body Composition page */
-    body.page-composition {
-      --page-accent: #7268f2;
-      --page-accent-2: #5b4fe8;
-    }
-    .wrap { max-width: 1280px; margin: 0 auto; }
-    .composition-nav {
-      display: flex;
-      justify-content: flex-start;
-      margin-bottom: 14px;
-    }
-    .composition-nav a {
-      display: inline-flex;
-      align-items: center;
-      min-height: 40px;
-      padding: 0 16px;
-    }
-    @media (max-width: 600px) {
-      .composition-nav { margin: 8px 0 12px; }
-      .composition-nav a { width: 100%; justify-content: center; }
-    }
-    
-    .hero {
-      margin-bottom: 14px;
-      padding: 20px;
-    }
-    
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-      margin-bottom: 16px;
-    }
-    @media (max-width: 1024px) {
-      .grid { grid-template-columns: 1fr; }
-    }
-    
-    .card.chart { padding: 14px; }
-    .chart-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-      gap: 8px;
-    }
-    .chart h3 { margin: 0; font-family: "Avenir Next Condensed", "Trebuchet MS", sans-serif; font-weight: 800; }
-    
-    /* Specific section headers */
-    .grid > .card:nth-child(1) .chart-head h3 { color: #8fcff5 !important; }
-    .grid > .card:nth-child(2) .chart-head h3 { color: #c9bbff !important; }
-    .grid > .card:nth-child(3) .chart-head h3 { color: #ffb0be !important; }
-    
-    .graph-shell {
-      position: relative;
-      border-radius: 12px;
-      overflow: hidden;
-      padding: 10px;
-    }
-    
-    svg {
-      width: 100%;
-      height: 240px;
-      display: block;
-      overflow: visible;
-    }
-    
-    .legend {
-      display: flex;
-      gap: 14px;
-      flex-wrap: wrap;
-      margin-top: 10px;
-      font-size: 12px;
-    }
-    .legend-item { display: inline-flex; align-items: center; gap: 6px; }
-    .legend-color { width: 10px; height: 10px; border-radius: 999px; display: inline-block; }
-    
-    /* Collapsible Section Styles */
-    details.section {
-      width: 100%;
-    }
-    summary.section-head {
-      list-style: none;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      padding: 14px 14px 12px;
-      cursor: pointer;
-      user-select: none;
-    }
-    summary.section-head::-webkit-details-marker {
-      display: none;
-    }
-    .section-head h3 {
-      margin: 0;
-      font-size: 18px;
-      font-family: "Avenir Next Condensed", "Trebuchet MS", sans-serif;
-      font-weight: 800;
-    }
-    .chev {
-      width: 26px;
-      height: 26px;
-      border-radius: 999px;
-      border: 1px solid var(--comp-line);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(17, 28, 42, 0.82);
-      font-size: 13px;
-      transition: transform .2s ease;
-      color: var(--comp-ink);
-    }
-    details[open] .chev {
-      transform: rotate(180deg);
-    }
-    .section-body {
-      padding: 14px;
-      border-top: 1px solid var(--comp-line);
-    }
-    
-    .table-wrap {
-      overflow: auto !important;
-      max-height: 480px;
-      border-radius: 12px;
-      margin-top: 10px;
-      border: 1px solid var(--comp-line);
-      background: rgba(8, 17, 30, 0.4) !important;
-    }
-    .table-wrap table {
-      width: 100%;
-      min-width: 650px;
-      border-collapse: collapse;
-      font-size: 14.5px;
-      line-height: 1.4;
-      text-align: center;
-    }
-    .table-wrap th, .table-wrap td {
-      padding: 12px 16px !important;
-      vertical-align: middle;
-    }
-    .table-wrap th {
-      font-weight: 800;
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      color: var(--comp-muted) !important;
-      border-bottom: 2px solid var(--comp-line) !important;
-      background: rgba(13, 24, 38, 0.95) !important;
-    }
-    .table-wrap td {
-      font-weight: 700;
-      color: var(--comp-ink) !important;
-      border-bottom: 1px solid rgba(116, 144, 172, 0.18) !important;
-    }
-    .table-wrap tbody tr:nth-child(odd) td {
-      background: rgba(10, 20, 35, 0.4) !important;
-    }
-    .table-wrap tbody tr:nth-child(even) td {
-      background: rgba(15, 28, 48, 0.4) !important;
-    }
-    .table-wrap tbody tr:hover td {
-      background: rgba(114, 104, 242, 0.12) !important;
-    }
-    
-    /* Specific table column adjustments */
-    .table-wrap td:nth-child(1) {
-      color: #8fcff5 !important;
-      font-weight: 800 !important;
-      letter-spacing: 0.2px;
-      min-width: 100px;
-    }
-    .table-wrap td.cell-notes {
-      text-align: left;
-      font-weight: 400 !important;
-      font-size: 13.5px;
-      color: var(--comp-muted) !important;
-      line-height: 1.45;
-      white-space: normal;
-      min-width: 250px;
-    }
-    .hidden { display: none !important; }
-
-    body.page-composition .inbody-card {
-      margin-bottom: 16px;
-      border-top: 4px solid #73ecb4 !important;
-      background:
-        radial-gradient(circle at 90% 0%, rgba(115, 236, 180, .11), transparent 34%),
-        rgba(13, 24, 38, .96) !important;
-    }
-    body.page-composition .dexa-card {
-      border-top: 4px solid #a99cf2 !important;
-      background:
-        radial-gradient(circle at 92% 0%, rgba(169, 156, 242, .16), transparent 38%),
-        linear-gradient(145deg, rgba(27, 25, 53, .96), rgba(20, 27, 45, .96)) !important;
-    }
-    body.page-composition .dexa-card > details > .section-head {
-      background: rgba(91, 79, 174, .08);
-    }
-    .inbody-head {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 16px;
-      margin-bottom: 14px;
-    }
-    .inbody-head h2 {
-      margin: 0 0 4px;
-      font: 800 22px/1.15 "Avenir Next Condensed", "Trebuchet MS", sans-serif;
-      color: #73ecb4;
-    }
-    .inbody-head p, .med-note p, .scan-caution {
-      margin: 0;
-      color: var(--comp-muted);
-      font-size: 13.5px;
-      line-height: 1.5;
-    }
-    .trend-badge {
-      flex: 0 0 auto;
-      border: 1px solid rgba(115, 236, 180, 0.35);
-      border-radius: 999px;
-      padding: 7px 11px;
-      color: #73ecb4;
-      background: rgba(115, 236, 180, 0.08);
-      font-size: 12px;
-      font-weight: 800;
-    }
-    .inbody-summary-row {
-      display: grid;
-      grid-template-columns: minmax(0, 1.45fr) minmax(280px, .75fr);
-      gap: 12px;
-      margin-bottom: 14px;
-    }
-    .summary-metrics-panel, .change-panel {
-      border: 1px solid var(--comp-line);
-      border-radius: 16px;
-      padding: 16px;
-      background: rgba(8, 17, 30, .55);
-    }
-    .eyebrow {
-      margin: 0 0 5px;
-      color: #73ecb4;
-      font-size: 10px;
-      font-weight: 900;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-    }
-    .change-panel h3, .history-head h3 {
-      margin: 0;
-      color: var(--comp-ink);
-      font-size: 18px;
-    }
-    .change-panel > p, .history-head p {
-      margin: 5px 0 0;
-      color: var(--comp-muted);
-      font-size: 12.5px;
-      line-height: 1.45;
-    }
-    .latest-metrics {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(120px, 1fr));
-      gap: 8px;
-      margin: 0;
-    }
-    .latest-metric {
-      padding: 10px;
-      border: 1px solid rgba(255, 255, 255, .08);
-      border-radius: 10px;
-      background: #070b10;
-    }
-    .latest-metric span { display: block; color: #aebdcc; font-size: 10px; text-transform: uppercase; }
-    .latest-metric strong { display: block; margin-top: 3px; color: #ffffff; font-size: 18px; }
-    .latest-metric small { display: block; margin-top: 3px; color: var(--comp-muted); font-size: 9.5px; line-height: 1.35; }
-    .latest-metric.reference { border: 1px dashed rgba(88, 200, 255, .45); background: #081018; }
-    .latest-scan-context { margin: 0 0 8px; color: var(--comp-muted); font-size: 11.5px; }
-    .change-list { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 14px; }
-    .change-row { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; padding: 8px 10px; border-radius: 9px; background: rgba(115, 236, 180, .045); font-size: 13px; }
-    .change-row span { color: var(--comp-muted); }
-    .change-row strong { color: #73ecb4; font-size: 14px; }
-    .history-head {
-      display: flex;
-      align-items: end;
-      justify-content: space-between;
-      gap: 12px;
-      margin: 18px 2px 4px;
-    }
-    .history-actions { display: flex; align-items: center; gap: 10px; }
-    .view-switcher {
-      display: inline-flex;
-      padding: 3px;
-      border: 1px solid var(--comp-line);
-      border-radius: 10px;
-      background: rgba(8, 17, 30, .7);
-    }
-    .view-switcher button {
-      border: 0;
-      border-radius: 7px;
-      padding: 7px 12px;
-      color: var(--comp-muted);
-      background: transparent;
-      font: inherit;
-      font-size: 12px;
-      font-weight: 800;
-      cursor: pointer;
-    }
-    .view-switcher button.active {
-      color: #07111d;
-      background: #73ecb4;
-    }
-    .inbody-table th:first-child, .inbody-table td:first-child { position: sticky; left: 0; z-index: 1; }
-    .inbody-table tbody tr.latest-row td { background: rgba(115, 236, 180, .09) !important; }
-    .dexa-history-table { min-width: 1840px !important; }
-    .dexa-history-table th:first-child, .dexa-history-table td:first-child { position: sticky; left: 0; z-index: 1; }
-    .dexa-history-table tbody tr td:first-child { background: rgba(39, 34, 73, .98) !important; }
-    .dexa-report-note {
-      margin-top: 10px;
-      padding: 12px 14px;
-      border-left: 4px solid #a99cf2;
-      border-radius: 10px;
-      background: rgba(169, 156, 242, .08);
-      color: var(--comp-muted);
-      font-size: 13px;
-      line-height: 1.45;
-    }
-    .source-note { color: var(--comp-muted); font-size: 11px; font-weight: 500; }
-    .inbody-chart-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 14px;
-    }
-    .inbody-chart {
-      padding: 12px;
-      border: 1px solid var(--comp-line);
-      border-radius: 12px;
-      background: rgba(8, 17, 30, 0.4);
-    }
-    .inbody-chart h3 {
-      margin: 0 0 4px;
-      color: var(--comp-ink);
-      font-size: 14px;
-    }
-    .inbody-chart svg { height: 190px; }
-    .med-note {
-      margin-top: 14px;
-      padding: 13px 14px;
-      border-left: 4px solid #ffd081;
-      border-radius: 10px;
-      background: rgba(255, 208, 129, 0.07);
-    }
-    .med-note strong { color: #ffd081; }
-    .scan-caution {
-      margin-top: 10px;
-      padding: 10px 12px;
-      border-radius: 10px;
-      background: rgba(255, 143, 160, 0.07);
-      border: 1px solid rgba(255, 143, 160, 0.2);
-    }
-    .dashboard-section-head {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 16px;
-      margin: 22px 0 12px;
-      padding: 0 2px;
-    }
-    .dashboard-section-head h2 {
-      margin: 0 0 4px;
-      color: #c9bbff;
-      font: 800 22px/1.15 "Avenir Next Condensed", "Trebuchet MS", sans-serif;
-    }
-    .dashboard-section-head p {
-      margin: 0;
-      color: var(--comp-muted);
-      font-size: 13.5px;
-      line-height: 1.45;
-    }
-    .dashboard-collapse {
-      margin-bottom: 16px;
-      padding: 0 !important;
-      overflow: hidden;
-    }
-    .dashboard-summary h2 {
-      margin: 0 0 4px;
-      font: 800 22px/1.15 "Avenir Next Condensed", "Trebuchet MS", sans-serif;
-    }
-    .dashboard-summary p {
-      margin: 0;
-      color: var(--comp-muted);
-      font-size: 13.5px;
-      line-height: 1.45;
-    }
-    .summary-actions {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      flex: 0 0 auto;
-    }
-    .scan-method-badge {
-      flex: 0 0 auto;
-      border: 1px solid rgba(201, 187, 255, 0.35);
-      border-radius: 999px;
-      padding: 7px 11px;
-      color: #c9bbff;
-      background: rgba(201, 187, 255, 0.08);
-      font-size: 12px;
-      font-weight: 800;
-    }
-    @media (max-width: 800px) {
-      .inbody-summary-row { grid-template-columns: 1fr; }
-      .latest-metrics { grid-template-columns: 1fr 1fr; }
-      .change-list { grid-template-columns: 1fr 1fr; }
-      .inbody-chart-grid { grid-template-columns: 1fr; }
-      .inbody-head { flex-direction: column; }
-      .dashboard-section-head { flex-direction: column; }
-    }
-    @media (max-width: 480px) {
-      .history-head { align-items: flex-start; flex-direction: column; }
-    }
-  </style>
-  <link rel="stylesheet" href="./companion_theme.css?v=20260729-2" />
+  
+  <link rel="stylesheet" href="./static/css/theme.css" />
+  <script src="./static/js/app.js"></script>
+  <script src="./static/js/charts.js"></script>
   <script>
     document.write('<script src="./dexa_data.js?ts=' + Date.now() + '"><\/script>');
     document.write('<script src="./home_weight_reference.js?ts=' + Date.now() + '"><\/script>');
   </script>
 </head>
-<body class="page-composition">
+<body data-page="composition">
   <div class="wrap">
     <section class="card" style="padding:20px;margin-bottom:20px"><h2>Weight &amp; Body Scan Context</h2><a href="weight.html">Record or edit daily weight</a><div id="weight-context">Loading…</div></section>
     <div id="file-protocol-warning" style="display:none; background:rgba(220,137,32,0.14); color:#b3c3d4; padding:12px; border-radius:12px; margin-bottom:14px; font-weight:700; border:1px solid rgba(220,137,32,0.3); font-size:14px;">
@@ -754,27 +337,27 @@
       document.getElementById("latest-scan-context").textContent = `Latest scan · ${fmtDate(latest.date)} · Fitness 19, Sunnyvale · 11:58`;
       const homeReference = window.HOME_WEIGHT_REFERENCE;
       const latestMetrics = [
-        ["Scan weight", `${latest.scan_weight_lb.toFixed(1)} lb`, "", ""],
-        ["Body fat", `${latest.body_fat_pct.toFixed(1)}%`, "", ""],
-        ["Lean mass", `${latest.lean_body_mass_lb.toFixed(1)} lb`, "", ""],
-        ["Skeletal muscle", `${latest.skeletal_muscle_mass_lb.toFixed(1)} lb`, "", ""],
-        ["Basal metabolic rate", `${Math.round(latest.basal_metabolic_rate_kcal)} kcal`, "", ""]
+        ["Scan weight", `${latest.scan_weight_lb.toFixed(1)} lb`, "", "ib-pill-blue"],
+        ["Body fat", `${latest.body_fat_pct.toFixed(1)}%`, "", "ib-pill-rose"],
+        ["Lean mass", `${latest.lean_body_mass_lb.toFixed(1)} lb`, "", "ib-pill-violet"],
+        ["Skeletal muscle", `${latest.skeletal_muscle_mass_lb.toFixed(1)} lb`, "", "ib-pill-green"],
+        ["Basal metabolic rate", `${Math.round(latest.basal_metabolic_rate_kcal)} kcal`, "", "ib-pill-amber"]
       ];
       if (homeReference) latestMetrics.splice(3, 0, [
         "Home weight · reference only",
         `${homeReference.weight_lb.toFixed(1).replace(/\.0$/, "")} lb`,
         `${fmtDate(homeReference.date)} · ${homeReference.source} · not an InBody measurement`,
-        "reference"
+        "ib-pill-slate"
       ]);
-      document.getElementById("inbody-latest-metrics").innerHTML = latestMetrics.map(([label, value, note, extraClass]) =>
-        `<div class="latest-metric ${extraClass}"><span>${label}</span><strong>${value}</strong>${note ? `<small>${note}</small>` : ""}</div>`
+      document.getElementById("inbody-latest-metrics").innerHTML = latestMetrics.map(([label, value, note, pillClass]) =>
+        `<div class="ib-pill ${pillClass}"><div class="ib-pill-tag">${label}</div><div class="ib-pill-value">${value}</div>${note ? `<div class="ib-pill-note">${note}</div>` : ""}</div>`
       ).join("");
       document.getElementById("inbody-change-list").innerHTML = [
         ["Scan weight", signed(change("scan_weight_lb"), " lb")],
         ["Fat mass", signed(change("body_fat_mass_lb"), " lb")],
         ["Lean mass", signed(change("lean_body_mass_lb"), " lb")],
         ["Skeletal muscle", signed(change("skeletal_muscle_mass_lb"), " lb")]
-      ].map(([label, value]) => `<div class="change-row"><span>${label}</span><strong>${value}</strong></div>`).join("");
+      ].map(([label, value]) => `<div class="ib-pill ib-pill-amber"><div class="ib-pill-tag">${label}</div><div class="ib-pill-value">${value}</div></div>`).join("");
     }
 
     function drawInBodyCharts(records) {
@@ -1016,16 +599,6 @@
     }
     
     function drawMultiLine(svgId, records, series, forceMin = null, forceMax = null) {
-      const svg = document.getElementById(svgId);
-      if (!svg) return;
-      
-      const width = svg.clientWidth || 500;
-      const height = svg.clientHeight || 240;
-      const pad = { l: 42, r: 12, t: 15, b: 25 };
-      const w = width - pad.l - pad.r;
-      const h = height - pad.t - pad.b;
-      
-      // Find limits
       let allVals = [];
       records.forEach(r => {
         series.forEach(s => {
@@ -1033,67 +606,29 @@
           if (v !== null && v !== undefined) allVals.push(Number(v));
         });
       });
-      
-      if (!allVals.length) {
-        svg.innerHTML = `<text x="50%" y="50%" text-anchor="middle" fill="#98adbf" font-size="12" font-weight="700" dy="4">No data available for this chart type</text>`;
-        return;
-      }
-      
       let vMin = forceMin !== null ? forceMin : Math.min(...allVals);
       let vMax = forceMax !== null ? forceMax : Math.max(...allVals);
       const span = vMax - vMin || 1;
       const padY = span * 0.15 || 1;
-      
       if (forceMin === null) vMin = Math.max(0, vMin - padY);
       if (forceMax === null) vMax = vMax + padY;
-      
-      const y = (val) => pad.t + (1 - (val - vMin) / (vMax - vMin)) * h;
-      const x = (idx) => pad.l + (idx / Math.max(1, records.length - 1)) * w;
-      
-      let html = "";
-      
-      // Draw gridlines
-      for (let i = 0; i <= 3; i++) {
-        const yy = pad.t + (i / 3) * h;
-        const tickVal = (vMax - (i / 3) * (vMax - vMin)).toFixed(1);
-        html += `<line x1="${pad.l}" y1="${yy}" x2="${pad.l + w}" y2="${yy}" stroke="rgba(74, 104, 136, 0.28)" stroke-width="0.8" stroke-dasharray="3 4"/>`;
-        html += `<text x="${pad.l - 6}" y="${yy + 4}" text-anchor="end" fill="#98adbf" font-size="10.5" font-weight="700">${tickVal}</text>`;
-      }
-      
-      // Draw time labels
-      records.forEach((r, i) => {
-        const isBoundary = i === 0 || i === records.length - 1;
-        if (isBoundary || records.length <= 5) {
-          const formatted = new Date(`${r.date}T00:00:00`).toLocaleDateString("en-US", { month: "short", day: "numeric" });
-          html += `<text x="${x(i)}" y="${height - 6}" text-anchor="middle" fill="#98adbf" font-size="10.5" font-weight="700">${formatted}</text>`;
-        }
+      Charts.line(svgId, {
+        series: series.map(s => ({
+          values: records.map(r => r[s.key]),
+          color: s.color, width: 2.5,
+          dots: () => ({ r: records.length > 10 ? 3 : 4, fill: s.color, stroke: "#070d14", sw: 1.2 }),
+          endLabel: true
+        })),
+        count: records.length,
+        pad: { l: 42, r: 12, t: 15, b: 25 }, fallbackW: 500, fallbackH: 240,
+        y: { min: vMin, max: vMax, ticks: 4, tickFormat: (v) => v.toFixed(1),
+             tickFill: "#98adbf", tickSize: 10.5, gridStroke: "rgba(74, 104, 136, 0.28)", gridW: 0.8 },
+        xLabel: { fn: (i) => (i === 0 || i === records.length - 1 || records.length <= 5)
+                    ? new Date(`${records[i].date}T00:00:00`).toLocaleDateString("en-US", { month: "short", day: "numeric" })
+                    : null,
+                  fill: "#98adbf", size: 10.5, dy: -6 },
+        emptyText: "No data available for this chart type", emptyFill: "#98adbf"
       });
-      
-      // Draw series lines
-      series.forEach(s => {
-        const points = records.map((r, i) => {
-          const v = r[s.key];
-          return (v !== null && v !== undefined) ? { x: x(i), y: y(Number(v)), val: v } : null;
-        }).filter(Boolean);
-        
-        if (points.length < 1) return;
-        
-        // Line path
-        const path = points.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x} ${p.y}`).join(" ");
-        html += `<path d="${path}" fill="none" stroke="${s.color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>`;
-        
-        // Point dots & values
-        points.forEach((p, idx) => {
-          html += `<circle cx="${p.x}" cy="${p.y}" r="${records.length > 10 ? 3 : 4}" fill="${s.color}" stroke="#070d14" stroke-width="1.2"/>`;
-          // Draw value text next to single point, or last point in timeline
-          if (records.length === 1 || idx === points.length - 1) {
-            html += `<text x="${p.x + 8}" y="${p.y - 6}" fill="${s.color}" font-size="11" font-weight="800">${p.val}</text>`;
-          }
-        });
-      });
-      
-      svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
-      svg.innerHTML = html;
     }
     
     async function init() {
@@ -1154,5 +689,6 @@
   </script>
 <script src="weight_context.js"></script>
 <script>loadWeightContext();</script>
+  <script src="./static/js/shell.js"></script>
 </body>
 </html>

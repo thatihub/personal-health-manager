@@ -5,1056 +5,16 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Health Vault</title>
-  <style>
-    :root {
-      --bg: #edf7ff;
-      --ink: #0f2b3d;
-      --muted: #456174;
-      --panel: rgba(255, 255, 255, 0.96);
-      --shadow: 0 16px 36px rgba(14, 43, 63, 0.12);
-      --blue: #0b7ca7;
-      --teal: #10a37f;
-      --amber: #e58f1f;
-      --rose: #de5a6c;
-      --sky: #d9f0ff;
-      --line: rgba(15, 43, 61, 0.12);
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      font-family: "Avenir Next", "Trebuchet MS", "Segoe UI", sans-serif;
-      color: var(--ink);
-      background:
-        radial-gradient(circle at 85% 8%, rgba(11, 124, 167, 0.2), transparent 38%),
-        radial-gradient(circle at 15% 88%, rgba(16, 163, 127, 0.16), transparent 36%),
-        linear-gradient(160deg, #f2f9ff 0%, #fffaf2 48%, #f0fff9 100%);
-      min-height: 100vh;
-      padding: 20px;
-    }
-
-    .wrap {
-      max-width: 1150px;
-      margin: 0 auto;
-    }
-
-    .nav {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-bottom: 14px;
-    }
-
-    .nav a {
-      text-decoration: none;
-      padding: 9px 12px;
-      border-radius: 12px;
-      border: 1px solid var(--line);
-      background: rgba(255, 255, 255, 0.82);
-      color: #274150;
-      font-weight: 700;
-      font-size: 13px;
-      min-height: 44px;
-      display: inline-flex;
-      align-items: center;
-      transition: transform .18s ease, box-shadow .18s ease;
-    }
-
-    .nav a:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 8px 16px rgba(16, 43, 61, .12);
-    }
-
-    .nav a.active {
-      background: linear-gradient(120deg, var(--blue), #1a93bf);
-      color: #fff;
-      border-color: transparent;
-    }
-
-    .pill-nav {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin: 10px 0 14px;
-    }
-
-    .pill {
-      text-decoration: none;
-      padding: 7px 12px;
-      border-radius: 999px;
-      border: 1px solid var(--line);
-      background: rgba(255, 255, 255, 0.9);
-      color: #24526a;
-      font-weight: 700;
-      font-size: 12px;
-      transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
-    }
-
-    .pill:hover {
-      background: #fff;
-      transform: translateY(-1px);
-      box-shadow: 0 8px 16px rgba(16, 43, 61, .12);
-    }
-
-    .sub-pills {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin: 6px 0 12px;
-    }
-
-    .sub-pill {
-      display: inline-flex;
-      align-items: center;
-      padding: 5px 10px;
-      border-radius: 12px;
-      background: rgba(15, 43, 61, 0.06);
-      color: #1f475c;
-      font-weight: 700;
-      font-size: 11px;
-      text-decoration: none;
-      border: 1px solid rgba(15, 43, 61, 0.12);
-      transition: transform .14s ease, background .14s ease, box-shadow .14s ease;
-    }
-
-    .sub-pill:hover {
-      background: rgba(15, 43, 61, 0.12);
-      transform: translateY(-1px);
-      box-shadow: 0 6px 12px rgba(16, 43, 61, .12);
-    }
-
-    .bottom-tab {
-      display: none;
-    }
-
-    .bottom-tab a {
-      text-decoration: none;
-      color: #2b4655;
-      font-weight: 700;
-      font-size: 12px;
-      padding: 8px 6px;
-      border-radius: 10px;
-      text-align: center;
-      min-height: 42px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .bottom-tab a.active {
-      background: linear-gradient(120deg, var(--blue), #1a93bf);
-      color: #fff;
-    }
-
-    h1 {
-      margin: 0 0 6px;
-      font-family: "Avenir Next Condensed", "Trebuchet MS", sans-serif;
-      letter-spacing: 0.2px;
-      font-size: clamp(26px, 4vw, 40px);
-    }
-
-    .sub {
-      color: var(--muted);
-      margin-bottom: 8px;
-    }
-
-    .updated-banner {
-      margin-bottom: 12px;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 7px 10px;
-      border-radius: 999px;
-      border: 1px solid var(--line);
-      background: rgba(255, 255, 255, 0.78);
-      color: #2f5569;
-      font-size: 12px;
-      font-weight: 700;
-    }
-
-    .search-wrap {
-      margin-bottom: 14px;
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    .search-input {
-      width: min(560px, 100%);
-      min-height: 44px;
-      border-radius: 12px;
-      border: 1px solid var(--line);
-      background: rgba(255, 255, 255, .92);
-      padding: 10px 12px;
-      font-size: 14px;
-      color: var(--ink);
-      outline: none;
-    }
-
-    .search-input:focus {
-      border-color: var(--blue);
-      box-shadow: 0 0 0 3px rgba(11, 124, 167, .17);
-    }
-
-    .search-note {
-      font-size: 12px;
-      color: var(--muted);
-    }
-
-    .toolbar {
-      margin: 0 0 14px;
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .toolbar-btn {
-      min-height: 40px;
-      border-radius: 10px;
-      border: 1px solid var(--line);
-      background: rgba(255, 255, 255, .9);
-      color: #24495c;
-      font-size: 12px;
-      font-weight: 700;
-      padding: 8px 11px;
-      cursor: pointer;
-      transition: transform .18s ease, filter .18s ease;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .toolbar-btn:hover {
-      background: #fff;
-      transform: translateY(-1px);
-      filter: brightness(1.03);
-    }
-
-    .json-editor {
-      margin: 0 0 14px;
-      padding: 12px;
-      border-radius: 14px;
-      border: 1px solid rgba(132, 166, 194, 0.28);
-      background: rgba(13, 22, 34, 0.86);
-      box-shadow: var(--shadow);
-    }
-
-    .json-editor h2 {
-      margin: 0 0 8px;
-      font-size: 16px;
-      color: #d9e9f5;
-      font-family: "Avenir Next Condensed", "Trebuchet MS", sans-serif;
-    }
-
-    .json-editor textarea {
-      width: 100%;
-      min-height: 280px;
-      border-radius: 10px;
-      border: 1px solid rgba(132, 166, 194, 0.28);
-      background: rgba(9, 17, 27, 0.95);
-      color: #e5f1fb;
-      padding: 10px;
-      font-size: 13px;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-      resize: vertical;
-      outline: none;
-    }
-
-    .json-editor .row-actions {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-top: 8px;
-    }
-
-    .json-sections {
-      margin-top: 8px;
-      display: grid;
-      gap: 8px;
-    }
-
-    .json-sec {
-      border: 1px solid rgba(132, 166, 194, 0.28);
-      border-radius: 10px;
-      background: rgba(9, 17, 27, 0.7);
-      overflow: hidden;
-    }
-
-    .json-sec summary {
-      cursor: pointer;
-      list-style: none;
-      padding: 10px;
-      font-weight: 700;
-      color: #d9e9f5;
-      border-bottom: 1px solid rgba(132, 166, 194, 0.2);
-    }
-
-    .json-sec summary::-webkit-details-marker {
-      display: none;
-    }
-
-    .json-sec textarea {
-      border: 0;
-      border-top: 1px solid rgba(132, 166, 194, 0.18);
-      border-radius: 0;
-      min-height: 180px;
-    }
-
-    .json-editor .status {
-      margin-top: 8px;
-      font-size: 12px;
-      color: #b5cde0;
-      white-space: pre-wrap;
-    }
-
-    .hidden {
-      display: none !important;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      align-items: start;
-    }
-
-    .card {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      box-shadow: var(--shadow);
-      padding: 0;
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      transition: transform .2s ease, box-shadow .2s ease;
-    }
-
-    .card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 18px 34px rgba(16, 43, 61, .16);
-    }
-
-    .card.accent-blue {
-      border-top: 5px solid var(--blue);
-    }
-
-    .card.accent-teal {
-      border-top: 5px solid var(--teal);
-    }
-
-    .card.accent-amber {
-      border-top: 5px solid var(--amber);
-    }
-
-    .card.accent-rose {
-      border-top: 5px solid var(--rose);
-    }
-
-    details.section {
-      width: 100%;
-    }
-
-    summary.section-head {
-      list-style: none;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      padding: 14px 14px 12px;
-      cursor: pointer;
-      user-select: none;
-    }
-
-    summary.section-head::-webkit-details-marker {
-      display: none;
-    }
-
-    .section-head h3 {
-      margin: 0;
-      font-size: 17px;
-    }
-
-    .chev {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-      color: var(--muted);
-      transition: transform .2s ease;
-    }
-
-    details[open] .chev {
-      transform: rotate(180deg);
-    }
-
-    .section-body {
-      padding: 0 14px 14px;
-      border-top: 1px solid rgba(20, 34, 46, .07);
-    }
-
-    .row {
-      border-top: 1px solid rgba(20, 34, 46, .08);
-      padding: 9px 0;
-    }
-
-    .row:first-child {
-      border-top: 0;
-      padding-top: 0;
-    }
-
-    .k {
-      font-size: 12px;
-      color: var(--muted);
-    }
-
-    .v {
-      font-weight: 700;
-      margin-top: 2px;
-    }
-
-    .muted {
-      color: var(--muted);
-      font-size: 12px;
-      margin-top: 3px;
-    }
-
-    a.link {
-      color: #124e67;
-      word-break: break-all;
-    }
-
-    .chip {
-      display: inline-block;
-      background: rgba(15, 126, 166, .16);
-      color: #104f67;
-      padding: 2px 8px;
-      border-radius: 999px;
-      font-size: 11px;
-      margin-right: 6px;
-    }
-
-    ul.list {
-      margin: 6px 0 0 18px;
-      padding: 0;
-    }
-
-    ul.list li {
-      margin: 4px 0;
-    }
-
-    .phone-link {
-      color: #124e67;
-      font-weight: 700;
-      text-decoration: none;
-    }
-
-    .mini-btn {
-      border: 1px solid var(--line);
-      background: #fff;
-      color: #2f5267;
-      border-radius: 8px;
-      font-size: 11px;
-      font-weight: 700;
-      padding: 2px 7px;
-      margin-left: 6px;
-      cursor: pointer;
-      vertical-align: middle;
-      transition: transform .18s ease, filter .18s ease;
-    }
-
-    .mini-btn:hover {
-      transform: translateY(-1px);
-      filter: brightness(1.03);
-    }
-
-    .card.hidden-by-search {
-      display: none;
-    }
-
-    .vacc-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 10px;
-    }
-
-    .vacc-card {
-      border: 1px solid rgba(116, 144, 172, 0.34);
-      border-radius: 14px;
-      padding: 10px;
-      background: rgba(37, 55, 76, 0.85);
-      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
-    }
-
-    .vacc-card h4 {
-      margin: 0 0 6px;
-      color: #f4f8fc;
-      font-size: 15px;
-    }
-
-    .vacc-card .dates {
-      color: #d6e4f2;
-      font-weight: 700;
-      font-size: 13px;
-    }
-
-    @media (max-width: 1024px) {
-      body {
-        padding: 16px;
-      }
-
-      .wrap {
-        max-width: 100%;
-      }
-
-      .grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    @media (max-width: 640px) {
-      body {
-        padding: 12px;
-        padding-bottom: calc(86px + env(safe-area-inset-bottom));
-      }
-
-      .nav {
-        display: none;
-      }
-
-      .bottom-tab {
-        position: fixed;
-        left: 12px;
-        right: 12px;
-        bottom: max(10px, env(safe-area-inset-bottom));
-        z-index: 999;
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-        gap: 8px;
-        padding: 8px;
-        border-radius: 14px;
-        background: rgba(255, 255, 255, 0.94);
-        border: 1px solid rgba(16, 36, 54, 0.18);
-        box-shadow: 0 12px 26px rgba(16, 36, 54, 0.18);
-        backdrop-filter: blur(8px);
-      }
-
-      h1 {
-        font-size: clamp(24px, 7vw, 34px);
-      }
-
-      .card {
-        border-radius: 14px;
-      }
-
-      .row {
-        padding: 8px 0;
-      }
-
-      summary.section-head {
-        padding: 12px;
-      }
-
-      .section-body {
-        padding: 0 12px 12px;
-      }
-    }
-
-    /* Premium Sub-item Cards for Support & Benefits */
-    .vault-item-card {
-      background: rgba(14, 25, 44, 0.45) !important;
-      border: 1px solid rgba(116, 144, 172, 0.18) !important;
-      border-left: 4px solid #1bc471 !important;
-      border-radius: 12px !important;
-      padding: 14px !important;
-      margin-bottom: 12px !important;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15) !important;
-      transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-    .vault-item-card:hover {
-      transform: translateY(-1.5px);
-      border-color: rgba(116, 144, 172, 0.35) !important;
-      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.28) !important;
-    }
-    
-    .vault-item-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      padding-bottom: 6px;
-      margin-bottom: 4px;
-    }
-    
-    .vault-item-title {
-      font-size: 15px !important;
-      font-weight: 800 !important;
-      color: #f4f8fc !important;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    
-    .vault-item-emoji {
-      font-size: 16px;
-      line-height: 1;
-    }
-    
-    .vault-item-badge {
-      display: inline-flex;
-      align-items: center;
-      padding: 3px 8px;
-      border-radius: 999px;
-      font-size: 11px !important;
-      font-weight: 700 !important;
-      background: rgba(18, 164, 212, 0.15);
-      border: 1px solid rgba(18, 164, 212, 0.3);
-      color: #8fcff5 !important;
-    }
-    
-    .vault-item-body {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      font-size: 13.5px !important;
-      line-height: 1.45;
-    }
-    
-    .vault-phone-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-weight: 700;
-      color: #73ecb4 !important;
-    }
-    .vault-phone-row a {
-      color: #73ecb4 !important;
-      text-decoration: none;
-      border-bottom: 1px dashed rgba(115, 236, 180, 0.5);
-    }
-    .vault-phone-row a:hover {
-      border-bottom-style: solid;
-      filter: brightness(1.1);
-    }
-    
-    .vault-detail-bullet {
-      position: relative;
-      padding-left: 14px;
-      color: #d6e5f3 !important;
-      font-size: 13px !important;
-    }
-    .vault-detail-bullet::before {
-      content: "✦";
-      position: absolute;
-      left: 0;
-      color: #ffd081;
-      font-size: 9px;
-      top: 1px;
-    }
-    .benefit-action {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      align-self: flex-start;
-      min-height: 42px;
-      margin-top: 8px;
-      padding: 9px 14px;
-      border: 1px solid rgba(255, 208, 129, 0.48);
-      border-radius: 11px;
-      background: linear-gradient(120deg, #b87412, #e29a27);
-      color: #fff !important;
-      text-decoration: none !important;
-      font-size: 13px;
-      font-weight: 850;
-      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.24);
-    }
-    .benefit-action:hover {
-      transform: translateY(-1px);
-      filter: brightness(1.08);
-    }
-    .gym-badge a {
-      color: #73ecb4 !important;
-      text-decoration: none;
-      border-bottom: 1px dashed rgba(115, 236, 180, 0.5);
-      font-weight: 700;
-    }
-    .gym-badge a:hover {
-      border-bottom-style: solid;
-      filter: brightness(1.1);
-    }
-
-    /* Quick Reference Card Styles */
-    .quick-reference-card {
-      margin: 0 0 16px;
-      padding: 20px;
-      border-radius: 20px;
-      background: linear-gradient(135deg, rgba(10, 25, 41, 0.9) 0%, rgba(16, 43, 61, 0.95) 100%) !important;
-      border: 1px solid rgba(27, 196, 113, 0.35) !important;
-      box-shadow: 0 12px 32px rgba(10, 25, 41, 0.25) !important;
-      color: #fff;
-    }
-
-    .qr-grid {
-      display: grid;
-      grid-template-columns: 1.2fr 1.2fr 1.6fr;
-      gap: 20px;
-      align-items: start;
-    }
-
-    .qr-col {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .qr-col:not(:last-child) {
-      border-right: 1px solid rgba(255, 255, 255, 0.1);
-      padding-right: 20px;
-    }
-
-    .qr-label {
-      font-size: 11px;
-      font-weight: 800;
-      color: #ff9d8c;
-      letter-spacing: 1.2px;
-      text-transform: uppercase;
-    }
-
-    .qr-value-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .qr-value {
-      font-size: 24px;
-      font-weight: 900;
-      color: #fff;
-      font-family: "Avenir Next Condensed", "Trebuchet MS", sans-serif;
-      letter-spacing: 0.5px;
-    }
-
-    #qr-member-id {
-      color: #73ecb4;
-    }
-
-    #qr-network-name {
-      color: #8fcff5;
-    }
-
-    .qr-sub-label {
-      font-size: 13px;
-      font-weight: 600;
-      color: #b5cde0;
-    }
-
-    .qr-scan-access {
-      display: grid;
-      gap: 7px;
-      margin-top: 9px;
-      padding-top: 10px;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-      font-size: 12px;
-      color: #d6e5f3;
-    }
-
-    .qr-scan-access-row {
-      display: grid;
-      grid-template-columns: 68px minmax(0, 1fr);
-      gap: 7px;
-      align-items: center;
-    }
-
-    .qr-scan-access-label {
-      color: #98adbf;
-      font-weight: 700;
-    }
-
-    .qr-scan-access a {
-      color: #73dfff !important;
-      font-weight: 750;
-      text-decoration: none;
-      overflow-wrap: anywhere;
-    }
-
-    .qr-scan-access a:hover { text-decoration: underline; }
-
-    .qr-network-details {
-      font-size: 12.5px;
-      color: #d6e5f3;
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-      margin-top: 4px;
-    }
-
-    .qr-network-details a {
-      color: #8fcff5 !important;
-      text-decoration: none;
-      font-weight: 700;
-    }
-
-    .qr-network-details a:hover {
-      text-decoration: underline;
-    }
-
-    .qr-care-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-top: 2px;
-    }
-
-    .qr-care-item {
-      font-size: 13px;
-      line-height: 1.4;
-    }
-
-    .qr-care-name {
-      font-weight: 700;
-      color: #ffd081;
-    }
-
-    .qr-care-phone {
-      color: #73ecb4 !important;
-      font-weight: 800;
-      text-decoration: none;
-    }
-
-    .qr-care-phone:hover {
-      text-decoration: underline;
-    }
-
-    .qr-care-meta {
-      font-size: 11px;
-      color: #98adbf;
-      margin-left: 20px;
-    }
-
-    @media (max-width: 1024px) {
-      .qr-grid {
-        grid-template-columns: 1fr 1fr;
-      }
-      .qr-col:nth-child(2) {
-        border-right: none;
-        padding-right: 0;
-      }
-      .qr-col:nth-child(3) {
-        grid-column: span 2;
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-        padding-top: 16px;
-      }
-    }
-
-    @media (max-width: 640px) {
-      .qr-grid {
-        grid-template-columns: 1fr;
-        gap: 16px;
-      }
-      .qr-col {
-        border-right: none !important;
-        padding-right: 0 !important;
-      }
-      .qr-col:not(:first-child) {
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-        padding-top: 16px;
-      }
-      .qr-col:nth-child(3) {
-        grid-column: span 1;
-      }
-      .qr-value {
-        font-size: 20px;
-      }
-    }
-
-    /* Drag and Drop Card Styles */
-    .drag-handle {
-      cursor: grab;
-      color: var(--muted);
-      font-size: 16px;
-      font-weight: normal;
-      padding: 0 4px;
-      user-select: none;
-      transition: color 0.15s ease;
-      display: inline-block;
-      vertical-align: middle;
-    }
-    .drag-handle:hover {
-      color: var(--blue);
-    }
-    .drag-handle:active {
-      cursor: grabbing;
-    }
-    .card.dragging {
-      opacity: 0.45;
-      border: 2px dashed var(--blue) !important;
-      transform: scale(0.99);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-  </style>
-  <link rel="stylesheet" href="./companion_theme.css?v=20260729-2" />
-  <style>
-    /* Vault-specific information hierarchy */
-    body.page-vault .wrap { max-width: 1180px; }
-    .vault-topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 24px;
-    }
-    .vault-brand {
-      color: #d8e8f5;
-      font-size: 14px;
-      font-weight: 800;
-      letter-spacing: .02em;
-    }
-    .vault-nav { display: flex; align-items: center; gap: 8px; }
-    .vault-nav > a,
-    .vault-nav summary {
-      min-height: 42px !important;
-      padding: 8px 13px !important;
-      border-radius: 10px !important;
-      border: 1px solid var(--comp-line) !important;
-      background: rgba(17, 28, 42, .82) !important;
-      color: #d6e4f2 !important;
-      font-size: 13px !important;
-      font-weight: 700;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      cursor: pointer;
-      list-style: none;
-    }
-    .vault-nav summary::-webkit-details-marker { display: none; }
-    .vault-nav-menu { position: relative; }
-    .vault-nav-menu[open] summary { border-color: rgba(18, 164, 212, .7) !important; }
-    .vault-nav-links {
-      position: absolute;
-      z-index: 20;
-      right: 0;
-      top: calc(100% + 8px);
-      width: 240px;
-      padding: 8px;
-      border: 1px solid var(--comp-line);
-      border-radius: 14px;
-      background: #111d2c;
-      box-shadow: 0 18px 40px rgba(0,0,0,.45);
-    }
-    .vault-nav-links a {
-      display: block;
-      padding: 10px 11px;
-      border-radius: 9px;
-      color: #dce9f5;
-      text-decoration: none;
-      font-size: 13px;
-      font-weight: 650;
-    }
-    .vault-nav-links a:hover { background: rgba(18,164,212,.13); }
-    .vault-title-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: end;
-      gap: 20px;
-      margin-bottom: 18px;
-    }
-    body.page-vault h1 { font-size: clamp(36px, 5vw, 58px) !important; margin-bottom: 4px; }
-    .vault-controls {
-      display: grid;
-      grid-template-columns: minmax(260px, 1fr) auto;
-      gap: 10px;
-      align-items: center;
-      margin-bottom: 18px;
-      padding: 12px;
-      border: 1px solid var(--comp-line);
-      border-radius: 16px;
-      background: rgba(16, 28, 43, .72);
-    }
-    .vault-controls .search-wrap,
-    .vault-controls .toolbar { margin: 0; }
-    .vault-controls .search-input {
-      width: 100%;
-      min-height: 42px !important;
-      border-radius: 10px !important;
-      box-shadow: none !important;
-    }
-    .vault-controls .search-note { display: none; }
-    .vault-controls .toolbar-btn {
-      min-height: 40px !important;
-      padding: 8px 11px !important;
-      box-shadow: none !important;
-      font-size: 12px !important;
-    }
-    .vault-tools { position: relative; }
-    .vault-tools summary { list-style: none; }
-    .vault-tools summary::-webkit-details-marker { display: none; }
-    .vault-tools-menu {
-      position: absolute;
-      z-index: 15;
-      right: 0;
-      top: calc(100% + 8px);
-      min-width: 205px;
-      padding: 8px;
-      border: 1px solid var(--comp-line);
-      border-radius: 13px;
-      background: #111d2c;
-      box-shadow: 0 18px 40px rgba(0,0,0,.45);
-    }
-    .vault-tools-menu .toolbar-btn { width: 100%; justify-content: flex-start; margin: 3px 0; }
-    .vault-block-heading { margin: 24px 0 10px; }
-    .vault-block-heading h2 { margin: 0 0 3px; font-size: 20px !important; }
-    .vault-block-heading p { margin: 0; color: var(--comp-muted); font-size: 13px; }
-    body.page-vault .quick-reference-card { margin-bottom: 22px; }
-    body.page-vault .grid { gap: 10px; }
-    body.page-vault .card { border-radius: 14px !important; border-top-width: 3px; box-shadow: 0 8px 18px rgba(0,0,0,.22) !important; }
-    body.page-vault .card:hover { transform: none; box-shadow: 0 10px 22px rgba(0,0,0,.27) !important; }
-    body.page-vault summary.section-head { min-height: 64px; padding: 12px 15px; }
-    body.page-vault .section-head h3 { font-size: 18px !important; letter-spacing: -.015em !important; }
-    body.page-vault .drag-handle { opacity: .4; font-size: 13px; }
-    @media (max-width: 760px) {
-      .vault-topbar { margin-bottom: 16px; }
-      .vault-brand { display: none; }
-      .vault-nav { width: 100%; justify-content: space-between; }
-      .vault-title-row { align-items: start; flex-direction: column; gap: 8px; }
-      .vault-controls { grid-template-columns: 1fr; }
-      .vault-controls .toolbar { display: grid; grid-template-columns: 1fr 1fr auto; width: 100%; }
-      .vault-controls .toolbar-btn { justify-content: center; }
-      .vault-tools-menu { right: 0; }
-    }
-  </style>
+  
+  <link rel="stylesheet" href="./static/css/theme.css" />
+  <script src="./static/js/app.js"></script>
+  
   <script src="./vault_data.js"></script>
 </head>
 
-<body class="page-vault">
+<body data-page="vault">
   <div class="wrap">
     <header>
-      <div class="vault-topbar">
-        <div class="vault-brand">PERSONAL HEALTH MANAGER</div>
-        <nav class="vault-nav" aria-label="Vault navigation">
-          <a href="./index.html">← Home</a>
-          <a href="./vault.html" aria-current="page">Health Vault</a>
-          <details class="vault-nav-menu">
-            <summary>Other pages ▾</summary>
-            <div class="vault-nav-links">
-              <a href="./doctor-notes.html">Doctor Notes</a>
-              <a href="./dashboard.html">Lab Results</a>
-              <a href="./bp.html">Blood Pressure</a>
-              <a href="./composition.html">Body Composition</a>
-              <a href="./kaiser-labs.html">Kaiser Labs</a>
-              <a href="./immunizations.html">Immunizations</a>
-            </div>
-          </details>
-        </nav>
-      </div>
       <div class="vault-title-row">
         <div>
           <h1>Health Vault</h1>
@@ -1145,9 +105,9 @@
       <article class="card accent-blue" id="providers-card">
         <details class="section">
           <summary class="section-head">
-            <div style="display: flex; align-items: center; gap: 8px;">
+            <div class="section-head-left">
               <span class="drag-handle" title="Drag to reorder">⋮⋮</span>
-              <h3>Doctors & Networks</h3>
+              <h3><span class="h-emoji">👨‍⚕️</span> Doctors & Networks</h3>
             </div>
             <span class="chev">⌄</span>
           </summary>
@@ -1165,9 +125,9 @@
       <article class="card accent-rose" id="pharmacy-card">
         <details class="section">
           <summary class="section-head">
-            <div style="display: flex; align-items: center; gap: 8px;">
+            <div class="section-head-left">
               <span class="drag-handle" title="Drag to reorder">⋮⋮</span>
-              <h3>Pharmacy & Rx</h3>
+              <h3><span class="h-emoji">💊</span> Pharmacy & Rx</h3>
             </div>
             <span class="chev">⌄</span>
           </summary>
@@ -1183,9 +143,9 @@
       <article class="card accent-teal" id="support-benefits-card">
         <details class="section">
           <summary class="section-head">
-            <div style="display: flex; align-items: center; gap: 8px;">
+            <div class="section-head-left">
               <span class="drag-handle" title="Drag to reorder">⋮⋮</span>
-              <h3>SCAN Member Support & Benefits</h3>
+              <h3><span class="h-emoji">🛡️</span> SCAN Support & Benefits</h3>
             </div>
             <span class="chev">⌄</span>
           </summary>
@@ -1202,9 +162,9 @@
       <article class="card accent-teal" id="labtests-card">
         <details class="section">
           <summary class="section-head">
-            <div style="display: flex; align-items: center; gap: 8px;">
+            <div class="section-head-left">
               <span class="drag-handle" title="Drag to reorder">⋮⋮</span>
-              <h3>Lab Test Plan</h3>
+              <h3><span class="h-emoji">🧪</span> Lab Test Plan</h3>
             </div>
             <span class="chev">⌄</span>
           </summary>
@@ -1219,9 +179,9 @@
       <article class="card accent-amber" id="vaccines-card">
         <details class="section">
           <summary class="section-head">
-            <div style="display: flex; align-items: center; gap: 8px;">
+            <div class="section-head-left">
               <span class="drag-handle" title="Drag to reorder">⋮⋮</span>
-              <h3>Vaccines & Immunizations</h3>
+              <h3><span class="h-emoji">💉</span> Vaccines & Immunizations</h3>
             </div>
             <span class="chev">⌄</span>
           </summary>
@@ -1236,9 +196,9 @@
       <article class="card accent-amber" id="onepass-card">
         <details class="section">
           <summary class="section-head">
-            <div style="display: flex; align-items: center; gap: 8px;">
+            <div class="section-head-left">
               <span class="drag-handle" title="Drag to reorder">⋮⋮</span>
-              <h3>One Pass Fitness</h3>
+              <h3><span class="h-emoji">🏋️</span> One Pass Fitness</h3>
             </div>
             <span class="chev">⌄</span>
           </summary>
@@ -1255,9 +215,9 @@
       <article class="card accent-rose" id="notes-card">
         <details class="section">
           <summary class="section-head">
-            <div style="display: flex; align-items: center; gap: 8px;">
+            <div class="section-head-left">
               <span class="drag-handle" title="Drag to reorder">⋮⋮</span>
-              <h3>Notes</h3>
+              <h3><span class="h-emoji">📝</span> Notes</h3>
             </div>
             <span class="chev">⌄</span>
           </summary>
@@ -1273,9 +233,9 @@
       <article class="card accent-teal" id="kaiser-card">
         <details class="section">
           <summary class="section-head">
-            <div style="display: flex; align-items: center; gap: 8px;">
+            <div class="section-head-left">
               <span class="drag-handle" title="Drag to reorder">⋮⋮</span>
-              <h3>Kaiser Data</h3>
+              <h3><span class="h-emoji">🏥</span> Kaiser Data</h3>
             </div>
             <span class="chev">⌄</span>
           </summary>
@@ -1629,7 +589,7 @@
          const emoji = emojiForName(c.name);
          const hrsBadge = c.hours ? `<span class="vault-item-badge">${c.hours}</span>` : "";
          return `
-           <div class="vault-item-card" style="border-left-color: #12a4d4 !important;">
+           <div class="vault-item-card accent-blue">
              <div class="vault-item-header">
                <div class="vault-item-title"><span class="vault-item-emoji">${emoji}</span> ${c.name || '-'}</div>
                ${hrsBadge}
@@ -1637,11 +597,11 @@
              <div class="vault-item-body">
                ${c.phone ? `<div class="vault-phone-row">📞 ${phoneLink(c.phone)}</div>` : ''}
                ${c.website ? `<div>🌐 ${link(c.website)} ${copyButton(c.website)}</div>` : ''}
-               ${c.notes ? `<div class="muted" style="margin-top: 2px;">ℹ️ ${linkifyPhones(c.notes)}</div>` : ''}
+               ${c.notes ? `<div class="muted mt-2">ℹ️ ${linkifyPhones(c.notes)}</div>` : ''}
              </div>
            </div>
          `;
-       }).join('') || `<div class="vault-item-card" style="border-left-color: #12a4d4 !important;"><div class="vault-item-body">No support contacts found.</div></div>`;
+       }).join('') || `<div class="vault-item-card accent-blue"><div class="vault-item-body">No support contacts found.</div></div>`;
 
         // Separate One Pass Fitness from general benefits
         const onepassProgram = benefitsPrograms.find(b => String(b.title || "").toLowerCase().includes("one pass"));
@@ -1656,7 +616,7 @@
             ? `<a class="benefit-action" href="${b.website}" target="_blank" rel="noopener">Check OTC Balance ↗</a>`
             : "";
           return `
-            <div class="vault-item-card" style="border-left-color: #f0a43a !important;">
+            <div class="vault-item-card accent-amber">
               <div class="vault-item-header">
                 <div class="vault-item-title"><span class="vault-item-emoji">${emoji}</span> ${b.title || '-'}</div>
               </div>
@@ -1664,12 +624,12 @@
                 ${b.phone ? `<div class="vault-phone-row">📞 ${phoneLink(b.phone)}</div>` : ''}
                 ${b.email ? `<div>✉️ ${b.email} ${copyButton(b.email)}</div>` : ''}
                 ${b.website ? `<div>🌐 ${link(b.website)} ${copyButton(b.website)}</div>` : ''}
-                ${bulletList ? `<div style="margin-top: 4px; display: flex; flex-direction: column; gap: 4px;">${bulletList}</div>` : ''}
+                ${bulletList ? `<div class="bullet-stack">${bulletList}</div>` : ''}
                 ${otcBalanceButton}
               </div>
             </div>
           `;
-        }).join('') || `<div class="vault-item-card" style="border-left-color: #f0a43a !important;"><div class="vault-item-body">No benefits programs found.</div></div>`;
+        }).join('') || `<div class="vault-item-card accent-amber"><div class="vault-item-body">No benefits programs found.</div></div>`;
 
         // Render One Pass Fitness content in its own dedicated card
         let onepassHtml = '';
@@ -1717,7 +677,7 @@
           // Render Gyms as a gorgeous grid of badges
           if (gyms.length) {
             const gymsGrid = `
-              <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 8.5px; margin-top: 6px;">
+              <div class="gyms-grid">
                 ${gyms.map(gym => {
                   const parts = gym.split(" - ");
                   const name = parts[0];
@@ -1738,23 +698,20 @@
                           const netName = wParts[0];
                           const pwd = wParts[1];
                           wifiHtml = `
-                            <div style="font-size: 11px; font-weight: 500; color: #ffd081; opacity: 0.85; margin-left: 22px; display: flex; flex-direction: column; gap: 4.5px; margin-top: 4px;">
-                              <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
-                                📶 Network: <span style="background: rgba(255, 255, 255, 0.08); padding: 2px 6px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.06); font-family: ui-monospace, monospace; color: #fff;">${netName}</span>
+                            <div class="gym-wifi">
+                              <div class="gym-wifi-row">📶 Network: <span class="mono-pill">${netName}</span>
                                 ${copyButton(netName, "Copy")}
                               </div>
                               <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
-                                🔑 Password: <span style="background: rgba(255, 255, 255, 0.08); padding: 2px 6px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.06); font-family: ui-monospace, monospace; color: #fff;">${pwd}</span>
+                                🔑 Password: <span class="mono-pill">${pwd}</span>
                                 ${copyButton(pwd, "Copy")}
                               </div>
                             </div>
                           `;
                         } else {
                           wifiHtml = `
-                            <div style="font-size: 11px; font-weight: 500; color: #ffd081; opacity: 0.85; margin-left: 22px; display: flex; align-items: center; gap: 4.5px; flex-wrap: wrap; margin-top: 3px;">
-                              📶 <span style="background: rgba(255, 255, 255, 0.08); padding: 2px 6px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.06); font-family: ui-monospace, monospace;">
-                                WiFi: <strong style="color: #fff;">${wifiVal}</strong>
-                              </span>
+                            <div class="gym-wifi">
+                              <div class="gym-wifi-row">📶 <span class="mono-pill">WiFi: <strong>${wifiVal}</strong></span>
                               ${copyButton(wifiVal, "Copy WiFi")}
                             </div>
                           `;
@@ -1766,14 +723,10 @@
                   }
                   
                   return `
-                    <div class="gym-badge" style="background: rgba(240, 164, 58, 0.08); border: 1px solid rgba(240, 164, 58, 0.22); padding: 10px 14px; border-radius: 12px; font-weight: 700; color: #ffd081; display: flex; flex-direction: column; gap: 4px; font-size: 13.5px; transition: transform 0.15s ease, background 0.15s ease;" onmouseover="this.style.transform='translateY(-1.5px)'; this.style.background='rgba(240, 164, 58, 0.12)';" onmouseout="this.style.transform='none'; this.style.background='rgba(240, 164, 58, 0.08)';">
-                      <div style="display: flex; align-items: center; gap: 6px;">
-                        🏋️ ${name}
-                      </div>
+                    <div class="gym-badge">
+                      <div class="gym-name">🏋️ ${name}</div>
                       ${addressText ? `
-                        <div style="font-size: 11px; font-weight: 500; color: #ffd081; opacity: 0.85; margin-left: 22px; display: flex; align-items: center; gap: 4px; flex-wrap: wrap;">
-                          📍 <span>
-                            <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(addressText)}" target="_blank" rel="noopener" class="map-link" style="color: #ffd081 !important; text-decoration: none; border-bottom: 1px dashed rgba(255, 208, 129, 0.45); font-weight: 700; transition: border-bottom-color 0.15s ease;" onmouseover="this.style.borderBottomColor='#ffd081'" onmouseout="this.style.borderBottomColor='rgba(255, 208, 129, 0.45)'">
+                        <div class="gym-addr">📍 <span><a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(addressText)}" target="_blank" rel="noopener" class="map-link">
                               ${addressText}
                             </a>
                             ${phoneHtml}
@@ -1786,7 +739,7 @@
                 }).join('')}
               </div>
             `;
-            onepassHtml += `<div class="row" style="border-top: 1px solid rgba(255,255,255,0.06); padding-top: 12px; margin-top: 8px;"><div class="k" style="margin-bottom: 6px;">Included Gyms</div><div class="v" style="width: 100%;">${gymsGrid}</div></div>`;
+            onepassHtml += `<div class="row gyms-row"><div class="k">Included Gyms</div><div class="v">${gymsGrid}</div></div>`;
           }
         } else {
           onepassHtml = `<div class="row"><div class="v">One Pass Fitness info not found.</div></div>`;
@@ -1794,32 +747,10 @@
 
         document.getElementById('onepass-content').innerHTML = onepassHtml;
 
-        const planVal = scan.member?.plan || "SCAN Medicare 2026";
-        const memberIdVal = scan.member?.member_id || "40083848601";
-        const memberInfoHtml = `
-          <div class="vault-item-card" style="border-left-color: #67d8ff !important; margin-bottom: 16px;">
-            <div class="vault-item-header" style="margin-bottom: 4px; padding-bottom: 4px;">
-              <div class="vault-item-title"><span class="vault-item-emoji">💳</span> Member Information</div>
-            </div>
-            <div class="vault-item-body" style="gap: 4px;">
-              <div class="row" style="display: flex; justify-content: space-between; align-items: center; border-top: 0; padding: 4px 0 !important;">
-                <div class="k" style="font-size: 13px;">Plan</div>
-                <div class="v" style="margin-top: 0; font-size: 13.5px; font-weight: 700;">${planVal}</div>
-              </div>
-              <div class="row" style="display: flex; justify-content: space-between; align-items: center; padding: 4px 0 !important; margin-top: 0;">
-                <div class="k" style="font-size: 13px;">Member ID</div>
-                <div class="v" style="margin-top: 0; font-size: 13.5px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px;">${memberIdVal} ${copyButton(memberIdVal)}</div>
-              </div>
-            </div>
-          </div>
-        `;
-
         document.getElementById('support-benefits-content').innerHTML = `
-          <h4 style="margin: 0 0 12px; color: #67d8ff !important; font-size: 14px; text-transform: uppercase; letter-spacing: 0.8px;">🛡️ SCAN Member Plan</h4>
-          ${memberInfoHtml}
-          <h4 style="margin: 20px 0 12px; color: #8fcff5 !important; font-size: 14px; text-transform: uppercase; letter-spacing: 0.8px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 14px;">📞 SCAN Support Contacts</h4>
+                    <h4 class="vsec-h v-blue">📞 SCAN Support Contacts</h4>
           ${supportContentHtml}
-          <h4 style="margin: 20px 0 12px; color: #ffd081 !important; font-size: 14px; text-transform: uppercase; letter-spacing: 0.8px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 14px;">🎁 Benefits & Programs</h4>
+          <h4 class="vsec-h v-amber">🎁 Benefits & Programs</h4>
           ${benefitsContentHtml}
         `;
 
@@ -2089,6 +1020,7 @@
     load();
   </script>
 
+  <script src="./static/js/shell.js"></script>
 </body>
 
 </html>

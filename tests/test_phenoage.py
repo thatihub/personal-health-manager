@@ -4,6 +4,7 @@ from datetime import date
 from unittest.mock import patch
 import phenoage as p
 import run_dashboard_server as server
+from api import config as server_config
 
 
 class PhenoAgeTests(unittest.TestCase):
@@ -107,7 +108,7 @@ class PhenoAgeTests(unittest.TestCase):
 
     def test_vault_missing_dob_has_no_default(self):
         handler=object.__new__(server.DashboardHandler)
-        with patch.object(server,'_decode_env_text',return_value='{}'):
+        with patch.object(server_config,'_decode_env_text',return_value='{}'):
             self.assertIsNone(handler._chronological_age())
 
 if __name__=='__main__': unittest.main()

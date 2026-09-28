@@ -4,570 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Prakash Lab Trends (2023-2026)</title>
-  <style>
-    :root {
-      --bg: #eff8ff;
-      --ink: #102b3d;
-      --muted: #4a6578;
-      --panel: rgba(255, 255, 255, 0.96);
-      --line: #0b7ca5;
-      --line2: #e58d20;
-      --line3: #0e9a78;
-      --warn: #b23a48;
-      --ok: #3a7d44;
-      --shadow: 0 14px 34px rgba(16, 43, 61, 0.12);
-    }
-
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      font-family: "Avenir Next", "Trebuchet MS", "Segoe UI", sans-serif;
-      text-rendering: geometricPrecision;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      color: var(--ink);
-      background:
-        radial-gradient(circle at 12% 10%, rgba(11, 124, 165, 0.22), transparent 42%),
-        radial-gradient(circle at 88% 18%, rgba(229, 141, 32, 0.14), transparent 36%),
-        radial-gradient(circle at 65% 80%, rgba(14, 154, 120, 0.16), transparent 34%),
-        linear-gradient(160deg, #f3faff 0%, #fffaf1 44%, #f2fff9 100%);
-      min-height: 100vh;
-      padding: 24px;
-    }
-
-    .wrap { max-width: 1180px; margin: 0 auto; }
-
-    h1 {
-      font-family: "Avenir Next Condensed", "Trebuchet MS", sans-serif;
-      font-size: clamp(28px, 4vw, 44px);
-      margin: 0 0 6px;
-      letter-spacing: 0.2px;
-    }
-
-    .sub { color: var(--muted); margin-bottom: 8px; }
-    .updated-banner {
-      margin-bottom: 14px;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 7px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(16, 43, 61, 0.14);
-      background: rgba(255, 255, 255, 0.88);
-      color: #2f5569;
-      font-size: 12px;
-      font-weight: 700;
-    }
-    .top-nav { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
-    .top-nav a { text-decoration:none; padding:9px 12px; border-radius:12px; border:1px solid rgba(16,43,61,.14); background:rgba(255,255,255,.9); color:#274150; font-weight:700; font-size:13px; min-height:44px; display:inline-flex; align-items:center; transition: transform .18s ease, box-shadow .18s ease; }
-    .top-nav a:hover { transform: translateY(-1px); box-shadow: 0 8px 16px rgba(16,43,61,.12); }
-    .top-nav a.active { background:linear-gradient(120deg, #0b7ca5, #17a1c8); color:#fff; border-color: transparent; }
-
-    .bottom-tab {
-      display: none;
-    }
-    .bottom-tab a {
-      text-decoration: none;
-      color: #2b4655;
-      font-weight: 700;
-      font-size: 12px;
-      padding: 8px 6px;
-      border-radius: 10px;
-      text-align: center;
-      min-height: 42px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .bottom-tab a.active {
-      background: linear-gradient(120deg, #0b7ca5, #17a1c8);
-      color: #fff;
-    }
-
-    .actions {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin: -8px 0 16px;
-      flex-wrap: wrap;
-    }
-    .panel-tools {
-      display: inline-flex;
-      gap: 8px;
-    }
-    .panel-btn {
-      border: 1px solid rgba(16, 43, 61, 0.2);
-      background: rgba(255,255,255,0.94);
-      color: #1e4a60;
-      padding: 9px 12px;
-      border-radius: 10px;
-      font-weight: 700;
-      font-size: 12px;
-      min-height: 44px;
-      cursor: pointer;
-      transition: transform .18s ease, filter .18s ease;
-    }
-    .panel-btn:hover { transform: translateY(-1px); filter: brightness(1.04); }
-
-    .kpis {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 12px;
-      margin-bottom: 16px;
-    }
-
-    .card {
-      background: var(--panel);
-      border: 1px solid rgba(16, 43, 61, 0.12);
-      border-radius: 16px;
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
-      transition: transform .2s ease, box-shadow .2s ease;
-    }
-    .card:hover { transform: translateY(-2px); box-shadow: 0 18px 34px rgba(16,43,61,.16); }
-
-    .kpi { padding: 14px; }
-    .kpis .kpi:nth-child(1) { border-top: 5px solid #0f7ea6; }
-    .kpis .kpi:nth-child(2) { border-top: 5px solid #ef6f59; }
-    .kpis .kpi:nth-child(3) { border-top: 5px solid #3aa76d; }
-    .kpis .kpi:nth-child(4) { border-top: 5px solid #6f7bf7; }
-    .kpis .kpi:nth-child(5) { border-top: 5px solid #0f7ea6; }
-    .kpis .kpi:nth-child(6) { border-top: 5px solid #ef6f59; }
-    .kpi .label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.7px; }
-    .kpi .value { font-size: 28px; font-weight: 700; margin-top: 4px; }
-
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-    }
-    .hidden { display: none !important; }
-
-    .view-btn {
-      border: 1px solid rgba(20, 34, 46, 0.16);
-      background: #ffffff;
-      color: var(--muted);
-      padding: 7px 10px;
-      border-radius: 8px;
-      font-weight: 700;
-      font-size: 12px;
-      cursor: pointer;
-      min-height: 40px;
-      transition: transform .18s ease, filter .18s ease;
-    }
-    .view-btn:hover { transform: translateY(-1px); filter: brightness(1.03); }
-
-    .view-btn.active {
-      background: linear-gradient(120deg, #0b7ca5, #17a1c8);
-      color: #fff;
-    }
-
-    .chart { padding: 14px; }
-    .graph-shell {
-      border: 2px solid rgba(20, 34, 46, 0.18);
-      border-radius: 14px;
-      padding: 10px;
-      background: rgba(255, 255, 255, 0.82);
-      position: relative;
-      overflow: hidden;
-    }
-    .graph-shell::before {
-      content: "";
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 5px;
-      background: rgba(20, 34, 46, 0.18);
-    }
-    .graph-shell.blue {
-      border-color: rgba(31, 111, 139, 0.3);
-      background: linear-gradient(180deg, rgba(31, 111, 139, 0.12), rgba(255, 255, 255, 0.9));
-    }
-    .graph-shell.blue::before { background: #1f6f8b; }
-    .graph-shell.orange {
-      border-color: rgba(229, 141, 32, 0.3);
-      background: linear-gradient(180deg, rgba(229, 141, 32, 0.12), rgba(255, 255, 255, 0.9));
-    }
-    .graph-shell.orange::before { background: #e58d20; }
-    .graph-shell.green {
-      border-color: rgba(14, 154, 120, 0.3);
-      background: linear-gradient(180deg, rgba(14, 154, 120, 0.12), rgba(255, 255, 255, 0.9));
-    }
-    .graph-shell.green::before { background: #0e9a78; }
-    .chart-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-    }
-    .chart-head-actions {
-      display: inline-flex;
-      gap: 8px;
-      align-items: center;
-    }
-    .collapse-btn {
-      border: 1px solid rgba(16, 43, 61, 0.14);
-      background: #fff;
-      color: #36566a;
-      border-radius: 8px;
-      min-height: 40px;
-      padding: 7px 10px;
-      font-weight: 700;
-      font-size: 12px;
-      cursor: pointer;
-      transition: transform .18s ease, filter .18s ease;
-    }
-    .collapse-btn:hover { transform: translateY(-1px); filter: brightness(1.03); }
-    .panel-content {
-      margin-top: 10px;
-    }
-    .card.chart.collapsed .panel-content {
-      display: none;
-    }
-    .card.chart.collapsed .collapse-btn {
-      background: rgba(16, 36, 54, 0.07);
-    }
-    .chart h3 {
-      margin: 2px 0 12px;
-      font-size: clamp(22px, 2.2vw, 28px);
-      line-height: 1.12;
-      letter-spacing: 0.2px;
-      font-family: "Avenir Next Condensed", "Trebuchet MS", sans-serif;
-      font-weight: 800;
-      cursor: pointer;
-    }
-    .grid .card:nth-child(1) .chart-head h3 { color: #0b7ca5; }
-    .grid .card:nth-child(2) .chart-head h3 { color: #b46a0a; }
-    .grid .card:nth-child(3) .chart-head h3 { color: #0e866a; }
-    .grid .card:nth-child(4) .chart-head h3 { color: #5b64b8; }
-    .grid .card:nth-child(5) .chart-head h3 { color: #a43e7f; }
-    .grid .card:nth-child(6) .chart-head h3 { color: #9a4b18; }
-    .grid .card:nth-child(7) .chart-head h3 { color: #7b4ea3; }
-    .grid .card:nth-child(8) .chart-head h3 { color: #a87932; }
-    .grid .card:nth-child(9) .chart-head h3 { color: #368f5c; }
-    .mini-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 10px;
-    }
-    .mini {
-      border: 2px solid rgba(20, 34, 46, 0.14);
-      border-radius: 12px;
-      padding: 8px;
-      background: rgba(255, 255, 255, 0.9);
-      position: relative;
-      overflow: hidden;
-      transition: transform 0.18s ease, box-shadow 0.18s ease;
-    }
-    .mini::before {
-      content: "";
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 4px;
-      background: rgba(20, 34, 46, 0.16);
-    }
-    .mini:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(20, 34, 46, 0.12);
-    }
-    .mini h4 {
-      margin: 0 0 2px;
-      font-size: 12px;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    .mini-range {
-      font-size: 11px;
-      color: #3f5a68;
-      margin-bottom: 6px;
-    }
-    .mini.blue {
-      border-color: rgba(31, 111, 139, 0.28);
-      background: linear-gradient(180deg, rgba(31, 111, 139, 0.12), rgba(255, 255, 255, 0.92));
-    }
-    .mini.blue::before { background: #1f6f8b; }
-    .mini.orange {
-      border-color: rgba(229, 141, 32, 0.28);
-      background: linear-gradient(180deg, rgba(229, 141, 32, 0.12), rgba(255, 255, 255, 0.92));
-    }
-    .mini.orange::before { background: #e58d20; }
-    .mini.green {
-      border-color: rgba(14, 154, 120, 0.28);
-      background: linear-gradient(180deg, rgba(14, 154, 120, 0.12), rgba(255, 255, 255, 0.92));
-    }
-    .mini.green::before { background: #0e9a78; }
-
-    svg {
-      width: 100%;
-      height: 150px;
-      overflow: visible;
-      display: block;
-      shape-rendering: geometricPrecision;
-      text-rendering: geometricPrecision;
-    }
-
-    .legend {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 6px;
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    .dot { width: 10px; height: 10px; border-radius: 999px; display: inline-block; margin-right: 6px; }
-
-    .notes {
-      margin-top: 14px;
-      padding: 14px;
-      font-size: 14px;
-      line-height: 1.45;
-    }
-
-    .notes ul { margin: 8px 0 0 18px; }
-
-    .table-wrap {
-      padding: 10px;
-      overflow: auto !important;
-      border: 1px solid rgba(16, 43, 61, 0.2);
-      border-radius: 14px;
-      background: #fbfdff;
-      backdrop-filter: none;
-      -webkit-backdrop-filter: none;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 420px;
-      font-size: 14px;
-      line-height: 1.35;
-      letter-spacing: 0.01em;
-      color: #123246;
-      overflow: hidden;
-      border-radius: 10px;
-      background: #ffffff;
-      border: 1px solid rgba(16, 43, 61, 0.16);
-    }
-    thead th {
-      position: sticky;
-      top: 0;
-      z-index: 1;
-      background: #e8f4fb;
-      color: #154059;
-      text-align: center;
-      padding: 11px 10px;
-      border-bottom: 1px solid rgba(21, 64, 89, 0.2);
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
-      font-size: 11px;
-      font-weight: 800;
-    }
-    tbody td {
-      padding: 10px;
-      border-bottom: 1px solid rgba(16, 43, 61, 0.12);
-      white-space: nowrap;
-      font-variant-numeric: tabular-nums;
-      text-align: center;
-      backdrop-filter: none;
-      -webkit-backdrop-filter: none;
-      color: #16384c;
-      font-weight: 700;
-    }
-    tbody tr:nth-child(odd) { background: #ffffff; }
-    tbody tr:nth-child(even) { background: #f6fbff; }
-    tbody tr:hover { background: #eaf5fe; }
-    td.num { text-align: center; font-weight: 600; }
-    td.date-cell { font-weight: 800; color: #12374d; text-align: center; }
-    .value-pill {
-      display: inline;
-      min-width: 0;
-      padding: 0;
-      border-radius: 0;
-      background: transparent;
-      color: #164663;
-      text-align: inherit;
-      border: 0;
-    }
-    .value-pill.na {
-      background: transparent;
-      color: #526575;
-      border-color: transparent;
-    }
-    .value-pill.normal {
-      background: transparent;
-      color: #186b35;
-      border-color: transparent;
-    }
-    .value-pill.high, .value-pill.low {
-      background: transparent;
-      color: #9b2436;
-      font-weight: 800;
-      border-color: transparent;
-    }
-    .range-flag {
-      margin-left: 6px;
-      padding: 0;
-      border-radius: 0;
-      background: transparent;
-      color: #8f1f2c;
-      font-size: 10px;
-      font-weight: 800;
-      vertical-align: middle;
-    }
-
-    @media (max-width: 1024px) {
-      body { padding: 16px; }
-      .wrap { max-width: 100%; }
-      .grid { grid-template-columns: 1fr; }
-    }
-    @media (max-width: 900px) {
-      body { padding: 14px; }
-      .grid { grid-template-columns: 1fr; }
-      svg { height: 130px; }
-      .table-wrap { padding: 8px; }
-      table { min-width: 360px; font-size: 12px; }
-      thead th, tbody td { padding: 8px 6px; }
-    }
-    @media (max-width: 640px) {
-      body {
-        padding: 12px;
-        padding-bottom: calc(86px + env(safe-area-inset-bottom));
-        padding-left: max(12px, env(safe-area-inset-left));
-        padding-right: max(12px, env(safe-area-inset-right));
-      }
-      .top-nav {
-        display: none;
-      }
-      .bottom-tab {
-        position: fixed;
-        left: 12px;
-        right: 12px;
-        bottom: max(10px, env(safe-area-inset-bottom));
-        z-index: 999;
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-        gap: 8px;
-        padding: 8px;
-        border-radius: 14px;
-        background: rgba(255,255,255,0.94);
-        border: 1px solid rgba(16,43,61,0.18);
-        box-shadow: 0 12px 26px rgba(16,43,61,0.14);
-        backdrop-filter: blur(8px);
-      }
-      h1 { font-size: clamp(24px, 7vw, 34px); }
-      .actions { gap: 8px; }
-      .kpis { grid-template-columns: 1fr 1fr; gap: 8px; }
-      .kpi { padding: 10px; }
-      .kpi .value { font-size: 22px; }
-    .chart { padding: 10px; }
-    .chart-head h3 { font-size: 20px; }
-    svg { height: 120px; }
-  }
-
-  /* Custom dialog styles */
-  .modern-dialog {
-    border: 1px solid var(--comp-line);
-    background: var(--comp-panel-strong);
-    color: var(--comp-ink);
-    border-radius: 12px;
-    padding: 24px;
-    max-width: 480px;
-    width: calc(100% - 32px);
-    box-shadow: var(--comp-shadow);
-    margin: auto;
-  }
-  .modern-dialog::backdrop {
-    background-color: rgba(4, 10, 26, 0.7);
-    backdrop-filter: blur(4px);
-  }
-  .dialog-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 16px;
-    border-bottom: 1px solid var(--comp-line);
-    padding-bottom: 12px;
-  }
-  .dialog-header h3 {
-    margin: 0;
-    color: var(--page-accent, #12a4d4);
-    font-size: 18px;
-  }
-  .dialog-close-btn {
-    background: none;
-    border: none;
-    color: var(--comp-muted);
-    font-size: 24px;
-    cursor: pointer;
-    padding: 0;
-    line-height: 1;
-  }
-  .dialog-close-btn:hover {
-    color: var(--comp-ink);
-  }
-  .dialog-body p {
-    margin-top: 0;
-    font-size: 14px;
-    line-height: 1.5;
-    color: var(--comp-ink);
-  }
-  .ratio-breakdown {
-    margin: 20px 0;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-  .ratio-item {
-    display: flex;
-    gap: 12px;
-    align-items: flex-start;
-    font-size: 13.5px;
-  }
-  .ratio-val {
-    font-weight: bold;
-    background: var(--comp-line);
-    padding: 2px 8px;
-    border-radius: 4px;
-    white-space: nowrap;
-    color: var(--page-accent, #12a4d4);
-  }
-  .ratio-desc {
-    color: var(--comp-ink);
-  }
-  .dialog-footer-note {
-    background: rgba(240, 164, 58, 0.1);
-    border-left: 3px solid #f0a43a;
-    padding: 10px 14px;
-    border-radius: 4px;
-    font-size: 12.5px;
-    color: var(--comp-muted);
-  }
-  .dialog-footer-note p {
-    margin: 0;
-    color: var(--comp-muted);
-  }
-  .info-btn {
-    font-size: 11.5px;
-    cursor: pointer;
-    opacity: 0.8;
-    margin-left: 4px;
-    display: inline-block;
-    vertical-align: middle;
-  }
-  .info-btn:hover {
-    opacity: 1;
-    color: var(--page-accent, #12a4d4);
-  }
-  </style>
-  <link rel="stylesheet" href="./companion_theme.css?v=20260729-2" />
+  
+  <link rel="stylesheet" href="./static/css/theme.css" />
+  <script src="./static/js/app.js"></script>
+  <script src="./static/js/charts.js"></script>
 </head>
-<body class="page-dashboard">
+<body data-page="labs">
   <div class="wrap">
     <div id="file-protocol-warning" style="display:none; background:rgba(220,137,32,0.14); color:#6d430c; padding:12px; border-radius:12px; margin-bottom:14px; font-weight:700; border:1px solid rgba(220,137,32,0.3); font-size:14px;">
       ℹ️ Note: You are viewing this page directly from the filesystem (file://). Dashboard panels are loaded from local cache files and are fully interactive. However, performing new uploads or raw data changes requires starting the server and visiting <a href="http://localhost:3002/dashboard.html" style="color:#4d2e05; text-decoration:underline;">http://localhost:3002/dashboard.html</a> instead.
@@ -577,16 +19,7 @@
         document.getElementById('file-protocol-warning').style.display = 'block';
       }
     </script>
-    <nav class="top-nav">
-      <a href="./index.html">Home</a>
-      <a href="./doctor-notes.html">Doctor Notes</a>
-      <a class="active" href="./dashboard.html">Lab Results Dashboard</a>
-      <a href="./bp.html">Blood Pressure</a>
-      <a href="./composition.html">Body Composition</a>
-      <a href="./vault.html">Health Vault</a>
-      <a href="./kaiser-labs.html">Kaiser Labs</a>
-      <a href="./immunizations.html">Immunizations</a>
-    </nav>
+    
     <h1>Lab Results Dashboard</h1>
     <div class="sub" id="summary-subtitle"></div>
     <div class="updated-banner" id="last-updated-banner">Last updated: loading...</div>
@@ -605,19 +38,19 @@
           <h3>Glycemic Control</h3>
           <button class="view-btn" id="btn-glycemic" type="button">Charts</button>
         </div>
-        <div id="graph-glycemic" class="graph-shell blue hidden">
+        <div id="graph-glycemic" class="graph-shell hidden" style="--accent: #1f6f8b; --accent-2: #155a70;">
           <div class="mini-grid">
-            <div class="mini blue" data-metric="hba1c">
+            <div class="mini" style="--accent: #1f6f8b; --accent-2: #155a70;" data-metric="hba1c">
               <h4>HbA1c %</h4>
               <div class="mini-range"></div>
               <svg id="chart-glycemic-hba1c"></svg>
             </div>
-            <div class="mini orange" data-metric="glucose">
+            <div class="mini" style="--accent: #e58d20; --accent-2: #b56f18;" data-metric="glucose">
               <h4>Glucose mg/dL</h4>
               <div class="mini-range"></div>
               <svg id="chart-glycemic-glucose"></svg>
             </div>
-            <div class="mini green" data-metric="cPeptide">
+            <div class="mini" style="--accent: #0e9a78; --accent-2: #0b7a5f;" data-metric="cPeptide">
               <h4>C-Peptide</h4>
               <div class="mini-range"></div>
               <svg id="chart-glycemic-cpeptide"></svg>
@@ -637,19 +70,19 @@
           <h3>Lipid Panel</h3>
           <button class="view-btn" id="btn-lipids" type="button">Charts</button>
         </div>
-        <div id="graph-lipids" class="graph-shell orange hidden">
+        <div id="graph-lipids" class="graph-shell hidden" style="--accent: #e58d20; --accent-2: #b56f18;">
           <div class="mini-grid">
-            <div class="mini blue" data-metric="ldl">
+            <div class="mini" style="--accent: #1f6f8b; --accent-2: #155a70;" data-metric="ldl">
               <h4>LDL</h4>
               <div class="mini-range"></div>
               <svg id="chart-lipids-ldl"></svg>
             </div>
-            <div class="mini orange" data-metric="hdl">
+            <div class="mini" style="--accent: #e58d20; --accent-2: #b56f18;" data-metric="hdl">
               <h4>HDL</h4>
               <div class="mini-range"></div>
               <svg id="chart-lipids-hdl"></svg>
             </div>
-            <div class="mini green" data-metric="triglycerides">
+            <div class="mini" style="--accent: #0e9a78; --accent-2: #0b7a5f;" data-metric="triglycerides">
               <h4>Triglycerides</h4>
               <div class="mini-range"></div>
               <svg id="chart-lipids-trig"></svg>
@@ -669,19 +102,19 @@
           <h3>Kidney Markers</h3>
           <button class="view-btn" id="btn-kidney" type="button">Charts</button>
         </div>
-        <div id="graph-kidney" class="graph-shell green hidden">
+        <div id="graph-kidney" class="graph-shell hidden" style="--accent: #0e9a78; --accent-2: #0b7a5f;">
           <div class="mini-grid">
-            <div class="mini blue" data-metric="creatinine">
+            <div class="mini" style="--accent: #1f6f8b; --accent-2: #155a70;" data-metric="creatinine">
               <h4>Creatinine</h4>
               <div class="mini-range"></div>
               <svg id="chart-kidney-creatinine"></svg>
             </div>
-            <div class="mini orange" data-metric="egfr">
+            <div class="mini" style="--accent: #e58d20; --accent-2: #b56f18;" data-metric="egfr">
               <h4>eGFR</h4>
               <div class="mini-range"></div>
               <svg id="chart-kidney-egfr"></svg>
             </div>
-            <div class="mini green" data-metric="acr">
+            <div class="mini" style="--accent: #0e9a78; --accent-2: #0b7a5f;" data-metric="acr">
               <h4>Urine ACR</h4>
               <div class="mini-range"></div>
               <svg id="chart-kidney-acr"></svg>
@@ -701,29 +134,29 @@
           <h3>Metabolic Panel</h3>
           <button class="view-btn" id="btn-metabolic" type="button">Charts</button>
         </div>
-        <div id="graph-metabolic" class="graph-shell green hidden">
+        <div id="graph-metabolic" class="graph-shell hidden" style="--accent: #0e9a78; --accent-2: #0b7a5f;">
           <div class="mini-grid">
-            <div class="mini blue" data-metric="bun">
+            <div class="mini" style="--accent: #1f6f8b; --accent-2: #155a70;" data-metric="bun">
               <h4>BUN</h4>
               <div class="mini-range"></div>
               <svg id="chart-metabolic-bun"></svg>
             </div>
-            <div class="mini orange" data-metric="sodium">
+            <div class="mini" style="--accent: #e58d20; --accent-2: #b56f18;" data-metric="sodium">
               <h4>Sodium</h4>
               <div class="mini-range"></div>
               <svg id="chart-metabolic-sodium"></svg>
             </div>
-            <div class="mini green" data-metric="chloride">
+            <div class="mini" style="--accent: #0e9a78; --accent-2: #0b7a5f;" data-metric="chloride">
               <h4>Chloride</h4>
               <div class="mini-range"></div>
               <svg id="chart-metabolic-chloride"></svg>
             </div>
-            <div class="mini blue" data-metric="potassium">
+            <div class="mini" style="--accent: #1f6f8b; --accent-2: #155a70;" data-metric="potassium">
               <h4>Potassium</h4>
               <div class="mini-range"></div>
               <svg id="chart-metabolic-potassium"></svg>
             </div>
-            <div class="mini orange" data-metric="co2">
+            <div class="mini" style="--accent: #e58d20; --accent-2: #b56f18;" data-metric="co2">
               <h4>CO2</h4>
               <div class="mini-range"></div>
               <svg id="chart-metabolic-co2"></svg>
@@ -743,29 +176,29 @@
           <h3>Thyroid Panel</h3>
           <button class="view-btn" id="btn-thyroid" type="button">Charts</button>
         </div>
-        <div id="graph-thyroid" class="graph-shell blue hidden">
+        <div id="graph-thyroid" class="graph-shell hidden" style="--accent: #1f6f8b; --accent-2: #155a70;">
           <div class="mini-grid">
-            <div class="mini blue" data-metric="tsh">
+            <div class="mini" style="--accent: #1f6f8b; --accent-2: #155a70;" data-metric="tsh">
               <h4>TSH</h4>
               <div class="mini-range"></div>
               <svg id="chart-thyroid-tsh"></svg>
             </div>
-            <div class="mini orange" data-metric="freeT4">
+            <div class="mini" style="--accent: #e58d20; --accent-2: #b56f18;" data-metric="freeT4">
               <h4>Free T4</h4>
               <div class="mini-range"></div>
               <svg id="chart-thyroid-freet4"></svg>
             </div>
-            <div class="mini green" data-metric="thyroxineT4">
+            <div class="mini" style="--accent: #0e9a78; --accent-2: #0b7a5f;" data-metric="thyroxineT4">
               <h4>Thyroxine (T4)</h4>
               <div class="mini-range"></div>
               <svg id="chart-thyroid-thyroxine"></svg>
             </div>
-            <div class="mini blue" data-metric="t3Uptake">
+            <div class="mini" style="--accent: #1f6f8b; --accent-2: #155a70;" data-metric="t3Uptake">
               <h4>T3 Uptake</h4>
               <div class="mini-range"></div>
               <svg id="chart-thyroid-t3uptake"></svg>
             </div>
-            <div class="mini orange" data-metric="freeThyroxineIndex">
+            <div class="mini" style="--accent: #e58d20; --accent-2: #b56f18;" data-metric="freeThyroxineIndex">
               <h4>Free Thyroxine Index</h4>
               <div class="mini-range"></div>
               <svg id="chart-thyroid-fti"></svg>
@@ -785,44 +218,44 @@
           <h3>Liver/Chemistry</h3>
           <button class="view-btn" id="btn-chemistry" type="button">Charts</button>
         </div>
-        <div id="graph-chemistry" class="graph-shell orange hidden">
+        <div id="graph-chemistry" class="graph-shell hidden" style="--accent: #e58d20; --accent-2: #b56f18;">
           <div class="mini-grid">
-            <div class="mini blue" data-metric="calcium">
+            <div class="mini" style="--accent: #1f6f8b; --accent-2: #155a70;" data-metric="calcium">
               <h4>Calcium</h4>
               <div class="mini-range"></div>
               <svg id="chart-chemistry-calcium"></svg>
             </div>
-            <div class="mini green" data-metric="albumin">
+            <div class="mini" style="--accent: #0e9a78; --accent-2: #0b7a5f;" data-metric="albumin">
               <h4>Albumin</h4>
               <div class="mini-range"></div>
               <svg id="chart-chemistry-albumin"></svg>
             </div>
-            <div class="mini orange" data-metric="totalProtein">
+            <div class="mini" style="--accent: #e58d20; --accent-2: #b56f18;" data-metric="totalProtein">
               <h4>Total Protein</h4>
               <div class="mini-range"></div>
               <svg id="chart-chemistry-total-protein"></svg>
             </div>
-            <div class="mini blue" data-metric="globulin">
+            <div class="mini" style="--accent: #1f6f8b; --accent-2: #155a70;" data-metric="globulin">
               <h4>Globulin</h4>
               <div class="mini-range"></div>
               <svg id="chart-chemistry-globulin"></svg>
             </div>
-            <div class="mini orange" data-metric="bilirubin">
+            <div class="mini" style="--accent: #e58d20; --accent-2: #b56f18;" data-metric="bilirubin">
               <h4>Bilirubin</h4>
               <div class="mini-range"></div>
               <svg id="chart-chemistry-bilirubin"></svg>
             </div>
-            <div class="mini green" data-metric="alkPhos">
+            <div class="mini" style="--accent: #0e9a78; --accent-2: #0b7a5f;" data-metric="alkPhos">
               <h4>Alkaline Phosphatase</h4>
               <div class="mini-range"></div>
               <svg id="chart-chemistry-alk-phos"></svg>
             </div>
-            <div class="mini blue" data-metric="ast">
+            <div class="mini" style="--accent: #1f6f8b; --accent-2: #155a70;" data-metric="ast">
               <h4>AST</h4>
               <div class="mini-range"></div>
               <svg id="chart-chemistry-ast"></svg>
             </div>
-            <div class="mini green" data-metric="alt">
+            <div class="mini" style="--accent: #0e9a78; --accent-2: #0b7a5f;" data-metric="alt">
               <h4>ALT</h4>
               <div class="mini-range"></div>
               <svg id="chart-chemistry-alt"></svg>
@@ -842,14 +275,14 @@
           <h3>Specialty & Lifetime Markers</h3>
           <button class="view-btn" id="btn-specialty" type="button">Charts</button>
         </div>
-        <div id="graph-specialty" class="graph-shell orange hidden">
+        <div id="graph-specialty" class="graph-shell hidden" style="--accent: #e58d20; --accent-2: #b56f18;">
           <div class="mini-grid">
-            <div class="mini blue" data-metric="lipoproteinA">
+            <div class="mini" style="--accent: #1f6f8b; --accent-2: #155a70;" data-metric="lipoproteinA">
               <h4>Lipoprotein (a)</h4>
               <div class="mini-range"></div>
               <svg id="chart-specialty-lpa"></svg>
             </div>
-            <div class="mini orange" data-metric="psa">
+            <div class="mini" style="--accent: #e58d20; --accent-2: #b56f18;" data-metric="psa">
               <h4>PSA</h4>
               <div class="mini-range"></div>
               <svg id="chart-specialty-psa"></svg>
@@ -869,14 +302,14 @@
           <h3>Vitamins & Nutrition</h3>
           <button class="view-btn" id="btn-vitamins" type="button">Charts</button>
         </div>
-        <div id="graph-vitamins" class="graph-shell blue hidden">
+        <div id="graph-vitamins" class="graph-shell hidden" style="--accent: #1f6f8b; --accent-2: #155a70;">
           <div class="mini-grid">
-            <div class="mini blue" data-metric="vitaminD">
+            <div class="mini" style="--accent: #1f6f8b; --accent-2: #155a70;" data-metric="vitaminD">
               <h4>Vitamin D</h4>
               <div class="mini-range"></div>
               <svg id="chart-vitamins-vitd"></svg>
             </div>
-            <div class="mini orange" data-metric="vitaminB12">
+            <div class="mini" style="--accent: #e58d20; --accent-2: #b56f18;" data-metric="vitaminB12">
               <h4>Vitamin B12</h4>
               <div class="mini-range"></div>
               <svg id="chart-vitamins-vitb12"></svg>
@@ -896,29 +329,29 @@
           <h3>Complete Blood Count (CBC)</h3>
           <button class="view-btn" id="btn-cbc" type="button">Charts</button>
         </div>
-        <div id="graph-cbc" class="graph-shell green hidden">
+        <div id="graph-cbc" class="graph-shell hidden" style="--accent: #0e9a78; --accent-2: #0b7a5f;">
           <div class="mini-grid">
-            <div class="mini blue" data-metric="wbc">
+            <div class="mini" style="--accent: #1f6f8b; --accent-2: #155a70;" data-metric="wbc">
               <h4>WBC</h4>
               <div class="mini-range"></div>
               <svg id="chart-cbc-wbc"></svg>
             </div>
-            <div class="mini orange" data-metric="rbc">
+            <div class="mini" style="--accent: #e58d20; --accent-2: #b56f18;" data-metric="rbc">
               <h4>RBC</h4>
               <div class="mini-range"></div>
               <svg id="chart-cbc-rbc"></svg>
             </div>
-            <div class="mini green" data-metric="hemoglobin">
+            <div class="mini" style="--accent: #0e9a78; --accent-2: #0b7a5f;" data-metric="hemoglobin">
               <h4>Hemoglobin</h4>
               <div class="mini-range"></div>
               <svg id="chart-cbc-hgb"></svg>
             </div>
-            <div class="mini blue" data-metric="hematocrit">
+            <div class="mini" style="--accent: #1f6f8b; --accent-2: #155a70;" data-metric="hematocrit">
               <h4>Hematocrit</h4>
               <div class="mini-range"></div>
               <svg id="chart-cbc-hct"></svg>
             </div>
-            <div class="mini orange" data-metric="platelets">
+            <div class="mini" style="--accent: #e58d20; --accent-2: #b56f18;" data-metric="platelets">
               <h4>Platelets</h4>
               <div class="mini-range"></div>
               <svg id="chart-cbc-plt"></svg>
@@ -1305,78 +738,37 @@
     initCategoryCollapse();
 
     function drawSingleLine(svgId, values, color, metric) {
-      const svg = document.getElementById(svgId);
-      const width = svg.clientWidth || 520;
-      const height = svg.clientHeight || 150;
-      const pad = { l: 34, r: 12, t: 12, b: 28 };
-      const w = width - pad.l - pad.r;
-      const h = height - pad.t - pad.b;
-
-      const allPoints = values.filter(v => v !== null);
-      if (!allPoints.length) {
-        svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
-        svg.innerHTML = "";
-        return;
-      }
       const rr = REFERENCE_RANGES[metric] || {};
+      const allPoints = values.filter(v => v !== null);
       const min = Math.min(...allPoints, rr.min ?? allPoints[0]);
       const max = Math.max(...allPoints, rr.max ?? allPoints[0]);
       const yMin = min - (Math.abs(min) * 0.1 || 1);
       const yMax = max + (Math.abs(max) * 0.1 || 1);
-      const y = v => pad.t + (1 - (v - yMin) / (yMax - yMin || 1)) * h;
-      const x = i => pad.l + (i / (data.length - 1)) * w;
-
-      let html = "";
-
+      let band = null;
       if (rr.type === "between" || rr.type === "min_only" || rr.type === "max_only") {
-        let bandLow = yMin;
-        let bandHigh = yMax;
-        if (rr.type === "between") {
-          bandLow = rr.min;
-          bandHigh = rr.max;
-        } else if (rr.type === "min_only") {
-          bandLow = rr.min;
-          bandHigh = yMax;
-        } else if (rr.type === "max_only") {
-          bandLow = yMin;
-          bandHigh = rr.max;
-        }
-        const bandTop = y(Math.max(bandLow, bandHigh));
-        const bandBottom = y(Math.min(bandLow, bandHigh));
-        html += `<rect x="${pad.l}" y="${bandTop}" width="${w}" height="${Math.max(0, bandBottom - bandTop)}" fill="rgba(58,125,68,0.12)"/>`;
+        let bandLow = yMin, bandHigh = yMax;
+        if (rr.type === "between") { bandLow = rr.min; bandHigh = rr.max; }
+        else if (rr.type === "min_only") { bandLow = rr.min; bandHigh = yMax; }
+        else if (rr.type === "max_only") { bandLow = yMin; bandHigh = rr.max; }
+        band = { min: Math.min(bandLow, bandHigh), max: Math.max(bandLow, bandHigh), fill: "rgba(58,125,68,0.12)" };
       }
-
-      for (let i = 0; i < 3; i++) {
-        const yy = pad.t + (i / 2) * h;
-        html += `<line x1="${pad.l}" y1="${yy}" x2="${pad.l + w}" y2="${yy}" stroke="rgba(160,180,198,0.28)" stroke-dasharray="3 4" stroke-width="1"/>`;
-      }
-
-      data.forEach((d, i) => {
-        const show = i % 2 === 0 || i === data.length - 1;
-        if (show) {
-          const dt = fmtMonthYear(d.date);
-          html += `<text x="${x(i)}" y="${height - 8}" text-anchor="middle" fill="#d2deea" font-size="11" font-weight="700">${dt}</text>`;
-        }
+      Charts.line(svgId, {
+        series: [{
+          values: values, color: color, width: 3.2,
+          dots: (i, v) => {
+            const row = data[i];
+            const verdict = classifyMetric(metric, v, row ? row.notes : null);
+            const bad = verdict.state === "high" || verdict.state === "low";
+            return { r: 4.2, fill: bad ? "#b23a48" : color, stroke: "#f5fbff", sw: 1.2 };
+          }
+        }],
+        count: data.length,
+        pad: { l: 34, r: 12, t: 12, b: 28 }, fallbackW: 520, fallbackH: 150,
+        y: { min: yMin, max: yMax, ticks: 3, tickFormat: null, gridStroke: "rgba(160,180,198,0.28)", gridW: 1 },
+        band: band,
+        xLabel: { fn: (i) => (i % 2 === 0 || i === data.length - 1) ? fmtMonthYear(data[i].date) : null,
+                  fill: "#d2deea", size: 11, dy: -8 }
       });
-
-      const path = [];
-      values.forEach((v, i) => {
-        if (v === null) return;
-        const cmd = path.length ? "L" : "M";
-        path.push(`${cmd}${x(i)} ${y(v)}`);
-      });
-      html += `<path d="${path.join(" ")}" fill="none" stroke="${color}" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>`;
-
-      values.forEach((v, i) => {
-        if (v === null) return;
-        const row = data[i];
-        const verdict = classifyMetric(metric, v, row ? row.notes : null);
-        const pointColor = (verdict.state === "high" || verdict.state === "low") ? "#b23a48" : color;
-        html += `<circle cx="${x(i)}" cy="${y(v)}" r="4.2" fill="${pointColor}" stroke="#f5fbff" stroke-width="1.2"/>`;
-      });
-
-      svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
-      svg.innerHTML = html;
     }
 
     drawSingleLine("chart-glycemic-hba1c", data.map(d => d.hba1c), "#1f6f8b", "hba1c");
@@ -1422,12 +814,7 @@
     drawSingleLine("chart-cbc-plt", data.map(d => d.platelets), "#ee6c4d", "platelets");
   </script>
 
-  <nav class="bottom-tab" aria-label="Primary">
-    <a href="./index.html">Home</a>
-    <a href="./dashboard.html" class="active">Lab Results</a>
-    <a href="./bp.html">BP</a>
-    <a href="./vault.html">Vault</a>
-  </nav>
+  
 
   <dialog id="ast-alt-dialog" closedby="any" class="modern-dialog">
     <div class="dialog-header">
@@ -1509,5 +896,6 @@
       }
     })();
   </script>
+  <script src="./static/js/shell.js"></script>
 </body>
 </html>

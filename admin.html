@@ -4,159 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Update Health Data</title>
-  <style>
-    body.page-admin {
-      --page-accent: #14b8a6;
-      --page-accent-2: #0f8f82;
-    }
-    .wrap { max-width: 1080px; margin: 0 auto; }
-    .nav { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
-    
-    .hero {
-      margin-bottom: 18px;
-      padding: 20px;
-    }
-    
-    /* Segment headers */
-    .section-group-title {
-      font-family: "Avenir Next Condensed", "Trebuchet MS", sans-serif;
-      font-size: 15px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      color: var(--comp-muted);
-      margin: 24px 0 12px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .section-group-title::after {
-      content: "";
-      flex: 1;
-      height: 1px;
-      background: var(--comp-line);
-      opacity: 0.5;
-    }
-    
-    .admin-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 16px;
-      margin-bottom: 10px;
-    }
-    @media (max-width: 768px) {
-      .admin-grid { grid-template-columns: 1fr; }
-    }
-    
-    .card.admin-card {
-      padding: 20px !important;
-      transition: transform .2s ease, box-shadow .2s ease;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      min-height: 190px;
-      background: linear-gradient(165deg, rgba(58, 74, 96, 0.98), rgba(47, 63, 84, 0.98)) !important;
-    }
-    .card.admin-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 16px 32px rgba(0, 0, 0, 0.4) !important;
-    }
-    
-    .card.admin-card h3 {
-      margin: 0 0 6px;
-      font-size: 21px;
-      font-family: "Avenir Next Condensed", "Trebuchet MS", sans-serif;
-      font-weight: 800;
-    }
-    
-    .card-body {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-    
-    .card-desc {
-      font-size: 13.5px;
-      color: var(--comp-muted);
-      line-height: 1.45;
-      margin-bottom: 14px;
-    }
-    
-    .upload-control {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      flex-wrap: wrap;
-      margin-top: auto;
-    }
-    
-    .file-input-wrapper {
-      flex: 1;
-      min-width: 180px;
-    }
-    
-    input[type="file"] {
-      width: 100%;
-      background: rgba(10, 20, 35, 0.6) !important;
-      border: 1px solid var(--comp-line) !important;
-      color: var(--comp-ink) !important;
-      border-radius: 10px !important;
-      padding: 5px 8px !important;
-      font-size: 13.5px;
-      transition: border-color 0.2s ease;
-      cursor: pointer !important;
-    }
-    input[type="file"]::file-selector-button {
-      background: linear-gradient(120deg, var(--page-accent-2), var(--page-accent)) !important;
-      border: none !important;
-      border-radius: 6px !important;
-      color: #fff !important;
-      padding: 5px 10px !important;
-      font-size: 12px !important;
-      font-weight: 700 !important;
-      cursor: pointer !important;
-      margin-right: 8px !important;
-      transition: filter 0.18s ease;
-    }
-    input[type="file"]::file-selector-button:hover {
-      filter: brightness(1.15) !important;
-    }
-    input[type="file"]:focus {
-      border-color: var(--page-accent) !important;
-    }
-    
-    .status {
-      margin-top: 14px;
-      background: rgba(8, 17, 30, 0.6) !important;
-      border: 1px solid var(--comp-line) !important;
-      border-radius: 12px !important;
-      padding: 14px !important;
-      color: #73ecb4 !important;
-      font-size: 14px !important;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      white-space: pre-wrap;
-      box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
-    }
-    .hint { color: var(--comp-muted); font-size: 12px; margin-top: 6px; }
-  </style>
-  <link rel="stylesheet" href="./companion_theme.css?v=20260729-2" />
+  
+  <link rel="stylesheet" href="./static/css/theme.css" />
+  <script src="./static/js/app.js"></script>
 </head>
-<body class="page-admin">
+<body data-page="admin">
   <div class="wrap">
-    <nav class="nav">
-      <a href="./index.html">Home</a>
-      <a href="./doctor-notes.html">Doctor Notes</a>
-      <a href="./dashboard.html">Lab Results Dashboard</a>
-      <a href="./bp.html">Blood Pressure</a>
-      <a href="./composition.html">Body Composition</a>
-      <a href="./bio-age.html">Biological Age</a>
-      <a href="./lab-import.html">Lab Import + Review</a>
-      <a href="./kaiser-labs.html">Kaiser Labs</a>
-      <a href="./vault.html">Health Vault</a>
-      <a href="./immunizations.html">Immunizations</a>
-      <a class="active" href="./admin.html">Admin</a>
-    </nav>
+    
 
     <h1>Update Health Data</h1>
     <div class="sub">Add lab results and upload new blood pressure, body composition, Vault, or other health records.</div>
@@ -260,9 +114,11 @@
     </div>
 
     <div id="dexa-review-panel" class="card" style="display: none; border-top: 3px solid #7268f2 !important; margin-top: 20px; padding: 20px !important; margin-bottom: 16px;">
-      <h3 style="margin-top: 0; color: #c9bbff !important; font-size: 22px;">Review & Log DEXA Scan</h3>
+      <h3 style="margin-top: 0; color: #c9bbff !important; font-size: 22px;">Review & Log Body Scan</h3>
       <div class="card-desc" style="margin-bottom: 15px; font-size: 13.5px; color: var(--comp-muted);">We archived the PDF in your local files. Confirm or adjust the parsed metrics below to log them into your body composition timeline:</div>
       
+      <label for="rev-scan-type">Scan type</label>
+      <select id="rev-scan-type" required><option value="">Select scan type</option><option value="DEXA">DEXA</option><option value="InBody">InBody</option></select>
       <form id="dexa-review-form" style="display: flex; flex-direction: column; gap: 14px;">
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
           <div style="display: flex; flex-direction: column; gap: 6px;">
@@ -274,8 +130,8 @@
             <input id="rev-scan-weight" type="number" step="0.1" required style="min-height: 44px; border-radius: 10px; border: 1px solid var(--comp-line); background: rgba(10, 20, 35, 0.6); color: var(--comp-ink); padding: 8px 12px; font-size: 14px;" />
           </div>
           <div style="display: flex; flex-direction: column; gap: 6px;">
-            <label style="font-size: 13px; font-weight: 700; color: var(--comp-muted);">Morning Home Weight (unclothed, lb)</label>
-            <input id="rev-home-weight" type="number" step="0.1" required style="min-height: 44px; border-radius: 10px; border: 1px solid var(--comp-line); background: rgba(10, 20, 35, 0.6); color: var(--comp-ink); padding: 8px 12px; font-size: 14px;" />
+            <label style="font-size: 13px; font-weight: 700; color: var(--comp-muted);">Morning Home Weight (optional, lb)</label>
+            <input id="rev-home-weight" type="number" step="0.1" style="min-height: 44px; border-radius: 10px; border: 1px solid var(--comp-line); background: rgba(10, 20, 35, 0.6); color: var(--comp-ink); padding: 8px 12px; font-size: 14px;" />
           </div>
           <div style="display: flex; flex-direction: column; gap: 6px;">
             <label style="font-size: 13px; font-weight: 700; color: var(--comp-muted);">Body Fat %</label>
@@ -530,6 +386,7 @@
 
     document.getElementById("confirm-dexa-save").addEventListener("click", async () => {
       const date = document.getElementById("rev-date").value;
+      const scanType = document.getElementById("rev-scan-type").value;
       const scanWeight = document.getElementById("rev-scan-weight").value;
       const homeWeight = document.getElementById("rev-home-weight").value;
       const bodyFat = document.getElementById("rev-body-fat").value;
@@ -548,17 +405,18 @@
       const bmdZ = document.getElementById("rev-bmd-z").value;
       const notes = document.getElementById("rev-notes").value;
 
-      if (!date || !scanWeight || !homeWeight || !bodyFat) {
-        setStatus("Please fill in all required fields (Date, Scan Weight, Home Weight, Body Fat %).");
+      if (!date || !scanType || !scanWeight || !bodyFat) {
+        setStatus("Please fill in all required fields (Date, Scan Type, Scan Weight, Body Fat %).");
         return;
       }
 
-      setStatus("Saving DEXA record to local database...");
+      setStatus("Saving body scan...");
       try {
         const payload = {
           date,
+          scan_type: scanType,
           scan_weight: parseFloat(scanWeight),
-          home_weight: parseFloat(homeWeight),
+          home_weight: homeWeight ? parseFloat(homeWeight) : null,
           body_fat_pct: parseFloat(bodyFat),
           muscle_mass: muscle ? parseFloat(muscle) : null,
           bmr: bmr ? parseFloat(bmr) : null,
@@ -595,5 +453,6 @@
       }
     });
   </script>
+<script src="storage_status.js"></script>  <script src="./static/js/shell.js"></script>
 </body>
 </html>

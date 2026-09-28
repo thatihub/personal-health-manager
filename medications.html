@@ -4,78 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Medication Manager</title>
-  <link rel="stylesheet" href="./companion_theme.css?v=20260729-2" />
-  <style>
-    :root { --med-accent:#9f7aea; --med-green:#1bc471; --med-red:#ef6f59; }
-    body { margin:0; min-height:100vh; padding:22px; }
-    .wrap { max-width:1160px; margin:0 auto; }
-    .topbar { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:26px; }
-    .brand { color:#b9cada; font-size:13px; font-weight:800; letter-spacing:.08em; }
-    .back { min-height:44px; display:inline-flex; align-items:center; padding:8px 14px; border:1px solid var(--comp-line); border-radius:11px; color:#e7f1fb; background:rgba(17,28,42,.84); text-decoration:none; font-weight:750; }
-    .hero { display:flex; align-items:end; justify-content:space-between; gap:18px; margin-bottom:22px; padding:0 !important; background:none !important; border:0 !important; box-shadow:none !important; overflow:visible !important; }
-    .hero h1 { margin:0 0 7px; }
-    .hero p { margin:0; color:var(--comp-muted); max-width:650px; }
-    .primary { min-height:46px; padding:10px 16px; border:0; border-radius:12px; color:#fff; background:linear-gradient(120deg,#7656c7,var(--med-accent)); font-weight:800; cursor:pointer; }
-    .toolbar { display:grid; grid-template-columns:minmax(220px,1fr) auto; gap:10px; align-items:center; margin-bottom:18px; padding:12px; border:1px solid var(--comp-line); border-radius:16px; background:rgba(16,28,43,.72); }
-    .search { min-height:44px; width:100%; padding:10px 13px; border:1px solid var(--comp-line); border-radius:11px; color:#eef6fc; background:rgba(44,58,76,.96); font:inherit; }
-    .count { color:#b8cad9; font-size:13px; font-weight:700; white-space:nowrap; }
-    .med-list { overflow:hidden; border:1px solid rgba(116,144,172,.3); border-radius:14px; background:rgba(14,25,39,.5); box-shadow:0 16px 34px rgba(0,0,0,.18); }
-    .list-head,.med-row { display:grid; grid-template-columns:minmax(210px,1.45fr) minmax(110px,.65fr) minmax(120px,.75fr) minmax(220px,1.4fr) auto; gap:18px; align-items:center; }
-    .list-head { min-height:44px; padding:0 16px; color:#9bb1c4; font-size:10px; font-weight:850; letter-spacing:.1em; text-transform:uppercase; border-bottom:1px solid rgba(116,144,172,.3); background:linear-gradient(90deg,rgba(35,52,72,.94),rgba(25,40,59,.94)); }
-    .med-row { position:relative; min-height:78px; padding:14px 16px 14px 20px; border-bottom:1px solid rgba(116,144,172,.2); transition:background .16s ease,transform .16s ease; }
-    .med-row:last-child { border-bottom:0; }
-    .med-row:nth-child(odd) { background:rgba(44,60,80,.16); }
-    .med-row::before { content:""; position:absolute; left:0; top:14px; bottom:14px; width:3px; border-radius:0 4px 4px 0; background:var(--med-accent); }
-    .med-row[data-type="Insulin"]::before { background:#12a4d4; }
-    .med-row[data-type="Device"]::before,.med-row[data-type="Supply"]::before { background:var(--med-green); }
-    .med-row:hover { background:rgba(87,108,136,.2); }
-    .med-main { min-width:0; padding-left:2px; }
-    .med-name { margin:0 0 5px; color:#f5f9fd !important; font-size:16px !important; line-height:1.25; }
-    .type { display:inline-flex; align-items:center; gap:5px; color:#bbaaf8; font-size:10px; font-weight:800; letter-spacing:.035em; text-transform:uppercase; }
-    .type::before { content:""; width:6px; height:6px; border-radius:50%; background:currentColor; box-shadow:0 0 9px currentColor; }
-    .med-row[data-type="Insulin"] .type { color:#6fd8f7; }
-    .med-row[data-type="Device"] .type,.med-row[data-type="Supply"] .type { color:#69dda3; }
-    .cell { min-width:0; color:#dce8f3; font-size:13px; line-height:1.45; overflow-wrap:anywhere; }
-    .rx-value { color:#a9c0d2; font-family:ui-monospace,"SFMono-Regular",Consolas,monospace; font-size:12px; }
-    .dose-value { color:#eaf3fb; font-weight:750; }
-    .schedule-value { color:#cae2f3; }
-    .note { display:block; margin-top:4px; color:#8fa8bb; font-size:11px; font-style:italic; }
-    .mobile-label { display:none; }
-    .edit-btn { min-height:38px; padding:7px 14px; border:1px solid rgba(159,122,234,.52); border-radius:9px; color:#eee8ff; background:linear-gradient(145deg,rgba(101,72,158,.56),rgba(66,49,108,.48)); font-weight:800; cursor:pointer; transition:transform .16s ease,filter .16s ease; }
-    .edit-btn:hover { transform:translateY(-1px); filter:brightness(1.14); }
-    .empty { padding:44px; text-align:center; color:var(--comp-muted); border-bottom:1px solid var(--comp-line); }
-    .status { min-height:22px; margin-top:14px; color:#8fdbff; font-size:13px; }
-    dialog { width:min(680px,calc(100vw - 28px)); padding:0; border:1px solid var(--comp-line); border-radius:18px; color:#eef6fc; background:#111d2c; box-shadow:0 30px 80px rgba(0,0,0,.65); }
-    dialog::backdrop { background:rgba(1,7,17,.72); backdrop-filter:blur(3px); }
-    .dialog-head { display:flex; justify-content:space-between; align-items:center; padding:18px 20px; border-bottom:1px solid var(--comp-line); }
-    .dialog-head h2 { margin:0; font-size:22px !important; }
-    .close { width:44px; height:44px; display:inline-flex; align-items:center; justify-content:center; border:0; border-radius:10px; color:#dce9f5; background:transparent; font-size:24px; cursor:pointer; }
-    form { padding:20px; }
-    .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
-    .field { display:grid; gap:6px; }
-    .field.wide { grid-column:1/-1; }
-    .field label { color:#b8cad9; font-size:12px; font-weight:750; }
-    .field input,.field select,.field textarea { width:100%; min-height:44px; padding:10px 11px; border:1px solid var(--comp-line); border-radius:10px; color:#eef6fc; background:#1d2c3e; font:inherit; }
-    .field textarea { min-height:82px; resize:vertical; }
-    .dialog-actions { display:flex; justify-content:flex-end; gap:9px; margin-top:18px; }
-    .secondary { min-height:44px; padding:9px 14px; border:1px solid var(--comp-line); border-radius:11px; color:#dce9f5; background:#1c2b40; font-weight:750; cursor:pointer; }
-    .danger { margin-right:auto; min-height:44px; padding:9px 14px; border:1px solid rgba(239,111,89,.5); border-radius:11px; color:#ffc2b8; background:rgba(117,48,45,.28); font-weight:800; cursor:pointer; }
-    @media(max-width:760px){
-      body{padding:15px}.brand{display:none}.hero{align-items:start;flex-direction:column}.toolbar{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.field.wide{grid-column:auto}
-      .list-head{display:none}.med-list{border:0;border-top:1px solid var(--comp-line);border-radius:0;background:transparent;box-shadow:none}
-      .med-row{grid-template-columns:minmax(0,1fr) auto; gap:9px 12px; padding:16px 6px 16px 14px; align-items:start}
-      .med-row::before{top:16px;bottom:16px}
-      .med-main{grid-column:1}.med-row .edit-btn{grid-column:2;grid-row:1;align-self:center;min-width:58px;min-height:44px;padding:9px 13px}
-      .cell{grid-column:1/-1;display:grid;grid-template-columns:82px minmax(0,1fr);gap:10px;font-size:13px;padding-left:2px}
-      .mobile-label{display:block;color:#91a9bd;font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
-      dialog{max-height:calc(100dvh - 24px);overflow:auto}
-      .dialog-head{position:sticky;top:0;z-index:2;padding:14px 16px;background:#111d2c}
-      form{padding:16px}.dialog-actions{flex-wrap:wrap;position:sticky;bottom:0;padding:12px 0 2px;background:#111d2c}.danger{width:100%;margin:0 0 4px}
-      .dialog-actions .secondary,.dialog-actions .primary{flex:1}
-    }
-  </style>
+  <link rel="stylesheet" href="./static/css/theme.css" />
+  <script src="./static/js/app.js"></script>
+  
 </head>
-<body class="page-medications">
+<body data-page="medications">
   <main class="wrap">
     <div class="topbar"><div class="brand">PERSONAL HEALTH MANAGER</div><a class="back" href="./index.html">← Home</a></div>
     <section class="hero">
@@ -208,5 +141,6 @@
     });
     load();
   </script>
+  <script src="./static/js/shell.js"></script>
 </body>
 </html>
