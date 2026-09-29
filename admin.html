@@ -44,16 +44,27 @@
         </div>
       </article>
 
-      <article class="card admin-card" style="border-top: 3px solid #7268f2 !important;">
-        <h3>DEXA Scan Report (PDF / Image Photo)</h3>
-        <div class="card-body">
-          <div class="card-desc">Upload your clinical printout sheet (either a PDF scan or a camera photo in JPEG/PNG format). The system will archive it and open a log panel.</div>
-          <div class="upload-control">
-            <div class="file-input-wrapper">
-              <input id="dexa-pdf-file" type="file" accept=".pdf,application/pdf,.jpg,.jpeg,.png,image/jpeg,image/png" />
-            </div>
-            <button class="btn" id="upload-dexa-pdf" type="button" style="background: linear-gradient(120deg, #5b4fe8, #7268f2) !important;">Upload Report</button>
+      <article class="scan-pill scan-pill-violet">
+        <div class="scan-pill-tag">Clinical · occasional</div>
+        <h3>DEXA Scan Report</h3>
+        <div class="scan-pill-desc">Upload your clinical DEXA printout (PDF scan or camera photo). The system archives it and opens a review panel.</div>
+        <div class="upload-control">
+          <div class="file-input-wrapper">
+            <input id="dexa-pdf-file" type="file" accept=".pdf,application/pdf,.jpg,.jpeg,.png,image/jpeg,image/png" />
           </div>
+          <button class="scan-btn" id="upload-dexa-pdf" type="button">Upload Report</button>
+        </div>
+      </article>
+
+      <article class="scan-pill scan-pill-rose">
+        <div class="scan-pill-tag">Monthly</div>
+        <h3>InBody Scan</h3>
+        <div class="scan-pill-desc">Upload your monthly InBody result sheet (PDF). The system archives it, extracts weight, body fat, muscle, water, BMR and visceral fat level, then opens a review panel.</div>
+        <div class="upload-control">
+          <div class="file-input-wrapper">
+            <input id="inbody-pdf-file" type="file" accept=".pdf,application/pdf,.jpg,.jpeg,.png,image/jpeg,image/png" />
+          </div>
+          <button class="scan-btn" id="upload-inbody-pdf" type="button">Upload InBody PDF</button>
         </div>
       </article>
     </div>
@@ -113,8 +124,8 @@
       </article>
     </div>
 
-    <div id="dexa-review-panel" class="card" style="display: none; border-top: 3px solid #7268f2 !important; margin-top: 20px; padding: 20px !important; margin-bottom: 16px;">
-      <h3 style="margin-top: 0; color: #c9bbff !important; font-size: 22px;">Review & Log Body Scan</h3>
+    <div id="dexa-review-panel" class="card rev-panel rev-panel-dexa" style="display: none; margin-top: 20px; padding: 20px !important; margin-bottom: 16px;">
+      <h3 id="dexa-review-title" style="margin-top: 0; font-size: 22px;">Review & Log Body Scan</h3>
       <div class="card-desc" style="margin-bottom: 15px; font-size: 13.5px; color: var(--comp-muted);">We archived the PDF in your local files. Confirm or adjust the parsed metrics below to log them into your body composition timeline:</div>
       
       <label for="rev-scan-type">Scan type</label>
@@ -149,43 +160,55 @@
             <label style="font-size: 13px; font-weight: 700; color: var(--comp-muted);">Total Body Water (lb, optional)</label>
             <input id="rev-water" type="number" step="0.1" placeholder="e.g. 57.8" style="min-height: 44px; border-radius: 10px; border: 1px solid var(--comp-line); background: rgba(10, 20, 35, 0.6); color: var(--comp-ink); padding: 8px 12px; font-size: 14px;" />
           </div>
+          <div data-scan="inbody" style="display: flex; flex-direction: column; gap: 6px;">
+            <label style="font-size: 13px; font-weight: 700; color: var(--comp-muted);">Body Fat Mass (lb, optional)</label>
+            <input id="rev-fat-mass" type="number" step="0.1" placeholder="e.g. 52.4" style="min-height: 44px; border-radius: 10px; border: 1px solid var(--comp-line); background: rgba(10, 20, 35, 0.6); color: var(--comp-ink); padding: 8px 12px; font-size: 14px;" />
+          </div>
+          <div data-scan="inbody" style="display: flex; flex-direction: column; gap: 6px;">
+            <label style="font-size: 13px; font-weight: 700; color: var(--comp-muted);">Visceral Fat Level (InBody, optional)</label>
+            <input id="rev-vf-level" type="number" step="1" placeholder="e.g. 12" style="min-height: 44px; border-radius: 10px; border: 1px solid var(--comp-line); background: rgba(10, 20, 35, 0.6); color: var(--comp-ink); padding: 8px 12px; font-size: 14px;" />
+          </div>
+          <div data-scan="inbody" style="display: flex; flex-direction: column; gap: 6px;">
+            <label style="font-size: 13px; font-weight: 700; color: var(--comp-muted);">InBody Score (optional)</label>
+            <input id="rev-inbody-score" type="number" step="1" placeholder="e.g. 72" style="min-height: 44px; border-radius: 10px; border: 1px solid var(--comp-line); background: rgba(10, 20, 35, 0.6); color: var(--comp-ink); padding: 8px 12px; font-size: 14px;" />
+          </div>
           <div style="display: flex; flex-direction: column; gap: 6px;">
             <label style="font-size: 13px; font-weight: 700; color: var(--comp-muted);">Waist Size (inches, optional)</label>
             <input id="rev-waist" type="number" step="0.1" placeholder="e.g. 34.0" style="min-height: 44px; border-radius: 10px; border: 1px solid var(--comp-line); background: rgba(10, 20, 35, 0.6); color: var(--comp-ink); padding: 8px 12px; font-size: 14px;" />
           </div>
-          <div style="display: flex; flex-direction: column; gap: 6px;">
+          <div data-scan="dexa" style="display: flex; flex-direction: column; gap: 6px;">
             <label style="font-size: 13px; font-weight: 700; color: var(--comp-muted);">Visceral Fat (VAT) Area (cm², optional)</label>
             <input id="rev-vat-area" type="number" step="0.1" placeholder="e.g. 218.1" style="min-height: 44px; border-radius: 10px; border: 1px solid var(--comp-line); background: rgba(10, 20, 35, 0.6); color: var(--comp-ink); padding: 8px 12px; font-size: 14px;" />
           </div>
-          <div style="display: flex; flex-direction: column; gap: 6px;">
+          <div data-scan="dexa" style="display: flex; flex-direction: column; gap: 6px;">
             <label style="font-size: 13px; font-weight: 700; color: var(--comp-muted);">Visceral Fat (VAT) Mass (g, optional)</label>
             <input id="rev-vat-mass" type="number" step="1" placeholder="e.g. 1051" style="min-height: 44px; border-radius: 10px; border: 1px solid var(--comp-line); background: rgba(10, 20, 35, 0.6); color: var(--comp-ink); padding: 8px 12px; font-size: 14px;" />
           </div>
-          <div style="display: flex; flex-direction: column; gap: 6px;">
+          <div data-scan="dexa" style="display: flex; flex-direction: column; gap: 6px;">
             <label style="font-size: 13px; font-weight: 700; color: var(--comp-muted);">Visceral Fat (VAT) Volume (cm³, optional)</label>
             <input id="rev-vat-volume" type="number" step="1" placeholder="e.g. 1137" style="min-height: 44px; border-radius: 10px; border: 1px solid var(--comp-line); background: rgba(10, 20, 35, 0.6); color: var(--comp-ink); padding: 8px 12px; font-size: 14px;" />
           </div>
-          <div style="display: flex; flex-direction: column; gap: 6px;">
+          <div data-scan="dexa" style="display: flex; flex-direction: column; gap: 6px;">
             <label style="font-size: 13px; font-weight: 700; color: var(--comp-muted);">ALM Index (kg/m², optional)</label>
             <input id="rev-alm-index" type="number" step="0.1" placeholder="e.g. 7.8" style="min-height: 44px; border-radius: 10px; border: 1px solid var(--comp-line); background: rgba(10, 20, 35, 0.6); color: var(--comp-ink); padding: 8px 12px; font-size: 14px;" />
           </div>
-          <div style="display: flex; flex-direction: column; gap: 6px;">
+          <div data-scan="dexa" style="display: flex; flex-direction: column; gap: 6px;">
             <label style="font-size: 13px; font-weight: 700; color: var(--comp-muted);">Lean/Height² Index (kg/m², optional)</label>
             <input id="rev-lean-height2" type="number" step="0.1" placeholder="e.g. 19.4" style="min-height: 44px; border-radius: 10px; border: 1px solid var(--comp-line); background: rgba(10, 20, 35, 0.6); color: var(--comp-ink); padding: 8px 12px; font-size: 14px;" />
           </div>
-          <div style="display: flex; flex-direction: column; gap: 6px;">
+          <div data-scan="dexa" style="display: flex; flex-direction: column; gap: 6px;">
             <label style="font-size: 13px; font-weight: 700; color: var(--comp-muted);">Lean Index Age Percentile (optional)</label>
             <input id="rev-lean-percentile" type="number" step="1" placeholder="e.g. 43" style="min-height: 44px; border-radius: 10px; border: 1px solid var(--comp-line); background: rgba(10, 20, 35, 0.6); color: var(--comp-ink); padding: 8px 12px; font-size: 14px;" />
           </div>
-          <div style="display: flex; flex-direction: column; gap: 6px;">
+          <div data-scan="dexa" style="display: flex; flex-direction: column; gap: 6px;">
             <label style="font-size: 13px; font-weight: 700; color: var(--comp-muted);">Total BMD (g/cm², optional)</label>
             <input id="rev-bmd" type="number" step="0.001" placeholder="e.g. 1.014" style="min-height: 44px; border-radius: 10px; border: 1px solid var(--comp-line); background: rgba(10, 20, 35, 0.6); color: var(--comp-ink); padding: 8px 12px; font-size: 14px;" />
           </div>
-          <div style="display: flex; flex-direction: column; gap: 6px;">
+          <div data-scan="dexa" style="display: flex; flex-direction: column; gap: 6px;">
             <label style="font-size: 13px; font-weight: 700; color: var(--comp-muted);">BMD T-score (optional)</label>
             <input id="rev-bmd-t" type="number" step="0.1" placeholder="e.g. -2.0" style="min-height: 44px; border-radius: 10px; border: 1px solid var(--comp-line); background: rgba(10, 20, 35, 0.6); color: var(--comp-ink); padding: 8px 12px; font-size: 14px;" />
           </div>
-          <div style="display: flex; flex-direction: column; gap: 6px;">
+          <div data-scan="dexa" style="display: flex; flex-direction: column; gap: 6px;">
             <label style="font-size: 13px; font-weight: 700; color: var(--comp-muted);">BMD Z-score (optional)</label>
             <input id="rev-bmd-z" type="number" step="0.1" placeholder="e.g. -1.3" style="min-height: 44px; border-radius: 10px; border: 1px solid var(--comp-line); background: rgba(10, 20, 35, 0.6); color: var(--comp-ink); padding: 8px 12px; font-size: 14px;" />
           </div>
@@ -209,6 +232,20 @@
   <script>
     const statusNode = document.getElementById("status");
     const setStatus = (msg) => { statusNode.textContent = msg; };
+
+    function setScanTypeUI(scanType) {
+      const title = document.getElementById("dexa-review-title");
+      if (title) title.textContent = scanType === "InBody" ? "Review & Log InBody Scan" : "Review & Log DEXA Scan";
+      const panel = document.getElementById("dexa-review-panel");
+      if (panel) {
+        panel.classList.toggle("rev-panel-inbody", scanType === "InBody");
+        panel.classList.toggle("rev-panel-dexa", scanType !== "InBody");
+      }
+      for (const el of document.querySelectorAll("#dexa-review-form [data-scan]")) {
+        el.style.display = (!scanType || el.dataset.scan === scanType.toLowerCase()) ? "" : "none";
+      }
+    }
+    document.getElementById("rev-scan-type").addEventListener("change", (e) => setScanTypeUI(e.target.value));
 
     async function readText(file) {
       return new Promise((resolve, reject) => {
@@ -350,6 +387,8 @@
         }
 
         // Fill form fields
+        document.getElementById("rev-scan-type").value = "DEXA";
+        setScanTypeUI("DEXA");
         document.getElementById("rev-date").value = out.date || "";
         document.getElementById("rev-scan-weight").value = out.scan_weight || "";
         document.getElementById("rev-home-weight").value = out.scan_weight ? (out.scan_weight - 5.3).toFixed(1) : ""; // prefill with standard 5.3lb clothed diff
@@ -379,6 +418,50 @@
       }
     });
 
+    document.getElementById("upload-inbody-pdf").addEventListener("click", async () => {
+      const input = document.getElementById("inbody-pdf-file");
+      const file = input.files && input.files[0];
+      if (!file) {
+        setStatus("Select an InBody scan file first (PDF or Image).");
+        return;
+      }
+      setStatus(`Uploading and archiving InBody report: ${file.name}...`);
+      try {
+        const form = new FormData();
+        form.append("file", file);
+        const res = await fetch("/api/admin/upload-inbody-pdf", { method: "POST", body: form });
+        const out = await res.json();
+        if (!res.ok || !out.ok) {
+          setStatus(`InBody report upload failed: ${out.error || "Unknown error"}`);
+          return;
+        }
+
+        // Fill form fields (InBody-specific)
+        document.getElementById("rev-scan-type").value = "InBody";
+        setScanTypeUI("InBody");
+        document.getElementById("rev-date").value = out.date || "";
+        document.getElementById("rev-scan-weight").value = out.scan_weight_lb || "";
+        document.getElementById("rev-home-weight").value = "";
+        document.getElementById("rev-body-fat").value = out.body_fat_pct || "";
+        document.getElementById("rev-fat-mass").value = out.body_fat_mass_lb || "";
+        document.getElementById("rev-muscle").value = out.skeletal_muscle_mass_lb || "";
+        document.getElementById("rev-bmr").value = out.bmr_kcal || "";
+        document.getElementById("rev-water").value = out.total_body_water_lb || "";
+        document.getElementById("rev-vf-level").value = out.visceral_fat_level || "";
+        document.getElementById("rev-inbody-score").value = out.inbody_score || "";
+        document.getElementById("rev-waist").value = "";
+        document.getElementById("rev-notes").value = "Monthly InBody scan.";
+
+        // Reveal panel
+        document.getElementById("dexa-review-panel").style.display = "block";
+        document.getElementById("dexa-review-panel").scrollIntoView({ behavior: "smooth" });
+
+        setStatus(`InBody report uploaded and archived in local records.\nPlease review the extracted values below, make any corrections, and click Save.`);
+      } catch (err) {
+        setStatus(`InBody report upload failed: ${err.message || err}`);
+      }
+    });
+
     document.getElementById("cancel-dexa-save").addEventListener("click", () => {
       document.getElementById("dexa-review-panel").style.display = "none";
       setStatus("DEXA scan logging cancelled.");
@@ -403,6 +486,8 @@
       const bmd = document.getElementById("rev-bmd").value;
       const bmdT = document.getElementById("rev-bmd-t").value;
       const bmdZ = document.getElementById("rev-bmd-z").value;
+      const vfLevel = document.getElementById("rev-vf-level").value;
+      const inbodyScore = document.getElementById("rev-inbody-score").value;
       const notes = document.getElementById("rev-notes").value;
 
       if (!date || !scanType || !scanWeight || !bodyFat) {
@@ -431,6 +516,8 @@
           bmd_g_cm2: bmd ? parseFloat(bmd) : null,
           bmd_t_score: bmdT ? parseFloat(bmdT) : null,
           bmd_z_score: bmdZ ? parseFloat(bmdZ) : null,
+          visceral_fat_level: vfLevel ? parseInt(vfLevel) : null,
+          inbody_score: inbodyScore ? parseInt(inbodyScore) : null,
           notes
         };
 

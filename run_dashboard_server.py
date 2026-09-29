@@ -164,6 +164,11 @@ class DashboardHandler(
                 return
             self._handle_admin_dexa_pdf_upload()
             return
+        if self.path == '/api/admin/upload-inbody-pdf':
+            if self._require_admin_auth():
+                return
+            self._handle_admin_inbody_pdf_upload()
+            return
         if self.path == '/api/admin/save-dexa-record':
             if self._require_admin_auth():
                 return

@@ -858,3 +858,29 @@ body[data-page="composition"] .ib-pill-violet { background:linear-gradient(135de
 body[data-page="composition"] .ib-pill-slate { background:linear-gradient(135deg,#c3cfdd,#8fa3b8); }
 body[data-page="composition"] .ib-pill-green { background:linear-gradient(135deg,#7fe3b2,#3cb98a); }
 body[data-page="composition"] .ib-pill-amber { background:linear-gradient(135deg,#ffd081,#f0a43a); }
+
+/* ================= admin: body scan intake pills ================= */
+body[data-page="admin"] .scan-pill { border-radius:18px; padding:18px; color:#000; box-shadow:0 10px 22px rgba(0,0,0,.25); border:0; }
+body[data-page="admin"] .scan-pill h3 { margin:0 0 4px; color:#000; font-size:19px; font-weight:900; letter-spacing:-.01em; }
+body[data-page="admin"] .scan-pill-violet { background:linear-gradient(135deg,#c4b5fd,#9f7aea); }
+body[data-page="admin"] .scan-pill-rose { background:linear-gradient(135deg,#ff9db0,#f0506e); }
+body[data-page="admin"] .scan-pill-tag { font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:rgba(0,0,0,.65); margin-bottom:6px; }
+body[data-page="admin"] .scan-pill-desc { font-size:13.5px; font-weight:600; color:rgba(0,0,0,.78); line-height:1.5; margin:6px 0 14px; }
+body[data-page="admin"] .scan-pill .upload-control { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+body[data-page="admin"] .scan-pill .file-input-wrapper { flex:1 1 200px; background:rgba(255,255,255,.45); border-radius:12px; padding:8px 10px; }
+body[data-page="admin"] .scan-pill input[type="file"] { color:#000; font-weight:700; font-size:12.5px; width:100%; }
+body[data-page="admin"] .scan-btn { min-height:44px; padding:10px 18px; border:0; border-radius:12px; background:#0b1523; color:#fff; font-weight:800; font-size:14px; cursor:pointer; box-shadow:0 6px 14px rgba(0,0,0,.3); transition:transform .15s ease, filter .15s ease; }
+body[data-page="admin"] .scan-btn:hover { transform:translateY(-1px); filter:brightness(1.25); }
+
+/* review panel becomes a colorful pill panel; gradient follows scan type */
+body[data-page="admin"] .rev-panel { border:0 !important; border-radius:18px; padding:22px; color:#000; box-shadow:0 12px 26px rgba(0,0,0,.28); }
+body[data-page="admin"] .rev-panel-dexa { background:linear-gradient(135deg,#c4b5fd,#9f7aea); }
+body[data-page="admin"] .rev-panel-inbody { background:linear-gradient(135deg,#ff9db0,#f0506e); }
+body[data-page="admin"] .rev-panel h3 { color:#000 !important; font-weight:900; }
+body[data-page="admin"] .rev-panel label { color:#000 !important; font-weight:800 !important; }
+body[data-page="admin"] .rev-panel .req { color:#b91c1c !important; }
+body[data-page="admin"] .rev-panel input,
+body[data-page="admin"] .rev-panel select,
+body[data-page="admin"] .rev-panel textarea { background:rgba(255,255,255,.9) !important; color:#000 !important; border:1px solid rgba(0,0,0,.18) !important; font-weight:700; }
+body[data-page="admin"] .rev-panel input::placeholder { color:rgba(0,0,0,.45); }
+body[data-page="admin"] .rev-panel select option { background:#0b1523; color:#fff; }

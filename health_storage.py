@@ -94,7 +94,7 @@ def merge_scan(records,payload):
            'adjusted_body_fat_mass_lb':round(home*fat/100,1) if home is not None else None,
            'adjusted_lean_body_mass_lb':round(home*(1-fat/100),1) if home is not None else None}
     mappings={'muscle_mass':'skeletal_muscle_mass_lb','water':'total_body_water_lb','bmr':'basal_metabolic_rate_kcal','waist':'waist_size_in'}
-    for key in ('visceral_fat_area_cm2','visceral_fat_mass_g','visceral_fat_volume_cm3','appendicular_lean_mass_index','lean_height2_index','lean_index_percentile','bmd_g_cm2','bmd_t_score','bmd_z_score'): mappings[key]=key
+    for key in ('visceral_fat_area_cm2','visceral_fat_mass_g','visceral_fat_volume_cm3','visceral_fat_level','inbody_score','appendicular_lean_mass_index','lean_height2_index','lean_index_percentile','bmd_g_cm2','bmd_t_score','bmd_z_score'): mappings[key]=key
     for key,target in mappings.items():
         if key in payload: entry[target]=number(key)
     if 'notes' in payload: entry['notes']=str(payload['notes'])

@@ -275,6 +275,122 @@ class UploadsMixin:
                 },
             )
 
+        def _scan_archive_dir(self, subdir: str, env_var: str, *candidates: Path) -> Path:
+            """Archive folder for scan PDFs; prefers the durable data dir when configured."""
+            if config.HEALTH_DATA_DIR != config.PROJECT_DIR:
+                target = config.HEALTH_DATA_DIR / subdir
+            else:
+                env_dir = os.getenv(env_var)
+                if env_dir:
+                    target = Path(env_dir).expanduser()
+                else:
+                    target = config.PROJECT_DIR / subdir
+                    for c in candidates:
+                        try:
+                            if c.exists() or (c.parent.exists() and "Health prakash" in str(c)):
+                                target = c
+                                break
+                        except Exception:
+                            pass
+            target.mkdir(parents=True, exist_ok=True)
+            return target
+
+        @staticmethod
+        def _parse_inbody_text(text: str) -> dict:
+            """Extract InBody result-sheet fields from PDF text or OCR output.
+
+            Pure function (no I/O) so it can be unit-tested with synthetic text.
+            Mass values are normalized to pounds; body water reported in liters
+            is converted (1 L ~= 2.20462 lb).
+            """
+            out = {"date": "", "scan_weight_lb": None, "body_fat_mass_lb": None,
+                   "body_fat_pct": None, "skeletal_muscle_mass_lb": None,
+                   "total_body_water_lb": None, "bmr_kcal": None,
+                   "visceral_fat_level": None, "bmi": None, "inbody_score": None}
+            if not text:
+                return out
+            t = re.sub(r"(\d)\.\s*(\d)", r"\1.\2", " ".join(text.split()))
+            LB_PER_KG = 2.20462
+
+            def mass_lb(patterns):
+                for pat in patterns:
+                    m = re.search(pat, t, re.IGNORECASE)
+                    if not m:
+                        continue
+                    try:
+                        value = float(m.group("v"))
+                    except (ValueError, IndexError):
+                        continue
+                    unit = (m.groupdict().get("u") or "").lower()
+                    if unit == "kg":
+                        value *= LB_PER_KG
+                    return round(value, 1)
+                return None
+
+            def plain(patterns):
+                for pat in patterns:
+                    m = re.search(pat, t, re.IGNORECASE)
+                    if not m:
+                        continue
+                    try:
+                        return float(m.group("v"))
+                    except (ValueError, IndexError):
+                        continue
+                return None
+
+            # --- test date ---
+            for pat in (r"(?P<y>\d{4})[./-](?P<m>\d{2})[./-](?P<d>\d{2})",
+                        r"(?P<m>\d{2})[./-](?P<d>\d{2})[./-](?P<y>\d{4})"):
+                m = re.search(pat, t)
+                if m:
+                    out["date"] = f"{m.group('y')}-{m.group('m')}-{m.group('d')}"
+                    break
+            if not out["date"]:
+                m = re.search(
+                    r"(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+(\d{1,2}),?\s+(\d{4})",
+                    t, re.IGNORECASE)
+                if m:
+                    months = {n: f"{i+1:02d}" for i, n in enumerate(
+                        ["jan", "feb", "mar", "apr", "may", "jun",
+                         "jul", "aug", "sep", "oct", "nov", "dec"])}
+                    out["date"] = f"{m.group(3)}-{months[m.group(1).lower()]}-{int(m.group(2)):02d}"
+
+            # --- weight (prefer the Muscle-Fat Analysis section value) ---
+            section = re.search(r"Muscle.?Fat Analysis(.{0,500})", t, re.IGNORECASE)
+            scope = section.group(1) if section else t
+            m = re.search(r"Weight\s*(?:\((?P<u>lb|kg)\))?\s*(?P<v>\d+\.?\d*)", scope, re.IGNORECASE)
+            if m:
+                try:
+                    value = float(m.group("v"))
+                    if (m.group("u") or "").lower() == "kg":
+                        value *= LB_PER_KG
+                    out["scan_weight_lb"] = round(value, 1)
+                except ValueError:
+                    pass
+
+            out["body_fat_mass_lb"] = mass_lb(
+                [r"Body Fat Mass\s*(?:\((?P<u>lb|kg)\))?\s*(?P<v>\d+\.?\d*)"])
+            out["body_fat_pct"] = plain(
+                [r"(?:Percent Body Fat|\bPBF\b)\s*(?:\(%\))?\s*(?P<v>\d+\.?\d*)",
+                 r"Body Fat\s*%\s*(?P<v>\d+\.?\d*)"])
+            out["skeletal_muscle_mass_lb"] = mass_lb(
+                [r"Skeletal Muscle Mass\s*(?:\((?P<u>lb|kg)\))?\s*(?P<v>\d+\.?\d*)",
+                 r"\bSMM\b\s*(?:\((?P<u>lb|kg)\))?\s*(?P<v>\d+\.?\d*)"])
+            water_l = plain([r"Total Body Water\s*\(L\)\s*(?P<v>\d+\.?\d*)"])
+            if water_l is not None:
+                out["total_body_water_lb"] = round(water_l * LB_PER_KG, 1)
+            else:
+                out["total_body_water_lb"] = mass_lb(
+                    [r"Total Body Water\s*(?:\((?P<u>lb|kg)\))?\s*(?P<v>\d+\.?\d*)"])
+            bmr = plain([r"Basal Metabolic Rate\s*(?:\(kcal\))?\s*(?P<v>\d{3,4})\b"])
+            out["bmr_kcal"] = int(bmr) if bmr is not None else None
+            vfl = plain([r"Visceral Fat Level\s*(?P<v>\d{1,2})\b"])
+            out["visceral_fat_level"] = int(vfl) if vfl is not None else None
+            out["bmi"] = plain([r"\bBMI\b\s*(?:\(kg/m[^)]*\))?\s*(?P<v>\d+\.?\d*)"])
+            score = plain([r"InBody Score\s*(?P<v>\d{2,3})\b"])
+            out["inbody_score"] = int(score) if score is not None else None
+            return out
+
         def _handle_admin_dexa_pdf_upload(self) -> None:
             import datetime
             import sys
@@ -513,6 +629,66 @@ class UploadsMixin:
                         "upload_dir": str(dexa_scans_dir)
                     }
                 )
+            except Exception as e:
+                self._json(500, {"ok": False, "error": f"Unhandled error during file write/OCR: {str(e)}"})
+
+        def _handle_admin_inbody_pdf_upload(self) -> None:
+            import datetime
+            import sys
+            try:
+                try:
+                    _fields, files = self._parse_multipart_form()
+                except ValueError as exc:
+                    self._json(400, {"ok": False, "error": str(exc)})
+                    return
+                if "file" not in files:
+                    self._json(400, {"ok": False, "error": "Missing file field."})
+                    return
+
+                raw_name, file_bytes = files["file"]
+                filename = Path(raw_name or "").name
+                if not filename:
+                    self._json(400, {"ok": False, "error": "No file selected."})
+                    return
+                is_pdf = filename.lower().endswith(".pdf")
+                is_image = filename.lower().endswith((".jpg", ".jpeg", ".png"))
+                if not (is_pdf or is_image):
+                    self._json(400, {"ok": False, "error": "Only PDF and JPEG/PNG image files are supported."})
+                    return
+
+                health_storage.require_durable(config.HEALTH_DATA_DIR, config.HOSTED_RENDER)
+                scans_dir = self._scan_archive_dir(
+                    "inbody_scans", "INBODY_SCANS_DIR",
+                    config.PROJECT_DIR.parent / "Health prakash/Lab tests/InBody scans",
+                    Path.home() / "Documents/Health/Health prakash/Lab tests/InBody scans",
+                )
+                target = scans_dir / filename
+                if target.exists():
+                    stem, suffix, i = target.stem, target.suffix, 1
+                    while target.exists():
+                        target = scans_dir / f"{stem}_{i}{suffix}"
+                        i += 1
+                with target.open("wb") as f:
+                    f.write(file_bytes)
+
+                text = ""
+                try:
+                    sys.path.append(str(config.PROJECT_DIR))
+                    if is_pdf:
+                        from rebuild_consolidation import normalize_pdf_text
+                        text = normalize_pdf_text(target)
+                    elif is_image:
+                        from rebuild_consolidation import ocr_image_bytes
+                        text = ocr_image_bytes(file_bytes)
+                except Exception:
+                    pass
+
+                parsed = self._parse_inbody_text(text)
+                if not parsed["date"]:
+                    m = re.search(r"(\d{4})-(\d{2})-(\d{2})", filename)
+                    parsed["date"] = m.group(0) if m else datetime.date.today().isoformat()
+
+                self._json(200, {"ok": True, "uploaded": target.name, "upload_dir": str(scans_dir), **parsed})
             except Exception as e:
                 self._json(500, {"ok": False, "error": f"Unhandled error during file write/OCR: {str(e)}"})
 
