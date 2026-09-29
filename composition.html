@@ -87,22 +87,23 @@
           </div>
           <div class="inbody-chart-grid hidden" id="inbody-history-charts">
             <div class="inbody-chart">
-              <h3>Scan weight</h3>
-              <svg id="chart-inbody-weight" aria-label="InBody scan weight trend"></svg>
+              <h3>Scan weight · Δ since Jun 28</h3>
+              <svg id="chart-inbody-weight" aria-label="InBody scan weight change since June 28"></svg>
             </div>
             <div class="inbody-chart">
-              <h3>Fat mass</h3>
-              <svg id="chart-inbody-fatmass" aria-label="InBody fat mass trend"></svg>
+              <h3>Fat mass · Δ since Jun 28</h3>
+              <svg id="chart-inbody-fatmass" aria-label="InBody fat mass change since June 28"></svg>
             </div>
             <div class="inbody-chart">
-              <h3>Lean mass</h3>
-              <svg id="chart-inbody-lean" aria-label="InBody lean mass trend"></svg>
+              <h3>Lean mass · Δ since Jun 28</h3>
+              <svg id="chart-inbody-lean" aria-label="InBody lean mass change since June 28"></svg>
             </div>
             <div class="inbody-chart">
-              <h3>Skeletal muscle</h3>
-              <svg id="chart-inbody-smm" aria-label="InBody skeletal muscle trend"></svg>
+              <h3>Skeletal muscle · Δ since Jun 28</h3>
+              <svg id="chart-inbody-smm" aria-label="InBody skeletal muscle change since June 28"></svg>
             </div>
           </div>
+          <p class="source-note" style="margin: 0 0 14px;">Change in lb since the Jun 28 baseline — all four charts share one scale, so the sizes of the drops are directly comparable. The May 29 scan is excluded (dehydration skewed that reading).</p>
           <div class="med-note">
             <p><strong>Mounjaro context:</strong> 2.5 mg started Apr 24; 5 mg started Jun 24. June 28 is the comparison baseline.</p>
           </div>
@@ -362,20 +363,36 @@
 
     function drawInBodyCharts(records) {
       if (!records.length) return;
-      // One chart per metric, each with its own vertical scale, so trends
-      // stay visually clear instead of flattening on a shared axis.
-      drawMultiLine("chart-inbody-weight", records, [
-        { key: "scan_weight_lb", color: "#58c8ff" }
-      ]);
-      drawMultiLine("chart-inbody-fatmass", records, [
-        { key: "body_fat_mass_lb", color: "#ff8fa0" }
-      ]);
-      drawMultiLine("chart-inbody-lean", records, [
-        { key: "lean_body_mass_lb", color: "#b9a6ff" }
-      ]);
-      drawMultiLine("chart-inbody-smm", records, [
-        { key: "skeletal_muscle_mass_lb", color: "#73ecb4" }
-      ]);
+      // Change-since-baseline view, all four charts on ONE shared lb axis:
+      // the visual proportions stay honest (fat loss dominates, muscle
+      // barely moves). The May 29 scan is already excluded upstream as a
+      // dehydration artifact; the Jun 28 record is the baseline.
+      const sorted = records.slice().sort((a, b) => a.date < b.date ? -1 : 1);
+      const baseline = sorted[0];
+      const metrics = [
+        { id: "chart-inbody-weight",  key: "scan_weight_lb",          color: "#58c8ff" },
+        { id: "chart-inbody-fatmass", key: "body_fat_mass_lb",        color: "#ff8fa0" },
+        { id: "chart-inbody-lean",    key: "lean_body_mass_lb",       color: "#b9a6ff" },
+        { id: "chart-inbody-smm",     key: "skeletal_muscle_mass_lb", color: "#73ecb4" }
+      ];
+      const deltas = sorted.map(r => {
+        const d = { date: r.date };
+        metrics.forEach(m => {
+          d[m.key] = (r[m.key] == null || baseline[m.key] == null)
+            ? null : Number(r[m.key]) - Number(baseline[m.key]);
+        });
+        return d;
+      });
+      let lo = 0, hi = 0;
+      deltas.forEach(d => metrics.forEach(m => {
+        const v = d[m.key];
+        if (v == null) return;
+        if (v < lo) lo = v;
+        if (v > hi) hi = v;
+      }));
+      const span = (hi - lo) || 1;
+      const yMin = lo - span * 0.15, yMax = hi + span * 0.15;
+      metrics.forEach(m => drawMultiLine(m.id, deltas, [{ key: m.key, color: m.color }], yMin, yMax));
     }
 
     function setupInBodyHistorySwitcher() {
