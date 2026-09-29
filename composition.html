@@ -87,20 +87,20 @@
           </div>
           <div class="inbody-chart-grid hidden" id="inbody-history-charts">
             <div class="inbody-chart">
-              <h3>Weight and fat mass</h3>
-              <svg id="chart-inbody-weight-fat" aria-label="InBody weight and fat-mass trend"></svg>
-              <div class="legend">
-                <div class="legend-item"><span class="legend-color" style="background:#58c8ff;"></span>Scan Weight</div>
-                <div class="legend-item"><span class="legend-color" style="background:#ff8fa0;"></span>Fat Mass</div>
-              </div>
+              <h3>Scan weight</h3>
+              <svg id="chart-inbody-weight" aria-label="InBody scan weight trend"></svg>
             </div>
             <div class="inbody-chart">
-              <h3>Lean and skeletal muscle mass</h3>
-              <svg id="chart-inbody-muscle" aria-label="InBody lean and skeletal-muscle trend"></svg>
-              <div class="legend">
-                <div class="legend-item"><span class="legend-color" style="background:#b9a6ff;"></span>Lean Mass</div>
-                <div class="legend-item"><span class="legend-color" style="background:#73ecb4;"></span>Skeletal Muscle</div>
-              </div>
+              <h3>Fat mass</h3>
+              <svg id="chart-inbody-fatmass" aria-label="InBody fat mass trend"></svg>
+            </div>
+            <div class="inbody-chart">
+              <h3>Lean mass</h3>
+              <svg id="chart-inbody-lean" aria-label="InBody lean mass trend"></svg>
+            </div>
+            <div class="inbody-chart">
+              <h3>Skeletal muscle</h3>
+              <svg id="chart-inbody-smm" aria-label="InBody skeletal muscle trend"></svg>
             </div>
           </div>
           <div class="med-note">
@@ -362,12 +362,18 @@
 
     function drawInBodyCharts(records) {
       if (!records.length) return;
-      drawMultiLine("chart-inbody-weight-fat", records, [
-        { key: "scan_weight_lb", color: "#58c8ff" },
+      // One chart per metric, each with its own vertical scale, so trends
+      // stay visually clear instead of flattening on a shared axis.
+      drawMultiLine("chart-inbody-weight", records, [
+        { key: "scan_weight_lb", color: "#58c8ff" }
+      ]);
+      drawMultiLine("chart-inbody-fatmass", records, [
         { key: "body_fat_mass_lb", color: "#ff8fa0" }
       ]);
-      drawMultiLine("chart-inbody-muscle", records, [
-        { key: "lean_body_mass_lb", color: "#b9a6ff" },
+      drawMultiLine("chart-inbody-lean", records, [
+        { key: "lean_body_mass_lb", color: "#b9a6ff" }
+      ]);
+      drawMultiLine("chart-inbody-smm", records, [
         { key: "skeletal_muscle_mass_lb", color: "#73ecb4" }
       ]);
     }
@@ -610,7 +616,7 @@
       let vMax = forceMax !== null ? forceMax : Math.max(...allVals);
       const span = vMax - vMin || 1;
       const padY = span * 0.15 || 1;
-      if (forceMin === null) vMin = Math.max(0, vMin - padY);
+      if (forceMin === null) vMin = vMin - padY;
       if (forceMax === null) vMax = vMax + padY;
       Charts.line(svgId, {
         series: series.map(s => ({
