@@ -10,6 +10,7 @@
   <script src="./static/js/charts.js"></script>
   <script>
     document.write('<script src="./bp_data.js?ts=' + Date.now() + '"><\/script>');
+    document.write('<script src="./heart_data.js?ts=' + Date.now() + '"><\/script>');
   </script>
 </head>
 <body data-page="bp">
@@ -26,6 +27,7 @@
     <h1>Blood Pressure</h1>
     <div class="sub">Three-month comparison and current-period readings (SYS, DIAS, Pulse).</div>
     <section id="bp-comparison" aria-label="Three-month blood pressure comparison"></section>
+    <section id="heart-comparison" aria-label="Heart rate and HRV comparison"></section>
     <section class="hero">
       <div class="hero-title">Blood Pressure Monitor</div>
       <div class="hero-sub">Professional view with separate SYS, DIAS, and Pulse trend panels.</div>
@@ -76,7 +78,8 @@
     </section>
   </div>
 
-  <script src="./bp_comparison.js?v=20260914"></script>
+  <script src="./bp_comparison.js?v=20261014"></script>
+  <script src="./heart_comparison.js?v=20261014"></script>
   <script>
     function fmtDate(iso) {
       const d = new Date(`${iso}T00:00:00`);
@@ -311,6 +314,7 @@
       rows.sort((a, b) => a.date.localeCompare(b.date) || a.time.localeCompare(b.time));
       const comparison = BPComparison.calculate(rows);
       BPComparison.render(document.getElementById("bp-comparison"), comparison);
+      if (window.HeartComparison) HeartComparison.render(document.getElementById("heart-comparison"), window.HEART_DATA || [], comparison);
       allRawRows = comparison.current.rows;
       renderDashboard();
     }

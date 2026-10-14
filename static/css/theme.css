@@ -791,9 +791,15 @@ body[data-page="vault"] .chip { font-weight: 800; }
 /* ================= bp: colorful pill stats ================= */
 body[data-page="bp"] .bp-pills { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
 body[data-page="bp"] .bp-pill { border-radius:18px; padding:16px 18px; color:#000; box-shadow:0 10px 22px rgba(0,0,0,.25); }
+body[data-page="bp"] .bp-pill-earliest { background:linear-gradient(135deg,#d3b8f7,#9a6fd0); }
 body[data-page="bp"] .bp-pill-prev { background:linear-gradient(135deg,#8fc3f7,#5b93d6); }
 body[data-page="bp"] .bp-pill-cur { background:linear-gradient(135deg,#7fe3b2,#3cb98a); }
 body[data-page="bp"] .bp-pill-delta { background:linear-gradient(135deg,#ffd081,#f0a43a); }
+body[data-page="bp"] .bp-pills-deltas { grid-template-columns:repeat(2,1fr); margin-top:14px; }
+body[data-page="bp"] .heart-head { font-size:20px; font-weight:900; letter-spacing:-.01em; margin:24px 0 12px; color:#eaf4fb; }
+body[data-page="bp"] .bp-pill-h-e { background:linear-gradient(135deg,#b8f1e4,#63cbae); }
+body[data-page="bp"] .bp-pill-h-p { background:linear-gradient(135deg,#8fe6d2,#3cb598); }
+body[data-page="bp"] .bp-pill-h-c { background:linear-gradient(135deg,#5fd8bd,#189a7c); }
 body[data-page="bp"] .bp-pill-tag { font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:rgba(0,0,0,.65); }
 body[data-page="bp"] .bp-pill-value { font-size:34px; font-weight:900; margin:6px 0 8px; letter-spacing:-.02em; }
 body[data-page="bp"] .bp-pill-unit { font-size:14px; font-weight:700; color:rgba(0,0,0,.6); }
