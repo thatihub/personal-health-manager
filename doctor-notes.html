@@ -146,22 +146,44 @@
       });
       if (currentNote) notes.push(currentNote);
       if (bullets.length) {
-        const list = document.createElement("ul");
-        list.className = "clean-outline";
-        bullets.forEach((node, index) => {
+        const topics = bullets.map((node, index) => {
           const topic = topicParts(node.text, index);
           if (node.children.length) topic.keyword = node.text.replace(/\*\*/g, "").replace(/:\s*$/, "").trim();
-          const item = document.createElement("li");
-          const details = document.createElement("details");
-          details.className = "clean-topic";
-          const summary = document.createElement("summary");
-          summary.textContent = topic.keyword;
-          const description = node.children.length ? nestedDetails(node.children) : topicDescription(topic);
-          details.append(summary, description);
-          item.appendChild(details);
-          list.appendChild(item);
+          topic.body = node.children.length ? nestedDetails(node.children) : topicDescription(topic);
+          return topic;
         });
-        container.appendChild(list);
+        const pills = document.createElement("div");
+        pills.className = "topic-pills";
+        const panel = document.createElement("div");
+        panel.className = "topic-panel";
+        panel.hidden = true;
+        let openIndex = -1;
+        topics.forEach((topic, index) => {
+          const pill = document.createElement("button");
+          pill.type = "button";
+          pill.className = "topic-pill";
+          pill.textContent = topic.keyword;
+          pill.setAttribute("aria-expanded", "false");
+          pill.addEventListener("click", () => {
+            const all = pills.querySelectorAll(".topic-pill");
+            if (openIndex === index) {
+              openIndex = -1;
+              panel.hidden = true;
+              panel.replaceChildren();
+              all.forEach(p => { p.classList.remove("active"); p.setAttribute("aria-expanded", "false"); });
+            } else {
+              openIndex = index;
+              panel.replaceChildren(topic.body);
+              panel.hidden = false;
+              all.forEach((p, i) => {
+                p.classList.toggle("active", i === index);
+                p.setAttribute("aria-expanded", i === index ? "true" : "false");
+              });
+            }
+          });
+          pills.appendChild(pill);
+        });
+        container.append(pills, panel);
       }
       notes.forEach(text => {
         const paragraph = document.createElement("p");
