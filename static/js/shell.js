@@ -11,6 +11,11 @@
 (function () {
   "use strict";
 
+  // Build stamp shown at the top right of every page, next to the storage
+  // pill. CONVENTION: bump on EVERY shipped build — "BUILD YYYY-MM-DD.N"
+  // (.N increments within the day). Missing stamp = stale cached page.
+  var BUILD = "BUILD 2026-10-14.1";
+
   var PAGES = [
     { id: "home",         file: "index.html",               label: "Home",      icon: "🏠", accent: "#12a4d4", accent2: "#0d8bb8" },
     { id: "labs",         file: "dashboard.html",           label: "Labs",      icon: "🧪", accent: "#9f7aea", accent2: "#7b5dd6" },
@@ -86,6 +91,14 @@
     if (!more.contains(e.target)) more.removeAttribute("open");
   });
   topbar.appendChild(nav);
+
+  // build stamp (top right, just left of the storage pill)
+  var stamp = document.createElement("span");
+  stamp.className = "build-stamp";
+  stamp.id = "build-stamp";
+  stamp.textContent = BUILD;
+  stamp.title = "Build stamp — if this is missing or old, you are looking at a stale cached page";
+  topbar.appendChild(stamp);
 
   // storage status pill (filled by app.js when present, quiet default otherwise)
   var pill = document.createElement("span");
