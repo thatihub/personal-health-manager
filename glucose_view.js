@@ -218,6 +218,19 @@
       + insulinHTML();
   }
 
+  function takeHTML() {
+    const o = D.opinion;
+    if (!o) return '';
+    const pts = o.points.map(p =>
+      `<div class="take-point"><div class="take-ico">${p.icon}</div><div><div class="take-title">${p.title}</div><div class="take-text">${p.text}</div></div></div>`).join('');
+    const sugs = o.suggestions.map(s =>
+      `<div class="take-sug"><div class="take-title">💡 ${s.title}</div><div class="take-text">${s.text}</div></div>`).join('');
+    return `<div class="g-card take-card"><div class="g-head g-head-take">🧠 Muse's Take · data through ${fmtD(o.asOf)}</div>`
+      + `<div class="take-headline">${o.headline}</div>${pts}`
+      + (sugs ? `<div class="take-sug-head">Worth trying / discussing</div>${sugs}` : '')
+      + `<div class="bp-method">A logical read of your own logged data, recomputed every time the data refreshes. Patterns to discuss with Dr. Munir — not dosing instructions. Best week so far: week of ${o.bestWeek.label}, ${o.bestWeek.tir}% in range.</div></div>`;
+  }
+
   function renderWindow() {
     $('g-stats').innerHTML = statsHTML(curWin);
     $('g-tir').innerHTML = tirHTML(curWin);
@@ -248,6 +261,7 @@
     $('day-select').addEventListener('change', e => { curDay = e.target.value; renderDay(); });
     $('day-prev').addEventListener('click', () => stepDay(-1));
     $('day-next').addEventListener('click', () => stepDay(1));
+    $('g-take').innerHTML = takeHTML();
     renderWindow();
     $('g-insights').innerHTML = insightsHTML();
     renderDay();
@@ -260,7 +274,7 @@
     const n = dates[i + d];
     if (n) { curDay = n; renderDay(); }
   }
-  root.GlucoseView = { init, statsHTML, tirHTML, agpSVG, daySVG, heatHTML, insightsHTML };
+  root.GlucoseView = { init, statsHTML, tirHTML, agpSVG, daySVG, heatHTML, insightsHTML, takeHTML };
   if (typeof document !== 'undefined' && document.getElementById('g-stats')) {
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
     else init();
