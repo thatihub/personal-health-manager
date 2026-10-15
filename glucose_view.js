@@ -218,17 +218,32 @@
       + insulinHTML();
   }
 
+  const TAKE_GREENS = [
+    'linear-gradient(135deg,#4ade80,#16a34a)',
+    'linear-gradient(135deg,#6ee7a0,#22c55e)',
+    'linear-gradient(135deg,#86efb5,#34d399)',
+    'linear-gradient(135deg,#a7f3c9,#4ade80)',
+    'linear-gradient(135deg,#bbf7d0,#6ee7a7)',
+    'linear-gradient(135deg,#d1fae0,#86efb5)'
+  ];
   function takeHTML() {
     const o = D.opinion;
     if (!o) return '';
-    const pts = o.points.map(p =>
-      `<div class="take-point"><div class="take-ico">${p.icon}</div><div><div class="take-title">${p.title}</div><div class="take-text">${p.text}</div></div></div>`).join('');
+    const pill = (inner, detail, style) =>
+      `<button type="button" class="take-pill" style="background:${style};" aria-expanded="false">`
+      + `<span class="take-pill-line">${inner}<span class="take-chev">▾</span></span>`
+      + `<span class="take-detail">${detail}</span></button>`;
+    const pts = o.points.map((p, i) =>
+      pill(`${p.icon} ${p.title}`, p.text, TAKE_GREENS[i % TAKE_GREENS.length])).join('');
     const sugs = o.suggestions.map(s =>
-      `<div class="take-sug"><div class="take-title">💡 ${s.title}</div><div class="take-text">${s.text}</div></div>`).join('');
-    return `<div class="g-card take-card"><div class="g-head g-head-take">🧠 Muse's Take · data through ${fmtD(o.asOf)}</div>`
+      pill(`💡 ${s.title}`, s.text, 'linear-gradient(135deg,#ffd081,#f0a43a)')).join('');
+    return `<div class="g-card take-card">`
+      + `<button type="button" class="take-toggle" id="take-toggle" aria-expanded="false"><span>🧠 Muse's Take · data through ${fmtD(o.asOf)}</span><span class="take-chev">▾</span></button>`
+      + `<div class="take-body" id="take-body" hidden>`
       + `<div class="take-headline">${o.headline}</div>${pts}`
       + (sugs ? `<div class="take-sug-head">Worth trying / discussing</div>${sugs}` : '')
-      + `<div class="bp-method">A logical read of your own logged data, recomputed every time the data refreshes. Patterns to discuss with Dr. Munir — not dosing instructions. Best week so far: week of ${o.bestWeek.label}, ${o.bestWeek.tir}% in range.</div></div>`;
+      + `<div class="bp-method">Pills are ordered most important first — the deepest green is the biggest story. Tap any pill to open its details, tap again to close. A logical read of your own logged data, recomputed at every refresh; patterns to discuss with Dr. Munir — not dosing instructions. Best week so far: week of ${o.bestWeek.label}, ${o.bestWeek.tir}% in range.</div>`
+      + `</div></div>`;
   }
 
   function renderWindow() {
@@ -262,6 +277,19 @@
     $('day-prev').addEventListener('click', () => stepDay(-1));
     $('day-next').addEventListener('click', () => stepDay(1));
     $('g-take').innerHTML = takeHTML();
+    const takeSec = $('g-take');
+    const toggle = document.getElementById('take-toggle');
+    if (toggle) toggle.addEventListener('click', () => {
+      const body = document.getElementById('take-body');
+      const open = body.hidden;
+      body.hidden = !open;
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.classList.toggle('open', open);
+    });
+    takeSec.querySelectorAll('.take-pill').forEach(p => p.addEventListener('click', () => {
+      const open = p.classList.toggle('open');
+      p.setAttribute('aria-expanded', String(open));
+    }));
     renderWindow();
     $('g-insights').innerHTML = insightsHTML();
     renderDay();
