@@ -21,6 +21,7 @@ from api import config
 from api.auth import AuthMixin
 from api.bp import BPMixin
 from api.core import CoreMixin
+from api.dexcom import DexcomMixin
 from api.labs import LabsMixin
 from api.records import RecordsMixin
 from api.uploads import UploadsMixin
@@ -53,11 +54,18 @@ class DashboardHandler(
     WeightMixin,
     UploadsMixin,
     RecordsMixin,
+    DexcomMixin,
     SimpleHTTPRequestHandler,
 ):
 
     def do_GET(self) -> None:
         path = self.path.split('?', 1)[0]
+        if path == '/api/dexcom/status':
+            self._handle_dexcom_status()
+            return
+        if path == '/api/dexcom/callback':
+            self._handle_dexcom_callback()
+            return
         if path == '/api/storage-status':
             self._json(200, {'ok': True, **health_storage.status(config.HEALTH_DATA_DIR, config.HOSTED_RENDER)})
             return
@@ -119,6 +127,16 @@ class DashboardHandler(
         super().do_HEAD()
 
     def do_POST(self) -> None:
+        if self.path == '/api/dexcom/config':
+            if self._require_admin_auth():
+                return
+            self._handle_dexcom_config()
+            return
+        if self.path == '/api/dexcom/sync':
+            if self._require_admin_auth():
+                return
+            self._handle_dexcom_sync()
+            return
         if self.path == '/api/admin/weight-entry':
             if self._require_admin_auth():
                 return

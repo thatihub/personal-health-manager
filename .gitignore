@@ -1,4 +1,40 @@
-.DS_Store
+# Personal Health Manager v2 — generated & personal data (never commit)
+
+# --- generated data files (rebuilt by the server / import pipeline) ---
+dashboard_data.js
+bp_data.js
+bp_comparison_data.js
+dexa_data.js
+bio_age_data.js
+kaiser_labs_data.js
+medicine_data.js
+vault_data.js
+weight_data.js
+consolidated_labs.json
+ag_lab_imports.json
+dexa_records.json
+weight_entries.json
+medicine_data.json
+
+# --- personal health records ---
+*_extracted_text/
+*.pdf
+health_records*.json
+health_records*.csv
+*_backup*/
+*.bak
+
+# --- uploads / caches ---
+_uploaded_pdfs/
 __pycache__/
 *.pyc
-_uploaded_pdfs/
+.pytest_cache/
+
+# --- local env ---
+dexcom_config.json
+.env
+.env.*
+!.env.example
+
+# --- logs ---
+*.log

@@ -265,7 +265,74 @@
     $('day-prev').disabled = i <= 0;
     $('day-next').disabled = i >= dates.length - 1;
   }
+  /* ---- Dexcom sync bar ---- */
+  function syncBar(st, msg, isErr) {
+    const el = $('g-sync');
+    if (!el) return;
+    let inner = `<div class="g-card sync-card"><div class="sync-row"><div class="sync-title">🩸 Dexcom</div>`;
+    if (!st) {
+      inner += `<div class="sync-status">Sync is available when this page is served by the Health Manager app.</div>`;
+    } else if (!st.configured) {
+      inner += `<div class="sync-status">Not connected yet. Enter your Dexcom developer app's Client ID and Secret — they stay on this Mac only.</div></div>`
+        + `<div class="sync-form"><input id="dx-id" type="text" placeholder="Client ID" autocomplete="off">`
+        + `<input id="dx-secret" type="password" placeholder="Client Secret" autocomplete="off">`
+        + `<button type="button" id="dx-save" class="sync-btn">Save &amp; Connect</button></div>`
+        + `<div class="sync-note">In your Dexcom app, set the Redirect URI to <b>${st.redirect_uri}</b> — then Save &amp; Connect opens Dexcom's sign-in.</div>`;
+    } else if (!st.connected) {
+      inner += `<div class="sync-status">App keys saved. One step left: sign in to Dexcom and approve.</div>`
+        + `<a class="sync-btn" href="${st.authorize_url}">Connect Dexcom</a></div>`
+        + `<div class="sync-note">Dexcom's Redirect URI for this app must be <b>${st.redirect_uri}</b>.</div>`;
+    } else {
+      inner += `<div class="sync-status">${st.last_sync ? 'Last synced ' + st.last_sync : 'Connected — not synced yet'}</div>`
+        + `<button type="button" id="dx-sync" class="sync-btn">⟳ Sync now</button></div>`;
+    }
+    if (msg) inner += `<div class="sync-msg${isErr ? ' err' : ''}">${msg}</div>`;
+    inner += `</div>`;
+    el.innerHTML = inner;
+    const save = document.getElementById('dx-save');
+    if (save) save.addEventListener('click', async () => {
+      const cid = document.getElementById('dx-id').value.trim();
+      const sec = document.getElementById('dx-secret').value.trim();
+      if (!cid || !sec) { syncBar(st, 'Enter both the Client ID and the Client Secret.', true); return; }
+      save.disabled = true; save.textContent = 'Saving…';
+      try {
+        const r = await fetch('/api/dexcom/config', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ client_id: cid, client_secret: sec }) });
+        const j = await r.json();
+        if (j.ok && j.authorize_url) { window.location.href = j.authorize_url; return; }
+        syncBar(st, j.error || 'Could not save.', true);
+      } catch (e) { syncBar(st, 'Could not reach the app server.', true); }
+    });
+    const syncBtn = document.getElementById('dx-sync');
+    if (syncBtn) syncBtn.addEventListener('click', async () => {
+      syncBtn.disabled = true; syncBtn.textContent = '⟳ Syncing…';
+      try {
+        const r = await fetch('/api/dexcom/sync', { method: 'POST' });
+        const j = await r.json();
+        if (j.ok) {
+          syncBar(st, `Synced ✓ ${j.readings.toLocaleString('en-US')} readings through ${fmtD(j.range.end)} — refreshing…`);
+          setTimeout(() => window.location.replace('/glucose.html'), 1100);
+        } else {
+          syncBar(st, j.error === 'not_connected' ? 'The Dexcom sign-in is missing — use Connect Dexcom first.' : 'Dexcom said: ' + j.error, true);
+        }
+      } catch (e) { syncBar(st, 'Sync failed — the app server did not answer.', true); }
+    });
+  }
+  async function initSync() {
+    const q = new URLSearchParams(window.location.search);
+    let msg = null, isErr = false;
+    if (q.get('dexcom') === 'connected') msg = 'Dexcom connected ✓ — tap Sync now to pull your readings.';
+    if (q.get('dexcom') === 'error') { msg = 'Dexcom connect failed: ' + (q.get('msg') || 'unknown error'); isErr = true; }
+    try {
+      const r = await fetch('/api/dexcom/status');
+      const st = await r.json();
+      syncBar(st, msg, isErr);
+    } catch (e) {
+      syncBar(null, msg, isErr);
+    }
+  }
+
   function init() {
+    initSync();
     if (!D) {
       $('g-missing').style.display = 'block';
       return;
