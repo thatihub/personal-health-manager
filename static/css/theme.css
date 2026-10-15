@@ -917,14 +917,14 @@ body[data-page="activity"] .bp-pill { border-radius:18px; padding:16px 18px; col
 body[data-page="activity"] .act-card { background:rgba(15,26,40,.72); border:1px solid rgba(116,144,172,.25); border-radius:20px; padding:14px; margin-bottom:22px; box-shadow:0 12px 26px rgba(0,0,0,.22); }
 body[data-page="activity"] .act-card-head { font-size:19px; font-weight:900; letter-spacing:-.01em; color:#000; border-radius:12px; padding:10px 14px; margin-bottom:12px; }
 body[data-page="activity"] .act-card-head-lite { font-size:19px; font-weight:900; letter-spacing:-.01em; color:#eaf4fb; padding:2px 4px 10px; }
-body[data-page="activity"] .sec-activity .act-card-head, body[data-page="activity"] .sec-activity .act-hero { background:linear-gradient(135deg,#fda65d,#f97316); }
-body[data-page="activity"] .sec-sleep .act-card-head, body[data-page="activity"] .sec-sleep .act-hero { background:linear-gradient(135deg,#c4b5fd,#8b6fd8); }
-body[data-page="activity"] .sec-resting .act-card-head, body[data-page="activity"] .sec-resting .act-hero { background:linear-gradient(135deg,#fda4af,#f0506e); }
-body[data-page="activity"] .sec-glucose .act-card-head, body[data-page="activity"] .sec-glucose .act-hero { background:linear-gradient(135deg,#7cc7f5,#0e9cc8); }
-body[data-page="activity"] .sec-activity .act-half { background:linear-gradient(135deg,#ffe7c7,#ffd9a8); }
-body[data-page="activity"] .sec-sleep .act-half { background:linear-gradient(135deg,#e6e0fd,#d4c8fa); }
-body[data-page="activity"] .sec-resting .act-half { background:linear-gradient(135deg,#ffd9de,#ffc2cb); }
-body[data-page="activity"] .sec-glucose .act-half { background:linear-gradient(135deg,#cfeafd,#a8dcf8); }
+body[data-page="activity"] .sec-activity .act-card-head, body[data-page="activity"] .sec-activity .act-hero { background:linear-gradient(135deg,#fb923c,#ea580c); }
+body[data-page="activity"] .sec-sleep .act-card-head, body[data-page="activity"] .sec-sleep .act-hero { background:linear-gradient(135deg,#b7a6f9,#8b5cf6); }
+body[data-page="activity"] .sec-resting .act-card-head, body[data-page="activity"] .sec-resting .act-hero { background:linear-gradient(135deg,#fb8fa3,#f43f5e); }
+body[data-page="activity"] .sec-glucose .act-card-head, body[data-page="activity"] .sec-glucose .act-hero { background:linear-gradient(135deg,#56c2f5,#0284c7); }
+body[data-page="activity"] .sec-activity .act-half { background:linear-gradient(135deg,#fdba74,#fb923c); }
+body[data-page="activity"] .sec-sleep .act-half { background:linear-gradient(135deg,#c4b5fd,#a78bfa); }
+body[data-page="activity"] .sec-resting .act-half { background:linear-gradient(135deg,#fda4af,#fb7185); }
+body[data-page="activity"] .sec-glucose .act-half { background:linear-gradient(135deg,#7dd3fc,#38bdf8); }
 body[data-page="activity"] .act-hero .bp-pill-value { font-size:40px; }
 body[data-page="activity"] .act-halfrow { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px; }
 body[data-page="activity"] .act-half .bp-pill-value { font-size:23px; }
