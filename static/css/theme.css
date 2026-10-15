@@ -950,3 +950,45 @@ body[data-page="activity"] .chip-deep { background:linear-gradient(135deg,#8beee
 body[data-page="activity"] .chip-rem { background:linear-gradient(135deg,#f7c8e8,#e07fc0); }
 body[data-page="activity"] .chip-eff { background:linear-gradient(135deg,#fde68a,#f59e0b); }
 @media (max-width:760px){ body[data-page="activity"] .bp-pills { grid-template-columns:1fr; } body[data-page="activity"] .recent-date { min-width:100%; } }
+
+/* ================= glucose: dexcom analysis ================= */
+body[data-page="glucose"] .g-card { background:rgba(15,26,40,.72); border:1px solid rgba(116,144,172,.25); border-radius:20px; padding:14px; margin-bottom:22px; box-shadow:0 12px 26px rgba(0,0,0,.22); }
+body[data-page="glucose"] .g-head { font-size:19px; font-weight:900; letter-spacing:-.01em; color:#000; border-radius:12px; padding:10px 14px; margin-bottom:12px; background:linear-gradient(135deg,#56c2f5,#0284c7); }
+body[data-page="glucose"] .g-toggle { display:flex; gap:8px; margin:14px 0 16px; flex-wrap:wrap; }
+body[data-page="glucose"] .g-toggle button { border:1px solid rgba(116,144,172,.4); background:rgba(19,31,47,.66); color:#dce8f3; font-weight:800; font-size:14px; border-radius:999px; padding:9px 18px; cursor:pointer; }
+body[data-page="glucose"] .g-toggle button.active { background:linear-gradient(135deg,#56c2f5,#0284c7); color:#000; border-color:transparent; }
+body[data-page="glucose"] .g-pills { display:grid; grid-template-columns:repeat(5,1fr); gap:12px; margin-bottom:22px; }
+body[data-page="glucose"] .bp-pill { border-radius:18px; padding:14px 16px; color:#000; box-shadow:0 10px 22px rgba(0,0,0,.25); }
+body[data-page="glucose"] .g-p-avg { background:linear-gradient(135deg,#7dd3fc,#38bdf8); }
+body[data-page="glucose"] .g-p-gmi { background:linear-gradient(135deg,#c4b5fd,#8b5cf6); }
+body[data-page="glucose"] .g-p-tir { background:linear-gradient(135deg,#7fe3b2,#3cb98a); }
+body[data-page="glucose"] .g-p-cv { background:linear-gradient(135deg,#ffd081,#f0a43a); }
+body[data-page="glucose"] .g-p-wear { background:linear-gradient(135deg,#fda4af,#fb7185); }
+body[data-page="glucose"] .bp-pill-tag { font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:rgba(0,0,0,.65); }
+body[data-page="glucose"] .bp-pill-value { font-size:30px; font-weight:900; margin:6px 0 6px; letter-spacing:-.02em; }
+body[data-page="glucose"] .bp-pill-unit { font-size:13px; font-weight:700; color:rgba(0,0,0,.6); }
+body[data-page="glucose"] .bp-pill-meta { font-size:12px; font-weight:600; color:rgba(0,0,0,.72); line-height:1.55; }
+body[data-page="glucose"] .tir-bar { display:flex; height:30px; border-radius:10px; overflow:hidden; margin-bottom:12px; }
+body[data-page="glucose"] .tir-seg { height:100%; min-width:2px; }
+body[data-page="glucose"] .tir-pills { display:grid; grid-template-columns:repeat(5,1fr); gap:10px; }
+body[data-page="glucose"] .tir-pill { border-radius:14px; padding:10px 12px; color:#000; }
+body[data-page="glucose"] .tir-pill-tag { font-size:10.5px; font-weight:800; text-transform:uppercase; letter-spacing:.6px; color:rgba(0,0,0,.65); }
+body[data-page="glucose"] .tir-pill-val { font-size:24px; font-weight:900; margin:2px 0; }
+body[data-page="glucose"] .tir-pill-meta { font-size:11.5px; font-weight:700; color:rgba(0,0,0,.7); }
+body[data-page="glucose"] .bp-method { color:#a9c0d2; font-size:12px; line-height:1.6; margin-top:12px; }
+body[data-page="glucose"] .g-svg { width:100%; height:auto; display:block; }
+body[data-page="glucose"] .svg-lab { fill:#8fa8bb; font-size:12px; font-weight:700; }
+body[data-page="glucose"] .svg-note { fill:#8fa8bb; font-size:12px; font-weight:600; }
+body[data-page="glucose"] .day-controls { display:flex; gap:10px; align-items:center; margin-bottom:10px; flex-wrap:wrap; }
+body[data-page="glucose"] .day-btn { border:1px solid rgba(116,144,172,.4); background:rgba(19,31,47,.66); color:#dce8f3; font-weight:800; font-size:14px; border-radius:10px; padding:9px 16px; cursor:pointer; }
+body[data-page="glucose"] .day-btn:disabled { opacity:.35; cursor:default; }
+body[data-page="glucose"] #day-select { flex:1; min-width:170px; background:rgba(19,31,47,.9); color:#eaf4fb; border:1px solid rgba(116,144,172,.4); border-radius:10px; padding:10px 12px; font-weight:700; font-size:14px; }
+body[data-page="glucose"] .day-meta { font-size:13.5px; color:#dce8f3; margin-top:8px; }
+body[data-page="glucose"] .day-meta b { color:#fff; }
+body[data-page="glucose"] .hm-wrap { max-height:430px; overflow:auto; padding-right:4px; }
+body[data-page="glucose"] .hm-row { display:grid; grid-template-columns:64px repeat(24,1fr); gap:2px; align-items:center; margin-bottom:2px; }
+body[data-page="glucose"] .hm-date { color:#a9c0d2; font-size:11px; font-weight:800; }
+body[data-page="glucose"] .hm-cell { height:13px; border-radius:2px; }
+body[data-page="glucose"] .hm-key { display:inline-block; width:11px; height:11px; border-radius:3px; vertical-align:-1px; margin:0 3px 0 8px; }
+@media (max-width:900px){ body[data-page="glucose"] .g-pills { grid-template-columns:repeat(2,1fr); } body[data-page="glucose"] .tir-pills { grid-template-columns:repeat(2,1fr); } }
+@media (max-width:760px){ body[data-page="glucose"] .hm-row { grid-template-columns:52px repeat(24,1fr); } }

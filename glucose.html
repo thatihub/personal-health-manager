@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Glucose</title>
+
+  <link rel="stylesheet" href="./static/css/theme.css" />
+  <script src="./static/js/app.js"></script>
+  <script>
+    document.write('<script src="./glucose_data.js?ts=' + Date.now() + '"><\/script>');
+  </script>
+</head>
+<body data-page="glucose">
+  <div class="wrap">
+    <h1>Glucose</h1>
+    <div class="sub">Full Dexcom CGM analysis — time in range, daily pattern (AGP), day explorer with insulin and meal markers, and an hour-by-day heatmap.</div>
+
+    <div id="g-missing" class="g-card" style="display:none;">
+      <div class="g-head">🩸 Glucose · Dexcom</div>
+      <div class="bp-method" style="background:rgba(220,137,32,.16); border:1px solid rgba(220,137,32,.4); border-radius:12px; padding:14px; font-weight:700; color:#eaf4fb;">
+        Glucose data is not on this Mac yet. Save <b>glucose_data.js</b> (sent by Muse in chat) into the Health Manager folder — the same folder as heart_data.js — then refresh this page.
+      </div>
+    </div>
+
+    <div class="g-toggle" role="group" aria-label="Time window">
+      <button type="button" data-win="14">Last 14 days</button>
+      <button type="button" data-win="30" class="active">Last 30 days</button>
+      <button type="button" data-win="90">Last 90 days</button>
+    </div>
+
+    <section id="g-stats" aria-label="Glucose summary"></section>
+    <section id="g-tir" aria-label="Time in range"></section>
+    <section id="g-agp" aria-label="Ambulatory glucose profile"></section>
+
+    <section class="g-card" aria-label="Day explorer">
+      <div class="g-head">🔍 Day Explorer</div>
+      <div class="day-controls">
+        <button type="button" id="day-prev" class="day-btn">‹ Prev</button>
+        <select id="day-select" aria-label="Choose a day"></select>
+        <button type="button" id="day-next" class="day-btn">Next ›</button>
+      </div>
+      <div id="g-day-chart"></div>
+      <div id="g-day-stats"></div>
+      <div class="bp-method">One full day of readings every five minutes. Amber triangles mark insulin doses, green diamonds mark logged meals — hover a marker for the detail. Traces cover the most recent 31 days of the export.</div>
+    </section>
+
+    <section id="g-heat" aria-label="Hour by day heatmap"></section>
+    <div class="bp-method" id="g-source" style="margin:10px 2px 26px;"></div>
+  </div>
+
+  <script src="./glucose_view.js?v=20261014"></script>
+  <script src="./static/js/shell.js"></script>
+</body>
+</html>
