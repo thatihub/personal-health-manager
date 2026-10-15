@@ -910,3 +910,30 @@ body[data-page="admin"] .rev-panel select,
 body[data-page="admin"] .rev-panel textarea { background:rgba(255,255,255,.9) !important; color:#000 !important; border:1px solid rgba(0,0,0,.18) !important; font-weight:700; }
 body[data-page="admin"] .rev-panel input::placeholder { color:rgba(0,0,0,.45); }
 body[data-page="admin"] .rev-panel select option { background:#0b1523; color:#fff; }
+
+/* ================= activity: colorful pill stats (mirrors bp language) ================= */
+body[data-page="activity"] .bp-pills { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+body[data-page="activity"] .bp-pill { border-radius:18px; padding:16px 18px; color:#000; box-shadow:0 10px 22px rgba(0,0,0,.25); }
+body[data-page="activity"] .bp-pill-earliest { background:linear-gradient(135deg,#d3b8f7,#9a6fd0); }
+body[data-page="activity"] .bp-pill-prev { background:linear-gradient(135deg,#8fc3f7,#5b93d6); }
+body[data-page="activity"] .bp-pill-cur { background:linear-gradient(135deg,#7fe3b2,#3cb98a); }
+body[data-page="activity"] .bp-pill-delta { background:linear-gradient(135deg,#ffd081,#f0a43a); }
+body[data-page="activity"] .bp-pills-deltas { grid-template-columns:repeat(2,1fr); margin-top:14px; }
+body[data-page="activity"] .heart-head { font-size:20px; font-weight:900; letter-spacing:-.01em; margin:24px 0 12px; color:#eaf4fb; }
+body[data-page="activity"] .bp-pill-tag { font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:rgba(0,0,0,.65); }
+body[data-page="activity"] .bp-pill-value { font-size:34px; font-weight:900; margin:6px 0 8px; letter-spacing:-.02em; }
+body[data-page="activity"] .bp-pill-unit { font-size:14px; font-weight:700; color:rgba(0,0,0,.6); }
+body[data-page="activity"] .bp-pill-meta { font-size:12px; font-weight:600; color:rgba(0,0,0,.72); line-height:1.65; }
+body[data-page="activity"] .bp-pill-delta-row { font-size:24px; font-weight:800; margin:6px 0; letter-spacing:-.01em; }
+body[data-page="activity"] .recent-row { display:flex; flex-wrap:wrap; align-items:center; gap:8px; padding:9px 4px; border-bottom:1px solid rgba(116,144,172,.18); }
+body[data-page="activity"] .recent-date { min-width:118px; color:#dce8f3; font-weight:800; font-size:13px; }
+body[data-page="activity"] .recent-chip { border-radius:999px; padding:4px 12px; color:#000; font-weight:800; font-size:12.5px; }
+body[data-page="activity"] .chip-steps { background:linear-gradient(135deg,#ffd081,#f0a43a); }
+body[data-page="activity"] .chip-ex { background:linear-gradient(135deg,#7fe3b2,#3cb98a); }
+body[data-page="activity"] .chip-rest { background:linear-gradient(135deg,#ff9db0,#f0506e); }
+body[data-page="activity"] .chip-glu { background:linear-gradient(135deg,#8fc3f7,#5b93d6); }
+body[data-page="activity"] .chip-sleep { background:linear-gradient(135deg,#d3b8f7,#9a6fd0); }
+body[data-page="activity"] .chip-deep { background:linear-gradient(135deg,#8beee0,#3cb598); }
+body[data-page="activity"] .chip-rem { background:linear-gradient(135deg,#f7c8e8,#e07fc0); }
+body[data-page="activity"] .chip-eff { background:linear-gradient(135deg,#fde68a,#f59e0b); }
+@media (max-width:760px){ body[data-page="activity"] .bp-pills { grid-template-columns:1fr; } body[data-page="activity"] .recent-date { min-width:100%; } }

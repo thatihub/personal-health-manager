@@ -14,13 +14,14 @@
   // Build stamp shown at the top right of every page, next to the storage
   // pill. CONVENTION: bump on EVERY shipped build — "BUILD YYYY-MM-DD.N"
   // (.N increments within the day). Missing stamp = stale cached page.
-  var BUILD = "BUILD 2026-10-14.3";
+  var BUILD = "BUILD 2026-10-14.4";
 
   var PAGES = [
     { id: "home",         file: "index.html",               label: "Home",      icon: "🏠", accent: "#12a4d4", accent2: "#0d8bb8" },
     { id: "labs",         file: "dashboard.html",           label: "Labs",      icon: "🧪", accent: "#9f7aea", accent2: "#7b5dd6" },
     { id: "bioage",       file: "bio-age.html",             label: "Bio Age",   icon: "⏳", accent: "#14b8a6", accent2: "#0f8f82" },
     { id: "bp",           file: "bp.html",                  label: "BP",        icon: "❤️", accent: "#1bc471", accent2: "#0f9a57" },
+    { id: "activity",     file: "activity.html",            label: "Activity",  icon: "👟", accent: "#fb923c", accent2: "#ea580c" },
     { id: "composition",  file: "composition.html",         label: "Body Comp", icon: "📊", accent: "#1aa672", accent2: "#0f8368" },
     { id: "weight",       file: "weight.html",              label: "Weight",    icon: "⚖️", accent: "#60a5fa", accent2: "#3c84db" },
     { id: "medications",  file: "medications.html",         label: "Meds",      icon: "💊", accent: "#ef6f59", accent2: "#cf5541" },
