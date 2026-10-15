@@ -127,6 +127,97 @@
       + `<span class="hm-key" style="background:#ef4444"></span> &gt;250. Hover any cell for its value.</div></div>`;
   }
 
+  /* ---- insights (whole export) ---- */
+  const bandColor = v => v == null ? '#5b7186' : v <= 140 ? '#22c55e' : v <= 180 ? '#84cc16' : v <= 250 ? '#f59e0b' : '#ef4444';
+
+  function hourChartSVG() {
+    const hs = D.insights.hourly;
+    const max = 220, bw = (W - PL - PR) / 24;
+    let s = `<svg viewBox="0 0 560 300" class="g-svg" role="img" aria-label="Average glucose by hour of day">`;
+    const y = v => 250 - ((v - 40) / (max - 40)) * 210;
+    s += `<rect x="40" y="${y(180)}" width="505" height="${y(70) - y(180)}" fill="rgba(34,197,94,.08)"/>`;
+    s += `<line x1="40" y1="${y(180)}" x2="545" y2="${y(180)}" stroke="#f59e0b" stroke-width="1.4" stroke-dasharray="5 4"/>`
+      + `<text x="545" y="${y(180) - 5}" text-anchor="end" class="svg-lab">180</text>`;
+    hs.forEach(e => {
+      if (e.mean == null) return;
+      const x = 40 + e.h * bw;
+      s += `<rect x="${x + 2}" y="${y(e.mean)}" width="${bw - 4}" height="${250 - y(e.mean)}" rx="3" fill="${bandColor(e.mean)}"><title>${e.h}:00 — avg ${e.mean} mg/dL, ${e.high}% above 180</title></rect>`;
+      if (e.h % 3 === 0) s += `<text x="${x + bw / 2}" y="268" text-anchor="middle" class="svg-lab">${e.h === 0 ? '12a' : e.h === 12 ? '12p' : e.h < 12 ? e.h + 'a' : (e.h - 12) + 'p'}</text>`;
+    });
+    const peak = hs.reduce((a, b) => (b.mean > (a.mean || 0) ? b : a), {});
+    s += `<text x="40" y="292" class="svg-note">Tallest bar = highest hour: ${peak.h}:00 averages ${peak.mean} mg/dL (${peak.high}% of readings above 180). Green band = target 70–180.</text>`;
+    return s + '</svg>';
+  }
+
+  function blocksHTML() {
+    const rows = D.insights.blocks.map(b => {
+      const inW = Math.max(b.in, 0), hiW = Math.max(b.high, 0), loW = Math.max(b.low, 0);
+      return `<div class="ins-row"><div class="ins-row-head"><span>${b.label}</span><b style="color:${bandColor(b.mean)};">avg ${b.mean}</b></div>`
+        + `<div class="ins-track"><div style="width:${loW}%;background:#38bdf8;"></div><div style="width:${inW}%;background:#22c55e;"></div><div style="width:${hiW}%;background:#f59e0b;"></div></div>`
+        + `<div class="ins-row-meta">${b.in}% in range · ${b.high}% above 180${b.low ? ` · ${b.low}% low` : ''}</div></div>`;
+    }).join('');
+    return `<div class="g-card"><div class="g-head g-head-ins">🕐 Where the Highs Live · parts of the day</div>${hourChartSVG()}${rows}</div>`;
+  }
+
+  function dawnHTML() {
+    const d = D.insights.dawn, n = D.insights.night, l = D.insights.lows;
+    return `<div class="ins-grid"><div class="g-card"><div class="g-head g-head-ins">🌅 Overnight &amp; Dawn</div>`
+      + `<div class="dawn-row"><div class="bp-pill g-p-night"><div class="bp-pill-tag">Overnight low · 2–5 AM</div><div class="bp-pill-value">${d.nadir}</div><div class="bp-pill-meta">typical lowest point</div></div>`
+      + `<div class="dawn-arrow">▲ +${d.rise}</div>`
+      + `<div class="bp-pill g-p-morn"><div class="bp-pill-tag">Morning · 7–9 AM</div><div class="bp-pill-value">${d.morning}</div><div class="bp-pill-meta">the dawn rise, before breakfast</div></div></div>`
+      + `<div class="bp-method">Overnight (12–6 AM) averages ${n.mean} with only ${n.lowPct}% low readings — nights run calm and steady.</div></div>`
+      + `<div class="g-card"><div class="g-head g-head-ins">🛡️ Lows · all ${D.days.length} days</div>`
+      + `<div class="dawn-row"><div class="bp-pill g-p-safe"><div class="bp-pill-tag">Below 70</div><div class="bp-pill-value">${l.n70}</div><div class="bp-pill-meta">readings · ${l.pct70}% of all</div></div>`
+      + `<div class="bp-pill g-p-safe"><div class="bp-pill-tag">Below 54</div><div class="bp-pill-value">${l.n54}</div><div class="bp-pill-meta">readings</div></div>`
+      + `<div class="bp-pill g-p-safe"><div class="bp-pill-tag">Lowest ever</div><div class="bp-pill-value">${l.min}</div><div class="bp-pill-meta">mg/dL</div></div></div>`
+      + `<div class="bp-method">Lows are rare in this record — about ${D.insights.episodesPerDay} excursions above 180 per day happen far more often than any low.</div></div></div>`;
+  }
+
+  function mealBars(list, key, color, fmt) {
+    const max = Math.max(...list.map(e => e[key] || 0), 1);
+    return list.filter(e => e.n).map(e =>
+      `<div class="bar-row"><span class="bar-lab">${e.label}</span><div class="bar-track"><div class="bar-fill" style="width:${Math.round(100 * (e[key] || 0) / max)}%;background:${color};"></div></div><span class="bar-val">${fmt(e)}</span></div>`).join('');
+  }
+  function mealsHTML() {
+    const m = D.insights.meals;
+    return `<div class="g-card"><div class="g-head g-head-ins">🍽️ Meal Responses · ${m.n} logged meals</div>`
+      + `<div class="bp-method" style="margin:0 0 10px;">Average meal: <b style="color:#eaf4fb;">${m.avgCarbs} g carbs → +${m.rise} rise → peak ${m.peak}</b>. ${m.over}% of meals still peak above 180 — mostly when the meal starts on top of an earlier high. Working carb ratio ≈ <b style="color:#eaf4fb;">${m.carbRatio} u per 10 g</b>.</div>`
+      + `<div class="ins-sub">Rise after eating, by meal size</div>${mealBars(m.byCarbs, 'rise', '#38bdf8', e => `+${e.rise} · ${e.over}% over 180`)}`
+      + `<div class="ins-sub">Rise after eating, by meal</div>${mealBars(m.bySlot, 'rise', '#f0a43a', e => `+${e.rise} · peak ${e.peak}`)}`
+      + `<div class="bp-method">Bigger meals spike less often than mid-size ones (31% vs 61% over 180) — they get bigger doses. The 30–50 g meal is the one that most often outruns its insulin.</div></div>`;
+  }
+
+  function weeksSVG() {
+    const ws = D.insights.weeks;
+    const bw = (1000 - 50) / ws.length;
+    const y = tir => 235 - (tir / 100) * 195;
+    let s = `<svg viewBox="0 0 1000 300" class="g-svg" role="img" aria-label="Weekly time in range trend">`;
+    s += `<line x1="40" y1="${y(70)}" x2="990" y2="${y(70)}" stroke="#f59e0b" stroke-width="1.2" stroke-dasharray="5 4"/><text x="990" y="${y(70) - 5}" text-anchor="end" class="svg-lab">70% goal</text>`;
+    ws.forEach((w, i) => {
+      const x = 40 + i * bw, c = w.tir >= 90 ? '#22c55e' : w.tir >= 85 ? '#4ade80' : w.tir >= 80 ? '#84cc16' : w.tir >= 75 ? '#f59e0b' : '#f97316';
+      s += `<rect x="${x + 3}" y="${y(w.tir)}" width="${bw - 6}" height="${235 - y(w.tir)}" rx="4" fill="${c}"><title>Week of ${w.label}: TIR ${w.tir}%, avg ${w.mean}</title></rect>`
+        + `<text x="${x + bw / 2}" y="${y(w.tir) - 6}" text-anchor="middle" class="svg-lab">${Math.round(w.tir)}</text>`
+        + `<text x="${x + bw / 2}" y="255" text-anchor="middle" class="svg-lab">${w.label}</text>`;
+    });
+    s += `<text x="40" y="285" class="svg-note">Bar = % of the week in range (70–180). Best weeks: late Aug – early Sep (92–93%). Recent weeks hold ~84%.</text>`;
+    return s + '</svg>';
+  }
+
+  function insulinHTML() {
+    const i = D.insights.insulin;
+    return `<div class="g-card"><div class="g-head g-head-ins">💉 Insulin · daily average, last 30 days</div>`
+      + `<div class="dawn-row"><div class="bp-pill g-p-fast"><div class="bp-pill-tag">Fast-acting</div><div class="bp-pill-value">${i.fast} <span class="bp-pill-unit">u/day</span></div><div class="bp-pill-meta">meals + corrections</div></div>`
+      + `<div class="bp-pill g-p-long"><div class="bp-pill-tag">Long-acting</div><div class="bp-pill-value">${i.long} <span class="bp-pill-unit">u/day</span></div><div class="bp-pill-meta">background basal</div></div>`
+      + `<div class="bp-pill g-p-total"><div class="bp-pill-tag">Total</div><div class="bp-pill-value">${i.total} <span class="bp-pill-unit">u/day</span></div><div class="bp-pill-meta">from your Clarity log</div></div></div></div>`;
+  }
+
+  function insightsHTML() {
+    if (!D.insights) return '';
+    return blocksHTML() + dawnHTML() + mealsHTML()
+      + `<div class="g-card"><div class="g-head g-head-ins">📅 Week by Week · time in range %</div>${weeksSVG()}</div>`
+      + insulinHTML();
+  }
+
   function renderWindow() {
     $('g-stats').innerHTML = statsHTML(curWin);
     $('g-tir').innerHTML = tirHTML(curWin);
@@ -158,6 +249,7 @@
     $('day-prev').addEventListener('click', () => stepDay(-1));
     $('day-next').addEventListener('click', () => stepDay(1));
     renderWindow();
+    $('g-insights').innerHTML = insightsHTML();
     renderDay();
     $('g-heat').innerHTML = heatHTML();
     $('g-source').textContent = `Source: ${D.source} (${fmtD(D.range.start)} – ${fmtD(D.range.end)}) · ${D.total_readings.toLocaleString('en-US')} readings · generated ${D.generated}. Refresh: export a fresh CSV from Clarity and ask Muse to rebuild.`;
@@ -168,7 +260,7 @@
     const n = dates[i + d];
     if (n) { curDay = n; renderDay(); }
   }
-  root.GlucoseView = { init, statsHTML, tirHTML, agpSVG, daySVG, heatHTML };
+  root.GlucoseView = { init, statsHTML, tirHTML, agpSVG, daySVG, heatHTML, insightsHTML };
   if (typeof document !== 'undefined' && document.getElementById('g-stats')) {
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
     else init();
