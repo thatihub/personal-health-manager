@@ -14,7 +14,7 @@
   // Build stamp shown at the top right of every page, next to the storage
   // pill. CONVENTION: bump on EVERY shipped build — "BUILD YYYY-MM-DD.N"
   // (.N increments within the day). Missing stamp = stale cached page.
-  var BUILD = "BUILD 2026-10-14.4";
+  var BUILD = "BUILD 2026-10-14.5";
 
   var PAGES = [
     { id: "home",         file: "index.html",               label: "Home",      icon: "🏠", accent: "#12a4d4", accent2: "#0d8bb8" },

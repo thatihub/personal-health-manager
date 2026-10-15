@@ -83,7 +83,14 @@
     const act = (root.ACTIVITY_DATA || []).slice().sort((a, b) => a.date.localeCompare(b.date));
     const slp = (root.SLEEP_DATA || []).slice().sort((a, b) => a.date.localeCompare(b.date));
     const w = windows(act);
-    if (!w) return;
+    if (!w) {
+      const el = root2.document.getElementById('activity-comparison');
+      if (el) el.innerHTML = `<div class="heart-head">👟 Activity · Apple Health</div>`
+        + `<div class="bp-detail bp-method" style="background:rgba(220,137,32,.16); border:1px solid rgba(220,137,32,.4); border-radius:12px; padding:14px; font-weight:700;">`
+        + `Activity data files are not on this Mac yet. Save <b>activity_data.js</b> and <b>sleep_data.js</b> `
+        + `(sent by Muse in chat) into the Health Manager folder — the same folder as heart_data.js — then refresh this page.</div>`;
+      return;
+    }
     const line = (label, val) => `<div class="bp-pill-meta">${label} ${val}</div>`;
     section(root2.document.getElementById('activity-comparison'), {
       title: '👟 Activity · Apple Health', rows: act, windows: w, unit: 'days',
