@@ -67,17 +67,19 @@
           return v == null ? '' : `<div class="bp-pill-delta-row">${d.label} ${v}${d.unit || ''}</div>`;
         }).join('') + `<div class="bp-pill-meta">based on unrounded daily averages</div>`
       : `<div class="bp-pill-value">Awaiting data</div><div class="bp-pill-meta">Both periods need Apple Health days</div>`;
-    el.innerHTML = `<div class="heart-head">${cfg.title}</div>`
-      + `<div class="bp-pills">`
-      + pill(e, 'bp-pill-earliest', 'Earliest 3 Months')
-      + pill(p, 'bp-pill-prev', 'Previous 3 Months')
-      + pill(c, 'bp-pill-cur', 'Current 3 Months')
+    el.innerHTML = `<div class="act-card ${cfg.cls}">`
+      + `<div class="act-card-head">${cfg.title}</div>`
+      + pill(c, 'act-hero', 'Current 3 Months')
+      + `<div class="act-halfrow">`
+      + pill(e, 'act-half', 'Earliest 3 Months')
+      + pill(p, 'act-half', 'Previous 3 Months')
       + `</div>`
       + `<div class="bp-pills bp-pills-deltas">`
       + `<div class="bp-pill bp-pill-delta"><div class="bp-pill-tag">Change · Previous − Earliest</div>${deltaBody(e, p)}</div>`
       + `<div class="bp-pill bp-pill-delta"><div class="bp-pill-tag">Change · Current − Previous</div>${deltaBody(p, c)}</div>`
       + `</div>`
-      + `<div class="bp-detail bp-method">${cfg.method}</div>`;
+      + `<div class="bp-detail bp-method">${cfg.method}</div>`
+      + `</div>`;
   }
   function render(root2) {
     const act = (root.ACTIVITY_DATA || []).slice().sort((a, b) => a.date.localeCompare(b.date));
@@ -85,15 +87,15 @@
     const w = windows(act);
     if (!w) {
       const el = root2.document.getElementById('activity-comparison');
-      if (el) el.innerHTML = `<div class="heart-head">👟 Activity · Apple Health</div>`
-        + `<div class="bp-detail bp-method" style="background:rgba(220,137,32,.16); border:1px solid rgba(220,137,32,.4); border-radius:12px; padding:14px; font-weight:700;">`
+      if (el) el.innerHTML = `<div class="act-card sec-activity"><div class="act-card-head">👟 Activity · Apple Health</div>`
+        + `<div class="bp-detail bp-method" style="background:rgba(220,137,32,.16); border:1px solid rgba(220,137,32,.4); border-radius:12px; padding:14px; font-weight:700; color:#eaf4fb;">`
         + `Activity data files are not on this Mac yet. Save <b>activity_data.js</b> and <b>sleep_data.js</b> `
-        + `(sent by Muse in chat) into the Health Manager folder — the same folder as heart_data.js — then refresh this page.</div>`;
+        + `(sent by Muse in chat) into the Health Manager folder — the same folder as heart_data.js — then refresh this page.</div></div>`;
       return;
     }
     const line = (label, val) => `<div class="bp-pill-meta">${label} ${val}</div>`;
     section(root2.document.getElementById('activity-comparison'), {
-      title: '👟 Activity · Apple Health', rows: act, windows: w, unit: 'days',
+      title: '👟 Activity · Apple Health', cls: 'sec-activity', rows: act, windows: w, unit: 'days',
       keys: ['steps', 'exercise', 'active', 'dist'],
       big: s => `${fmtInt(s.steps)} <span class="bp-pill-unit">steps / day</span>`,
       lines: s => line('Exercise', `${fmtInt(s.exercise)} min/day`)
@@ -106,7 +108,7 @@
       method: 'Daily Apple Health totals, equally weighted, in the same three windows as the blood pressure comparison. Days the watch was not worn are excluded.'
     });
     section(root2.document.getElementById('sleep-comparison'), {
-      title: '😴 Sleep · Apple Health', rows: slp, windows: w, unit: 'nights',
+      title: '😴 Sleep · Apple Health', cls: 'sec-sleep', rows: slp, windows: w, unit: 'nights',
       keys: ['total', 'deep', 'rem', 'eff', 'awakenings'],
       big: s => `${fmtDur(s.total)} <span class="bp-pill-unit">avg sleep</span>`,
       lines: s => line('Deep', fmtDur(s.deep)) + line('REM', fmtDur(s.rem))
@@ -119,7 +121,7 @@
       method: 'Sleep as recorded by Apple Watch, nights running noon to noon (an afternoon nap counts into that night). Nights under one hour are excluded, and nights the watch was not worn do not appear — so short averages mean short recorded sleep, not missing weeks.'
     });
     section(root2.document.getElementById('resting-comparison'), {
-      title: '💓 Resting Heart Rate · Apple Health', rows: act, windows: w, unit: 'days',
+      title: '💓 Resting Heart Rate · Apple Health', cls: 'sec-resting', rows: act, windows: w, unit: 'days',
       keys: ['resting'],
       big: s => `${fmtInt(s.resting)} <span class="bp-pill-unit">bpm resting</span>`,
       lines: s => {
@@ -130,7 +132,7 @@
       method: 'Apple Health resting heart rate (the watch measures it during rest). The all-day average heart rate and HRV live on the BP page.'
     });
     section(root2.document.getElementById('glucose-comparison'), {
-      title: '🩸 Blood Glucose · Apple Health', rows: act, windows: w, unit: 'days',
+      title: '🩸 Blood Glucose · Apple Health', cls: 'sec-glucose', rows: act, windows: w, unit: 'days',
       keys: ['glucose', 'gmin', 'gmax'],
       big: s => `${fmtInt(s.glucose)} <span class="bp-pill-unit">mg/dL average</span>`,
       lines: s => line('Typical low', s.gmin != null ? `${fmtInt(s.gmin)} mg/dL` : '—')
@@ -147,18 +149,18 @@
     const daysEl = document.getElementById('recent-days');
     if (daysEl) {
       const rows = act.slice(-14).reverse();
-      daysEl.innerHTML = `<div class="heart-head">📅 Last 14 Days</div>` + rows.map(r =>
+      daysEl.innerHTML = `<div class="act-card sec-recent"><div class="act-card-head-lite">📅 Last 14 Days</div>` + rows.map(r =>
         `<div class="recent-row"><span class="recent-date">${fmtD(r.date)}</span>`
         + `<span class="recent-chip chip-steps">${r.steps != null ? Math.round(r.steps).toLocaleString('en-US') + ' steps' : '—'}</span>`
         + `<span class="recent-chip chip-ex">${r.exercise != null ? Math.round(r.exercise) + ' min exercise' : '—'}</span>`
         + `<span class="recent-chip chip-rest">${r.resting != null ? Math.round(r.resting) + ' bpm resting' : '—'}</span>`
         + `<span class="recent-chip chip-glu">${r.glucose != null ? Math.round(r.glucose) + ' mg/dL glucose' : '—'}</span></div>`
-      ).join('');
+      ).join('') + `</div>`;
     }
     const nightsEl = document.getElementById('recent-nights');
     if (nightsEl) {
       const rows = slp.slice(-14).reverse();
-      nightsEl.innerHTML = `<div class="heart-head">🌙 Last 14 Nights</div>` + rows.map(r => {
+      nightsEl.innerHTML = `<div class="act-card sec-recent"><div class="act-card-head-lite">🌙 Last 14 Nights</div>` + rows.map(r => {
         const staged = (r.deep || 0) + (r.rem || 0) + (r.core || 0) > 0;
         return `<div class="recent-row"><span class="recent-date">${fmtD(r.date)}</span>`
           + `<span class="recent-chip chip-sleep">${fmtDur(r.total)} asleep</span>`
@@ -167,7 +169,7 @@
               + `<span class="recent-chip chip-rem">REM ${fmtDur(r.rem)}</span>`
             : `<span class="recent-chip chip-deep">stages not recorded</span>`)
           + `<span class="recent-chip chip-eff">${r.eff != null ? Math.round(r.eff) + '% efficiency' : '—'}</span></div>`;
-      }).join('');
+      }).join('') + `</div>`;
     }
   }
   root.ActivityPage = { windows, summarize, render };
