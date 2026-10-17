@@ -266,6 +266,16 @@
     $('day-next').disabled = i >= dates.length - 1;
   }
   /* ---- Dexcom sync bar ---- */
+  function fmtSync(s) {
+    const m = /^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})/.exec(s || "");
+    if (!m) return s || "";
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    let h = +m[4];
+    const ap = h >= 12 ? "PM" : "AM";
+    h = h % 12; if (h === 0) h = 12;
+    return `${months[+m[2] - 1]} ${+m[3]}, ${m[1]} · ${h}:${m[5]} ${ap}`;
+  }
+
   function syncBar(st, msg, isErr, forceForm) {
     const el = $('g-sync');
     if (!el) return;
@@ -284,7 +294,7 @@
         + `<button type="button" id="dx-replace" class="sync-linkbtn">Use different app keys</button></div>`
         + `<div class="sync-note">Dexcom's Redirect URI for this app must be <b>${st.redirect_uri}</b>.</div>`;
     } else {
-      inner += `<div class="sync-status">${st.last_sync ? 'Last synced ' + st.last_sync : 'Connected — not synced yet'}</div>`
+      inner += `<div class="sync-status">${st.last_sync ? 'Last synced ' + fmtSync(st.last_sync) : 'Connected — not synced yet'}</div>`
         + `<button type="button" id="dx-sync" class="sync-btn">⟳ Sync now</button>`
         + `<button type="button" id="dx-replace" class="sync-linkbtn">Use different app keys</button></div>`;
     }
