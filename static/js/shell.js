@@ -14,7 +14,7 @@
   // Build stamp shown at the top right of every page, next to the storage
   // pill. CONVENTION: bump on EVERY shipped build — "BUILD YYYY-MM-DD.N"
   // (.N increments within the day). Missing stamp = stale cached page.
-  var BUILD = "BUILD 2026-10-16.4";
+  var BUILD = "BUILD 2026-10-16.5";
 
   var PAGES = [
     { id: "home",         file: "index.html",               label: "Home",      icon: "🏠", accent: "#12a4d4", accent2: "#0d8bb8" },
@@ -117,7 +117,12 @@
     var finish = function () {
       if (done) return;
       done = true;
-      location.replace(location.pathname + "?fresh=" + Date.now() + location.hash);
+      // Plain reload, NOT a URL-changing navigation: the server already
+      // sends Cache-Control: no-cache on everything, so a reload always
+      // revalidates and lands fresh — and a dock/home-screen web app can
+      // never treat its own reload as an out-of-scope navigation (a
+      // ?fresh= URL change left the web app on a white screen, Oct 16).
+      location.reload();
     };
     try {
       var jobs = [];
