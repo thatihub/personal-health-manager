@@ -996,6 +996,7 @@ body[data-page="glucose"] .sync-title { font-size:17px; font-weight:900; color:#
 body[data-page="glucose"] .sync-status { color:#a9c0d2; font-size:13.5px; font-weight:600; flex:1; min-width:200px; }
 body[data-page="glucose"] .sync-btn { background:linear-gradient(135deg,#56c2f5,#0284c7); color:#000; font-weight:900; font-size:14.5px; border:0; border-radius:999px; padding:10px 22px; cursor:pointer; text-decoration:none; display:inline-block; }
 body[data-page="glucose"] .sync-btn:disabled { opacity:.55; cursor:wait; }
+body[data-page="glucose"] .sync-linkbtn { background:none; border:0; color:#7dd3fc; font-weight:700; font-size:13px; cursor:pointer; text-decoration:underline; padding:6px 2px; }
 body[data-page="glucose"] .sync-form { display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
 body[data-page="glucose"] .sync-form input { flex:1; min-width:180px; background:rgba(19,31,47,.9); color:#eaf4fb; border:1px solid rgba(116,144,172,.4); border-radius:10px; padding:11px 12px; font-size:14px; }
 body[data-page="glucose"] .sync-note { color:#a9c0d2; font-size:12px; line-height:1.6; margin-top:10px; overflow-wrap:anywhere; }

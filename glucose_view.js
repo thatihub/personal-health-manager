@@ -266,13 +266,13 @@
     $('day-next').disabled = i >= dates.length - 1;
   }
   /* ---- Dexcom sync bar ---- */
-  function syncBar(st, msg, isErr) {
+  function syncBar(st, msg, isErr, forceForm) {
     const el = $('g-sync');
     if (!el) return;
     let inner = `<div class="g-card sync-card"><div class="sync-row"><div class="sync-title">🩸 Dexcom</div>`;
     if (!st) {
       inner += `<div class="sync-status">Sync is available when this page is served by the Health Manager app.</div>`;
-    } else if (!st.configured) {
+    } else if (!st.configured || forceForm) {
       inner += `<div class="sync-status">Not connected yet. Enter your Dexcom developer app's Client ID and Secret — they stay on this Mac only.</div></div>`
         + `<div class="sync-form"><input id="dx-id" type="text" placeholder="Client ID" autocomplete="off">`
         + `<input id="dx-secret" type="password" placeholder="Client Secret" autocomplete="off">`
@@ -280,11 +280,13 @@
         + `<div class="sync-note">In your Dexcom app, set the Redirect URI to <b>${st.redirect_uri}</b> — then Save &amp; Connect opens Dexcom's sign-in.</div>`;
     } else if (!st.connected) {
       inner += `<div class="sync-status">App keys saved. One step left: sign in to Dexcom and approve.</div>`
-        + `<a class="sync-btn" href="${st.authorize_url}">Connect Dexcom</a></div>`
+        + `<a class="sync-btn" href="${st.authorize_url}">Connect Dexcom</a>`
+        + `<button type="button" id="dx-replace" class="sync-linkbtn">Use different app keys</button></div>`
         + `<div class="sync-note">Dexcom's Redirect URI for this app must be <b>${st.redirect_uri}</b>.</div>`;
     } else {
       inner += `<div class="sync-status">${st.last_sync ? 'Last synced ' + st.last_sync : 'Connected — not synced yet'}</div>`
-        + `<button type="button" id="dx-sync" class="sync-btn">⟳ Sync now</button></div>`;
+        + `<button type="button" id="dx-sync" class="sync-btn">⟳ Sync now</button>`
+        + `<button type="button" id="dx-replace" class="sync-linkbtn">Use different app keys</button></div>`;
     }
     if (msg) inner += `<div class="sync-msg${isErr ? ' err' : ''}">${msg}</div>`;
     inner += `</div>`;
@@ -302,6 +304,8 @@
         syncBar(st, j.error || 'Could not save.', true);
       } catch (e) { syncBar(st, 'Could not reach the app server.', true); }
     });
+    const replaceBtn = document.getElementById('dx-replace');
+    if (replaceBtn) replaceBtn.addEventListener('click', () => syncBar(st, null, false, true));
     const syncBtn = document.getElementById('dx-sync');
     if (syncBtn) syncBtn.addEventListener('click', async () => {
       syncBtn.disabled = true; syncBtn.textContent = '⟳ Syncing…';
