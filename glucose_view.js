@@ -294,7 +294,7 @@
         + `<button type="button" id="dx-replace" class="sync-linkbtn">Use different app keys</button></div>`
         + `<div class="sync-note">Dexcom's Redirect URI for this app must be <b>${st.redirect_uri}</b>.</div>`;
     } else {
-      inner += `<div class="sync-status">${st.last_sync ? 'Last synced ' + fmtSync(st.last_sync) : 'Connected — not synced yet'}</div>`
+      inner += `<div class="sync-status">${st.last_sync ? 'Last synced ' + fmtSync(st.last_sync) : 'Connected — not synced yet'}${st.auto_sync ? ' · 🔄 Auto-sync daily' : ''}</div>`
         + `<button type="button" id="dx-sync" class="sync-btn">⟳ Sync now</button>`
         + `<button type="button" id="dx-replace" class="sync-linkbtn">Use different app keys</button></div>`;
     }

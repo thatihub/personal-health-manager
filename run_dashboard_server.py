@@ -10,6 +10,7 @@ import argparse
 import json
 import os
 import subprocess
+import threading
 from pathlib import Path
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 
@@ -21,7 +22,7 @@ from api import config
 from api.auth import AuthMixin
 from api.bp import BPMixin
 from api.core import CoreMixin
-from api.dexcom import DexcomMixin
+from api.dexcom import DexcomMixin, auto_sync_loop
 from api.labs import LabsMixin
 from api.records import RecordsMixin
 from api.uploads import UploadsMixin
@@ -342,6 +343,9 @@ def main() -> None:
         print(f"Warning: could not generate initial static JS files: {e}")
 
     os.chdir(PROJECT_DIR)
+    # Daily Dexcom auto-sync (in-app; first tick at/after 7 AM local if the
+    # day has no sync yet). Daemon thread, never blocks shutdown.
+    threading.Thread(target=auto_sync_loop, daemon=True).start()
     server = ThreadingHTTPServer((args.host, args.port), DashboardHandler)
     print(
         f"Personal Health Manager running at http://{args.host}:{args.port}/index.html"
