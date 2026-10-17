@@ -58,6 +58,15 @@ class DashboardHandler(
     SimpleHTTPRequestHandler,
 ):
 
+    def end_headers(self) -> None:
+        # Local app: browsers and home-screen/dock web apps must revalidate
+        # on every load so a new build never hides behind a stale cache.
+        try:
+            self.send_header('Cache-Control', 'no-cache')
+        except Exception:
+            pass
+        super().end_headers()
+
     def do_GET(self) -> None:
         path = self.path.split('?', 1)[0]
         if path == '/api/dexcom/status':

@@ -14,7 +14,7 @@
   // Build stamp shown at the top right of every page, next to the storage
   // pill. CONVENTION: bump on EVERY shipped build — "BUILD YYYY-MM-DD.N"
   // (.N increments within the day). Missing stamp = stale cached page.
-  var BUILD = "BUILD 2026-10-16.1";
+  var BUILD = "BUILD 2026-10-16.2";
 
   var PAGES = [
     { id: "home",         file: "index.html",               label: "Home",      icon: "🏠", accent: "#12a4d4", accent2: "#0d8bb8" },
@@ -101,6 +101,41 @@
   stamp.textContent = BUILD;
   stamp.title = "Build stamp — if this is missing or old, you are looking at a stale cached page";
   topbar.appendChild(stamp);
+
+  // refresh button — clears any cached scripts/pages and reloads fresh,
+  // so a dock / home-screen web app can never sit on an old build.
+  var refreshBtn = document.createElement("button");
+  refreshBtn.type = "button";
+  refreshBtn.className = "refresh-btn";
+  refreshBtn.id = "refresh-btn";
+  refreshBtn.textContent = "⟳ Refresh";
+  refreshBtn.title = "Clear cached files and reload the latest build";
+  refreshBtn.addEventListener("click", function () {
+    refreshBtn.disabled = true;
+    refreshBtn.textContent = "⟳ …";
+    var done = false;
+    var finish = function () {
+      if (done) return;
+      done = true;
+      location.replace(location.pathname + "?fresh=" + Date.now() + location.hash);
+    };
+    try {
+      var jobs = [];
+      if (window.caches && caches.keys) {
+        jobs.push(caches.keys().then(function (ks) {
+          return Promise.all(ks.map(function (k) { return caches.delete(k); }));
+        }));
+      }
+      if (navigator.serviceWorker && navigator.serviceWorker.getRegistrations) {
+        jobs.push(navigator.serviceWorker.getRegistrations().then(function (rs) {
+          return Promise.all(rs.map(function (r) { return r.unregister(); }));
+        }));
+      }
+      if (jobs.length) { Promise.all(jobs).then(finish, finish); setTimeout(finish, 1200); }
+      else finish();
+    } catch (e) { finish(); }
+  });
+  topbar.appendChild(refreshBtn);
 
   // storage status pill (filled by app.js when present, quiet default otherwise)
   var pill = document.createElement("span");
