@@ -212,6 +212,7 @@
   }
 
   let curWeekOffset = 0;
+  let curWeekView = 'table';
   function saturdayOf(dateStr) {
     const d = new Date(dateStr + 'T12:00:00');
     d.setDate(d.getDate() - ((d.getDay() + 1) % 7));
@@ -244,10 +245,70 @@
     const dose = dateStr >= '2026-10-17' ? '7.5' : '5';
     return ' <span style="display:inline-block;font-size:11px;font-weight:700;color:#231a03;background:#fbbf24;border-radius:999px;padding:2px 9px;margin-left:6px;vertical-align:2px;white-space:nowrap;">Mounjaro ' + dose + ' mg</span>';
   }
+  function miniSVG(title, vals, color, isBars) {
+    const nums = vals.filter(v => v != null);
+    if (!nums.length) return '<div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:14px;padding:10px 8px;"><div style="font-size:12px;font-weight:700;">' + title + '</div><div style="opacity:.4;font-size:12px;padding:18px 0;text-align:center;">no data</div></div>';
+    const W = 320, H = 132, PL = 34, PR = 10, PT = 10, PB = 22;
+    let mn = Math.min.apply(null, nums), mx = Math.max.apply(null, nums);
+    if (isBars) { mn = 0; if (mx <= 0) mx = 1; mx = mx * 1.2; }
+    else { if (mx - mn < 2) { mx += 1; mn -= 1; } const pad = (mx - mn) * 0.18; mn -= pad; mx += pad; }
+    const X = i => PL + (i / 6) * (W - PL - PR);
+    const Y = v => PT + (1 - (v - mn) / (mx - mn)) * (H - PT - PB);
+    const dlab = ['S', 'S', 'M', 'T', 'W', 'T', 'F'];
+    let g = '';
+    [mn, (mn + mx) / 2, mx].forEach(v => {
+      g += '<line x1="' + PL + '" y1="' + Y(v).toFixed(1) + '" x2="' + (W - PR) + '" y2="' + Y(v).toFixed(1) + '" stroke="rgba(255,255,255,.09)"/>'
+        + '<text x="' + (PL - 5) + '" y="' + (Y(v) + 3).toFixed(1) + '" text-anchor="end" font-size="8.5" fill="rgba(255,255,255,.55)">' + Math.round(v) + '</text>';
+    });
+    vals.forEach((_, i) => { g += '<text x="' + X(i).toFixed(1) + '" y="' + (H - 7) + '" text-anchor="middle" font-size="8.5" fill="rgba(255,255,255,.55)">' + dlab[i] + '</text>'; });
+    if (isBars) {
+      const bw = (W - PL - PR) / 7 * 0.55;
+      vals.forEach((v, i) => {
+        if (v == null) return;
+        g += '<rect x="' + (X(i) - bw / 2).toFixed(1) + '" y="' + Y(v).toFixed(1) + '" width="' + bw.toFixed(1) + '" height="' + Math.max(1.5, Y(mn) - Y(v)).toFixed(1) + '" rx="3" fill="' + color + '" opacity=".85"/>';
+        const blab = (v % 1 === 0) ? String(Math.round(v)) : v.toFixed(1);
+        g += '<text x="' + X(i).toFixed(1) + '" y="' + (Y(v) - 5).toFixed(1) + '" text-anchor="middle" font-size="8.5" font-weight="700" fill="rgba(255,255,255,.9)">' + blab + '</text>';
+      });
+    } else {
+      let d = '', started = false;
+      vals.forEach((v, i) => {
+        if (v == null) { started = false; return; }
+        d += (started ? 'L' : 'M') + X(i).toFixed(1) + ' ' + Y(v).toFixed(1) + ' ';
+        started = true;
+      });
+      g += '<path d="' + d.trim() + '" fill="none" stroke="' + color + '" stroke-width="2" stroke-linecap="round"/>';
+      vals.forEach((v, i) => { if (v != null) g += '<circle cx="' + X(i).toFixed(1) + '" cy="' + Y(v).toFixed(1) + '" r="3" fill="' + color + '"/>'; });
+    }
+    return '<div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:14px;padding:10px 8px 4px;">'
+      + '<div style="font-size:12px;font-weight:700;margin-bottom:2px;">' + title + '</div>'
+      + '<svg viewBox="0 0 ' + W + ' ' + H + '" style="width:100%;height:auto;display:block;">' + g + '</svg></div>';
+  }
+  function weekGraphHTML(rows) {
+    const col = k => rows.map(r => r[k]);
+    let s = '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:10px;">';
+    s += miniSVG('Fasting glucose', col('fasting'), '#38bdf8', false);
+    s += miniSVG('1 PM glucose', col('onePm'), '#a78bfa', false);
+    s += miniSVG('8 PM glucose', col('eightPm'), '#f472b6', false);
+    s += miniSVG('Humalog per day (u)', col('humalog'), '#fbbf24', true);
+    s += '</div>';
+    s += '<div class="bp-method" style="margin-top:8px;">Glucose panels in mg/dL · Humalog in units. Each panel scales to its own range. Gaps mean no reading that day.</div>';
+    return s;
+  }
   function weekPillsHTML(offset) {
     const dates = getWeekDates(offset);
     if (!dates.length) return '';
     const maxOff = getMaxWeekOffset();
+    const minsOf = t => { const a = String(t).split(':'); return (+a[0]) * 60 + (+a[1] || 0); };
+    const closestAt = (pts, target) => {
+      let best = null, bd = 1e9;
+      (pts || []).forEach(p => {
+        const v = p[1];
+        if (typeof v !== 'number' || !isFinite(v)) return;
+        const dd = Math.abs(minsOf(p[0]) - target);
+        if (dd < bd) { bd = dd; best = v; }
+      });
+      return bd <= 240 ? Math.round(best) : null;
+    };
     const rows = dates.map(d => {
       const t = D.traces[d] || {};
       const gv = (t.g || []).map(p => p[1]).filter(v => typeof v === 'number' && isFinite(v));
@@ -256,7 +317,9 @@
       const hasIns = (t.ins || []).length > 0;
       const carbs = (t.meal || []).reduce((a, m) => a + (Number(m[1]) || 0), 0);
       const humalog = (t.ins || []).filter(e => !String(e[2] || '').toLowerCase().startsWith('long')).reduce((a, e) => a + (Number(e[1]) || 0), 0);
-      return { d, avgG, carbs, humalog, hasMeal, hasIns };
+      const gpts = t.g || [];
+      return { d, avgG, carbs, humalog, hasMeal, hasIns,
+        fasting: closestAt(gpts, 420), onePm: closestAt(gpts, 780), eightPm: closestAt(gpts, 1200) };
     });
     const avgOf = (key, flag) => {
       const vs = rows.filter(r => r[flag]).map(r => r[key]).filter(v => v != null);
@@ -270,24 +333,41 @@
     const fmtWday = d => { const p = d.split('-'); return new Date(+p[0], +p[1] - 1, +p[2]).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }); };
     const weekLabel = fmtWday(dates[0]) + ' \u2013 ' + fmtWday(dates[6]);
     const navBtn_GONE = (id, ch, dis, lab) => `<button id="${id}" type="button"${dis ? ' disabled' : ''} aria-label="${lab}" style="cursor:${dis ? 'default' : 'pointer'};opacity:${dis ? '.35' : '1'};background:rgba(56,189,248,.12);border:1px solid rgba(56,189,248,.35);color:#eaf4fb;border-radius:999px;width:34px;height:34px;font-size:17px;line-height:1;flex:none;">${ch}</button>`;
-    let s = `<div class="g-card"><div class="g-head g-head-ins">\u2696\uFE0F 7-Day Balance \u00B7 Humalog vs glucose</div><div class="dawn-row">`;
+    let s = `<div class="g-card"><div class="g-head g-head-ins">\u2696\uFE0F 7-Day Balance \u00B7 Mounjaro week pattern</div><div class="dawn-row">`;
     s += pill('Humalog', h ? h.v.toFixed(1) : '\u2013', 'u/day', h ? `avg of ${h.n} day${h.n > 1 ? 's' : ''} \u00B7 fast-acting` : 'no doses logged', 'g-p-long');
     s += pill('Avg glucose', g ? Math.round(g.v) : '\u2013', 'mg/dL', g ? `avg of ${g.n} day${g.n > 1 ? 's' : ''}` : 'no readings', 'g-p-total');
-    s += `</div><div class="ins-sub">Day by day \u2014 Humalog dosed, glucose result</div>`;
-    s += `<div style="position:relative;background:linear-gradient(135deg,rgba(139,92,246,.28),rgba(56,189,248,.28));border:1px solid rgba(139,92,246,.45);border-radius:20px;padding:12px 48px 8px 48px;margin:0 auto 10px;max-width:700px;">`;
-    s += `<div style="text-align:center;font-size:14px;font-weight:700;margin-bottom:8px;">${weekLabel}${mounjaroBadge(dates[0])}</div>`;
-    s += `<button id="wk-prev" type="button"${offset >= maxOff ? ' disabled' : ''} aria-label="Previous week" style="position:absolute;left:5px;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:999px;border:none;background:#38bdf8;color:#0b1220;font-size:18px;font-weight:700;line-height:1;cursor:${offset >= maxOff ? 'default' : 'pointer'};opacity:${offset >= maxOff ? '.35' : '1'};box-shadow:0 2px 10px rgba(56,189,248,.45);">\u2190</button>`;
-    s += `<button id="wk-next" type="button"${offset <= 0 ? ' disabled' : ''} aria-label="Next week" style="position:absolute;right:5px;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:999px;border:none;background:#38bdf8;color:#0b1220;font-size:18px;font-weight:700;line-height:1;cursor:${offset <= 0 ? 'default' : 'pointer'};opacity:${offset <= 0 ? '.35' : '1'};box-shadow:0 2px 10px rgba(56,189,248,.45);">\u2192</button>`;
+    s += `</div>`;
+    const vwBtn = (id, lab, active) => `<button id="${id}" type="button" style="padding:7px 18px;border-radius:999px;border:1px solid ${active ? '#38bdf8' : 'rgba(255,255,255,.18)'};background:${active ? '#38bdf8' : 'rgba(255,255,255,.05)'};color:${active ? '#0b1220' : '#cfe3f5'};font-size:13px;font-weight:700;cursor:pointer;">${lab}</button>`;
+    s += `<div style="display:flex;gap:8px;justify-content:center;align-items:center;margin:0 0 10px;">${vwBtn('wv-table', 'Table', curWeekView !== 'graph')}${vwBtn('wv-graph', 'Graph', curWeekView === 'graph')}</div>`;
+    s += `<div style="background:linear-gradient(135deg,rgba(139,92,246,.28),rgba(56,189,248,.28));border:1px solid rgba(139,92,246,.45);border-radius:20px;padding:14px 18px 10px 18px;margin:0 auto 10px;max-width:900px;">`;
+    s += `<div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:10px;">`;
+    s += `<button id="wk-prev" type="button"${offset >= maxOff ? ' disabled' : ''} aria-label="Previous week" style="width:32px;height:32px;flex:none;border-radius:999px;border:none;background:#38bdf8;color:#0b1220;font-size:16px;font-weight:700;line-height:1;cursor:${offset >= maxOff ? 'default' : 'pointer'};opacity:${offset >= maxOff ? '.35' : '1'};box-shadow:0 2px 10px rgba(56,189,248,.45);">←</button>`;
+    s += `<div style="font-size:14px;font-weight:700;text-align:center;">${weekLabel}${mounjaroBadge(dates[0])}</div>`;
+    s += `<button id="wk-next" type="button"${offset <= 0 ? ' disabled' : ''} aria-label="Next week" style="width:32px;height:32px;flex:none;border-radius:999px;border:none;background:#38bdf8;color:#0b1220;font-size:16px;font-weight:700;line-height:1;cursor:${offset <= 0 ? 'default' : 'pointer'};opacity:${offset <= 0 ? '.35' : '1'};box-shadow:0 2px 10px rgba(56,189,248,.45);">→</button>`;
+    s += `</div>`;
+    if (curWeekView === 'graph') { s += weekGraphHTML(rows); } else {
+    const cellB = 'border-bottom:1px solid rgba(255,255,255,.10);';
+    const cellV = 'border-right:1px solid rgba(255,255,255,.05);';
+    const thS = 'font-size:11px;font-weight:700;opacity:.85;padding:8px 6px;line-height:1.35;';
+    const tdS = 'font-size:13px;padding:10px 8px;';
+    const dash = '<span style="opacity:.35;">-</span>';
+    s += `<table style="width:100%;border-collapse:collapse;table-layout:fixed;">`;
+    s += `<colgroup><col style="width:27%"><col style="width:14.5%"><col style="width:14.5%"><col style="width:14.5%"><col style="width:16%"><col style="width:13.5%"></colgroup>`;
+    s += `<thead><tr><th style="${thS}text-align:left;${cellB}${cellV}">Date</th><th style="${thS}text-align:right;${cellB}${cellV}">Fasting</th><th style="${thS}text-align:right;${cellB}${cellV}">1 PM</th><th style="${thS}text-align:right;${cellB}${cellV}">8 PM</th><th style="${thS}text-align:right;${cellB}${cellV}">Humalog</th><th style="${thS}text-align:right;${cellB}">Avg</th></tr></thead><tbody>`;
     rows.forEach(r => {
-      s += `<div style="display:grid;grid-template-columns:1.1fr 1fr 1fr;gap:6px;align-items:center;padding:9px 4px;border-bottom:1px solid rgba(255,255,255,.07);">`;
-      s += `<div style="font-size:14px;font-weight:600;">${fmtWday(r.d)}</div>`;
-      s += `<div style="text-align:right;font-size:14px;">${r.hasIns ? r.humalog.toFixed(1) + ' u' : '<span style="opacity:.35;">\u2013</span>'}</div>`;
-      s += `<div style="text-align:right;font-size:14px;">${r.avgG != null ? Math.round(r.avgG) : '<span style="opacity:.35;">\u2013</span>'}</div>`;
-      s += `</div>`;
+      s += `<tr><td style="${tdS}font-weight:600;white-space:nowrap;text-align:left;${cellB}${cellV}">${fmtWday(r.d)}</td>`
+        + `<td style="${tdS}text-align:right;${cellB}${cellV}">${r.fasting != null ? r.fasting : dash}</td>`
+        + `<td style="${tdS}text-align:right;${cellB}${cellV}">${r.onePm != null ? r.onePm : dash}</td>`
+        + `<td style="${tdS}text-align:right;${cellB}${cellV}">${r.eightPm != null ? r.eightPm : dash}</td>`
+        + `<td style="${tdS}text-align:right;${cellB}${cellV}">${r.hasIns ? r.humalog.toFixed(1) + ' u' : dash}</td>`
+        + `<td style="${tdS}text-align:right;${cellB}">${r.avgG != null ? Math.round(r.avgG) : dash}</td></tr>`;
     });
+    s += `</tbody></table>`;
+    }
     s += `</div>`;
     s += `<div class="bp-method" style="margin-top:10px;">Basal holds steady around 33 u/day, so it's left out \u2014 Humalog is the part that moves with your meals.</div>`;
     s += `<div class="bp-method" style="margin-top:8px;">Mounjaro 7.5 mg every Saturday \u2014 increased from 5 mg on Oct 17. Humalog needs tend to climb toward end of week.</div>`;
+    s += `<div class="bp-method" style="margin-top:8px;">Mounjaro's ~5-day half-life means Thursday–Friday readings show your body as the dose wears off — compare them against Saturday–Monday to see the pattern.</div>`;
     s += `<div class="bp-method" style="margin-top:8px;opacity:.65;">Don't change your treatments without talking to your doctor.</div></div>`;
     return s;
   }
@@ -299,6 +379,10 @@
     const next = document.getElementById('wk-next');
     if (prev) prev.addEventListener('click', () => { curWeekOffset = Math.min(curWeekOffset + 1, getMaxWeekOffset()); renderWeek(); });
     if (next) next.addEventListener('click', () => { curWeekOffset = Math.max(curWeekOffset - 1, 0); renderWeek(); });
+    const wvt = document.getElementById('wv-table');
+    const wvg = document.getElementById('wv-graph');
+    if (wvt) wvt.addEventListener('click', () => { curWeekView = 'table'; renderWeek(); });
+    if (wvg) wvg.addEventListener('click', () => { curWeekView = 'graph'; renderWeek(); });
   }
 
   function insightsHTML() {

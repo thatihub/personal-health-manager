@@ -92,6 +92,110 @@
 
     function yearOf(d) { return String(d).slice(0,4); }
 
+    /* ---- Table/Graph toggles for lab cards ---- */
+    const LAB_CARDS = [
+      { id: 'trend-table', markers: [
+        ['hba1c','A1c %',1,'#f87171'], ['glucoseFasting','Glucose (fast)',0,'#38bdf8'],
+        ['totalChol','Cholesterol',0,'#a78bfa'], ['ldl','LDL',0,'#fbbf24'],
+        ['hdl','HDL',0,'#34d399'], ['triglycerides','Triglycerides',0,'#f472b6'] ] },
+      { id: 'kidney-table', markers: [
+        ['creatinine','Creatinine',2,'#38bdf8'], ['egfr','eGFR',0,'#34d399'],
+        ['bun','BUN',0,'#fbbf24'], ['acr','ACR',1,'#f472b6'] ] },
+      { id: 'chem-table', markers: [
+        ['sodium','Sodium',0,'#38bdf8'], ['potassium','Potassium',1,'#a78bfa'],
+        ['chloride','Chloride',0,'#34d399'], ['co2','CO2',0,'#fbbf24'],
+        ['alt','ALT',0,'#f87171'], ['ast','AST',0,'#fb923c'], ['psa','PSA',1,'#f472b6'] ] },
+      { id: 'thyroid-table', markers: [
+        ['tsh','TSH',1,'#38bdf8'], ['freeT4','Free T4',2,'#a78bfa'] ] },
+      { id: 'vit-table', markers: [
+        ['vitaminD','Vitamin D',0,'#fbbf24'], ['b12','B12',0,'#38bdf8'], ['crp','hs-CRP',1,'#f87171'] ] },
+      { id: 'cbc-table', markers: [
+        ['wbc','WBC',1,'#38bdf8'], ['hgb','Hgb',1,'#f87171'],
+        ['hct','Hct',1,'#a78bfa'], ['plt','Platelets',0,'#34d399'] ] },
+    ];
+    const labViewState = {};
+    function labPoints(key, data) {
+      return data
+        .filter(r => r[key] !== null && r[key] !== undefined && isFinite(Number(r[key])))
+        .map(r => [new Date(r.date + 'T00:00:00').getTime(), Number(r[key])])
+        .sort((a, b) => a[0] - b[0]);
+    }
+    function labTrendSVG(label, pts, color, digits) {
+      const W = 320, H = 134, PL = 40, PR = 10, PT = 10, PB = 22;
+      if (pts.length < 2) return '<div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:14px;padding:10px;"><div style="font-size:12px;font-weight:700;">' + label + '</div><div style="opacity:.4;font-size:12px;padding:16px 0;text-align:center;">not enough data</div></div>';
+      const t0 = pts[0][0], t1 = pts[pts.length - 1][0];
+      const vs = pts.map(p => p[1]);
+      let mn = Math.min.apply(null, vs), mx = Math.max.apply(null, vs);
+      if (mx - mn < 1e-9) { mn -= 1; mx += 1; }
+      const pd = (mx - mn) * 0.15; mn -= pd; mx += pd;
+      const X = t => PL + (t1 === t0 ? 0.5 : (t - t0) / (t1 - t0)) * (W - PL - PR);
+      const Y = v => PT + (1 - (v - mn) / (mx - mn)) * (H - PT - PB);
+      let g = '';
+      [mn, (mn + mx) / 2, mx].forEach(v => {
+        g += '<line x1="' + PL + '" y1="' + Y(v).toFixed(1) + '" x2="' + (W - PR) + '" y2="' + Y(v).toFixed(1) + '" stroke="rgba(255,255,255,.09)"/>'
+          + '<text x="' + (PL - 5) + '" y="' + (Y(v) + 3).toFixed(1) + '" text-anchor="end" font-size="8.5" fill="rgba(255,255,255,.55)">' + v.toFixed(digits) + '</text>';
+      });
+      const yrs = Array.from(new Set(pts.map(p => new Date(p[0]).getFullYear()))).sort();
+      const step = Math.max(1, Math.ceil(yrs.length / 4));
+      yrs.forEach((y, i) => {
+        if (i % step !== 0) return;
+        const t = new Date(y + '-01-01T00:00:00').getTime();
+        g += '<text x="' + X(Math.max(t0, Math.min(t1, t))).toFixed(1) + '" y="' + (H - 7) + '" text-anchor="middle" font-size="8.5" fill="rgba(255,255,255,.55)">' + String(y).slice(2) + '</text>';
+      });
+      let d = '';
+      pts.forEach((p, i) => { d += (i ? 'L' : 'M') + X(p[0]).toFixed(1) + ' ' + Y(p[1]).toFixed(1) + ' '; });
+      g += '<path d="' + d.trim() + '" fill="none" stroke="' + color + '" stroke-width="2" stroke-linecap="round"/>';
+      pts.forEach(p => { g += '<circle cx="' + X(p[0]).toFixed(1) + '" cy="' + Y(p[1]).toFixed(1) + '" r="2.6" fill="' + color + '"/>'; });
+      const latest = vs[vs.length - 1];
+      return '<div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:14px;padding:10px 8px 4px;">'
+        + '<div style="font-size:12px;font-weight:700;margin-bottom:2px;">' + label + ' <span style="opacity:.55;font-weight:400;">\u00B7 latest ' + latest.toFixed(digits) + '</span></div>'
+        + '<svg viewBox="0 0 ' + W + ' ' + H + '" style="width:100%;height:auto;display:block;">' + g + '</svg></div>';
+    }
+    function renderLabGraphs() {
+      const data = activeYear === 'all' ? rows : rows.filter(r => yearOf(r.date) === activeYear);
+      LAB_CARDS.forEach(cfg => {
+        if (labViewState[cfg.id] !== 'graph') return;
+        const el = document.getElementById(cfg.id + '-graphs');
+        if (!el) return;
+        el.innerHTML = '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:10px;">'
+          + cfg.markers.map(m => labTrendSVG(m[1], labPoints(m[0], data), m[3], m[2])).join('') + '</div>';
+      });
+    }
+    function setupLabToggles() {
+      LAB_CARDS.forEach(cfg => {
+        labViewState[cfg.id] = 'table';
+        const table = document.getElementById(cfg.id);
+        if (!table) return;
+        const card = table.closest('article');
+        const h3 = card ? card.querySelector('h3') : null;
+        if (!h3) return;
+        const tgl = document.createElement('div');
+        tgl.style.cssText = 'display:flex;gap:8px;margin:8px 0 10px;';
+        tgl.innerHTML = '<button type="button" data-v="table" style="padding:6px 16px;border-radius:999px;border:1px solid #38bdf8;background:#38bdf8;color:#0b1220;font-size:12.5px;font-weight:700;cursor:pointer;">Table</button>'
+          + '<button type="button" data-v="graph" style="padding:6px 16px;border-radius:999px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.05);color:#cfe3f5;font-size:12.5px;font-weight:700;cursor:pointer;">Graph</button>';
+        h3.after(tgl);
+        const gdiv = document.createElement('div');
+        gdiv.id = cfg.id + '-graphs';
+        gdiv.hidden = true;
+        gdiv.style.marginTop = '4px';
+        table.after(gdiv);
+        tgl.addEventListener('click', e => {
+          const b = e.target.closest('button');
+          if (!b) return;
+          const v = b.dataset.v;
+          labViewState[cfg.id] = v;
+          tgl.querySelectorAll('button').forEach(x => {
+            const on = x.dataset.v === v;
+            x.style.border = on ? '1px solid #38bdf8' : '1px solid rgba(255,255,255,.18)';
+            x.style.background = on ? '#38bdf8' : 'rgba(255,255,255,.05)';
+            x.style.color = on ? '#0b1220' : '#cfe3f5';
+          });
+          table.style.display = v === 'table' ? '' : 'none';
+          gdiv.hidden = v !== 'graph';
+          if (v === 'graph') renderLabGraphs();
+        });
+      });
+    }
     function buildYearFilters() {
       const years = Array.from(new Set(rows.map(r => yearOf(r.date)))).sort().reverse();
       const pills = [`<div class="pill active" data-year="all">All</div>`]
@@ -192,6 +296,9 @@
         </tr>`).join('');
     }
 
+    const _renderTablesOrig = renderTables;
+    renderTables = function() { _renderTablesOrig(); renderLabGraphs(); };
+    setupLabToggles();
     buildYearFilters();
     renderTables();
   </script>
