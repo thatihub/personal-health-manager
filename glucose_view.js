@@ -211,6 +211,96 @@
       + `<div class="bp-pill g-p-total"><div class="bp-pill-tag">Total</div><div class="bp-pill-value">${i.total} <span class="bp-pill-unit">u/day</span></div><div class="bp-pill-meta">from your Clarity log</div></div></div></div>`;
   }
 
+  let curWeekOffset = 0;
+  function saturdayOf(dateStr) {
+    const d = new Date(dateStr + 'T12:00:00');
+    d.setDate(d.getDate() - ((d.getDay() + 1) % 7));
+    return d;
+  }
+  function dateKey(dt) {
+    return dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0') + '-' + String(dt.getDate()).padStart(2, '0');
+  }
+  function getWeekDates(offset) {
+    const all = Object.keys(D.traces).sort();
+    if (!all.length) return [];
+    const sat = saturdayOf(all[all.length - 1]);
+    sat.setDate(sat.getDate() - offset * 7);
+    const out = [];
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(sat);
+      d.setDate(d.getDate() + i);
+      out.push(dateKey(d));
+    }
+    return out;
+  }
+  function getMaxWeekOffset() {
+    const all = Object.keys(D.traces).sort();
+    if (all.length < 2) return 0;
+    const a = saturdayOf(all[0]), b = saturdayOf(all[all.length - 1]);
+    return Math.max(0, Math.round((b - a) / 604800000));
+  }
+  function mounjaroBadge(dateStr) {
+    if (new Date(dateStr + 'T12:00:00').getDay() !== 6) return '';
+    const dose = dateStr >= '2026-10-17' ? '7.5' : '5';
+    return ' <span style="display:inline-block;font-size:11px;font-weight:700;color:#231a03;background:#fbbf24;border-radius:999px;padding:2px 9px;margin-left:6px;vertical-align:2px;white-space:nowrap;">Mounjaro ' + dose + ' mg</span>';
+  }
+  function weekPillsHTML(offset) {
+    const dates = getWeekDates(offset);
+    if (!dates.length) return '';
+    const maxOff = getMaxWeekOffset();
+    const rows = dates.map(d => {
+      const t = D.traces[d] || {};
+      const gv = (t.g || []).map(p => p[1]).filter(v => typeof v === 'number' && isFinite(v));
+      const avgG = gv.length ? gv.reduce((a, b) => a + b, 0) / gv.length : null;
+      const hasMeal = (t.meal || []).length > 0;
+      const hasIns = (t.ins || []).length > 0;
+      const carbs = (t.meal || []).reduce((a, m) => a + (Number(m[1]) || 0), 0);
+      const humalog = (t.ins || []).filter(e => !String(e[2] || '').toLowerCase().startsWith('long')).reduce((a, e) => a + (Number(e[1]) || 0), 0);
+      return { d, avgG, carbs, humalog, hasMeal, hasIns };
+    });
+    const avgOf = (key, flag) => {
+      const vs = rows.filter(r => r[flag]).map(r => r[key]).filter(v => v != null);
+      return vs.length ? { v: vs.reduce((a, b) => a + b, 0) / vs.length, n: vs.length } : null;
+    };
+    const h = avgOf('humalog', 'hasIns');
+    const gVals = rows.map(r => r.avgG).filter(v => v != null);
+    const g = gVals.length ? { v: gVals.reduce((a, b) => a + b, 0) / gVals.length, n: gVals.length } : null;
+    const pill = (tag, val, unit, meta, cls) =>
+      `<div class="bp-pill ${cls}"><div class="bp-pill-tag">${tag}</div><div class="bp-pill-value">${val} <span class="bp-pill-unit">${unit}</span></div><div class="bp-pill-meta">${meta}</div></div>`;
+    const fmtWday = d => { const p = d.split('-'); return new Date(+p[0], +p[1] - 1, +p[2]).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }); };
+    const weekLabel = fmtWday(dates[0]) + ' \u2013 ' + fmtWday(dates[6]);
+    const navBtn_GONE = (id, ch, dis, lab) => `<button id="${id}" type="button"${dis ? ' disabled' : ''} aria-label="${lab}" style="cursor:${dis ? 'default' : 'pointer'};opacity:${dis ? '.35' : '1'};background:rgba(56,189,248,.12);border:1px solid rgba(56,189,248,.35);color:#eaf4fb;border-radius:999px;width:34px;height:34px;font-size:17px;line-height:1;flex:none;">${ch}</button>`;
+    let s = `<div class="g-card"><div class="g-head g-head-ins">\u2696\uFE0F 7-Day Balance \u00B7 Humalog vs glucose</div><div class="dawn-row">`;
+    s += pill('Humalog', h ? h.v.toFixed(1) : '\u2013', 'u/day', h ? `avg of ${h.n} day${h.n > 1 ? 's' : ''} \u00B7 fast-acting` : 'no doses logged', 'g-p-long');
+    s += pill('Avg glucose', g ? Math.round(g.v) : '\u2013', 'mg/dL', g ? `avg of ${g.n} day${g.n > 1 ? 's' : ''}` : 'no readings', 'g-p-total');
+    s += `</div><div class="ins-sub">Day by day \u2014 Humalog dosed, glucose result</div>`;
+    s += `<div style="position:relative;background:linear-gradient(135deg,rgba(139,92,246,.28),rgba(56,189,248,.28));border:1px solid rgba(139,92,246,.45);border-radius:20px;padding:12px 48px 8px 48px;margin:0 auto 10px;max-width:700px;">`;
+    s += `<div style="text-align:center;font-size:14px;font-weight:700;margin-bottom:8px;">${weekLabel}${mounjaroBadge(dates[0])}</div>`;
+    s += `<button id="wk-prev" type="button"${offset >= maxOff ? ' disabled' : ''} aria-label="Previous week" style="position:absolute;left:5px;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:999px;border:none;background:#38bdf8;color:#0b1220;font-size:18px;font-weight:700;line-height:1;cursor:${offset >= maxOff ? 'default' : 'pointer'};opacity:${offset >= maxOff ? '.35' : '1'};box-shadow:0 2px 10px rgba(56,189,248,.45);">\u2190</button>`;
+    s += `<button id="wk-next" type="button"${offset <= 0 ? ' disabled' : ''} aria-label="Next week" style="position:absolute;right:5px;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:999px;border:none;background:#38bdf8;color:#0b1220;font-size:18px;font-weight:700;line-height:1;cursor:${offset <= 0 ? 'default' : 'pointer'};opacity:${offset <= 0 ? '.35' : '1'};box-shadow:0 2px 10px rgba(56,189,248,.45);">\u2192</button>`;
+    rows.forEach(r => {
+      s += `<div style="display:grid;grid-template-columns:1.1fr 1fr 1fr;gap:6px;align-items:center;padding:9px 4px;border-bottom:1px solid rgba(255,255,255,.07);">`;
+      s += `<div style="font-size:14px;font-weight:600;">${fmtWday(r.d)}</div>`;
+      s += `<div style="text-align:right;font-size:14px;">${r.hasIns ? r.humalog.toFixed(1) + ' u' : '<span style="opacity:.35;">\u2013</span>'}</div>`;
+      s += `<div style="text-align:right;font-size:14px;">${r.avgG != null ? Math.round(r.avgG) : '<span style="opacity:.35;">\u2013</span>'}</div>`;
+      s += `</div>`;
+    });
+    s += `</div>`;
+    s += `<div class="bp-method" style="margin-top:10px;">Basal holds steady around 33 u/day, so it's left out \u2014 Humalog is the part that moves with your meals.</div>`;
+    s += `<div class="bp-method" style="margin-top:8px;">Mounjaro 7.5 mg every Saturday \u2014 increased from 5 mg on Oct 17. Humalog needs tend to climb toward end of week.</div>`;
+    s += `<div class="bp-method" style="margin-top:8px;opacity:.65;">Don't change your treatments without talking to your doctor.</div></div>`;
+    return s;
+  }
+  function renderWeek() {
+    const sec = document.getElementById('g-week');
+    if (!sec || !D) return;
+    sec.innerHTML = weekPillsHTML(curWeekOffset);
+    const prev = document.getElementById('wk-prev');
+    const next = document.getElementById('wk-next');
+    if (prev) prev.addEventListener('click', () => { curWeekOffset = Math.min(curWeekOffset + 1, getMaxWeekOffset()); renderWeek(); });
+    if (next) next.addEventListener('click', () => { curWeekOffset = Math.max(curWeekOffset - 1, 0); renderWeek(); });
+  }
+
   function insightsHTML() {
     if (!D.insights) return '';
     return blocksHTML() + dawnHTML() + mealsHTML()
@@ -372,6 +462,7 @@
       p.setAttribute('aria-expanded', String(open));
     }));
     renderWindow();
+    renderWeek();
     $('g-insights').innerHTML = insightsHTML();
     renderDay();
     $('g-heat').innerHTML = heatHTML();

@@ -14,7 +14,7 @@
   // Build stamp shown at the top right of every page, next to the storage
   // pill. CONVENTION: bump on EVERY shipped build — "BUILD YYYY-MM-DD.N"
   // (.N increments within the day). Missing stamp = stale cached page.
-  var BUILD = "BUILD 2026-10-16.5";
+  var BUILD = "BUILD 2026-10-17.6";
 
   var PAGES = [
     { id: "home",         file: "index.html",               label: "Home",      icon: "🏠", accent: "#12a4d4", accent2: "#0d8bb8" },
@@ -124,21 +124,47 @@
       // ?fresh= URL change left the web app on a white screen, Oct 16).
       location.reload();
     };
+    var abort = function () {
+      // Server unreachable (e.g. Render free tier asleep): leave caches
+      // and the current page alone — clearing them first strands the
+      // reload on a white screen. Restore the button and say so.
+      refreshBtn.disabled = false;
+      refreshBtn.textContent = "⟳ Refresh";
+      try {
+        var n = document.createElement("div");
+        n.textContent = "Server not responding — keeping the current page. Try again in a moment.";
+        n.style.cssText = "position:fixed;left:12px;right:12px;bottom:76px;z-index:9999;background:#3a2b12;border:1px solid #e7ad53;color:#fff;border-radius:12px;padding:12px 14px;font-weight:600;";
+        document.body.appendChild(n);
+        setTimeout(function () { if (n.parentNode) n.parentNode.removeChild(n); }, 5000);
+      } catch (e) { /* ignore */ }
+    };
+    var clearAndReload = function () {
+      try {
+        var jobs = [];
+        if (window.caches && caches.keys) {
+          jobs.push(caches.keys().then(function (ks) {
+            return Promise.all(ks.map(function (k) { return caches.delete(k); }));
+          }));
+        }
+        if (navigator.serviceWorker && navigator.serviceWorker.getRegistrations) {
+          jobs.push(navigator.serviceWorker.getRegistrations().then(function (rs) {
+            return Promise.all(rs.map(function (r) { return r.unregister(); }));
+          }));
+        }
+        if (jobs.length) { Promise.all(jobs).then(finish, finish); setTimeout(finish, 1200); }
+        else finish();
+      } catch (e) { finish(); }
+    };
+    // Reachability check FIRST: wiping caches while the server is down
+    // leaves the reload with nothing to load -> white screen.
     try {
-      var jobs = [];
-      if (window.caches && caches.keys) {
-        jobs.push(caches.keys().then(function (ks) {
-          return Promise.all(ks.map(function (k) { return caches.delete(k); }));
-        }));
-      }
-      if (navigator.serviceWorker && navigator.serviceWorker.getRegistrations) {
-        jobs.push(navigator.serviceWorker.getRegistrations().then(function (rs) {
-          return Promise.all(rs.map(function (r) { return r.unregister(); }));
-        }));
-      }
-      if (jobs.length) { Promise.all(jobs).then(finish, finish); setTimeout(finish, 1200); }
-      else finish();
-    } catch (e) { finish(); }
+      var ping = fetch(location.href.split("#")[0], { method: "HEAD", cache: "no-store", redirect: "follow" });
+      var timer = new Promise(function (_, reject) { setTimeout(function () { reject(new Error("timeout")); }, 9000); });
+      Promise.race([ping, timer]).then(function (resp) {
+        if (resp && resp.ok) clearAndReload();
+        else abort();
+      }, abort);
+    } catch (e) { abort(); }
   });
   topbar.appendChild(refreshBtn);
 

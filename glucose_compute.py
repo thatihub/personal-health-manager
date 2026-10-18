@@ -276,6 +276,8 @@ def build_glucose_data(readings, insulin_by_day, meal_by_day,
             "min": int(min(vals)), "max": int(max(vals)),
             "tir": pct(sum(1 for v in vals if 70 <= v <= 180), len(vals)),
             "insulin": round(sum(u for _, u, _ in insulin_by_day.get(d, [])), 1),
+            "insulin_fast": round(sum(u for _, u, s in insulin_by_day.get(d, []) if not s.startswith("Long")), 1),
+            "carbs": round(sum(g for _, g in meal_by_day.get(d, [])), 1),
             "heat": [round(sum(hour_bins.get((d, h), [])) / len(hour_bins[(d, h)]))
                      if hour_bins.get((d, h)) else None for h in range(24)],
         })

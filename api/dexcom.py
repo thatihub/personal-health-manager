@@ -144,16 +144,23 @@ def run_sync() -> dict:
     for t, rec in events:
         et = str(rec.get("eventType", "")).lower()
         sub = str(rec.get("eventSubType", "") or "")
-        val = rec.get("value")
-        if not isinstance(val, (int, float)):
+        if str(rec.get("eventStatus", "")).lower() == "deleted":
+            continue
+        try:
+            val = float(rec.get("value"))
+        except (TypeError, ValueError):
             continue
         if et == "insulin":
             sub_label = "Long-Acting" if "long" in sub.lower() else "Fast-Acting"
             insulin_by_day[t.date().isoformat()].append([t.strftime("%H:%M"), float(val), sub_label])
             insulin_events.append((t, float(val), sub_label))
-        elif et == "carbs":
+        elif et in ("carbs", "meal", "meals", "food") or "carb" in et:
             meal_by_day[t.date().isoformat()].append([t.strftime("%H:%M"), float(val)])
             meal_events.append((t, float(val)))
+    from collections import Counter
+    et_counts = Counter(str(rec.get("eventType", "?")) for _, rec in events)
+    diag_path = DATA_PATH.parent / "dexcom_event_types.json"
+    diag_path.write_text(json.dumps({"generated": datetime.now().strftime("%Y-%m-%d %H:%M"), "event_types": dict(et_counts)}, indent=2), encoding="utf-8")
     data = glucose_compute.build_glucose_data(
         egvs, insulin_by_day, meal_by_day, insulin_events, meal_events,
         "Dexcom API sync")
